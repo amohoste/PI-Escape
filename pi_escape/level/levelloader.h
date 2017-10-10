@@ -12,6 +12,7 @@ typedef struct Level {
     char ** spel;
     int kol;
     int rij;
+    int nr;
 } Level;
 
 typedef struct LevelLoader {
