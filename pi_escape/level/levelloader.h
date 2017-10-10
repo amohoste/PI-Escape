@@ -9,8 +9,9 @@ typedef enum ItemType { KEY } ItemType;
 typedef enum ItemColor { O, A, B, C } ItemColor;
 
 typedef struct Level {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+    char ** spel;
+    int kol;
+    int rij;
 } Level;
 
 typedef struct LevelLoader {
