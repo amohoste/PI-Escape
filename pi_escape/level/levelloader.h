@@ -2,7 +2,8 @@
 #define LEVELLOADER_H
 #define TO_IMPLEMENT_STRUCT char c
 
-#include <glmc.h>
+#include "../../libraries/glmc/include/glmc.h"
+#include <bits/types/FILE.h>
 #include "../es/game_util.h"
 
 typedef enum ItemType { KEY } ItemType;
@@ -26,5 +27,7 @@ void levelloader_free(LevelLoader*);
 
 Level* levelloader_load_level(LevelLoader*, int level_nr);
 void levelloader_free_level(Level*);
+
+void rows_cols_read(FILE *file,int* rows, int* cols);
 
 #endif //LEVELLOADER_H

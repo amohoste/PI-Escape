@@ -1,9 +1,9 @@
 #include "levelloader.h"
-#include "../../../util/util.h"
 
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 
 
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
@@ -35,9 +35,41 @@ void levelloader_free(LevelLoader *ll) {
 
 
 Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
+    int* rows = 0;
+    int* cols = 0;
+    FILE* file = fopen("game1.lvl", "r");
+
+    rows_cols_read(file, rows, cols);
     Level *level = level_alloc(5, 5, 0);
 
     //TODO
 
     return level;
+}
+
+
+/* Leest het aantal kolommen en rijen in een bestand */
+void rows_cols_read(FILE *file, int* rows, int* cols) {
+    void rows_cols_read(FILE *file, int *rows, int *cols) {
+        char c = 'a';
+        int max_col = 0;
+        int rowsize = 0;
+        if (file) {
+            int kol = 0;
+            while (c != EOF) {
+                c = (char) getc(file);
+                if (c == '\r') {
+                    getc(file);
+                } else if (c == '\n') {
+                    max_col = max_col > kol ? max_col : kol;
+                    rowsize++;
+                    kol = 0;
+                } else {
+                    kol++;
+                }
+            }
+        }
+        *rows = rowsize;
+        *cols = max_col;
+    }
 }
