@@ -2,7 +2,7 @@
 
 int test_game1() {
 	FILE *f;
-	f = fopen("level_files/game1.lvl", "r");
+	f = fopen("pi_escape/level/level_files/game1.lvl", "r");
 	int rows = 0;
 	int cols = 0;
 	rows_cols_read(f, &rows, &cols);
