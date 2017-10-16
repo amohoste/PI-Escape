@@ -3,7 +3,7 @@
 #define TO_IMPLEMENT_STRUCT char c
 
 #include "../../libraries/glmc/include/glmc.h"
-#include <bits/types/FILE.h>
+#include <stdio.h>
 #include "../es/game_util.h"
 
 typedef enum ItemType { KEY } ItemType;
