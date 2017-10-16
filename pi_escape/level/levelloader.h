@@ -30,4 +30,6 @@ void levelloader_free_level(Level*);
 
 void rows_cols_read(FILE *file,int* rows, int* cols);
 
+char **init_array_of_size(int width, int height);
+
 #endif //LEVELLOADER_H
