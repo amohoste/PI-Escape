@@ -50,7 +50,6 @@ Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
 
 /* Leest het aantal kolommen en rijen in een bestand */
 void rows_cols_read(FILE *file, int* rows, int* cols) {
-    void rows_cols_read(FILE *file, int *rows, int *cols) {
         char c = 'a';
         int max_col = 0;
         int rowsize = 0;
@@ -71,5 +70,4 @@ void rows_cols_read(FILE *file, int* rows, int* cols) {
         }
         *rows = rowsize;
         *cols = max_col;
-    }
 }
