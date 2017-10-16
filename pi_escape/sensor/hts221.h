@@ -1,7 +1,9 @@
 #ifndef HTS221
 #define HTS221
 
-//TODO
+int hts221_init(int);
+int hts221_read_humidity();
+int hts221_read_temperature();
 
 #endif /* HTS221 */
 
