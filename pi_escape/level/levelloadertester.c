@@ -1,7 +1,7 @@
 #include "levelloadertester.h"
 
 int test_game1() {
-	return test_file("pi_escape/level/level_files/game1.lvl", 11, 8);
+	return test_file("pi_escape/level/level_files/game1.lvl", 9, 8);
 }
 
 int test_game2() {
@@ -13,11 +13,11 @@ int test_game3() {
 }
 
 int test_tutorial1() {
-	return test_file("pi_escape/level/level_files/tutorial1.lvl", 3,7);
+	return test_file("pi_escape/level/level_files/tutorial1.lvl", 7,3);
 }
 
 int test_tutorial2() {
-	return test_file("pi_escape/level/level_files/tutorial2.lvl", 7, 7);
+	return test_file("pi_escape/level/level_files/tutorial2.lvl", 6, 7);
 }
 
 int test_tutorial3() {
