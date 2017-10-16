@@ -86,14 +86,19 @@ void rows_cols_read(FILE *file, int *rows, int *cols) {
                 getc(file);
             } else if (c == '\n') {
                 max_col = max_col > kol ? max_col : kol;
-                rowsize++;
+                if (kol != 0) {
+                    rowsize++;
+                }
                 kol = 0;
             } else {
                 kol++;
             }
         }
+        //indien laatste rij niet leeg
+        if(kol > 1){
+            rowsize ++;
+        }
     }
-    /*eerste lijn mag niet ingelezen worden*/
-    *rows = rowsize + 1 ;
+    *rows = rowsize;
     *cols = max_col;
 }
