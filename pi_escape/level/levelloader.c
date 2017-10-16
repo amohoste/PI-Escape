@@ -68,6 +68,7 @@ void rows_cols_read(FILE *file, int* rows, int* cols) {
                 }
             }
         }
-        *rows = rowsize;
+    /*eerste lijn mag niet ingelezen worden*/
+        *rows = rowsize - 1;
         *cols = max_col;
 }
