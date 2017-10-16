@@ -7,6 +7,7 @@
 #include "pi_escape/level/levelloader.h"
 #include "pi_escape/es/game.h"
 #include "util/min_unit.h"
+#include "pi_escape/level/levelloadertester.h"
 
 #include <SDL.h>
 #undef main //Weird bug on windows where SDL overwrite main definition
@@ -25,10 +26,15 @@ static char * test_memory_manager_create_component() {
     return 0;
 }
 
+static char * test_load_levels() {
+	mu_assert(test_game1());
+	return 0;
+}
+
 static char * all_tests() {
     //Basic memory manager test
     mu_run_test(test_memory_manager_create_component);
-
+	mu_run_test(test_load_levels);
     return 0;
 }
 
