@@ -29,7 +29,7 @@ char **init_array_of_size(int width, int height) {
 
 Level *level_alloc(int width, int height, int nr) {
     Level *res = malloc(sizeof(Level));
-    level_init(res, width, height, nr);
+    level_init(res, height, width, nr);
     return res;
 }
 
@@ -50,16 +50,20 @@ void levelloader_free(LevelLoader *ll) {
 }
 
 Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
-    int *rows = 0;
-    int *cols = 0;
+    int rows = 0;
+    int cols = 0;
+
     FILE *file = fopen(ll->file, "r");
 
     /* inlezen hoeveel rijen en kolommen moeten wroden vrijgemaakt */
-    rows_cols_read(file, rows, cols);
+    rows_cols_read(file, &rows, &cols);
+    fclose(file);
 
-    Level *level = level_alloc(*rows, *cols, level_nr);
+    Level *level = level_alloc(rows, cols, level_nr);
 
+    file = fopen(ll->file, "r");
     read_level(level, file);
+    fclose(file);
 
     return level;
 }
