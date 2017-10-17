@@ -32,4 +32,6 @@ void rows_cols_read(FILE *file,int* rows, int* cols);
 
 char **init_array_of_size(int width, int height);
 
+void fill_empty_places(char *string, int lenght);
+
 #endif //LEVELLOADER_H

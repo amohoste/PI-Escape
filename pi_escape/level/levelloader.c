@@ -7,6 +7,7 @@
 
 void read_level(Level *pLevel, FILE *file);
 
+
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
 void level_init(Level *level, int width, int height, int nr) {
     level->kol = width;
@@ -68,7 +69,19 @@ Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
 void read_level(Level *level, FILE *file) {
     char **a = level->spel;
     int height = level->rij;
-    int widht = level->kol;
+    int width = level->kol;
+
+
+    }
+
+
+}
+void fill_empty_places(char *rij, int length) {
+    for(int i=0;i <length; i++){
+        if(rij[i] == '\0'){
+            rij[i] = ' ';
+        }
+    }
 
 }
 
