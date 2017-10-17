@@ -22,8 +22,8 @@ void game_load_level(Game* g, Level* l) {
     //TODO: use assembly to create all entities needed for the level
     Engine * engine = &g->engine;
     //As a demo, this creates a few example entities. This should be completely replaced by the level_loader and assemblage in the real game
-    for (int x = 0; x < l->rij; x++) {
-        for (int y = 0; y < l->kol; y++) {
+    for (int x = 0; x < l->height; x++) {
+        for (int y = 0; y < l->width; y++) {
             int has_door = x == 2 && y == 2;
             int has_floor = x != 2 && !has_door;
             int has_ceil = !has_floor && !has_door;
