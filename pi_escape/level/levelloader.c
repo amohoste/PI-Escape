@@ -46,7 +46,7 @@ LevelLoader *levelloader_alloc() {
 }
 
 void levelloader_free(LevelLoader *ll) {
-    free(ll);
+    free(ll->file);
 }
 
 Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
