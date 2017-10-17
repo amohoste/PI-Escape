@@ -74,8 +74,6 @@ void read_level(Level *level, FILE *file) {
 
     }
 
-
-}
 void fill_empty_places(char *rij, int length) {
     for(int i=0;i <length; i++){
         if(rij[i] == '\0'){
