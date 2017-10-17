@@ -15,8 +15,8 @@ typedef enum ItemColor {
 
 typedef struct Level {
     char **spel;
-    int kol;
-    int rij;
+    int width;
+    int height;
     int nr;
 } Level;
 

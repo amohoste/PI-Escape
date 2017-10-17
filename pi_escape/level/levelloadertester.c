@@ -79,7 +79,7 @@ int test_complete() {
 
     Level *l = levelloader_load_level(ll, 1);
 
-    assert(l->rij == 11);
+    assert(l->height == 11);
 
     free(ll);
     return 1;
