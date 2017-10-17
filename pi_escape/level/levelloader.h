@@ -34,4 +34,8 @@ char **init_array_of_size(int width, int height);
 
 void fill_empty_places(char *string, int lenght);
 
+void level_init(Level *level, int width, int height, int nr);
+
+void read_level(Level *level, FILE *file);
+
 #endif //LEVELLOADER_H

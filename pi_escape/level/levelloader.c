@@ -70,13 +70,36 @@ void read_level(Level *level, FILE *file) {
     char **a = level->spel;
     int height = level->rij;
     int width = level->kol;
+    char kar = (char) getc(file);
 
+    int i = 0;
+    int j = 0;
 
+    /* eerste lijnen skippen */
+    while (kar == '\n' || kar == '\r') {
+        kar = (char) getc(file);
     }
 
+    while (i < height) {
+        j = 0;
+        while (kar != '\n' && kar != '\r') {
+            a[i][j] = kar;
+            j++;
+            kar = (char) getc(file);
+        };
+        fill_empty_places(a[i], width);
+        kar = (char) getc(file);
+        i++;
+    }
+
+}
+
+
+
+
 void fill_empty_places(char *rij, int length) {
-    for(int i=0;i <length; i++){
-        if(rij[i] == '\0'){
+    for (int i = 0; i < length; i++) {
+        if (rij[i] == '\0') {
             rij[i] = ' ';
         }
     }
@@ -92,34 +115,34 @@ void rows_cols_read(FILE *file, int *rows, int *cols) {
     int kol = 0;
 
     /*bijhouden van rijen die misschien in het midden liggen*/
-    int stack =0;
+    int stack = 0;
 
     if (file) {
         while (c != EOF) {
             c = (char) getc(file);
             /* eerste regels */
-            while(c == '\n' || c == '\r'){
+            while (c == '\n' || c == '\r') {
                 c = (char) getc(file);
             }
 
-            while (c != EOF){
+            while (c != EOF) {
                 rowsize += stack;
-                stack =0;
-                kol ++;
-                if(c == '\n' || c == '\r'){
+                stack = 0;
+                kol++;
+                if (c == '\n' || c == '\r') {
                     /*newline is ingelezen*/
-                    kol --;
-                    if(kol != 0){
-                        rowsize ++;
-                        max_col = kol > max_col? kol : max_col;
+                    kol--;
+                    if (kol != 0) {
+                        rowsize++;
+                        max_col = kol > max_col ? kol : max_col;
                         kol = 0;
-                    } else{
-                        stack ++;
+                    } else {
+                        stack++;
                     }
                 }
                 c = (char) getc(file);
             }
-            if(kol != 0){
+            if (kol != 0) {
                 rowsize++;
             }
         }
