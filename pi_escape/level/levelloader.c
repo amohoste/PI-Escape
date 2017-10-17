@@ -119,6 +119,9 @@ void rows_cols_read(FILE *file, int *rows, int *cols) {
                 }
                 c = (char) getc(file);
             }
+            if(kol != 0){
+                rowsize++;
+            }
         }
     }
     *rows = rowsize;

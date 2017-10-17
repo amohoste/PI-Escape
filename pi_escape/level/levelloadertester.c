@@ -46,6 +46,7 @@ int test_file(char *path, int nrows, int ncols) {
 	int rows = 0;
 	int cols = 0;
 	rows_cols_read(f, &rows, &cols);
+    printf("rijen %d kol %d \n", rows, cols);
 	assert(rows == nrows);
 	assert(cols == ncols);
 	return 1;
