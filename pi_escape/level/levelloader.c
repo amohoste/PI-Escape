@@ -34,6 +34,9 @@ Level *level_alloc(int width, int height, int nr) {
 }
 
 void levelloader_free_level(Level *l) {
+    for(int i = 0; i < l->rij; i++){
+        free(l->spel[i]);
+    }
     free(l->spel);
 }
 
