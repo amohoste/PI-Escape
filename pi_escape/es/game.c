@@ -55,8 +55,24 @@ void game_load_level(Game *g, Level *l) {
                 GridLocationComponent *gridloc = create_component(engine, key_entity_id, COMP_GRIDLOCATION);
                 glmc_ivec2_set(gridloc->pos, x, y);
 
+                //TODO beter dan switchopdrachten?
                 ItemComponent *item = create_component(engine, key_entity_id, COMP_ITEM);
-                item->color = A;
+                switch (l->spel[x][y]) {
+                    case 'a':
+                        item->color = A;
+                        break;
+                    case 'b':
+                        item->color = B;
+                        break;
+                    case 'c' :
+                        item->color = C;
+                        break;
+                    case 'o':
+                        item->color = O;
+                        break;
+                    default:
+                        break;
+                }
 
                 ArtComponent *art = create_component(engine, key_entity_id, COMP_ART);
                 art->type = ART_KEY;
@@ -113,7 +129,22 @@ void game_load_level(Game *g, Level *l) {
                 art->type = ART_LOCK;
 
                 LockComponent *lock = create_component(engine, lock_entity_id, COMP_LOCK);
-                lock->requiredKeyColor = B;
+                switch (l->spel[x][y]) {
+                    case 'A':
+                        lock->requiredKeyColor = A;
+                        break;
+                    case 'B':
+                        lock->requiredKeyColor = B;
+                        break;
+                    case 'C' :
+                        lock->requiredKeyColor = C;
+                        break;
+                    case 'O':
+                        lock->requiredKeyColor = O;
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
