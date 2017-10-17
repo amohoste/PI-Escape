@@ -24,12 +24,13 @@ void game_load_level(Game* g, Level* l) {
     //As a demo, this creates a few example entities. This should be completely replaced by the level_loader and assemblage in the real game
     for (int x = 0; x < l->height; x++) {
         for (int y = 0; y < l->width; y++) {
-            int has_door = x == 2 && y == 2;
+            int has_door = IS_DOOR(x,y);
             int has_floor = x != 2 && !has_door;
             int has_ceil = !has_floor && !has_door;
             int has_key = x == 1 && y == 1;
-            int has_player = x == 3 && y == 3;
+            int has_player = IS_START(x,y);
             int has_lock = x == 0 && y == 0;
+            int has_wall = IS_WALL(x,y);
 
             EntityId entity_id = get_new_entity_id(engine);
 
