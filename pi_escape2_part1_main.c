@@ -114,6 +114,7 @@ int main() {
     }
 
     struct LevelLoader* level_loader = levelloader_alloc();
+    level_loader->file = "pi_escape/level/level_files/game1.lvl";
 
     //init the graphics system
     Graphics* graphics = graphics_alloc(0, 0);
@@ -122,11 +123,11 @@ int main() {
     Game* pi_escape_2 = game_alloc(graphics);
 
     //TODO: don't use this
-    create_demo_entities(&pi_escape_2->engine);
+//    create_demo_entities(&pi_escape_2->engine);
 
     //TODO: use the 2 lines below instead of using create_demo_entities
-    // Level* level = levelloader_load_level(level_loader, 0);
-    // game_load_level(pi_escape_2, level);
+     Level* level = levelloader_load_level(level_loader, 0);
+     game_load_level(pi_escape_2, level);
 
     //TODO: support playing all levels in sequence
 
