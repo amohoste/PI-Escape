@@ -89,25 +89,36 @@ void rows_cols_read(FILE *file, int *rows, int *cols) {
     char c = 'a';
     int max_col = 0;
     int rowsize = 0;
+    int kol = 0;
+
+    /*bijhouden van rijen die misschien in het midden liggen*/
+    int stack =0;
+
     if (file) {
-        int kol = 0;
         while (c != EOF) {
             c = (char) getc(file);
-            if (c == '\r') {
-                getc(file);
-            } else if (c == '\n') {
-                max_col = max_col > kol ? max_col : kol;
-                if (kol != 0) {
-                    rowsize++;
-                }
-                kol = 0;
-            } else {
-                kol++;
+            /* eerste regels */
+            while(c == '\n' || c == '\r'){
+                c = (char) getc(file);
             }
-        }
-        //indien laatste rij niet leeg
-        if(kol > 1){
-            rowsize ++;
+
+            while (c != EOF){
+                rowsize += stack;
+                stack =0;
+                kol ++;
+                if(c == '\n' || c == '\r'){
+                    /*newline is ingelezen*/
+                    kol --;
+                    if(kol != 0){
+                        rowsize ++;
+                        max_col = kol > max_col? kol : max_col;
+                        kol = 0;
+                    } else{
+                        stack ++;
+                    }
+                }
+                c = (char) getc(file);
+            }
         }
     }
     *rows = rowsize;
