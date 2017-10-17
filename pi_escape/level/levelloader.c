@@ -7,7 +7,6 @@
 
 void read_level(Level *pLevel, FILE *file);
 
-
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
 void level_init(Level *level, int width, int height, int nr) {
     level->kol = width;
@@ -38,7 +37,6 @@ void levelloader_free_level(Level *l) {
     free(l->spel);
 }
 
-
 LevelLoader *levelloader_alloc() {
     LevelLoader *res = malloc(sizeof(LevelLoader));
     return res;
@@ -47,7 +45,6 @@ LevelLoader *levelloader_alloc() {
 void levelloader_free(LevelLoader *ll) {
     //TODO
 }
-
 
 Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
     int *rows = 0;
@@ -60,8 +57,6 @@ Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
     Level *level = level_alloc(*rows, *cols, level_nr);
 
     read_level(level, file);
-
-    //TODO
 
     return level;
 }
@@ -94,9 +89,6 @@ void read_level(Level *level, FILE *file) {
 
 }
 
-
-
-
 void fill_empty_places(char *rij, int length) {
     for (int i = 0; i < length; i++) {
         if (rij[i] == '\0') {
@@ -105,7 +97,6 @@ void fill_empty_places(char *rij, int length) {
     }
 
 }
-
 
 /* Leest het aantal kolommen en rijen in een bestand */
 void rows_cols_read(FILE *file, int *rows, int *cols) {
