@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <string.h>
 #include "levelloadertester.h"
 
 int test_game1() {
@@ -64,5 +65,18 @@ int test_array() {
 
     assert(l->spel[0][0] == ' ');
 
-        return 1;
+    return 1;
+}
+
+int test_complete() {
+    LevelLoader *ll = malloc(sizeof(LevelLoader));
+
+    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
+
+    Level *l = levelloader_load_level(ll, 1);
+
+    assert(l->rij == 11);
+
+    free(ll);
+    return 1;
 }
