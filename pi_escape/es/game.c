@@ -25,11 +25,11 @@ void game_load_level(Game* g, Level* l) {
     for (int x = 0; x < l->height; x++) {
         for (int y = 0; y < l->width; y++) {
             int has_door = IS_DOOR(x,y);
-            int has_floor = x != 2 && !has_door;
+            int has_floor = !has_door;
             int has_ceil = !has_floor && !has_door;
-            int has_key = x == 1 && y == 1;
+            int has_key = IS_KEY(x,y);
             int has_player = IS_START(x,y);
-            int has_lock = x == 0 && y == 0;
+            int has_lock = IS_LOCK(x,y);
             int has_wall = IS_WALL(x,y);
 
             EntityId entity_id = get_new_entity_id(engine);
@@ -40,13 +40,14 @@ void game_load_level(Game* g, Level* l) {
             ArtComponent* art = create_component(engine, entity_id, COMP_ART);
             art->type = ART_WALL;
 
+            /* inlezen van de muur, waar welke muur enzo*/
             WallArtComponent* wall_info = create_component(engine, entity_id, COMP_WALLART);
             wall_info->has_ceil = has_ceil;
             wall_info->has_floor = has_floor;
-            wall_info->has_wall[N] = has_door || y == 4 ;
-            wall_info->has_wall[S] = has_door || y == 0 ;
-            wall_info->has_wall[W] = x == 0 || (x == 3 && y != 2);
-            wall_info->has_wall[E] = x == 4 || (x == 1 && y != 2);
+            wall_info->has_wall[S] = y == 0;
+            wall_info->has_wall[N] = y == l->width -1;
+            wall_info->has_wall[E] = x == l->height -1;
+            wall_info->has_wall[W] = x == 0;
 
             if (has_key) {
                 EntityId key_entity_id = get_new_entity_id(engine);
