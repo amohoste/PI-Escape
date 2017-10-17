@@ -52,7 +52,7 @@ void levelloader_free(LevelLoader *ll) {
 Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
     int *rows = 0;
     int *cols = 0;
-    FILE *file = fopen("game1.lvl", "r");
+    FILE *file = fopen(ll->file, "r");
 
     /* inlezen hoeveel rijen en kolommen moeten wroden vrijgemaakt */
     rows_cols_read(file, rows, cols);

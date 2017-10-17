@@ -17,8 +17,7 @@ typedef struct Level {
 } Level;
 
 typedef struct LevelLoader {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+    char* file;
 } LevelLoader;
 
 
