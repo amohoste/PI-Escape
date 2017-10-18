@@ -14,6 +14,12 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_lock = IS_LOCK(x, y);
             int has_wall = IS_WALL(x, y);
 
+            int walls[4];
+            walls[S] = y == 0 || has_wall;
+            walls[N] = y == l->width - 1 || has_wall;
+            walls[E] = x == l->height - 1 || has_wall;
+            walls[W] = x == 0 || has_wall;
+
             if (has_player) {
                 //todo waarom returntype?
                 EntityId player = create_player_entity(engine, x, y);
@@ -30,7 +36,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
-            EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil);
+            EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil,has_wall, walls);
 
         }
     }
@@ -146,22 +152,24 @@ EntityId create_key_entity(Engine *engine, int x, int y, char color) {
     return key_entity_id;
 }
 
-EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_ceil) {
+EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_ceil,int has_wall, int walls[4]) {
 
     EntityId wall_entity_id = get_new_entity_id(engine);
 
     GridLocationComponent *gridloc = create_component(engine, wall_entity_id, COMP_GRIDLOCATION);
     glmc_ivec2_set(gridloc->pos, x, y);
 
+    ArtComponent *art = create_component(engine, wall_entity_id, COMP_ART);
+    art->type = ART_WALL;
 
     WallArtComponent *wall = create_component(engine, wall_entity_id, COMP_WALLART);
 
     wall->has_floor = has_floor;
-    wall->has_ceil = has_ceil;
-//    wall->has_wall[S] = y == 0 || has_wall;
-//    wall->has_wall[N] = y == l->width - 1 || has_wall;
-//    wall->has_wall[E] = x == l->height - 1 || has_wall;
-//    wall->has_wall[W] = x == 0 || has_wall;
+    wall->has_ceil = has_ceil || has_wall;
+    wall->has_wall[S] = walls[S];
+    wall->has_wall[N] = walls[N];
+    wall->has_wall[E] = walls[E];
+    wall->has_wall[W] = walls[W];
 
     return wall_entity_id;
 

@@ -30,5 +30,5 @@ EntityId create_lock_entity(Engine *engine, int x, int y, char color);
 
 EntityId create_key_entity(Engine *engine, int x, int y, char color);
 
-EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_door);
+EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_door,int has_wall, int walls[4]);
 #endif
