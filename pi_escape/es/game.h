@@ -24,17 +24,6 @@
 #endif
 #include "../graphics/opengl_game_renderer.h"
 
-#define IS_START(x,y) l->spel[x][y] == 'S' || l->spel[x][y] == 's'
-#define IS_EMPTY(x,y) l->spel[x][y] == ' '
-#define IS_VERBINDING(x,y) l->spel[x][y] == '=' || l->spel[x][y] == '-' || l->spel[x][y] == '.'
-#define IS_WALL(x,y) l->spel[x][y] == '*' || l->spel[x][y] == 'X' || l->spel[x][y] == 'x'
-#define IS_DOOR(x,y) l->spel[x][y] == 'D' || l->spel[x][y] == 'd' || l->spel[x][y] == '#'
-#define IS_AND(x,y) l->spel[x][y] == '&'
-#define IS_OR(x,y) l->spel[x][y] == '|'
-#define IS_EXIT(x,y) l->spel[x][y] == 'E' || l->spel[x][y] == 'e'
-#define IS_KEY(x,y) l->spel[x][y] == 'a' || l->spel[x][y] == 'b'|| l->spel[x][y] == 'c'|| l->spel[x][y] == 'o'
-#define IS_LOCK(x,y) l->spel[x][y] == 'A' || l->spel[x][y] == 'B'|| l->spel[x][y] == 'C'|| l->spel[x][y] == 'O'
-
 typedef struct Game {
     Graphics* graphics;
     Engine engine;
