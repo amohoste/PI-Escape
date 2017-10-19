@@ -62,7 +62,8 @@ int test_array() {
 
     read_level(l, f);
 
-    assert(l->spel[0][0] == ' ');
+	assert(l->spel[0][0] == ' ');
+    assert(l->spel[0][3] == 'E');
 
         return 1;
 }
