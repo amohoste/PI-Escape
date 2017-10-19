@@ -191,7 +191,6 @@ EntityId create_key_entity(Engine *engine, int x, int y, char color) {
     GridLocationComponent *gridloc = create_component(engine, key_entity_id, COMP_GRIDLOCATION);
     glmc_ivec2_set(gridloc->pos, x, y);
 
-    //TODO beter dan switchopdrachten?
     ItemComponent *item = create_component(engine, key_entity_id, COMP_ITEM);
     switch (color) {
         case 'a':
