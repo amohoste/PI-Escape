@@ -2,15 +2,9 @@
 
 #include <assert.h>
 
-int test_game1();
-int test_game2();
-int test_game3();
-int test_tutorial1();
-int test_tutorial2();
-int test_tutorial3();
-int test_tutorial4();
-int test_tutorial5();
-int test_tutorial6();
-int test_tutorial7();
-int test_array();
+int test_filesdimensions();
+int test_filedimensions(char *path, int nrows, int ncols);
+int test_few();
 int test_complete();
+int array_compare(char **a, char b[][8], int rij, int kol);
+int test_game1();
