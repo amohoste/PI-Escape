@@ -75,7 +75,13 @@ int hts221_read_humidity()
 
 int hts221_read_temperature()
 {
-	return 0;
+	int temp_out_H = i2c_read_byte_data(file, TEMP_OUT_H);
+	int temp_out_L = i2c_read_byte_data(file, TEMP_OUT_L);
+
+	int temp_out_HL = temp_out_H << 8 | temp_out_L;
+
+	int temp = (tempCali.T1_degC - tempCali.T.0_degC) * (temp_out_HL - tempCali.T0_OUT);
+	return (temp / (tempCali.T0_OUT - tempCali.T1_OUT)) + tempCali.T0_degC;
 }	
 
 void init_calbration_value() 
@@ -87,7 +93,7 @@ void init_calbration_value()
 
 	// Misschien error bij negatieve getallen!
 	tempCali.T0_degC = i2c_read_byte_data(file, T0_DEGC_X8) / 8;
-	tempCali.T1_degC = i2c_read_byte_data(file, T1_DEGC_X8) / 2;
-	tempCali.T0_degC = i2c_read_byte_data(file, T0_OUT_H) << 8 | i2c_read_byte_data(file, T0_OUT_L);
-	tempCali.T0_degC = i2c_read_byte_data(file, T1_OUT_H) << 8 | i2c_read_byte_data(file, T1_OUT_L);
+	tempCali.T1_degC = i2c_read_byte_data(file, T1_DEGC_X8) / 8;
+	tempCali.T0_OUT = i2c_read_byte_data(file, T0_OUT_H) << 8 | i2c_read_byte_data(file, T0_OUT_L);
+	tempCali.T1_OUT = i2c_read_byte_data(file, T1_OUT_H) << 8 | i2c_read_byte_data(file, T1_OUT_L);
 }
