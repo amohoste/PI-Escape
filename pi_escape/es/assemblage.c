@@ -17,6 +17,7 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_wall = IS_WALL(x, y);
             int has_or = IS_OR(x, y);
             int has_and = IS_AND(x, y);
+            int is_verbinding = IS_VERBINDING(x, y);
 
             int walls[4];
             walls[S] = y == 0 || has_wall;
@@ -43,8 +44,12 @@ void create_level_entities(Level *l, Engine *engine) {
                 EntityId or = create_or_entity(engine, x, y);
             }
 
-            if(has_and){
+            if (has_and) {
                 EntityId and = create_and_entity(engine, x, y);
+            }
+
+            if (is_verbinding) {
+                EntityId verbinding = create_verbinding_entity(engine, x, y);
             }
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
@@ -52,6 +57,25 @@ void create_level_entities(Level *l, Engine *engine) {
 
         }
     }
+}
+
+EntityId create_verbinding_entity(Engine *engine, int x, int y) {
+    EntityId verb_entity_id = get_new_entity_id(engine);
+
+    GridLocationComponent *gridLoc = create_component(engine, verb_entity_id, COMP_GRIDLOCATION);
+    glmc_ivec2_set(gridLoc->pos, x, y);
+
+    ArtComponent *art = create_component(engine, verb_entity_id, COMP_ART);
+    art->type = ART_CONNECTOR;
+
+    DirectionComponent *dir = create_component(engine, verb_entity_id, COMP_DIRECTION);
+    //TODO juiste kant inlezen
+    dir->dir = S;
+
+    ActivatableComponent *act = create_component(engine, verb_entity_id, COMP_ACTIVATABLE);
+    act->active = 0;
+
+    return verb_entity_id;
 }
 
 EntityId create_and_entity(Engine *engine, int x, int y) {
