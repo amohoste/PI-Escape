@@ -1,7 +1,8 @@
 #include "../sensor/lps25h.h"
 #include "../sensor/i2c.h"
-#include <linux/i2c-dev.h>
 
+#include <stdint.h>
+#include <linux/i2c-dev.h>
 
 #define ADDR 0x5c
 #define CTRL_REG1 0x20
@@ -19,8 +20,8 @@ int file;
 
 int lps25h_init(int frequentie)
 {
-	int status = 0;
-	int count = 0;
+	uint8_t status = 0;
+	uint8_t count = 0;
 
 	// file maken
 	file = i2c_init_adapter(ADDR);
@@ -54,10 +55,10 @@ int lps25h_read_pressure()
 	int press_out_XL = i2c_read_byte_data(file, PRESS_OUT_XL);
 
 	// variablen naar goed formaat omzetten
-	int temp_out_HLLX = press_out_H << 16 | press_out_L << 8 | press_out_H;
+	int press_out_HLLX = press_out_H << 16 | press_out_L << 8 | press_out_XL;
 
 	// pressure bepalen
-	return temp_out_HLLX / 4096;
+	return press_out_HLLX / 4096;
 }
 
 
@@ -76,7 +77,7 @@ int lps25h_read_temperature()
 }
 
 
-int init_initValue(int frequentie) {
+void init_initValue(int frequentie) {
 	switch (frequentie) {
 	case 0:
 		// eenmalige check
@@ -92,5 +93,4 @@ int init_initValue(int frequentie) {
 	default:
 		initValue = 0x90;
 	}
-	return 0;
 }

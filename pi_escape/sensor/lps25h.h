@@ -30,5 +30,5 @@ int lps25h_read_temperature();
 	@param frequentie in hexadecimaal
 	@return 0;
 */
-int init_initValue(frequentie);
+void init_initValue(frequentie);
 #endif /* LPS25H */
