@@ -7,8 +7,9 @@
 
 
 typedef struct RealSensorsSystem {
-	TO_IMPLEMENT_STRUCT;
-	//TODO
+	int pressure;
+	int humidity;
+	int temperature;
 } RealSensorsSystem;
 
 #include "../engine.h"

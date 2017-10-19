@@ -15,14 +15,21 @@ RealSensorsSystem* system_real_sensors_alloc() {
 }
 
 void system_real_sensors_init(RealSensorsSystem* system) {
-    //TODO
+	system->humidity = calloc(1, sizeof(int));
+	system->temperature = calloc(1, sizeof(int));
+	system->pressure = calloc(1, sizeof(int));
 }
 
 
 void system_real_sensors_free(RealSensorsSystem* system) {
-    //TODO
+	free(system->humidity);
+	free(system->temperature);
+	free(system->pressure);
+	free(system);
 }
 
 void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
-    //TODO
+	system->humidity = hts221_read_humidity();
+	system->temperature = hts221_read_temperature();
+	system->pressure = lps25h_read_pressure();
 }
