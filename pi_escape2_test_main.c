@@ -38,6 +38,7 @@ static char * test_load_levels() {
     mu_assert(test_tutorial6());
     mu_assert(test_tutorial7());
     mu_assert(test_array());
+    mu_assert(test_complete());
 	return 0;
 }
 

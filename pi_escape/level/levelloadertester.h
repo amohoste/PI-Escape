@@ -13,3 +13,4 @@ int test_tutorial5();
 int test_tutorial6();
 int test_tutorial7();
 int test_array();
+int test_complete();

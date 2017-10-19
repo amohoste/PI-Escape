@@ -1,4 +1,5 @@
 #include <malloc.h>
+#include <string.h>
 #include "levelloadertester.h"
 
 int test_game1() {
@@ -42,11 +43,13 @@ int test_tutorial7() {
 }
 
 int test_file(char *path, int nrows, int ncols) {
+    LevelLoader *ll = malloc(sizeof(LevelLoader));
+    ll->file = strdup(path);
     FILE *f;
     f = fopen(path, "r");
     int rows = 0;
     int cols = 0;
-    rows_cols_read(f, &rows, &cols);
+    rows_cols_read(ll, &rows, &cols);
     assert(rows == nrows);
     assert(cols == ncols);
     fclose(f);
@@ -54,16 +57,31 @@ int test_file(char *path, int nrows, int ncols) {
 }
 
 int test_array() {
+    LevelLoader *ll = malloc(sizeof(LevelLoader));
+    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
     FILE *f;
-    f = fopen("pi_escape/level/level_files/game1.lvl", "r");
+    f = fopen(ll->file, "r");
     struct Level *l = malloc(sizeof(Level));
 
     level_init(l, 11, 8, 1);
 
-    read_level(l, f);
+    read_level(l, ll);
 
 	assert(l->spel[0][0] == ' ');
     assert(l->spel[0][3] == 'E');
 
-        return 1;
+    return 1;
+}
+
+int test_complete() {
+    LevelLoader *ll = malloc(sizeof(LevelLoader));
+
+    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
+
+    Level *l = levelloader_load_level(ll, 1);
+
+    assert(l->rij == 11);
+
+    free(ll);
+    return 1;
 }
