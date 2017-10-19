@@ -8,8 +8,8 @@
 
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
 void level_init(Level *level, int width, int height, int nr) {
-    level->kol = width;
-    level->rij = height;
+    level->width = width;
+    level->height = height;
     level->nr = nr;
     level->spel = init_array_of_size(width, height);
 }
@@ -33,7 +33,7 @@ Level *level_alloc(int width, int height, int nr) {
 }
 
 void levelloader_free_level(Level *l) {
-    for(int i = 0; i < l->rij; i++){
+    for(int i = 0; i < l->height; i++){
         free(l->spel[i]);
     }
     free(l->spel);
@@ -45,7 +45,7 @@ LevelLoader *levelloader_alloc() {
 }
 
 void levelloader_free(LevelLoader *ll) {
-    free(ll);
+    //TODO
 }
 
 Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
@@ -63,8 +63,8 @@ Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
 
 void read_level(Level *level, LevelLoader *ll) {
     char **a = level->spel;
-    int height = level->rij;
-    int width = level->kol;
+    int height = level->height;
+    int width = level->width;
     FILE* file = fopen(ll->file, "r");
     char kar = (char) getc(file);
 
