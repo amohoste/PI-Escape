@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include "assemblage.h"
 
+
+
 void create_level_entities(Level *l, Engine *engine) {
     for (int x = 0; x < l->height; x++) {
         for (int y = 0; y < l->width; y++) {
@@ -13,6 +15,8 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_player = IS_START(x, y);
             int has_lock = IS_LOCK(x, y);
             int has_wall = IS_WALL(x, y);
+            int has_or = IS_OR(x, y);
+            int has_and = IS_AND(x, y);
 
             int walls[4];
             walls[S] = y == 0 || has_wall;
@@ -35,11 +39,51 @@ void create_level_entities(Level *l, Engine *engine) {
                 EntityId key = create_key_entity(engine, x, y, l->spel[x][y]);
             }
 
+            if (has_or) {
+                EntityId or = create_or_entity(engine, x, y);
+            }
+
+            if(has_and){
+                EntityId and = create_and_entity(engine, x, y);
+            }
+
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
-            EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil,has_wall, walls);
+            EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil, has_wall, walls);
 
         }
     }
+}
+
+EntityId create_and_entity(Engine *engine, int x, int y) {
+    EntityId or_entity_id = get_new_entity_id(engine);
+
+    GridLocationComponent *gridloc = create_component(engine, or_entity_id, COMP_GRIDLOCATION);
+    glmc_ivec2_set(gridloc->pos, x, y);
+
+    ArtComponent *art = create_component(engine, or_entity_id, COMP_ART);
+    art->type = ART_CONNECTOR_AND;
+
+    ConnectorLogicComponent *con = create_component(engine, or_entity_id, COMP_CONNECTORLOGIC);
+
+    ActivatableComponent *act = create_component(engine, or_entity_id, COMP_ACTIVATABLE);
+
+    return or_entity_id;
+}
+
+EntityId create_or_entity(Engine *engine, int x, int y) {
+    EntityId or_entity_id = get_new_entity_id(engine);
+
+    GridLocationComponent *gridloc = create_component(engine, or_entity_id, COMP_GRIDLOCATION);
+    glmc_ivec2_set(gridloc->pos, x, y);
+
+    ArtComponent *art = create_component(engine, or_entity_id, COMP_ART);
+    art->type = ART_CONNECTOR_OR;
+
+    ConnectorLogicComponent *con = create_component(engine, or_entity_id, COMP_CONNECTORLOGIC);
+
+    ActivatableComponent *act = create_component(engine, or_entity_id, COMP_ACTIVATABLE);
+
+    return or_entity_id;
 }
 
 EntityId create_player_entity(Engine *engine, int x, int y) {
@@ -152,7 +196,7 @@ EntityId create_key_entity(Engine *engine, int x, int y, char color) {
     return key_entity_id;
 }
 
-EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_ceil,int has_wall, int walls[4]) {
+EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_ceil, int has_wall, int walls[4]) {
 
     EntityId wall_entity_id = get_new_entity_id(engine);
 
