@@ -31,7 +31,7 @@ int test_filedimensions(char *path, int nrows, int ncols) {
 }
 
 int test_game1() {
-	char cmp[11][8] = {
+	char arr[11][8] = {
 	{' ', ' ', ' ', 'E', ' ', ' ', ' ', ' '} ,
 	{' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '} ,
 	{'X', 'X', 'X', '#', 'X', 'X', 'X', 'X'} ,
@@ -45,6 +45,8 @@ int test_game1() {
 	{' ', ' ', 'S', ' ', 'b', ' ', ' ', ' '} 
 	};
 
+	
+
 	LevelLoader *ll = malloc(sizeof(LevelLoader));
 	ll->file = strdup("pi_escape/level/level_files/game1.lvl");
 	FILE *f;
@@ -55,12 +57,12 @@ int test_game1() {
 
 	read_level(l, ll);
 
-	assert(array_compare(l->spel, cmp, 11, 8) == 1);
+	assert(array_compare(l->spel, arr, 11, 8) == 1);
 
 	return 1;
 }
 
-int test_array() {
+int test_few() {
 
     LevelLoader *ll = malloc(sizeof(LevelLoader));
     ll->file = strdup("pi_escape/level/level_files/game1.lvl");
@@ -91,12 +93,13 @@ int test_complete() {
     return 1;
 }
 
+int array_compare(char **a, char b[][8], int rij, int kol) {
 
-int array_compare(char **a, char **b, int rij, int kol) {
 	for (int i = 0; i < rij; i++) {
 		for (int j = 0; j < kol; j++) {
 			if (a[i][j] != b[i][j]) return 0;
 		}
 	}
+	
 	return 1;
 }
