@@ -7,7 +7,7 @@
 
 
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
-void level_init(Level *level, int width, int height, int nr) {
+void level_init(Level *level, int height, int width, int nr) {
     level->width = width;
     level->height = height;
     level->nr = nr;
@@ -26,7 +26,7 @@ char **init_array_of_size(int width, int height) {
     return a;
 }
 
-Level *level_alloc(int width, int height, int nr) {
+Level *level_alloc(int height, int width, int nr) {
     Level *res = malloc(sizeof(Level));
     level_init(res, height, width, nr);
     return res;
