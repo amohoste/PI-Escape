@@ -1,10 +1,7 @@
 #ifndef REAL_SENSORS_SYSTEM_H
 #define REAL_SENSORS_SYSTEM_H
-#define TO_IMPLEMENT_STRUCT char c
-
 
 #include <stdint.h>
-
 
 typedef struct RealSensorsSystem {
 	int pressure;
