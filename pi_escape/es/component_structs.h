@@ -29,8 +29,10 @@ typedef struct CameraLookAtComponent {
 } CameraLookAtComponent;
 
 typedef struct MoveActionComponent {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+	int up;
+	int right;
+	int down;
+	int left;
 } MoveActionComponent;
 
 typedef struct GridLocationComponent {
@@ -112,8 +114,7 @@ typedef struct MoveHistoryComponent {
 } MoveHistoryComponent;
 
 typedef struct ItemActionComponent {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+	int act;	// bool act
 } ItemActionComponent;
 
 typedef struct DirectionComponent {
