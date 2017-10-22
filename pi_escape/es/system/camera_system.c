@@ -36,10 +36,10 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	// positie van deze entity opslaan
 	t_ivec2 lookat_grid_pos;
 	GridLocationComponent* lookat_grid_comp = get_component(engine, lookat_entity_id, COMP_GRIDLOCATION);
-	glmc_assign_ivec2(lookat_grid_pos, lookat_grid_comp->pos);
-
-	// Nieuwe lookatpositie berekenen en aanpassen
-	level_pos_to_world_pos2i(lookat_grid_pos, cameraLookAt->pos);
+	// printf("position = (%f,%f,%f)\n", cameraLookAt->pos[0], cameraLookAt->pos[1], cameraLookAt->pos[2]);
+	float x = lookat_grid_comp->pos[0] * 1.0f;
+	float y = lookat_grid_comp->pos[1] * 1.0f;
+	glmc_vec3_set(cameraLookAt->pos, x , y + 5.0f, 0.0f);
 
 	// Positie van waar gekeken wordt
 	float distance = cameraLookFrom->distance;
@@ -47,4 +47,5 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	float zdegrees = cameraLookFrom->Zdegrees;
 
 	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
+
 }
