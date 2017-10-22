@@ -1,3 +1,9 @@
+/***************************************************************
+- Animation System -
+Beheert de timing van de animaties, en verwijdert de animaties
+wanneer ze voltooid zijn.
+****************************************************************/
+
 #include "animation_system.h"
 
 

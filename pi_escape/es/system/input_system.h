@@ -1,3 +1,9 @@
+/***************************************************************
+- Input System -
+Afhandelen van toetsenbord en muis input via SDL. Dit voegt 
+MoveActionComponent en ItemActionComponent toe wanneer nodig.
+****************************************************************/
+
 #ifndef INPUT_SYSTEM_H
 #define INPUT_SYSTEM_H
 

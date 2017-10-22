@@ -1,3 +1,9 @@
+/***************************************************************
+- Real Sensor System -
+Zorgt voor het renderen van alles wat een ArtComponent en 
+CellLocationComponent heeft.
+****************************************************************/
+
 #ifndef RENDER_SYSTEM_H
 #define RENDER_SYSTEM_H
 
