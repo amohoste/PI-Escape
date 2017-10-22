@@ -33,13 +33,13 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	EntityId lookat_entity_id = lookat_it.entity_id;
 	assert(lookat_entity_id != NO_ENTITY);
 
-	// positie van deze entity opslaan
-	t_ivec2 lookat_grid_pos;
+	// Gridlocationcomponent van deze entity opvragen
 	GridLocationComponent* lookat_grid_comp = get_component(engine, lookat_entity_id, COMP_GRIDLOCATION);
+
 	// printf("position = (%f,%f,%f)\n", cameraLookAt->pos[0], cameraLookAt->pos[1], cameraLookAt->pos[2]);
 	float x = lookat_grid_comp->pos[0] * 1.0f;
 	float y = lookat_grid_comp->pos[1] * 1.0f;
-	glmc_vec3_set(cameraLookAt->pos, x , y + 5.0f, 0.0f);
+	glmc_vec3_set(cameraLookAt->pos, x , y, 0.0f);
 
 	// Positie van waar gekeken wordt
 	float distance = cameraLookFrom->distance;
