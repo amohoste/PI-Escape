@@ -1,3 +1,9 @@
+/***************************************************************
+- Assemblage (assembly) -
+Biedt functies om typische soorten entities en al hun 
+components aan te maken.
+****************************************************************/
+
 #ifndef ASSEMBLAGE_H
 #define ASSEMBLAGE_H
 
