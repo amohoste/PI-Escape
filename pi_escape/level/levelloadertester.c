@@ -17,17 +17,15 @@ int test_filesdimensions() {
 }
 
 int test_filedimensions(char *path, int nrows, int ncols) {
-    LevelLoader *ll = malloc(sizeof(LevelLoader));
-    ll->file = strdup(path);
-    FILE *f;
-    f = fopen(path, "r");
-    int rows = 0;
-    int cols = 0;
-    rows_cols_read(ll, &rows, &cols);
-    assert(rows == nrows);
-    assert(cols == ncols);
-    fclose(f);
-    return 0;
+	LevelLoader *ll = levelloader_alloc();
+	ll->file = strdup(path);
+
+	// Level aanmaken en inlezen
+	Level *l = levelloader_load_level(ll, 1);
+	assert(l->width == ncols);
+	assert(l->height == nrows);
+
+	return 1;
 }
 
 int test_game1() {
@@ -46,12 +44,11 @@ int test_game1() {
 	};
 
 	
-
-	LevelLoader *ll = malloc(sizeof(LevelLoader));
+	// Levelloader aanmaken
+	LevelLoader *ll = levelloader_alloc();
 	ll->file = strdup("pi_escape/level/level_files/game1.lvl");
-	FILE *f;
-	f = fopen(ll->file, "r");
 
+	// Level aanmaken en inlezen
 	Level *l = levelloader_load_level(ll,1);
 
 	assert(array_compare(l, arr, 11, 8) == 1);
@@ -61,32 +58,16 @@ int test_game1() {
 
 int test_few() {
 
-    LevelLoader *ll = malloc(sizeof(LevelLoader));
-    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
-    FILE *f;
-    f = fopen(ll->file, "r");
-    struct Level *l = malloc(sizeof(Level));
-
-    level_init(l, 11, 8, 1);
-
-    read_level(l, ll);
+	// Levelloader aanmaken
+	LevelLoader *ll = levelloader_alloc();
+	ll->file = strdup("pi_escape/level/level_files/game1.lvl");
+	
+	// Level aanmaken en inlezen
+	Level *l = levelloader_load_level(ll, 1);
 
 	assert(l->spel[0][0] == ' ');
     assert(l->spel[0][3] == 'E');
 
-    return 1;
-}
-
-int test_complete() {
-    LevelLoader *ll = malloc(sizeof(LevelLoader));
-
-    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
-
-    Level *l = levelloader_load_level(ll, 1);
-
-    assert(l->height == 11);
-
-    free(ll);
     return 1;
 }
 
