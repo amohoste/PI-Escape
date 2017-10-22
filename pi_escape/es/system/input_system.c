@@ -51,20 +51,23 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
             //engine->context.demo = !engine->context.demo;
 
 			// search entity
-			struct EntityIterator *entityresolver;
+			EntityIterator *entityresolver = malloc(sizeof(EntityIterator));
 			search_entity_1(engine, COMP_MOVE_ACTION, entityresolver);
+			next_entity(entityresolver);
 
-			print(entityresolver->entity_id);
+			//printf(entityresolver->entity_id);
 
-			struct ComponentIterator *componentresolver;
-			search_component(engine, COMP_MOVE_ACTION, componentresolver);
+			ComponentIterator *componentresolver = malloc(sizeof(ComponentIterator));
+			search_component(engine, COMP_MOVE_ACTION, &componentresolver);
 			// update move component of the entity
 			while (next_entity(entityresolver))
 			{
 				// search move component
 				componentresolver->entity_id = entityresolver->entity_id;
-				print(componentresolver->comp);
+				printf(componentresolver->comp);
 			}
+
+			//next_entity(entityresolver);
 
             break;
         }
