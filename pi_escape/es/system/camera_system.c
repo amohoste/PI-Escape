@@ -22,7 +22,6 @@ void system_camera_free(CameraSystem* system) {
 }
 
 void system_camera_update(CameraSystem* system, Engine* engine) {
-    //TODO
 	CameraLookFromComponent* cameraLookFrom = search_first_component(engine, COMP_CAMERA_LOOK_FROM);
 	CameraLookAtComponent* cameraLookAt = search_first_component(engine, COMP_CAMERA_LOOK_AT);
 
@@ -47,5 +46,4 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	float zdegrees = cameraLookFrom->Zdegrees;
 
 	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
-
 }
