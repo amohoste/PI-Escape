@@ -39,10 +39,6 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
         default:
             break;
     }
-    
-    
-    
-    
 }
 
 static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId inputReceiverEntity)
@@ -52,7 +48,24 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
             engine->context.is_exit_game = 1;
             break;
         case SDLK_UP:{
-            engine->context.demo = !engine->context.demo;
+            //engine->context.demo = !engine->context.demo;
+
+			// search entity
+			struct EntityIterator *entityresolver;
+			search_entity_1(engine, COMP_MOVE_ACTION, entityresolver);
+
+			print(entityresolver->entity_id);
+
+			struct ComponentIterator *componentresolver;
+			search_component(engine, COMP_MOVE_ACTION, componentresolver);
+			// update move component of the entity
+			while (next_entity(entityresolver))
+			{
+				// search move component
+				componentresolver->entity_id = entityresolver->entity_id;
+				print(componentresolver->comp);
+			}
+
             break;
         }
         case SDLK_DOWN:{
