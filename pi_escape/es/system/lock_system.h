@@ -1,3 +1,9 @@
+/***************************************************************
+- Lock System -
+Kijkt of de correcte sleutel zich op dezelfde positie als
+een slot bevind, of niet, en activeert of deactiveert het slot.
+****************************************************************/
+
 #ifndef LOCK_SYSTEM_H
 #define LOCK_SYSTEM_H
 #define EMPTY_SYSTEM_STRUCT char c

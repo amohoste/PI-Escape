@@ -1,3 +1,8 @@
+/***************************************************************
+- Process Sensor System -
+
+****************************************************************/
+
 #ifndef PROCESS_SENSOR_SYSTEM_H
 #define PROCESS_SENSOR_SYSTEM_H
 #define TO_IMPLEMENT_STRUCT char c

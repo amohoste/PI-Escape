@@ -37,6 +37,10 @@ typedef struct AllComponent {
     };
 } AllComponent;
 
+/*
+* Boekhouding spel, hierin wordt voor elke entity bijgehouden
+* welke components deze heeft en hoe deze data bereikbaar is.
+*/
 typedef struct ESMemory {
     EntityId next_entity_id;
     
@@ -48,6 +52,9 @@ void es_memory_manager_free(ESMemory*);
 
 #include "engine.h"
 
+/*
+* Basisoperaties op boekhouding spel
+*/
 int has_component(Engine* engine, EntityId entity_id, ComponentId component_id);
 void* get_component(Engine* engine, EntityId entity_id, ComponentId component_id);
 
