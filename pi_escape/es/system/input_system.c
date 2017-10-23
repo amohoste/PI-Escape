@@ -29,51 +29,46 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 	// search entity
 	EntityIterator entityresolver;
 	search_entity_1(engine, COMP_MOVE_ACTION, &entityresolver);
-	next_entity(&entityresolver);
+	while (next_entity(&entityresolver)) {
+		EntityId entity_id = entityresolver.entity_id;
+		assert(entity_id != NO_ENTITY);
 
-	EntityId entity_id = entityresolver.entity_id;
-	assert(entity_id != NO_ENTITY);
+		// get move component of the entity
+		MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
-	// get move component of the entity
-	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+		// get item action component of the entity
+		ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
 
-	// get item action component of the entity
-	ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
-
-    switch( keysym->sym ) {
-        case SDLK_ESCAPE:
-            //ignore untile key released
-            break;
-        case SDLK_KP_ENTER: //fall-through
-        case SDLK_RETURN:   //fall-through
-        case SDLK_SPACE: {
-            //engine->context.demo = !engine->context.demo;
+		switch (keysym->sym) {
+		case SDLK_ESCAPE:
+			//ignore untile key released
+			break;
+		case SDLK_KP_ENTER: //fall-through
+		case SDLK_RETURN:   //fall-through
+		case SDLK_SPACE: {
 			itemaction->act = 1;
-            break;
-        }
+			break;
+		}
 		case SDLK_UP: {
-			//engine->context.demo = !engine->context.demo;
 			move->up = 1;
 			break;
 		}
 		case SDLK_DOWN: {
-			//engine->context.demo = !engine->context.demo;
 			move->down = 1;
 			break;
 		}
 		case SDLK_LEFT: {
-			//engine->context.demo = !engine->context.demo;
 			move->left = 1;
 			break;
 		}
 		case SDLK_RIGHT: {
-			//engine->context.demo = !engine->context.demo;
 			move->right = 1;
 			break;
 		}
-        default:
-            break;
-    }
+		default:
+			break;
+		}
+	}
 }
 
 static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId inputReceiverEntity)
@@ -81,18 +76,18 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 	// search entity
 	EntityIterator entityresolver;
 	search_entity_1(engine, COMP_MOVE_ACTION, &entityresolver);
-	next_entity(&entityresolver);
+	while (next_entity(&entityresolver)) {
 
-	EntityId entity_id = entityresolver.entity_id;
-	assert(entity_id != NO_ENTITY);
+		EntityId entity_id = entityresolver.entity_id;
+		assert(entity_id != NO_ENTITY);
 
-	// get move component of the entity
-	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+		// get move component of the entity
+		MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
-	// get item action component of the entity
-	ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
+		// get item action component of the entity
+		ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
 
-    switch( keysym->sym ) {
+		switch (keysym->sym) {
 		case SDLK_ESCAPE: {
 			engine->context.is_exit_game = 1;
 			break;
@@ -100,35 +95,29 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 		case SDLK_KP_ENTER: //fall-through
 		case SDLK_RETURN:   //fall-through
 		case SDLK_SPACE: {
-			//engine->context.demo = !engine->context.demo;
 			itemaction->act = 0;
 			break;
 		}
-        case SDLK_UP:{
-			//engine->context.demo = !engine->context.demo;
+		case SDLK_UP: {
 			move->up = 0;
-            break;
-        }
-        case SDLK_DOWN:{
-            //engine->context.demo = !engine->context.demo;
+			break;
+		}
+		case SDLK_DOWN: {
 			move->down = 0;
-            break;
-        }
-        case SDLK_LEFT:{
-            //engine->context.demo = !engine->context.demo;
+			break;
+		}
+		case SDLK_LEFT: {
 			move->left = 0;
-            break;
-        }
-        case SDLK_RIGHT:{
-            //engine->context.demo = !engine->context.demo;
+			break;
+		}
+		case SDLK_RIGHT: {
 			move->right = 0;
-            break;
-        }
-        default:
-            break;
-    }
-    
-    
+			break;
+		}
+		default:
+			break;
+		}
+	}
 }
 
 void system_input_update(InputSystem* system, Engine* engine) {
