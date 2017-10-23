@@ -34,8 +34,11 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 	EntityId entity_id = entityresolver.entity_id;
 	assert(entity_id != NO_ENTITY);
 
-	// update move component of the entity
+	// get move component of the entity
 	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+
+	// get item action component of the entity
+	ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
 
     switch( keysym->sym ) {
         case SDLK_ESCAPE:
@@ -44,7 +47,8 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
         case SDLK_KP_ENTER: //fall-through
         case SDLK_RETURN:   //fall-through
         case SDLK_SPACE: {
-            engine->context.demo = !engine->context.demo;
+            //engine->context.demo = !engine->context.demo;
+			itemaction->act = 1;
             break;
         }
 		case SDLK_UP: {
@@ -82,13 +86,24 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 	EntityId entity_id = entityresolver.entity_id;
 	assert(entity_id != NO_ENTITY);
 
-	// update move component of the entity
+	// get move component of the entity
 	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
+	// get item action component of the entity
+	ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
+
     switch( keysym->sym ) {
-        case SDLK_ESCAPE:
-            engine->context.is_exit_game = 1;
-            break;
+		case SDLK_ESCAPE: {
+			engine->context.is_exit_game = 1;
+			break;
+		}
+		case SDLK_KP_ENTER: //fall-through
+		case SDLK_RETURN:   //fall-through
+		case SDLK_SPACE: {
+			//engine->context.demo = !engine->context.demo;
+			itemaction->act = 0;
+			break;
+		}
         case SDLK_UP:{
 			//engine->context.demo = !engine->context.demo;
 			move->up = 0;
