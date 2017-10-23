@@ -26,6 +26,17 @@ void system_input_free(InputSystem* system) {
 
 static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId input_recv_entity_id)
 {
+	// search entity
+	EntityIterator entityresolver;
+	search_entity_1(engine, COMP_MOVE_ACTION, &entityresolver);
+	next_entity(&entityresolver);
+
+	EntityId entity_id = entityresolver.entity_id;
+	assert(entity_id != NO_ENTITY);
+
+	// update move component of the entity
+	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+
     switch( keysym->sym ) {
         case SDLK_ESCAPE:
             //ignore untile key released
@@ -36,6 +47,26 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
             engine->context.demo = !engine->context.demo;
             break;
         }
+		case SDLK_UP: {
+			//engine->context.demo = !engine->context.demo;
+			move->up = 1;
+			break;
+		}
+		case SDLK_DOWN: {
+			//engine->context.demo = !engine->context.demo;
+			move->down = 1;
+			break;
+		}
+		case SDLK_LEFT: {
+			//engine->context.demo = !engine->context.demo;
+			move->left = 1;
+			break;
+		}
+		case SDLK_RIGHT: {
+			//engine->context.demo = !engine->context.demo;
+			move->right = 1;
+			break;
+		}
         default:
             break;
     }
@@ -43,44 +74,39 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 
 static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId inputReceiverEntity)
 {
+	// search entity
+	EntityIterator entityresolver;
+	search_entity_1(engine, COMP_MOVE_ACTION, &entityresolver);
+	next_entity(&entityresolver);
+
+	EntityId entity_id = entityresolver.entity_id;
+	assert(entity_id != NO_ENTITY);
+
+	// update move component of the entity
+	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+
     switch( keysym->sym ) {
         case SDLK_ESCAPE:
             engine->context.is_exit_game = 1;
             break;
         case SDLK_UP:{
-            //engine->context.demo = !engine->context.demo;
-
-			// search entity
-			EntityIterator *entityresolver = malloc(sizeof(EntityIterator));
-			search_entity_1(engine, COMP_MOVE_ACTION, entityresolver);
-			next_entity(entityresolver);
-
-			//printf(entityresolver->entity_id);
-
-			ComponentIterator *componentresolver = malloc(sizeof(ComponentIterator));
-			search_component(engine, COMP_MOVE_ACTION, &componentresolver);
-			// update move component of the entity
-			while (next_entity(entityresolver))
-			{
-				// search move component
-				componentresolver->entity_id = entityresolver->entity_id;
-				printf(componentresolver->comp);
-			}
-
-			//next_entity(entityresolver);
-
+			//engine->context.demo = !engine->context.demo;
+			move->up = 0;
             break;
         }
         case SDLK_DOWN:{
-            engine->context.demo = !engine->context.demo;
+            //engine->context.demo = !engine->context.demo;
+			move->down = 0;
             break;
         }
         case SDLK_LEFT:{
-            engine->context.demo = !engine->context.demo;
+            //engine->context.demo = !engine->context.demo;
+			move->left = 0;
             break;
         }
         case SDLK_RIGHT:{
-            engine->context.demo = !engine->context.demo;
+            //engine->context.demo = !engine->context.demo;
+			move->right = 0;
             break;
         }
         default:
