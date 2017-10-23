@@ -18,7 +18,7 @@ void system_camera_init(CameraSystem* system) {
 
 
 void system_camera_free(CameraSystem* system) {
-    //TODO
+	//TODO
 }
 
 void system_camera_update(CameraSystem* system, Engine* engine) {
@@ -45,5 +45,10 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	float xydegrees = cameraLookFrom->XYdegees;
 	float zdegrees = cameraLookFrom->Zdegrees;
 
-	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
+	float dx = (distance * sinf(zdegrees) * cosf(xydegrees));
+	float dy = (distance * sinf(zdegrees) * sinf(xydegrees));
+	float dz = distance * cosf(zdegrees);
+
+	glmc_vec3_set(cameraLookFrom->pos, x + dx, y + dy , 0.0f + dz);
+
 }

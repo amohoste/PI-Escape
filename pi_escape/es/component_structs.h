@@ -68,7 +68,7 @@ typedef struct OneTimeAnimationComponent {
 */
 typedef struct MoveAnimationComponent {
     //TODO
-	TO_IMPLEMENT_STRUCT;
+	Direction dir;
 } MoveAnimationComponent;
 
 /*
