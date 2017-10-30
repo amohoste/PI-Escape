@@ -75,6 +75,8 @@ EntityId create_exit_entity(Engine *engine, int x, int y) {
 
     ArtComponent *art = create_component(engine, exit_entity_id, COMP_ART);
     art->type = ART_END;
+
+    ExitComponent *exit = create_component(engine, exit_entity_id, COMP_EXIT);
 }
 
 EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y) {
