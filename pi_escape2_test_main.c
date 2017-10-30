@@ -29,7 +29,6 @@ static char * test_memory_manager_create_component() {
 static char * test_load_levels() {
 	mu_assert(test_filesdimensions());
 	mu_assert(test_game1());
-    mu_assert(test_complete());
 	return 0;
 }
 
