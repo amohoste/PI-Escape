@@ -18,6 +18,7 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_or = IS_OR(x, y);
             int has_and = IS_AND(x, y);
             int is_verbinding = IS_VERBINDING(x, y);
+            int is_exit = IS_EXIT(x,y);
 
             int walls[4];
             walls[S] = y == 0 || has_wall;
@@ -52,11 +53,25 @@ void create_level_entities(Level *l, Engine *engine) {
                 EntityId verbinding = create_verbinding_entity(engine, x, y);
             }
 
+            if(is_exit){
+                EntityId exit = create_exit_entity(engine, x,y);
+            }
+
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
             EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil, has_wall, walls);
 
         }
     }
+}
+
+EntityId create_exit_entity(Engine *engine, int x, int y){
+    EntityId  exit_entity_id = get_new_entity_id(engine);
+
+    GridLocationComponent * gridLoc = create_component(engine, exit_entity_id, COMP_GRIDLOCATION);
+    glmc_ivec2_set(gridLoc->pos, x, y);
+
+    ArtComponent *art = create_component(engine, exit_entity_id, COMP_ART);
+    art->type =  ART_END;
 }
 
 EntityId create_verbinding_entity(Engine *engine, int x, int y) {

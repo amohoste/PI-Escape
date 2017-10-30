@@ -44,4 +44,6 @@ EntityId create_or_entity(Engine *engine, int x, int y);
 
 EntityId create_and_entity(Engine *engine, int x, int y);
 
+EntityId create_exit_entity(Engine *engine, int x, int y);
+
 #endif
