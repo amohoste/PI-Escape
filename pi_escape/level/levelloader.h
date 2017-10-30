@@ -29,6 +29,8 @@ LevelLoader *levelloader_alloc();
 
 void levelloader_free(LevelLoader *);
 
+char* create_level_name(int new_level_number);
+
 Level *levelloader_load_level(LevelLoader *, int level_nr);
 
 void levelloader_free_level(Level *);

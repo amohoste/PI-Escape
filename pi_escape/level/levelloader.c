@@ -3,6 +3,7 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
@@ -57,7 +58,22 @@ Level *levelloader_load_level(LevelLoader *ll, int level_nr) {
 
     read_level(level, ll);
 
+    printf("%s", create_level_name(3));
+
     return level;
+}
+
+char *create_level_name(int new_level_number) {
+    char *level_name;
+    int extra = (int) (new_level_number >= 7 ? strlen("game") : strlen("tutorial"));
+    level_name = malloc(strlen("pi_escape/level/level_files/") + extra + 1 + strlen(".lvl") + 1);
+    level_name[0] = '\0';
+    strcat(level_name, "pi_escape/level/level_files/");
+    strcat(level_name, new_level_number >= 7 ? "game" : "tutorial");
+    //48 extra optellen zodat levelnaam correct is
+    level_name[strlen(level_name)] = (char) ((char) new_level_number + 48);
+    strcat(level_name, ".lvl");
+    return level_name;
 }
 
 void read_level(Level *level, LevelLoader *ll) {
