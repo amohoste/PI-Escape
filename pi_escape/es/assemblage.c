@@ -4,8 +4,12 @@
 #include "assemblage.h"
 
 
-
 void create_level_entities(Level *l, Engine *engine) {
+    EntityId **entityList;
+    entityList = (EntityId **) calloc((size_t) l->height, sizeof(EntityId *));
+    for (int i = 0; i < l->height; i++) {
+        entityList[i] = (EntityId *) calloc((size_t) l->width, sizeof(EntityId));
+    }
     for (int x = 0; x < l->height; x++) {
         for (int y = 0; y < l->width; y++) {
             int has_door = IS_DOOR(x, y);
@@ -18,7 +22,7 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_or = IS_OR(x, y);
             int has_and = IS_AND(x, y);
             int is_verbinding = IS_VERBINDING(x, y);
-            int is_exit = IS_EXIT(x,y);
+            int is_exit = IS_EXIT(x, y);
 
             int walls[4];
             walls[S] = y == 0 || has_wall;
@@ -27,34 +31,33 @@ void create_level_entities(Level *l, Engine *engine) {
             walls[W] = x == 0 || has_wall;
 
             if (has_player) {
-                //todo waarom returntype?
-                EntityId player = create_player_entity(engine, x, y);
+                entityList[x][y] = create_player_entity(engine, x, y);
             }
 
             if (has_door) {
-                EntityId door = create_door_entity(engine, x, y);
+                entityList[x][y] = create_door_entity(engine, x, y);
             }
             if (has_lock) {
-                EntityId lock = create_lock_entity(engine, x, y, l->spel[x][y]);
+                entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
             }
             if (has_key) {
-                EntityId key = create_key_entity(engine, x, y, l->spel[x][y]);
+                entityList[x][y] = create_key_entity(engine, x, y, l->spel[x][y]);
             }
 
             if (has_or) {
-                EntityId or = create_or_entity(engine, x, y);
+                entityList[x][y] = create_or_entity(engine, x, y);
             }
 
             if (has_and) {
-                EntityId and = create_and_entity(engine, x, y);
+                entityList[x][y] = create_and_entity(engine, x, y);
             }
 
             if (is_verbinding) {
-                EntityId verbinding = create_verbinding_entity(engine, x, y);
+                entityList[x][y] = create_verbinding_entity(engine, l, x, y);
             }
 
-            if(is_exit){
-                EntityId exit = create_exit_entity(engine, x,y);
+            if (is_exit) {
+                entityList[x][y] = create_exit_entity(engine, x, y);
             }
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
@@ -64,17 +67,17 @@ void create_level_entities(Level *l, Engine *engine) {
     }
 }
 
-EntityId create_exit_entity(Engine *engine, int x, int y){
-    EntityId  exit_entity_id = get_new_entity_id(engine);
+EntityId create_exit_entity(Engine *engine, int x, int y) {
+    EntityId exit_entity_id = get_new_entity_id(engine);
 
-    GridLocationComponent * gridLoc = create_component(engine, exit_entity_id, COMP_GRIDLOCATION);
+    GridLocationComponent *gridLoc = create_component(engine, exit_entity_id, COMP_GRIDLOCATION);
     glmc_ivec2_set(gridLoc->pos, x, y);
 
     ArtComponent *art = create_component(engine, exit_entity_id, COMP_ART);
-    art->type =  ART_END;
+    art->type = ART_END;
 }
 
-EntityId create_verbinding_entity(Engine *engine, int x, int y) {
+EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y) {
     EntityId verb_entity_id = get_new_entity_id(engine);
 
     GridLocationComponent *gridLoc = create_component(engine, verb_entity_id, COMP_GRIDLOCATION);
@@ -84,8 +87,12 @@ EntityId create_verbinding_entity(Engine *engine, int x, int y) {
     art->type = ART_CONNECTOR;
 
     DirectionComponent *dir = create_component(engine, verb_entity_id, COMP_DIRECTION);
-    //TODO juiste kant inlezen
-    dir->dir = S;
+    //kijken of het vakje erboven of eronder aantoont hoe er moet worden bewogen
+    if (x >= 1 && (IS_VERBINDING(x - 1, y) || IS_AND(x - 1, y) || IS_DOOR(x - 1, y) || IS_OR(x - 1, y))) {
+        dir->dir = E;
+    } else {
+        dir->dir = S;
+    }
 
     ActivatableComponent *act = create_component(engine, verb_entity_id, COMP_ACTIVATABLE);
     act->active = 0;
