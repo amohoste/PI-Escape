@@ -117,12 +117,9 @@ int main() {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
     }
 
-<<<<<<< HEAD
-=======
     struct LevelLoader* level_loader = levelloader_alloc();
     level_loader->file = "pi_escape/level/level_files/game2.lvl";
 
->>>>>>> game_loader
     //init the graphics system
     Graphics *graphics = graphics_alloc(0, 0);
 
