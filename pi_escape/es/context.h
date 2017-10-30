@@ -1,3 +1,9 @@
+/***************************************************************
+- Context -
+Hulp struct waarin data wordt bijgehouden die niet tot één 
+specifiek deel spel behoort, maar tot het gehele spel.
+****************************************************************/
+
 #ifndef CONTEXT_H
 #define CONTEXT_H
 

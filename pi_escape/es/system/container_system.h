@@ -1,3 +1,11 @@
+/***************************************************************
+- Container System -
+Zorgt ervoor dat items (= entities met een InContainerComponent)
+zich samen met de container waarin ze zich bevinden bewegen. 
+Hiervoor wordt de GridLocationComponent aangepast wanneer
+nodig, en wordt er met animaties rekening gehouden.
+****************************************************************/
+
 #ifndef CONTAINER_SYSTEM_H
 #define CONTAINER_SYSTEM_H
 #define EMPTY_SYSTEM_STRUCT char c

@@ -1,3 +1,11 @@
+/***************************************************************
+- Engine -
+Bevat engine_update() functie die elke iteratie van de game
+loop wordt aangeroepen. Hierin wordt dan de update van elk
+system aangeroepen. Data geheugenbeheersysteem wordt bijgehouden
+in de engine struct (Entity ID's en bijhorende components).
+****************************************************************/
+
 #ifndef ENGINE_H
 #define ENGINE_H
 

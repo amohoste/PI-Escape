@@ -1,3 +1,9 @@
+/***************************************************************
+- Camera System -
+Bepaalt hoe de camera gepositioneerd is, en zorgt dat
+de camera niet te snel van positie verandert.
+****************************************************************/
+
 #ifndef CAMERA_SYSTEM_H
 #define CAMERA_SYSTEM_H
 #define EMPTY_SYSTEM_STRUCT char c
