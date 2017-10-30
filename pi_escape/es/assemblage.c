@@ -131,6 +131,10 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
     cameralookfrom->Zdegrees = 25.0f;
     glmc_vec3_set(cameralookfrom->pos, 4.0f, -4.0f, 4.0f); //this normally gets overridden by camera system
 
+	MoveActionComponent *move = create_component(engine, player_entity_id, COMP_MOVE_ACTION);
+
+	ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
+
     return player_entity_id;
 }
 

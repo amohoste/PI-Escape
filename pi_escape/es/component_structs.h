@@ -42,10 +42,12 @@ typedef struct CameraLookAtComponent {
 * De intentie van een entity om te bewegen
 */
 typedef struct MoveActionComponent {
-    //TODO
 	// Er kunnen meerdere richtingen tegelijk bijgehouden
 	// worden (als speler 2 pijltjestoetsen ingedrukt houdt)
-	TO_IMPLEMENT_STRUCT;
+	int up;
+	int right;
+	int down;
+	int left;
 } MoveActionComponent;
 
 /*
@@ -186,8 +188,7 @@ typedef struct MoveHistoryComponent {
 * De intentie van een entity om een actie uit te voeren
 */
 typedef struct ItemActionComponent {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+	int act;	// bool act
 } ItemActionComponent;
 
 /*
