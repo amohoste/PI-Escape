@@ -114,7 +114,7 @@ int main() {
     }
 
     struct LevelLoader* level_loader = levelloader_alloc();
-    level_loader->file = "pi_escape/level/level_files/game1.lvl";
+    level_loader->file = "pi_escape/level/level_files/game2.lvl";
 
     //init the graphics system
     Graphics* graphics = graphics_alloc(0, 0);

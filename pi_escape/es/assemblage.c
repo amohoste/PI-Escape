@@ -166,7 +166,7 @@ EntityId create_door_entity(Engine *engine, Level *l, int x, int y) {
     activatable->active = 0;
 
     DirectionComponent *directioncomponent = create_component(engine, door_entity_id, COMP_DIRECTION);
-    if ((x > 1 && IS_WALL(x - 1, y)) || x < l->width - 1 && IS_WALL(x + 1, y)) {
+    if ((x > 1 && IS_WALL(x - 1, y)) || (x < l->width - 1 && IS_WALL(x + 1, y))) {
         directioncomponent->dir = E;
     } else {
         directioncomponent->dir = N;
