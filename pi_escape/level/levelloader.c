@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 
-
 /*Krijgt een pointer mee naar een level, de rijen, kolommen en het levelnr worden toegevoegd*/
 void level_init(Level *level, int height, int width, int nr) {
     level->width = width;
@@ -33,7 +32,7 @@ Level *level_alloc(int height, int width, int nr) {
 }
 
 void levelloader_free_level(Level *l) {
-    for(int i = 0; i < l->height; i++){
+    for (int i = 0; i < l->height; i++) {
         free(l->spel[i]);
     }
     free(l->spel);
@@ -65,7 +64,7 @@ void read_level(Level *level, LevelLoader *ll) {
     char **a = level->spel;
     int height = level->height;
     int width = level->width;
-    FILE* file = fopen(ll->file, "r");
+    FILE *file = fopen(ll->file, "r");
     char kar = (char) getc(file);
 
     int i = 0;
@@ -78,7 +77,7 @@ void read_level(Level *level, LevelLoader *ll) {
 
     while (i < height) {
         j = 0;
-        while (kar != '\n' && kar != '\r') {
+        while (kar != '\n' && kar != '\r' && kar != EOF) {
             a[i][j] = kar;
             j++;
             kar = (char) getc(file);
@@ -101,12 +100,12 @@ void fill_empty_places(char *rij, int length) {
 }
 
 /* Leest het aantal kolommen en rijen in een bestand */
-void rows_cols_read(LevelLoader* ll, int *rows, int *cols) {
+void rows_cols_read(LevelLoader *ll, int *rows, int *cols) {
     char c = 'a';
     int max_col = 0;
     int rowsize = 0;
     int kol = 0;
-    FILE* file = fopen(ll->file, "r");
+    FILE *file = fopen(ll->file, "r");
 
     /*bijhouden van rijen die misschien in het midden liggen*/
     int stack = 0;
