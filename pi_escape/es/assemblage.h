@@ -30,7 +30,7 @@ void create_level_entities(Level *, Engine *engine);
 
 EntityId create_player_entity(Engine *engine, int x, int y);
 
-EntityId create_door_entity(Engine *engine, int x, int y);
+EntityId create_door_entity(Engine *engine, Level *l, int x, int y);
 
 EntityId create_lock_entity(Engine *engine, int x, int y, char color);
 

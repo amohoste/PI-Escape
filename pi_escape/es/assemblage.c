@@ -35,7 +35,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
 
             if (has_door) {
-                entityList[x][y] = create_door_entity(engine, x, y);
+                entityList[x][y] = create_door_entity(engine, l, x, y);
             }
             if (has_lock) {
                 entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
@@ -156,7 +156,7 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
     return player_entity_id;
 }
 
-EntityId create_door_entity(Engine *engine, int x, int y) {
+EntityId create_door_entity(Engine *engine, Level *l, int x, int y) {
     EntityId door_entity_id = get_new_entity_id(engine);
 
     GridLocationComponent *gridloc = create_component(engine, door_entity_id, COMP_GRIDLOCATION);
@@ -166,7 +166,11 @@ EntityId create_door_entity(Engine *engine, int x, int y) {
     activatable->active = 0;
 
     DirectionComponent *directioncomponent = create_component(engine, door_entity_id, COMP_DIRECTION);
-    directioncomponent->dir = N;
+    if ((x > 1 && IS_WALL(x - 1, y)) || x < l->width - 1 && IS_WALL(x + 1, y)) {
+        directioncomponent->dir = E;
+    } else {
+        directioncomponent->dir = N;
+    }
 
     ArtComponent *art = create_component(engine, door_entity_id, COMP_ART);
     art->type = ART_DOOR;
