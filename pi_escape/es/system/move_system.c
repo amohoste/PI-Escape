@@ -71,7 +71,7 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		}
 
 		// Move
-		if (10 >= x && x >= 0 && 7 >= y && y >= 0) glmc_ivec2_set(grid_comp->pos, x, y);
+		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
 	}
 
 	/*
@@ -99,6 +99,24 @@ void system_move_update(MoveSystem* system, Engine* engine) {
  *         0 if the position isn't available
  */
 int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
-	// TODO
+	Context* ctx = &(engine->context);
+	Level* lvl = ctx->current_level;
+
+	int width = lvl->width;
+	int height = lvl->height;
+
+	int available = 1;
+
+	// check position
+	if (lvl->height > x && x >= 0 && lvl->width > y && y >= 0) {
+		char place = lvl->spel[x][y];
+		if ('*' == place || 'X' == place || 'x' == place) available = 0;	// wall
+	}
+	else {
+		// position is out of bounds
+		available = 0;
+	}
+
+	return available;
 }
 
