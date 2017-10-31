@@ -9,6 +9,7 @@ te bewegen en langs muren te bewegen tot de eerste opening.
 ****************************************************************/
 
 #include "move_system.h"
+#include "../assemblage.h"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -48,10 +49,6 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 
 		// TODO continue moving while key is pressed down
 		// TODO check movehistory
-		// TODO check walls & doors
-		// TODO check width and height of level
-		//int width = 10;
-		//int height = 7;
 
 		// Change location
 		int x = grid_comp->pos[0];
@@ -100,17 +97,19 @@ void system_move_update(MoveSystem* system, Engine* engine) {
  */
 int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 	Context* ctx = &(engine->context);
-	Level* lvl = ctx->current_level;
+	Level* l = ctx->current_level;
 
-	int width = lvl->width;
-	int height = lvl->height;
+	int width = l->width;
+	int height = l->height;
 
 	int available = 1;
 
 	// check position
-	if (lvl->height > x && x >= 0 && lvl->width > y && y >= 0) {
-		char place = lvl->spel[x][y];
-		if ('*' == place || 'X' == place || 'x' == place) available = 0;	// wall
+	if (l->height > x && x >= 0 && l->width > y && y >= 0) {
+		char place = l->spel[x][y];
+
+		if (IS_WALL(x, y)) available = 0;
+		if (IS_DOOR(x, y) && doorIsClosed(system, engine, x, y)) available = 0;
 	}
 	else {
 		// position is out of bounds
@@ -120,3 +119,17 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 	return available;
 }
 
+/*
+* Check if the door at the given position is closed
+*
+* returns 1 if closed
+*         0 if open (or there isn't a door at the given position)
+*/
+int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
+	Context* ctx = &(engine->context);
+	Level* l = ctx->current_level;
+
+	int closed = 1;
+
+	return closed;
+}
