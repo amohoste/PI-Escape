@@ -32,8 +32,6 @@ void system_move_free(MoveSystem* system) {
 }
 
 void system_move_update(MoveSystem* system, Engine* engine) {
-    //TODO
-
 	// Entity zoeken met een MoveActionComponent
 
 	EntityIterator moveaction_it;
@@ -48,6 +46,7 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// MoveActionComponent van deze entity opvragen
 		MoveActionComponent* move_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_ACTION);
 
+		// TODO continue moving while key is pressed down
 		// TODO check movehistory
 		// TODO check walls & doors
 		// TODO check width and height of level
@@ -92,3 +91,14 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
 	*/
 }
+
+/*
+ * Check if the position at coords (x,y) is available for the player
+ * 
+ * returns 1 if the position is available
+ *         0 if the position isn't available
+ */
+int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
+	// TODO
+}
+
