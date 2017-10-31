@@ -53,7 +53,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
 
             if (is_verbinding) {
-                entityList[x][y] = create_verbinding_entity(engine, l, x, y);
+                create_verbinding_entities(engine, l, x, y);
             }
 
             if (is_exit) {
@@ -79,7 +79,24 @@ EntityId create_exit_entity(Engine *engine, int x, int y) {
     ExitComponent *exit = create_component(engine, exit_entity_id, COMP_EXIT);
 }
 
-EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y) {
+void create_verbinding_entities(Engine *engine, Level *l, int x, int y) {
+
+    //kijken of het vakje erboven of eronder aantoont hoe er moet worden bewogen
+    if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+        create_verbinding_entity(engine, l, x, y, W);
+    }
+    if (x < l->height - 1 && IS_VERBINDING_DIRECTION(x + 1, y)) {
+        create_verbinding_entity(engine, l, x, y, E);
+    }
+    if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+        create_verbinding_entity(engine, l, x, y, S);
+    }
+    if(y< l->width -1 && IS_VERBINDING_DIRECTION(x, y +1)){
+        create_verbinding_entity(engine,l,x,y,N);
+    }
+}
+
+EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction) {
     EntityId verb_entity_id = get_new_entity_id(engine);
 
     GridLocationComponent *gridLoc = create_component(engine, verb_entity_id, COMP_GRIDLOCATION);
@@ -89,12 +106,8 @@ EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y) {
     art->type = ART_CONNECTOR;
 
     DirectionComponent *dir = create_component(engine, verb_entity_id, COMP_DIRECTION);
-    //kijken of het vakje erboven of eronder aantoont hoe er moet worden bewogen
-    if (x >= 1 && (IS_VERBINDING(x - 1, y) || IS_AND(x - 1, y) || IS_DOOR(x - 1, y) || IS_OR(x - 1, y))) {
-        dir->dir = E;
-    } else {
-        dir->dir = S;
-    }
+    dir->dir = direction;
+
 
     ActivatableComponent *act = create_component(engine, verb_entity_id, COMP_ACTIVATABLE);
     act->active = 0;
@@ -155,9 +168,9 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
     cameralookfrom->Zdegrees = 25.0f;
     glmc_vec3_set(cameralookfrom->pos, 4.0f, -4.0f, 4.0f); //this normally gets overridden by camera system
 
-	MoveActionComponent *move = create_component(engine, player_entity_id, COMP_MOVE_ACTION);
+    MoveActionComponent *move = create_component(engine, player_entity_id, COMP_MOVE_ACTION);
 
-	ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
+    ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
 
     return player_entity_id;
 }
