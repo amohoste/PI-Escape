@@ -39,6 +39,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
             if (has_lock) {
                 entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
+                create_verbinding_entities(engine,l,x,y);
             }
             if (has_key) {
                 entityList[x][y] = create_key_entity(engine, x, y, l->spel[x][y]);
@@ -46,10 +47,12 @@ void create_level_entities(Level *l, Engine *engine) {
 
             if (has_or) {
                 entityList[x][y] = create_or_entity(engine, x, y);
+                create_verbinding_entities(engine,l,x,y);
             }
 
             if (has_and) {
                 entityList[x][y] = create_and_entity(engine, x, y);
+                create_verbinding_entities(engine,l,x,y);
             }
 
             if (is_verbinding) {
