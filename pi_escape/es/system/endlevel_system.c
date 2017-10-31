@@ -22,5 +22,4 @@ void system_endlevel_free(EndLevelSystem* system) {
 }
 
 void system_endlevel_update(EndLevelSystem* system, Engine* engine) {
-    printf("hallo");
 }
