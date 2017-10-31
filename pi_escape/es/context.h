@@ -1,6 +1,6 @@
 /***************************************************************
 - Context -
-Hulp struct waarin data wordt bijgehouden die niet tot één 
+Hulp struct waarin data wordt bijgehouden die niet tot ï¿½ï¿½n 
 specifiek deel spel behoort, maar tot het gehele spel.
 ****************************************************************/
 
@@ -9,11 +9,14 @@ specifiek deel spel behoort, maar tot het gehele spel.
 
 #include <stdint.h>
 #include "../../util/rgb_triple.h"
+#include "../level/levelloader.h"
 
 typedef struct Context {
     uint64_t time;
     int is_exit_game;
     int demo;
+    Level *current_level;
+    int level_ended;
     //TODO: add other context fields
 } Context;
 

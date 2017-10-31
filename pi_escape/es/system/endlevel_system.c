@@ -41,9 +41,8 @@ void system_endlevel_update(EndLevelSystem *system, Engine *engine) {
 
     GridLocationComponent *exit_grid = get_component(engine, exit_id, COMP_GRIDLOCATION);
 
-    if(speler_grid->pos[0] == exit_grid->pos[0] && speler_grid->pos[1] == exit_grid->pos[1]){
-        //todo beter
-        printf("de exit is bereikt");
+    if (speler_grid->pos[0] == exit_grid->pos[0] && speler_grid->pos[1] == exit_grid->pos[1]) {
+        engine->context.level_ended = 1;
     }
 
 }
