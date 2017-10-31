@@ -20,11 +20,11 @@ int test_filesdimensions() {
     return 1;
 }
 
-int test_filedimensions(char *path, int nrows, int ncols) {
+int test_filedimensions(int lvl, int nrows, int ncols) {
     LevelLoader *ll = levelloader_alloc();
 
     // Level aanmaken en inlezen
-    Level *l = load_level(1);
+    Level *l = load_level(lvl);
     assert(l->width == ncols);
     assert(l->height == nrows);
 
