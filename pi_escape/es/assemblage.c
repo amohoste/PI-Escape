@@ -39,7 +39,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
             if (has_lock) {
                 entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
-                create_verbinding_entities(engine,l,x,y);
+                create_verbinding_entities(engine, l, x, y);
             }
             if (has_key) {
                 entityList[x][y] = create_key_entity(engine, x, y, l->spel[x][y]);
@@ -47,12 +47,12 @@ void create_level_entities(Level *l, Engine *engine) {
 
             if (has_or) {
                 entityList[x][y] = create_or_entity(engine, x, y);
-                create_verbinding_entities(engine,l,x,y);
+                create_verbinding_entities(engine, l, x, y);
             }
 
             if (has_and) {
                 entityList[x][y] = create_and_entity(engine, x, y);
-                create_verbinding_entities(engine,l,x,y);
+                create_verbinding_entities(engine, l, x, y);
             }
 
             if (is_verbinding) {
@@ -64,7 +64,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
-            EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil, has_wall, walls);
+            EntityId wall = create_wall_entity(engine, l, x, y, has_floor, has_ceil, has_wall, walls);
 
         }
     }
@@ -94,8 +94,8 @@ void create_verbinding_entities(Engine *engine, Level *l, int x, int y) {
     if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
         create_verbinding_entity(engine, l, x, y, S);
     }
-    if(y< l->width -1 && IS_VERBINDING_DIRECTION(x, y +1)){
-        create_verbinding_entity(engine,l,x,y,N);
+    if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+        create_verbinding_entity(engine, l, x, y, N);
     }
 }
 
@@ -267,7 +267,8 @@ EntityId create_key_entity(Engine *engine, int x, int y, char color) {
     return key_entity_id;
 }
 
-EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_ceil, int has_wall, int walls[4]) {
+EntityId
+create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int has_ceil, int has_wall, int walls[4]) {
 
     EntityId wall_entity_id = get_new_entity_id(engine);
 
@@ -286,6 +287,30 @@ EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has
     wall->has_wall[E] = walls[E];
     wall->has_wall[W] = walls[W];
 
+    if (x > 0 && wall->has_wall[W]) {
+        create_wall(engine, x - 1, y, E);
+    }
+    if (x < l->height - 1 && wall->has_wall[E]) {
+        create_wall(engine, x + 1, y, W);
+    }
+    if (y > 0 && wall->has_wall[S]) {
+        create_wall(engine, x, y - 1, N);
+    }
+    if (y < l->width - 1 && wall->has_wall[N]) {
+        create_wall(engine, x, y + 1, S);
+    }
+
     return wall_entity_id;
 
+}
+
+
+void create_wall(Engine *engine, int x, int y, Direction direction) {
+    EntityId wall_entity_id = get_new_entity_id(engine);
+    GridLocationComponent *gridloc = create_component(engine, wall_entity_id, COMP_GRIDLOCATION);
+    glmc_ivec2_set(gridloc->pos, x, y);
+    ArtComponent *art = create_component(engine, wall_entity_id, COMP_ART);
+    art->type = ART_WALL;
+    WallArtComponent *wall = create_component(engine, wall_entity_id, COMP_WALLART);
+    wall->has_wall[direction] = 1;
 }
