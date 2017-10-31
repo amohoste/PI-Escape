@@ -39,6 +39,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
             if (has_lock) {
                 entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
+                create_verbinding_entities(engine, l, x, y);
             }
             if (has_key) {
                 entityList[x][y] = create_key_entity(engine, x, y, l->spel[x][y]);
@@ -46,14 +47,16 @@ void create_level_entities(Level *l, Engine *engine) {
 
             if (has_or) {
                 entityList[x][y] = create_or_entity(engine, x, y);
+                create_verbinding_entities(engine, l, x, y);
             }
 
             if (has_and) {
                 entityList[x][y] = create_and_entity(engine, x, y);
+                create_verbinding_entities(engine, l, x, y);
             }
 
             if (is_verbinding) {
-                entityList[x][y] = create_verbinding_entity(engine, l, x, y);
+                create_verbinding_entities(engine, l, x, y);
             }
 
             if (is_exit) {
@@ -61,7 +64,7 @@ void create_level_entities(Level *l, Engine *engine) {
             }
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
-            EntityId wall = create_wall_entity(engine, x, y, has_floor, has_ceil, has_wall, walls);
+            EntityId wall = create_wall_entity(engine, l, x, y, has_floor, has_ceil, has_wall, walls);
 
         }
     }
@@ -79,7 +82,24 @@ EntityId create_exit_entity(Engine *engine, int x, int y) {
     ExitComponent *exit = create_component(engine, exit_entity_id, COMP_EXIT);
 }
 
-EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y) {
+void create_verbinding_entities(Engine *engine, Level *l, int x, int y) {
+
+    //kijken of het vakje erboven of eronder aantoont hoe er moet worden bewogen
+    if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+        create_verbinding_entity(engine, l, x, y, W);
+    }
+    if (x < l->height - 1 && IS_VERBINDING_DIRECTION(x + 1, y)) {
+        create_verbinding_entity(engine, l, x, y, E);
+    }
+    if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+        create_verbinding_entity(engine, l, x, y, S);
+    }
+    if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+        create_verbinding_entity(engine, l, x, y, N);
+    }
+}
+
+EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction) {
     EntityId verb_entity_id = get_new_entity_id(engine);
 
     GridLocationComponent *gridLoc = create_component(engine, verb_entity_id, COMP_GRIDLOCATION);
@@ -89,12 +109,8 @@ EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y) {
     art->type = ART_CONNECTOR;
 
     DirectionComponent *dir = create_component(engine, verb_entity_id, COMP_DIRECTION);
-    //kijken of het vakje erboven of eronder aantoont hoe er moet worden bewogen
-    if (x >= 1 && (IS_VERBINDING(x - 1, y) || IS_AND(x - 1, y) || IS_DOOR(x - 1, y) || IS_OR(x - 1, y))) {
-        dir->dir = E;
-    } else {
-        dir->dir = S;
-    }
+    dir->dir = direction;
+
 
     ActivatableComponent *act = create_component(engine, verb_entity_id, COMP_ACTIVATABLE);
     act->active = 0;
@@ -155,9 +171,9 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
     cameralookfrom->Zdegrees = 25.0f;
     glmc_vec3_set(cameralookfrom->pos, 4.0f, -4.0f, 4.0f); //this normally gets overridden by camera system
 
-	MoveActionComponent *move = create_component(engine, player_entity_id, COMP_MOVE_ACTION);
+    MoveActionComponent *move = create_component(engine, player_entity_id, COMP_MOVE_ACTION);
 
-	ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
+    ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
 
     return player_entity_id;
 }
@@ -251,7 +267,8 @@ EntityId create_key_entity(Engine *engine, int x, int y, char color) {
     return key_entity_id;
 }
 
-EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has_ceil, int has_wall, int walls[4]) {
+EntityId
+create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int has_ceil, int has_wall, int walls[4]) {
 
     EntityId wall_entity_id = get_new_entity_id(engine);
 
@@ -270,6 +287,30 @@ EntityId create_wall_entity(Engine *engine, int x, int y, int has_floor, int has
     wall->has_wall[E] = walls[E];
     wall->has_wall[W] = walls[W];
 
+    if (x > 0 && wall->has_wall[W]) {
+        create_wall(engine, x - 1, y, E);
+    }
+    if (x < l->height - 1 && wall->has_wall[E]) {
+        create_wall(engine, x + 1, y, W);
+    }
+    if (y > 0 && wall->has_wall[S]) {
+        create_wall(engine, x, y - 1, N);
+    }
+    if (y < l->width - 1 && wall->has_wall[N]) {
+        create_wall(engine, x, y + 1, S);
+    }
+
     return wall_entity_id;
 
+}
+
+
+void create_wall(Engine *engine, int x, int y, Direction direction) {
+    EntityId wall_entity_id = get_new_entity_id(engine);
+    GridLocationComponent *gridloc = create_component(engine, wall_entity_id, COMP_GRIDLOCATION);
+    glmc_ivec2_set(gridloc->pos, x, y);
+    ArtComponent *art = create_component(engine, wall_entity_id, COMP_ART);
+    art->type = ART_WALL;
+    WallArtComponent *wall = create_component(engine, wall_entity_id, COMP_WALLART);
+    wall->has_wall[direction] = 1;
 }
