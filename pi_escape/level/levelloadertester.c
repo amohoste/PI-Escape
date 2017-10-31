@@ -49,10 +49,9 @@ int test_game1() {
 
     // Levelloader aanmaken
     LevelLoader *ll = levelloader_alloc();
-    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
 
     // Level aanmaken en inlezen
-    Level *l = load_level(1);
+    Level *l = load_level(8);
 
     assert(array_compare(l, arr, 11, 8) == 1);
 
