@@ -28,7 +28,7 @@ int main() {
 
     //een level inladen kan je doen door gewoon op te  geven het hoeveelste level het is -> beginnend vanaf 1
     //vanaf level 7 worden de echte games geladen en niet de tutorials
-    Level *level = load_level(8);
+    Level *level = load_level(1);
     game_load_level(pi_escape_2, level);
 
     pi_escape_2->engine.context.current_level = level;
@@ -49,6 +49,7 @@ int main() {
         //kijken of er een nieuw level geladen moet worden
         if (pi_escape_2->engine.context.level_ended) {
             Level *next = load_level(pi_escape_2->engine.context.current_level->nr + 1);
+            clear_level(pi_escape_2);
             game_load_level(pi_escape_2, next);
             pi_escape_2->engine.context.current_level = next;
             pi_escape_2->engine.context.level_ended = 0;

@@ -8,7 +8,7 @@
 
 typedef struct AllComponent {
     int free;
-    
+
     union {
         CameraLookFromComponent camera_lookfrom;
         CameraLookAtComponent camera_lookat;
@@ -43,7 +43,7 @@ typedef struct AllComponent {
 */
 typedef struct ESMemory {
     EntityId next_entity_id;
-    
+
     AllComponent components[COMPONENT_ID_SIZE][MAX_ENTITIES];
 } ESMemory;
 
@@ -60,6 +60,7 @@ void* get_component(Engine* engine, EntityId entity_id, ComponentId component_id
 
 void* create_component(Engine* engine, EntityId entity_id, ComponentId component_id);
 void free_component(Engine* engine, EntityId entity_id, ComponentId component_id);
+void free_every_component(Engine* engine);
 
 EntityId get_new_entity_id(Engine* engine);
 

@@ -22,3 +22,8 @@ void game_load_level(Game *g, Level *l) {
     Engine *engine = &g->engine;
     create_level_entities(l, engine);
 }
+
+void clear_level(Game *g) {
+    free_every_component(&g->engine);
+    printf("nu zou alles van het veld moeten verdwijne");
+}
