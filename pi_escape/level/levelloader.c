@@ -65,7 +65,7 @@ char *create_level_name(int new_level_number) {
     char *level_name;
     int number = new_level_number <= 7 ? new_level_number : new_level_number - 7;
     int extra = (int) (new_level_number >= 7 ? strlen("game") : strlen("tutorial"));
-    level_name = malloc(strlen("pi_escape/level/level_files/") + extra + 1 + strlen(".lvl") + 2);
+    level_name = malloc(strlen("pi_escape/level/level_files/") + extra + 1 + strlen(".lvl") + 1);
     level_name[0] = '\0';
     strcat(level_name, "pi_escape/level/level_files/");
     strcat(level_name, new_level_number > 7 ? "game" : "tutorial");
@@ -73,7 +73,6 @@ char *create_level_name(int new_level_number) {
 	char str[2] = "\0"; /* gives {\0, \0} */
 	str[0] = number + '0';
 	strcat(level_name, str);
-    // level_name[strlen(level_name)] = number + '0';
     strcat(level_name, ".lvl");
     return level_name;
 }
