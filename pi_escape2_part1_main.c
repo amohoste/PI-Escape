@@ -31,6 +31,8 @@ int main() {
     Level *level = load_level(8);
     game_load_level(pi_escape_2, level);
 
+    pi_escape_2->engine.context.current_level = level;
+
     //TODO: support playing all levels in sequence
 
     Uint32 start_time_ms = SDL_GetTicks();
@@ -43,6 +45,14 @@ int main() {
 
         engine_update(&pi_escape_2->engine);
         update_count++;
+
+        //kijken of er een nieuw level geladen moet worden
+        if (pi_escape_2->engine.context.level_ended) {
+            Level *next = load_level(pi_escape_2->engine.context.current_level->nr + 1);
+            game_load_level(pi_escape_2, next);
+            pi_escape_2->engine.context.current_level = next;
+            pi_escape_2->engine.context.level_ended = 0;
+        }
 
         //print performance statistics each second
         if (diff_time_ms > 1000) {
