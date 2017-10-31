@@ -24,6 +24,5 @@ void game_load_level(Game *g, Level *l) {
 }
 
 void clear_level(Game *g) {
-    free_every_component(&g->engine);
-    printf("nu zou alles van het veld moeten verdwijne");
+    es_memory_manager_init(&g->engine.es_memory);
 }
