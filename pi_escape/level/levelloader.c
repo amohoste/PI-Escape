@@ -70,7 +70,9 @@ char *create_level_name(int new_level_number) {
     strcat(level_name, "pi_escape/level/level_files/");
     strcat(level_name, new_level_number > 7 ? "game" : "tutorial");
     //48 extra optellen zodat levelnaam correct is
-    level_name[strlen(level_name)] = (char) ((char) number + 48);
+	char str[2] = "\0"; /* gives {\0, \0} */
+	str[0] = number + '0';
+	strcat(level_name, str);
     strcat(level_name, ".lvl");
     return level_name;
 }
