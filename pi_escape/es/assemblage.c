@@ -88,8 +88,10 @@ void create_verbinding_entities(Engine *engine, Level *l, int x, int y) {
     if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
         create_verbinding_entity(engine, l, x, y, W);
     }
-    if (x < l->height - 1 && IS_VERBINDING_DIRECTION(x + 1, y)) {
-        create_verbinding_entity(engine, l, x, y, E);
+    if(x < l->height - 1) {
+        if (IS_VERBINDING_DIRECTION(x + 1, y)) {
+            create_verbinding_entity(engine, l, x, y, E);
+        }
     }
     if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
         create_verbinding_entity(engine, l, x, y, S);
