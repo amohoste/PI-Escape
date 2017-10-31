@@ -3,24 +3,28 @@
 #include "levelloadertester.h"
 
 int test_filesdimensions() {
-    assert(test_filedimensions(1, 11, 8) == 0);
-    assert(test_filedimensions(2, 10, 13) == 0);
-    assert(test_filedimensions(3, 13, 14) == 0);
-    assert(test_filedimensions(4, 7, 3) == 0);
-    assert(test_filedimensions(5, 7, 7) == 0);
-    assert(test_filedimensions(6, 9, 8) == 0);
-    assert(test_filedimensions(7, 9, 8) == 0);
-    assert(test_filedimensions(8, 9, 8) == 0);
-    assert(test_filedimensions(9, 9, 8) == 0);
-    assert(test_filedimensions(10, 9, 8) == 0);
+	// Tutorials
+	assert(test_filedimensions(1, 7, 3) == 0);
+	assert(test_filedimensions(2, 7, 7) == 0);
+	assert(test_filedimensions(3, 9, 8) == 0);
+	assert(test_filedimensions(4, 9, 8) == 0);
+	assert(test_filedimensions(5, 9, 8) == 0);
+	assert(test_filedimensions(6, 9, 8) == 0);
+	assert(test_filedimensions(7, 9, 8) == 0);
+
+	// Games
+    assert(test_filedimensions(8, 11, 8) == 0);
+    assert(test_filedimensions(9, 10, 13) == 0);
+    assert(test_filedimensions(10, 13, 14) == 0);
+
     return 1;
 }
 
-int test_filedimensions(int lvl, int nrows, int ncols) {
+int test_filedimensions(char *path, int nrows, int ncols) {
     LevelLoader *ll = levelloader_alloc();
 
     // Level aanmaken en inlezen
-    Level *l = load_level(lvl);
+    Level *l = load_level(1);
     assert(l->width == ncols);
     assert(l->height == nrows);
 
