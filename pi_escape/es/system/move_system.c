@@ -24,58 +24,69 @@ MoveSystem* system_move_alloc() {
 }
 
 void system_move_init(MoveSystem* system) {
-	system->player_moves = 0;
+    //TODO
 }
 
 
 void system_move_free(MoveSystem* system) {
-
+    //TODO
 }
 
 void system_move_update(MoveSystem* system, Engine* engine) {
-	// Move if timer is 0
-	if (system->player_moves == 0) {
-		// Entity zoeken met een MoveActionComponent
-		EntityIterator moveaction_it;
-		search_entity_1(engine, COMP_MOVE_ACTION, &moveaction_it);
-		while (next_entity(&moveaction_it)) {
-			EntityId moveaction_entity_id = moveaction_it.entity_id;
-			assert(moveaction_entity_id != NO_ENTITY);
+	// Entity zoeken met een MoveActionComponent
 
-			// Gridlocationcomponent van deze entity opvragen
-			GridLocationComponent* grid_comp = get_component(engine, moveaction_entity_id, COMP_GRIDLOCATION);
+	EntityIterator moveaction_it;
+	search_entity_1(engine, COMP_MOVE_ACTION, &moveaction_it);
+	while (next_entity(&moveaction_it)) {
+		EntityId moveaction_entity_id = moveaction_it.entity_id;
+		assert(moveaction_entity_id != NO_ENTITY);
 
-			// MoveActionComponent van deze entity opvragen
-			MoveActionComponent* move_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_ACTION);
+		// Gridlocationcomponent van deze entity opvragen
+		GridLocationComponent* grid_comp = get_component(engine, moveaction_entity_id, COMP_GRIDLOCATION);
 
-			// TODO continue moving while key is pressed down
-			// TODO check movehistory
+		// MoveActionComponent van deze entity opvragen
+		MoveActionComponent* move_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_ACTION);
 
-			// Change location
-			int x = grid_comp->pos[0];
-			int y = grid_comp->pos[1];
-			if (move_comp->up) {
-				x = x - 1;
-			}
-			else if (move_comp->right) {
-				y = y + 1;
-			}
-			else if (move_comp->down) {
-				x = x + 1;
-			}
-			else if (move_comp->left) {
-				y = y - 1;
-			}
+		// TODO continue moving while key is pressed down
+		// TODO check movehistory
 
-			// Move
-			if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
+		// Change location
+		int x = grid_comp->pos[0];
+		int y = grid_comp->pos[1];
+		if (move_comp->up) {
+			x = x - 1;
+			move_comp->up = 0;
+		} else if (move_comp->right) {
+			y = y + 1;
+			move_comp->right = 0;
+		} else if (move_comp->down) {
+			x = x + 1;
+			move_comp->down = 0;
+		} else if (move_comp->left) {
+			y = y - 1;
+			move_comp->left = 0;
 		}
 
-		// Reset timer
-		system->player_moves = PLAYER_MOVE_MS;
-	} else {
-		system->player_moves = system->player_moves - 1;
+		// Move
+		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
 	}
+
+	/*
+	// Gridlocationcomponent van deze entity opvragen
+	GridLocationComponent* lookat_grid_comp = get_component(engine, lookat_entity_id, COMP_GRIDLOCATION);
+
+	// printf("position = (%f,%f,%f)\n", cameraLookAt->pos[0], cameraLookAt->pos[1], cameraLookAt->pos[2]);
+	float x = lookat_grid_comp->pos[0] * 1.0f;
+	float y = lookat_grid_comp->pos[1] * 1.0f;
+	glmc_vec3_set(cameraLookAt->pos, x, y, 0.0f);
+
+	// Positie van waar gekeken wordt
+	float distance = cameraLookFrom->distance;
+	float xydegrees = cameraLookFrom->XYdegees;
+	float zdegrees = cameraLookFrom->Zdegrees;
+
+	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
+	*/
 }
 
 /*
@@ -119,8 +130,6 @@ int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 	Level* l = ctx->current_level;
 
 	int closed = 1;
-
-	// TODO
 
 	return closed;
 }
