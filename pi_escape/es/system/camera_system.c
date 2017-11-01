@@ -71,10 +71,9 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	float distance = cameraLookFrom->distance;
 	float xydegrees = cameraLookFrom->XYdegees;
 	float zdegrees = cameraLookFrom->Zdegrees;
-
-	float dx = (distance * sinf(zdegrees) * cosf(xydegrees));
-	float dy = (distance * sinf(zdegrees) * sinf(xydegrees));
-	float dz = distance * cosf(zdegrees);
+	float dx = (distance * sinf(degreesToRadians(zdegrees)) * cosf(degreesToRadians(xydegrees)));
+	float dy = (distance * sinf(degreesToRadians(zdegrees)) * sinf(degreesToRadians(xydegrees)));
+	float dz = distance * cosf(degreesToRadians(zdegrees));
 
 	glmc_vec3_set(cameraLookFrom->pos, curx + dx, cury + dy , 0.0f + dz);
 
