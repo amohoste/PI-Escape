@@ -14,7 +14,7 @@ te bewegen en langs muren te bewegen tot de eerste opening.
 
 
 typedef struct MoveSystem {
-	EMPTY_SYSTEM_STRUCT;
+	int player_moves;	// een timer om te bepalen hoe snel een speler beweegt
 } MoveSystem;
 
 #include "../engine.h"
