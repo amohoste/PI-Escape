@@ -15,20 +15,19 @@ int lps25h_init(int);
 	Lees de sensorwaarde in, calibreer
 	@return druk in hPa
 */
-int lps25h_read_pressure();
+double lps25h_read_pressure();
 
 /*
 	Lees de sensorwaarde in, calibreer
 	@return temprature in ° C
 	   schrijf converters voor K en F als het nodig is
 */
-int lps25h_read_temperature();
+double lps25h_read_temperature();
 
 
 /*
 	Een switch die de globale variable voor frequentie instelt
 	@param frequentie in hexadecimaal
-	@return 0;
 */
 void init_initValue(frequentie);
 #endif /* LPS25H */

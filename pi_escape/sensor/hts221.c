@@ -1,99 +1,124 @@
 #include "../sensor/hts221.h"
 #include "../sensor/i2c.h"
 
+#include <stdio.h>
 #include <stdint.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
 #include <linux/i2c-dev.h>
 
 #define ADDR 0x5f
+#define CLEAN_START 0x20
+
 #define CTRL_REG1 0x20
+#define CTRL_REG2 0x21
 
-#define H0_RH_X2 0x30
-#define H1_RH_X2 0x31
-#define H0_T0_OUT_L 0x36
-#define H0_T0_OUT_H 0x37
-#define H1_T0_OUT_L 0x3A
-#define H1_T0_OUT_H 0x3B
-
-#define T0_DEGC_X8 0x32
-#define T1_DEGC_X8 0x33
 #define T0_OUT_L 0x3C
 #define T0_OUT_H 0x3D
 #define T1_OUT_L 0x3E
 #define T1_OUT_H 0x3F
+#define T0_degC_x8 0x32
+#define T1_degC_x8 0x33
+#define T1_T0_MSB 0x35
 
 #define TEMP_OUT_L 0x2A
 #define TEMP_OUT_H 0x2B
-#define HUM_OUT_L 0x28
-#define HUM_OUT_H 0x29
 
-#define MAX_COUNT 20
+#define H0_T0_OUT_L 0x36
+#define H0_T0_OUT_H 0x37
+#define H1_T0_OUT_L 0x3A
+#define H1_T0_OUT_H 0x3B
+#define H0_rH_x2 0x30
+#define H1_rH_x2 0x31
+
+#define H_T_OUT_L 0x28
+#define H_T_OUT_H 0x29
 
 
-int initValue = 55555555; // gewoon aanzetten en eenmalig op te minst 0x80 
 int file;
-TempCali tempCali;
-HumCali humCali;
+TemperatureC tempC;
+TemperatureLSB tempLSB;
+HumidityLSB humLSB;
 
 int hts221_init(int frequentie)
 {
-	int status = 0;
-	int count = 0;
+	uint8_t status;
 
-	file = i2c_init_adapter(ADDR);
-	if (ioctl(file, I2C_SLAVE, ADDR) < 0) {
+	// file maken en configureer de slave
+	if ((file = i2c_init_adapter(ADDR)) == -1) {
+		close(file);
 		return -1;
 	}
 
-	// aanzetten van sensor en proberen te garanderen dat de sensor aanstaat
+	i2c_write_byte_data(file, CTRL_REG1, CLEAN_START);
+
+	//TODO: change 0x84 to frequentie
+	i2c_write_byte_data(file, CTRL_REG1, 0x84);
+
+	i2c_write_byte_data(file, CTRL_REG2, 0x01);
+
 	do {
-		usleep(10000);
-		count++;
-		status = i2c_write_byte_data(file, CTRL_REG1, initValue);
-	} while (status != 0 && MAX_COUNT < count);
-	if (count > MAX_COUNT) {
-		return -1;
-	}
+		sleep(2500);
+		status = i2c_read_byte_data(file, CTRL_REG2);
+	} while (status != 0);
 
-	init_calbration_value();
+	tempC.t0_degC_x8 = i2c_read_byte_data(file, T0_degC_x8);
+	tempC.t1_degC_x8 = i2c_read_byte_data(file, T1_degC_x8);
+	tempC.t1_t0_msb = i2c_read_byte_data(file, T1_T0_MSB);
+	
+	tempLSB.t0_out_l = i2c_read_byte_data(file, T0_OUT_L);
+	tempLSB.t0_out_h = i2c_read_byte_data(file, T0_OUT_H);
+	tempLSB.t1_out_l = i2c_read_byte_data(file, T1_OUT_L);
+	tempLSB.t1_out_h = i2c_read_byte_data(file, T1_OUT_H);
+
+	humLSB.h0_out_l = i2c_read_byte_data(file, H0_T0_OUT_L);
+	humLSB.h0_out_h = i2c_read_byte_data(file, H0_T0_OUT_H);
+	humLSB.h1_out_l = i2c_read_byte_data(file, H1_T0_OUT_L);
+	humLSB.h1_out_h = i2c_read_byte_data(file, H1_T0_OUT_H);
 
 	return 0;
 }
 
-
-int hts221_read_humidity()
+double hts221_read_humidity()
 {
-	// bepalen van variablen
-	int hum_out_H = i2c_read_byte_data(file, HUM_OUT_H);
-	int hum_out_L = i2c_read_byte_data(file, HUM_OUT_L);
+	int16_t H0_T0_OUT = humLSB.h0_out_h << 8 | humLSB.h0_out_l;
+	int16_t H1_T0_OUT = humLSB.h1_out_h << 8 | humLSB.h1_out_l;
 
-	int hum_out_HL = hum_out_H << 8 | hum_out_L;
+	double H0_rH = i2c_read_byte_data(file, H0_rH_x2) / 2.0;
+	double H1_rH = i2c_read_byte_data(file, H1_rH_x2) / 2.0;
 
-	int temp = (humCali.H1_rH - humCali.H0_rH) * (hum_out_HL - humCali.H0_T0_OUT);
-	return (temp / (humCali.H1_T0_OUT - humCali.H0_T0_OUT)) + humCali.H0_rH;
+	double h_m = (H1_rH - H0_rH) / (H1_T0_OUT - H0_T0_OUT);
+	double h_c = H1_rH - (h_m * H1_T0_OUT);
+
+	uint8_t h_t_out_l = i2c_read_byte_data(file, H_T_OUT_L);
+	uint8_t h_t_out_h = i2c_read_byte_data(file, H_T_OUT_H);
+
+	/* make 16 bit value */
+	int16_t H_T_OUT = h_t_out_h << 8 | h_t_out_l;
+
+	double humidity = (h_m * H_T_OUT) + h_c;
+	printf("Luchtvochtigheid = %.2f°", humidity);
+	return humidity;
 }
 
-
-int hts221_read_temperature()
+double hts221_read_temperature()
 {
-	int temp_out_H = i2c_read_byte_data(file, TEMP_OUT_H);
-	int temp_out_L = i2c_read_byte_data(file, TEMP_OUT_L);
+	int16_t T0_out = tempLSB.t0_out_h << 8 | tempLSB.t0_out_l;
+	int16_t T1_out = tempLSB.t1_out_h << 8 | tempLSB.t1_out_l;
 
-	int temp_out_HL = temp_out_H << 8 | temp_out_L;
+	double T0_DegC = ((tempC.t1_t0_msb & 3) << 8 | tempC.t0_degC_x8) / 8.0;
+	double T1_DegC = (((tempC.t1_t0_msb & 12) >> 2) << 8 | tempC.t1_degC_x8) / 8.0;
 
-	int temp = (tempCali.T1_degC - tempCali.T.0_degC) * (temp_out_HL - tempCali.T0_OUT);
-	return (temp / (tempCali.T0_OUT - tempCali.T1_OUT)) + tempCali.T0_degC;
+	double t_m = (T1_DegC - T0_DegC) / (T1_out - T0_out);
+	double t_c = T1_DegC - (t_m * T1_out);
+
+	uint8_t t_out_l = i2c_read_byte_data(file, TEMP_OUT_L);
+	uint8_t t_out_h = i2c_read_byte_data(file, TEMP_OUT_H);
+
+	int16_t T_out = t_out_h << 8 | t_out_l;
+
+	double temp_C = (t_m * T_out) + t_c;
+	printf("Temperatuur = %.2f°", temp_C);
+	return temp_C;
 }	
-
-void init_calbration_value() 
-{
-	humCali.H0_rH = i2c_read_byte_data(file, H0_RH_X2) / 2;
-	humCali.H1_rH = i2c_read_byte_data(file, H1_RH_X2) / 2;
-	humCali.H0_T0_OUT = i2c_read_byte_data(file, H0_T0_OUT_H) << 8 | i2c_read_byte_data(file, H0_T0_OUT_L);
-	humCali.H1_T0_OUT = i2c_read_byte_data(file, H1_T0_OUT_H) << 8 | i2c_read_byte_data(file, H1_T0_OUT_L);
-
-	// Misschien error bij negatieve getallen!
-	tempCali.T0_degC = i2c_read_byte_data(file, T0_DEGC_X8) / 8;
-	tempCali.T1_degC = i2c_read_byte_data(file, T1_DEGC_X8) / 8;
-	tempCali.T0_OUT = i2c_read_byte_data(file, T0_OUT_H) << 8 | i2c_read_byte_data(file, T0_OUT_L);
-	tempCali.T1_OUT = i2c_read_byte_data(file, T1_OUT_H) << 8 | i2c_read_byte_data(file, T1_OUT_L);
-}
