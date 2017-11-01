@@ -8,6 +8,15 @@ de camera niet te snel van positie verandert.
 #define CAMERA_SYSTEM_H
 #define EMPTY_SYSTEM_STRUCT char c
 
+#ifndef max(a,b)
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef min(a,b)
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
+
+
 
 #define CAMERA_PERCENT_SPEED_PER_S 200.0f
 #define CAMERA_MIN_SPEED_PER_TICK 0.05f
