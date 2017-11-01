@@ -1,5 +1,10 @@
 #ifndef HTS221
+#ifdef TARGET_LINUX_ARM
+
 #define HTS221
+
+#include <stdint.h>
+
 
 /*
 	Initializeert een i2c adapter(0x5f)
@@ -53,5 +58,6 @@ typedef struct TemperatureLSB {
 	Een switch die de globale variable voor frequentie instelt
 	@param frequentie in hexadecimaal
 */
+#endif
 #endif /* HTS221 */
 

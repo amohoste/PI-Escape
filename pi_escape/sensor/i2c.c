@@ -1,8 +1,6 @@
-#include "../sensor/i2c.h"
+#ifdef TARGET_LINUX_ARM
 
-#include <stdint.h>
-#include <linux/i2c-dev.h> 
-#include <fcntl.h>
+#include "../sensor/i2c.h"
 
 #define FILENAME "/dev/i2c-1" // de naam van de "file" waarop de i2c bus bevinden
 
@@ -10,9 +8,9 @@ int i2c_init_adapter(int addr)
 {
 	int file = open(FILENAME, O_RDWR);
 
-	if (ioctl(file, I2C_SLAVE, addr) < 0) {
+	/*if (Ioctl(file, I2C_SLAVE, addr) < 0) {
 		return -1;
-	}
+	}*/
 	return file;
 }
 
@@ -42,3 +40,4 @@ int i2c_read_byte_data(int file, uint8_t reg)
 	}
 	return buff[0];
 }
+#endif

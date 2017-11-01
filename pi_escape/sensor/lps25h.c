@@ -1,13 +1,7 @@
+#ifdef TARGET_LINUX_ARM
+
 #include "../sensor/lps25h.h"
 #include "../sensor/i2c.h"
-
-#include <stdio.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <linux/i2c-dev.h>
-#include <stdlib.h>
-#include <fcntl.h>
-
 
 #define ADDR 0x5c
 #define CTRL_REG1 0x20
@@ -40,7 +34,7 @@ int lps25h_init(int frequentie)
 	i2c_write_byte_data(file, CTRL_REG2, 0x01);
 
 	do {
-		sleep(2500);
+		Sleep(2500);
 		status = i2c_read_byte_data(file, CTRL_REG2);
 	} while (status != 0);
 	
@@ -77,3 +71,5 @@ double lps25h_read_temperature()
 	printf("Temperatuur = %.2f°", temp_C);
 	return temp_C;
 }
+
+#endif

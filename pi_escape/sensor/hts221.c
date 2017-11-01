@@ -1,12 +1,6 @@
+#ifdef TARGET_LINUX_ARM
 #include "../sensor/hts221.h"
 #include "../sensor/i2c.h"
-
-#include <stdio.h>
-#include <stdint.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <linux/i2c-dev.h>
 
 #define ADDR 0x5f
 #define CLEAN_START 0x20
@@ -59,7 +53,7 @@ int hts221_init(int frequentie)
 	i2c_write_byte_data(file, CTRL_REG2, 0x01);
 
 	do {
-		sleep(2500);
+		Sleep(2500);
 		status = i2c_read_byte_data(file, CTRL_REG2);
 	} while (status != 0);
 
@@ -122,3 +116,4 @@ double hts221_read_temperature()
 	printf("Temperatuur = %.2f°", temp_C);
 	return temp_C;
 }	
+#endif

@@ -1,5 +1,9 @@
 #ifndef LPS25H
+#ifdef TARGET_LINUX_ARM
+
 #define LPS25H
+
+#include <stdint.h>
 
 /*
 	Initializeert een i2c adapter(0x5c)
@@ -31,3 +35,4 @@ double lps25h_read_temperature();
 */
 void init_initValue(frequentie);
 #endif /* LPS25H */
+#endif

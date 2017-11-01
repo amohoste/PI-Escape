@@ -1,5 +1,10 @@
 #ifndef I2C
+#ifdef TARGET_LINUX_ARM
 #define I2C
+
+#include <stdint.h>
+#include <linux/i2c-dev.h>
+#include <fcntl.h>
 
 /*
 	Initializeert een i2c device
@@ -25,5 +30,5 @@ int i2c_write_byte_data(int, uint8_t , uint8_t );
 	@return 0 succeed, -1 failed
 */
 int i2c_read_byte_data(int, uint8_t);
-
+#endif 
 #endif /* I2C */
