@@ -164,6 +164,7 @@ typedef struct LockComponent {
 */
 typedef struct ConnectorLogicComponent {
     //TODO
+	LogicType type;
 	TO_IMPLEMENT_STRUCT;
 } ConnectorLogicComponent;
 

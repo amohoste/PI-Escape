@@ -130,8 +130,10 @@ EntityId create_and_entity(Engine *engine, int x, int y) {
     art->type = ART_CONNECTOR_AND;
 
     ConnectorLogicComponent *con = create_component(engine, or_entity_id, COMP_CONNECTORLOGIC);
+	con->type = AND;
 
     ActivatableComponent *act = create_component(engine, or_entity_id, COMP_ACTIVATABLE);
+	act->active = 0;
 
     return or_entity_id;
 }
@@ -146,8 +148,10 @@ EntityId create_or_entity(Engine *engine, int x, int y) {
     art->type = ART_CONNECTOR_OR;
 
     ConnectorLogicComponent *con = create_component(engine, or_entity_id, COMP_CONNECTORLOGIC);
+	con->type = OR;
 
     ActivatableComponent *act = create_component(engine, or_entity_id, COMP_ACTIVATABLE);
+	act->active = 0;
 
     return or_entity_id;
 }
