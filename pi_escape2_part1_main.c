@@ -58,11 +58,12 @@ int main() {
                 pi_escape_2->engine.context.level_ended = 0;
             }
         }
-
+		
         //print performance statistics each second
         if (diff_time_ms > 1000) {
             float time_ms_per_update = (float) diff_time_ms / (float) update_count;
             float fps = 1.0f / time_ms_per_update * 1000.0f;
+			pi_escape_2->engine.context.fps = fps;
             printf("This second: %f updates. Average time per update: %f ms.\n", fps, time_ms_per_update);
 
             last_print_time_ms = cur_time_ms;
