@@ -25,4 +25,5 @@ void system_move_update(MoveSystem*, Engine*);
 void system_move_free(MoveSystem*);
 int availablePosition(MoveSystem* system, Engine* engine, int x, int y);
 int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y);
+
 #endif //MOVE_SYSTEM_H
