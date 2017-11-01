@@ -9,6 +9,7 @@ te bewegen en langs muren te bewegen tot de eerste opening.
 ****************************************************************/
 
 #include "move_system.h"
+#include "../assemblage.h"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -32,8 +33,6 @@ void system_move_free(MoveSystem* system) {
 }
 
 void system_move_update(MoveSystem* system, Engine* engine) {
-    //TODO
-
 	// Entity zoeken met een MoveActionComponent
 
 	EntityIterator moveaction_it;
@@ -48,11 +47,8 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// MoveActionComponent van deze entity opvragen
 		MoveActionComponent* move_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_ACTION);
 
+		// TODO continue moving while key is pressed down
 		// TODO check movehistory
-		// TODO check walls & doors
-		// TODO check width and height of level
-		//int width = 10;
-		//int height = 7;
 
 		// Change location
 		int x = grid_comp->pos[0];
@@ -72,7 +68,7 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		}
 
 		// Move
-		if (10 >= x && x >= 0 && 7 >= y && y >= 0) glmc_ivec2_set(grid_comp->pos, x, y);
+		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
 	}
 
 	/*
@@ -91,4 +87,49 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 
 	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
 	*/
+}
+
+/*
+ * Check if the position at coords (x,y) is available for the player
+ * 
+ * returns 1 if the position is available
+ *         0 if the position isn't available
+ */
+int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
+	Context* ctx = &(engine->context);
+	Level* l = ctx->current_level;
+
+	int width = l->width;
+	int height = l->height;
+
+	int available = 1;
+
+	// check position
+	if (l->height > x && x >= 0 && l->width > y && y >= 0) {
+		char place = l->spel[x][y];
+
+		if (IS_WALL(x, y)) available = 0;
+		if (IS_DOOR(x, y) && doorIsClosed(system, engine, x, y)) available = 0;
+	}
+	else {
+		// position is out of bounds
+		available = 0;
+	}
+
+	return available;
+}
+
+/*
+* Check if the door at the given position is closed
+*
+* returns 1 if closed
+*         0 if open (or there isn't a door at the given position)
+*/
+int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
+	Context* ctx = &(engine->context);
+	Level* l = ctx->current_level;
+
+	int closed = 1;
+
+	return closed;
 }
