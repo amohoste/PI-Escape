@@ -48,19 +48,19 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	if (curx != x || cury != y) {
 		if (curx < x) {
 			curx += move;
-			curx = min(curx, x);
+			curx = MIN(curx, x);
 		} else if (curx > x) {
 			curx -= move;
-			curx = max(curx, x);
+			curx = MAX(curx, x);
 		}
 
 		if (cury < y) {
 			cury += move;
-			cury = min(cury, y);
+			cury = MIN(cury, y);
 		}
 		else if (cury > y) {
 			cury -= move;
-			cury = max(cury, y);
+			cury = MAX(cury, y);
 		}
 		
 	}
