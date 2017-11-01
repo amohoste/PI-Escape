@@ -156,8 +156,8 @@ void system_input_update(InputSystem* system, Engine* engine) {
                     if (buttonDown) {
                         printf("Mouse dragged %f %f\n", mouseMotionEvent->xrel * 1.0f, mouseMotionEvent->yrel * 1.0f);
 						CameraLookFromComponent* cameraLookFrom = search_first_component(engine, COMP_CAMERA_LOOK_FROM);
-						cameraLookFrom->XYdegees = fmodf((cameraLookFrom->XYdegees + (mouseMotionEvent->xrel / 360.0f)), (2 * 3.1415926535897932384));
-						cameraLookFrom->Zdegrees = fmodf((cameraLookFrom->Zdegrees + (mouseMotionEvent->yrel / 360.0f)),  (2 * 3.1415926535897932384));
+						cameraLookFrom->XYdegees = fmodf((cameraLookFrom->XYdegees + (mouseMotionEvent->xrel) / 3.0f), 360.0f);
+						cameraLookFrom->Zdegrees = fmodf((cameraLookFrom->Zdegrees + (mouseMotionEvent->yrel) / 3.0f), 360.0f);
                     } else {
                         //printf("Mouse moved %f %f\n", mouseMotionEvent->xrel * 1.0f, mouseMotionEvent->yrel * 1.0f);
                     }
