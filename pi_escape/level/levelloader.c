@@ -135,7 +135,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
     int stack = 0;
 	//int count = 0;
 
-	printf("%i", EOF);
+	printf("%i\n", EOF);
 
     if (file) {
         while (c != EOF) {
@@ -161,7 +161,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                     }
                 }
                 c =  getc(file);
-				printf("character: %c as int %i\n", c, c);
+				//printf("character: %c as int %i\n", c, c);
 				// count++;
             }
 			//break;
@@ -169,6 +169,8 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                 rowsize++;
             }
         }
+
+		printf("end of while\n")
     }
     *rows = rowsize;
     *cols = max_col;
