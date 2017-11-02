@@ -5,6 +5,7 @@
 #include <stdint.h>
 #include <linux/i2c-dev.h>
 #include <fcntl.h>
+#include <unistd.h>
 
 /*
 	Initializeert een i2c device

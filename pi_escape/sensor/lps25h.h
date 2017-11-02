@@ -5,7 +5,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
-
+#include <unistd.h>
 
 /*
 	Initializeert een i2c adapter(0x5c)

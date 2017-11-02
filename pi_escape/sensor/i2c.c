@@ -1,8 +1,4 @@
 #ifdef RPI
-#include <stdint.h>
-#include <linux/i2c-dev.h>
-#include <fcntl.h>
-#include <stdio.h>
 
 #include "../sensor/i2c.h"
 
