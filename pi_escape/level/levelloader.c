@@ -141,7 +141,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                 c = (char) getc(file);
             }
 
-            while (c != EOF && count < 200) {
+            while (c != EOF /*&& count < 200*/) {
                 rowsize += stack;
                 stack = 0;
                 kol++;
@@ -157,7 +157,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                     }
                 }
                 c = (char) getc(file);
-				count++;
+				// count++;
             }
 			break;
             if (kol != 0) {
