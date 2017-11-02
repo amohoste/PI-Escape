@@ -27,13 +27,12 @@ typedef struct LevelLoader {
 
 LevelLoader *levelloader_alloc();
 
-void levelloader_free(LevelLoader *);
 
-Level *levelloader_load_level(LevelLoader *, int level_nr);
+char* create_level_name(int new_level_number);
 
-void levelloader_free_level(Level *);
+Level *load_level(int level_nr);
 
-void rows_cols_read(LevelLoader *ll, int *rows, int *cols);
+void rows_cols_read(char* level_name, int *rows, int *cols);
 
 char **init_array_of_size(int width, int height);
 
@@ -41,6 +40,6 @@ void fill_empty_places(char *string, int lenght);
 
 void level_init(Level *level, int width, int height, int nr);
 
-void read_level(Level *level, LevelLoader *ll);
+void read_level(Level *level, char* level_name);
 
 #endif //LEVELLOADER_H
