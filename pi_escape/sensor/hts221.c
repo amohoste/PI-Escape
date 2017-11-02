@@ -57,6 +57,8 @@ int hts221_init(int frequentie)
 
 	i2c_write_byte_data(file, CTRL_REG2, 0x01);
 
+
+	printf("%d", i2c_read_byte_data(file, CTRL_REG1))
 	do {
 		sleep(2500);
 		status = i2c_read_byte_data(file, CTRL_REG2);

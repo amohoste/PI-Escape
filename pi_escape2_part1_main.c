@@ -144,7 +144,6 @@ int main() {
 	
 
     while (!pi_escape_2->engine.context.is_exit_game) {
-		printf("5555555555555555555555555555555555555555");
 		/*
 
 		hts221_init(0);
