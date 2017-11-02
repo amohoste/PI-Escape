@@ -129,7 +129,7 @@ int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 	Context* ctx = &(engine->context);
 	Level* l = ctx->current_level;
 
-	int closed = 1;
+	int closed = 0;
 
 	return closed;
 }
