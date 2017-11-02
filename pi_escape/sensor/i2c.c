@@ -13,9 +13,9 @@ int i2c_init_adapter(int addr)
 {
 	int file = open(FILENAME, O_RDWR);
 
-	/*if (Ioctl(file, I2C_SLAVE, addr) < 0) {
+	if (Ioctl(file, I2C_SLAVE, addr) < 0) {
 		return -1;
-	}*/
+	}
 	return file;
 }
 
