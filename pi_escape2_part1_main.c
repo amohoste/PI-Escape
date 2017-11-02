@@ -141,6 +141,8 @@ int main() {
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
 
+	printf("5555555555555555555555555555555555555555");
+
 	hts221_init(0);
 	lps25h_init(0);
 	printf("5555555555555555555555555555555555555555");
