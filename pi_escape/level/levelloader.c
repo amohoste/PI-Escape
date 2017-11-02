@@ -132,7 +132,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 
     /*bijhouden van rijen die misschien in het midden liggen*/
     int stack = 0;
-
+	int count = 0;
     if (file) {
         while (c != EOF) {
             c = (char) getc(file);
@@ -141,7 +141,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                 c = (char) getc(file);
             }
 
-            while (c != EOF) {
+            while (c != EOF && count < 200) {
                 rowsize += stack;
                 stack = 0;
                 kol++;
@@ -157,7 +157,9 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                     }
                 }
                 c = (char) getc(file);
+				count++;
             }
+			break;
             if (kol != 0) {
                 rowsize++;
             }
