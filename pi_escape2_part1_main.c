@@ -120,6 +120,7 @@ int main() {
 
 	hts221_init();
 	lps25h_init();
+	printf("5555555555555555555555555555555555555555");
 	hts221_read_humidity();
 	hts221_read_temperature();
 	lps25h_read_pressure();
