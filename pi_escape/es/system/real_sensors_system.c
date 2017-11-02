@@ -1,4 +1,4 @@
-//#ifdef RPI
+#ifdef RPI
 
 #include "real_sensors_system.h"
 #include "../../sensor/lps25h.h"
@@ -30,4 +30,4 @@ void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
 	engine->context.pressure = lps25h_read_pressure();
 }
 
-//#endif // RPI
+#endif // RPI
