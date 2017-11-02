@@ -5,15 +5,12 @@
 
 #ifndef REAL_SENSORS_SYSTEM_H
 #define REAL_SENSORS_SYSTEM_H
-#define TO_IMPLEMENT_STRUCT char c
-
+#define EMPTY_SYSTEM_STRUCT char c
 
 #include <stdint.h>
 
-
 typedef struct RealSensorsSystem {
-	TO_IMPLEMENT_STRUCT;
-	//TODO
+	EMPTY_SYSTEM_STRUCT;
 } RealSensorsSystem;
 
 #include "../engine.h"

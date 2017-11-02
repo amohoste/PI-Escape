@@ -1,3 +1,5 @@
+#ifdef RPI
+
 #include "real_sensors_system.h"
 #include "../../sensor/lps25h.h"
 #include "../../sensor/hts221.h"
@@ -15,14 +17,17 @@ RealSensorsSystem* system_real_sensors_alloc() {
 }
 
 void system_real_sensors_init(RealSensorsSystem* system) {
-    //TODO
+
 }
 
 
 void system_real_sensors_free(RealSensorsSystem* system) {
-    //TODO
 }
 
 void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
-    //TODO
+	engine->context.humidity = hts221_read_humidity();
+	engine->context.temperature = hts221_read_temperature();
+	engine->context.pressure = lps25h_read_pressure();
 }
+
+#endif // RPI
