@@ -65,38 +65,40 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 			move->right = 1;
 			break;
 		}
+#ifndef RPI
 		case SDLK_t: {
 			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
 				// lower temperature value
-				printf("ctrl+shift+t\n");
+				(&engine->context)->temperature -= 1;
 			} else if (keysym->mod & KMOD_CTRL) {
 				// increase temperature value
-				printf("ctrl+t\n");
+				(&engine->context)->temperature += 1;
 			}
 			break;
 		}
 		case SDLK_p: {
 			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
 				// lower pressure value
-				printf("ctrl+shift+p\n");
+				(&engine->context)->pressure -= 1;
 			}
 			else if (keysym->mod & KMOD_CTRL) {
 				// increase pressure value
-				printf("ctrl+p\n");
+				(&engine->context)->pressure += 1;
 			}
 			break;
 		}
 		case SDLK_h: {
 			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
 				// lower humidity value
-				printf("ctrl+shift+h\n");
+				(&engine->context)->humidity -= 1;
 			}
 			else if (keysym->mod & KMOD_CTRL) {
 				// increase humidity value
-				printf("ctrl+h\n");
+				(&engine->context)->humidity += 1;
 			}
 			break;
 		}
+#endif // RPI
 		default:
 			break;
 		}
