@@ -2,6 +2,11 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#include "pi_escape/sensor/i2c.h"
+#include "pi_escape/sensor/hts221.h"
+#include "pi_escape/sensor/lps25h.h"
+
+
 #include "util/sleep.h"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
@@ -112,6 +117,13 @@ int main() {
     if(!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
     }
+
+	hts221_init();
+	lps25h_init();
+	hts221_read_humidity();
+	hts221_read_temperature();
+	lps25h_read_pressure();
+	lps25h_read_temperature();
 
     struct LevelLoader* level_loader = levelloader_alloc();
 
