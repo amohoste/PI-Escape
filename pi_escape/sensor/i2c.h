@@ -1,6 +1,6 @@
 #ifndef I2C
-#ifdef RPI
 #define I2C
+#ifdef RPI
 
 #include <stdint.h>
 

@@ -1,6 +1,6 @@
-#ifdef RPI
 #ifndef HTS221
 #define HTS221
+#ifdef RPI
 
 #include <stdint.h>
 
