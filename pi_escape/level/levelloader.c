@@ -125,7 +125,7 @@ void fill_empty_places(char *rij, int length) {
 /* Leest het aantal kolommen en rijen in een bestand */
 void rows_cols_read(char *level_name, int *rows, int *cols) {
 	printf("read rowds and cols\n");
-    char c = 'a';
+    int c = 0;
     int max_col = 0;
     int rowsize = 0;
     int kol = 0;
@@ -139,10 +139,10 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 
     if (file) {
         while (c != EOF) {
-            c = (char) getc(file);
+            c =  getc(file);
             /* eerste regels */
             while (c == '\n' || c == '\r') {
-                c = (char) getc(file);
+                c = getc(file);
             }
 
             while (c != EOF /*&& count < 200*/) {
@@ -160,7 +160,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                         stack++;
                     }
                 }
-                c = (char) getc(file);
+                c =  getc(file);
 				printf("character: %c as int %i\n", c, c);
 				// count++;
             }
