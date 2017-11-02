@@ -1,5 +1,5 @@
 #ifndef I2C
-#ifdef RPI
+//#ifdef RPI
 #define I2C
 
 #include <stdint.h>
@@ -29,5 +29,5 @@ int i2c_write_byte_data(int, uint8_t , uint8_t );
 	@return 0 succeed, -1 failed
 */
 int i2c_read_byte_data(int, uint8_t);
-#endif 
+//#endif 
 #endif /* I2C */

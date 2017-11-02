@@ -29,6 +29,7 @@ void engine_init(Engine* engine, Graphics* graphics) {
     engine->move_system = system_move_alloc();
     engine->process_sensor_system = system_process_sensor_alloc();
 #ifdef RPI
+	printf("RPI");
     engine->real_sensors_system = system_real_sensors_alloc();
     engine->orientation_system = system_orientation_alloc();
 #endif
