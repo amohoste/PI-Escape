@@ -53,6 +53,8 @@ Level *load_level(int level_nr) {
 
     rows_cols_read(level_name, &rows, &cols);
 
+	printf("(r:%i, c:%i)", rows, cols);
+
     Level *level = level_alloc(rows, cols, level_nr);
 
     read_level(level, level_name);
