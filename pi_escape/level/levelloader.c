@@ -170,7 +170,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
             }
         }
 
-		printf("end of while\n")
+		printf("end of while\n");
     }
     *rows = rowsize;
     *cols = max_col;
