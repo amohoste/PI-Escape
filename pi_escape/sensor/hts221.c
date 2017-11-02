@@ -42,6 +42,7 @@ HumidityLSB humLSB;
 
 int hts221_init(int frequentie)
 {
+	printf("1")
 	uint8_t status;
 
 	// file maken en configureer de slave
@@ -49,6 +50,7 @@ int hts221_init(int frequentie)
 		close(file);
 		return -1;
 	}
+	printf("2")
 
 	i2c_write_byte_data(file, CTRL_REG1, CLEAN_START);
 
