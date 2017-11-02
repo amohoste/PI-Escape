@@ -53,7 +53,7 @@ Level *load_level(int level_nr) {
 
     char *level_name = create_level_name(level_nr);
 
-	printf("level: %c\n", level_name);
+	printf("level_name: %c\n", level_name);
 
     rows_cols_read(level_name, &rows, &cols);
 
@@ -124,6 +124,7 @@ void fill_empty_places(char *rij, int length) {
 
 /* Leest het aantal kolommen en rijen in een bestand */
 void rows_cols_read(char *level_name, int *rows, int *cols) {
+	printf("read rowds and cols\n");
     char c = 'a';
     int max_col = 0;
     int rowsize = 0;
@@ -132,6 +133,8 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 
     /*bijhouden van rijen die misschien in het midden liggen*/
     int stack = 0;
+
+	printf("%i", EOF);
 
     if (file) {
         while (c != EOF) {
@@ -157,6 +160,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                     }
                 }
                 c = (char) getc(file);
+				printf("character: %c as int %i\n", c, c);
             }
             if (kol != 0) {
                 rowsize++;
