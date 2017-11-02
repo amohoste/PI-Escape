@@ -7,6 +7,8 @@ void context_init(Context* c) {
     c->is_exit_game = 0;
     c->demo = 0;
     c->time = 0;
+    c->level_ended = 0;
+	c->fps = 0;
 }
 
 Context* context_alloc() {

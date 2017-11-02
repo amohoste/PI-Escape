@@ -2,81 +2,84 @@
 #include <string.h>
 #include "levelloadertester.h"
 
+int test_filesdimensions() {
+	// Tutorials
+	assert(test_filedimensions(1, 7, 3) == 1);
+	assert(test_filedimensions(2, 7, 7) == 1);
+	assert(test_filedimensions(3, 9, 8) == 1);
+	assert(test_filedimensions(4, 9, 8) == 1);
+	assert(test_filedimensions(5, 9, 8) == 1);
+	assert(test_filedimensions(6, 9, 8) == 1);
+	assert(test_filedimensions(7, 9, 8) == 1);
+
+	// Games
+    assert(test_filedimensions(8, 11, 8) == 1);
+    assert(test_filedimensions(9, 10, 13) == 1);
+    assert(test_filedimensions(10, 13, 14) == 1);
+
+    return 1;
+}
+
+int test_filedimensions(int lvl, int nrows, int ncols) {
+    LevelLoader *ll = levelloader_alloc();
+
+    // Level aanmaken en inlezen
+    Level *l = load_level(lvl);
+    assert(l->width == ncols);
+    assert(l->height == nrows);
+
+    return 1;
+}
+
 int test_game1() {
-    return test_file("pi_escape/level/level_files/game1.lvl", 11, 8);
-}
+    char arr[11][8] = {
+            {' ', ' ', ' ', 'E', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'X', 'X', 'X', '#', 'X', 'X', 'X', 'X'},
+            {' ', ' ', ' ', '.', ' ', ' ', 'a', ' '},
+            {'C', '.', '.', '&', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', '.', '.', '.', 'B', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'X', 'X', '#', 'X', 'X', 'X', 'X', 'X'},
+            {' ', ' ', '.', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', 'A', ' ', ' ', 'o', ' ', ' '},
+            {' ', ' ', 'S', ' ', ' ', 'b', ' ', ' '}
+    };
 
-int test_game2() {
-    return test_file("pi_escape/level/level_files/game2.lvl", 10, 13);
-}
 
-int test_game3() {
-    return test_file("pi_escape/level/level_files/game3.lvl", 13, 14);
-}
+    // Levelloader aanmaken
+    LevelLoader *ll = levelloader_alloc();
 
-int test_tutorial1() {
-    return test_file("pi_escape/level/level_files/tutorial1.lvl", 7, 3);
-}
+    // Level aanmaken en inlezen
+    Level *l = load_level(8);
 
-int test_tutorial2() {
-    return test_file("pi_escape/level/level_files/tutorial2.lvl", 7, 7);
-}
-
-int test_tutorial3() {
-    return test_file("pi_escape/level/level_files/tutorial3.lvl", 9, 8);
-}
-
-int test_tutorial4() {
-    return test_file("pi_escape/level/level_files/tutorial4.lvl", 9, 8);
-}
-
-int test_tutorial5() {
-    return test_file("pi_escape/level/level_files/tutorial5.lvl", 9, 8);
-}
-
-int test_tutorial6() {
-    return test_file("pi_escape/level/level_files/tutorial6.lvl", 9, 8);
-}
-
-int test_tutorial7() {
-    return test_file("pi_escape/level/level_files/tutorial7.lvl", 9, 8);
-}
-
-int test_file(char *path, int nrows, int ncols) {
-    FILE *f;
-    f = fopen(path, "r");
-    int rows = 0;
-    int cols = 0;
-    rows_cols_read(f, &rows, &cols);
-    assert(rows == nrows);
-    assert(cols == ncols);
-    fclose(f);
-    return 1;
-}
-
-int test_array() {
-    FILE *f;
-    f = fopen("pi_escape/level/level_files/game1.lvl", "r");
-    struct Level *l = malloc(sizeof(Level));
-
-    level_init(l, 11, 8, 1);
-
-    read_level(l, f);
-
-    assert(l->spel[0][0] == ' ');
+    assert(array_compare(l, arr, 11, 8) == 1);
 
     return 1;
 }
 
-int test_complete() {
-    LevelLoader *ll = malloc(sizeof(LevelLoader));
+int test_few() {
 
+    // Levelloader aanmaken
+    LevelLoader *ll = levelloader_alloc();
     ll->file = strdup("pi_escape/level/level_files/game1.lvl");
 
-    Level *l = levelloader_load_level(ll, 1);
+    // Level aanmaken en inlezen
+    Level *l = load_level(1);
 
-    assert(l->rij == 11);
+    assert(l->spel[0][0] == ' ');
+    assert(l->spel[0][3] == 'E');
 
-    free(ll);
+    return 1;
+}
+
+int array_compare(Level *a, char b[][8], int rij, int kol) {
+
+    for (int i = 0; i < rij; i++) {
+        for (int j = 0; j < kol; j++) {
+            if (a->spel[i][j] != b[i][j]) return 0;
+        }
+    }
+
     return 1;
 }

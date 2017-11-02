@@ -1,3 +1,9 @@
+/***************************************************************
+- Memory manager collections -
+Functies om te zoeken binnen de memory manager 
+(het geheugenbeheersysteem).
+****************************************************************/
+
 #ifndef PIESCAPE2_ENGINE_COLLECTIONS_H
 #define PIESCAPE2_ENGINE_COLLECTIONS_H
 

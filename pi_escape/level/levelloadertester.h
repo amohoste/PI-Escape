@@ -2,15 +2,8 @@
 
 #include <assert.h>
 
+int test_filesdimensions();
+int test_filedimensions(int lvl, int nrows, int ncols);
 int test_game1();
-int test_game2();
-int test_game3();
-int test_tutorial1();
-int test_tutorial2();
-int test_tutorial3();
-int test_tutorial4();
-int test_tutorial5();
-int test_tutorial6();
-int test_tutorial7();
-int test_array();
-int test_complete();
+int test_few();
+int array_compare(Level* a, char b[][8], int rij, int kol);
