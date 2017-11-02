@@ -3,8 +3,8 @@
 #include <stdio.h>
 
 #ifdef RPI
-#include "pi_escape\sensor\hts221.h"
-#include "pi_escape\sensor\i2c.h"
+#include "pi_escape/sensor/hts221.h"
+#include "pi_escape/sensor/i2c.h"
 #endif 
 
 
