@@ -1,5 +1,10 @@
 #ifndef HTS221
+#ifdef RPI
+
 #define HTS221
+
+#include <stdint.h>
+
 
 /*
 	Initializeert een i2c adapter(0x5f)
@@ -13,39 +18,46 @@ int hts221_init(int);
 	Lees de sensorwaarde in, calibreer
 	@return relative humidity
 */
-int hts221_read_humidity();
+double hts221_read_humidity();
 
 /*
 	Lees de sensorwaarde in, calibreer
 	@return temprature in ° C
 	schrijf converters voor K en F als het nodig is
 */
-int hts221_read_temperature();
+double hts221_read_temperature();
 
-/*
-	Initialiseert calibratue 
-*/
-void init_calbration_value();
+
 /*
 	struct dat de calibratie waarden van temperatuur bevat
 */
-typedef struct TempCali {
-	uint8_t T0_degC;
-	uint8_t T1_degC;
-	int16_t T0_OUT;
-	int16_t T1_OUT;
-} TempCali;
+typedef struct TemperatureC{
+	uint8_t t0_degC_x8;
+	uint8_t t1_degC_x8;
+	uint8_t t1_t0_msb;
+} TemperatureC;
 
 /*
 	struct dat de calibratie waarden van vochtigheid bevat
 */
-typedef struct HumCali {
-	uint8_t H0_rH;
-	uint8_t H1_rH;
-	int16_t H0_T0_OUT;
-	int16_t H1_T0_OUT;
-} HumCali;
+typedef struct HumidityLSB{
+	uint8_t h0_out_l;
+	uint8_t h0_out_h;
+	uint8_t h1_out_l;
+	uint8_t h1_out_h;
+} HumidityLSB;
 
+typedef struct TemperatureLSB {
+	uint8_t t0_out_l;
+	uint8_t t0_out_h;
+	uint8_t t1_out_l;
+	uint8_t t1_out_h;
+} TemperatureLSB;
 
+/*
+	Een switch die de globale variable voor frequentie instelt
+	@param frequentie in hexadecimaal
+*/
+#endif
 #endif /* HTS221 */
 

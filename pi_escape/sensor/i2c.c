@@ -1,16 +1,23 @@
-#include "../sensor/i2c.h"
+#ifdef RPI
 
 #include <stdint.h>
-#include <linux/i2c-dev.h> 
+#include <linux/i2c-dev.h>
 #include <fcntl.h>
+#include <unistd.h>
+
+#include "../sensor/i2c.h"
 
 #define FILENAME "/dev/i2c-1" // de naam van de "file" waarop de i2c bus bevinden
 
 int i2c_init_adapter(int addr)
 {
-	return open(FILENAME, O_RDWR);
-}
+	int file = open(FILENAME, O_RDWR);
 
+	/*if (Ioctl(file, I2C_SLAVE, addr) < 0) {
+		return -1;
+	}*/
+	return file;
+}
 
 int i2c_write_byte_data(int file, uint8_t reg, uint8_t data)
 {
@@ -25,7 +32,6 @@ int i2c_write_byte_data(int file, uint8_t reg, uint8_t data)
 	return returnValue;
 }
 
-
 int i2c_read_byte_data(int file, uint8_t reg)
 {
 	char buff[1];
@@ -39,3 +45,4 @@ int i2c_read_byte_data(int file, uint8_t reg)
 	}
 	return buff[0];
 }
+#endif
