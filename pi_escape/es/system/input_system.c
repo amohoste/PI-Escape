@@ -41,7 +41,7 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 
 		switch (keysym->sym) {
 		case SDLK_ESCAPE:
-			//ignore untile key released
+			//ignore until key released
 			break;
 		case SDLK_KP_ENTER: //fall-through
 		case SDLK_RETURN:   //fall-through
@@ -63,6 +63,38 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 		}
 		case SDLK_RIGHT: {
 			move->right = 1;
+			break;
+		}
+		case SDLK_t: {
+			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+				// lower temperature value
+				printf("ctrl+shift+t\n");
+			} else if (keysym->mod & KMOD_CTRL) {
+				// increase temperature value
+				printf("ctrl+t\n");
+			}
+			break;
+		}
+		case SDLK_p: {
+			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+				// lower pressure value
+				printf("ctrl+shift+p\n");
+			}
+			else if (keysym->mod & KMOD_CTRL) {
+				// increase pressure value
+				printf("ctrl+p\n");
+			}
+			break;
+		}
+		case SDLK_h: {
+			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+				// lower humidity value
+				printf("ctrl+shift+h\n");
+			}
+			else if (keysym->mod & KMOD_CTRL) {
+				// increase humidity value
+				printf("ctrl+h\n");
+			}
 			break;
 		}
 		default:
@@ -96,6 +128,11 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 		case SDLK_RETURN:   //fall-through
 		case SDLK_SPACE: {
 			itemaction->act = 0;
+			break;
+		}
+		case SDLK_t: {
+
+
 			break;
 		}
 		case SDLK_UP: {
