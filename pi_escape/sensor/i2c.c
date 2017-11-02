@@ -2,8 +2,9 @@
 
 #include <stdint.h>
 #include <fcntl.h>
-#include <linux/dev-i2c.h>
-#include <sys/ioctl.h>
+#include <linux/i2c-dev.h>
+#include <unistd.h>
+#include <stdlib.h>
 
 #include "../sensor/i2c.h"
 
@@ -11,9 +12,11 @@
 
 int i2c_init_adapter(int addr)
 {
-	int file = open(FILENAME, O_RDWR);
-
-	if (ioctl(file, 0x700, addr) < 0) {
+	int file;
+	if ((file = open(FILENAME, O_RDWR)) < 0) {
+		return -1;
+	}
+	if (ioctl(file, I2C_SLAVE, addr) < 0) {
 		return -1;
 	}
 	return file;

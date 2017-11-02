@@ -26,10 +26,8 @@ int lps25h_init(int frequentie)
 
 	// file maken en configureer de slave
 	if ((file = i2c_init_adapter(ADDR)) == -1) {
-		close(file);
 		return -1;
 	}
-
 	i2c_write_byte_data(file, CTRL_REG1, CLEAN_START);
 
 	//TODO: change 0x84 to frequentie
