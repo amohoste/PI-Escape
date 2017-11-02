@@ -118,13 +118,7 @@ int main() {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
     }
 
-	hts221_init();
-	lps25h_init();
-	printf("5555555555555555555555555555555555555555");
-	hts221_read_humidity();
-	hts221_read_temperature();
-	lps25h_read_pressure();
-	lps25h_read_temperature();
+	
 
     struct LevelLoader* level_loader = levelloader_alloc();
 
@@ -148,6 +142,14 @@ int main() {
     long update_count = 0;
 
     while (!pi_escape_2->engine.context.is_exit_game) {
+		hts221_init();
+		lps25h_init();
+		printf("5555555555555555555555555555555555555555");
+		hts221_read_humidity();
+		hts221_read_temperature();
+		lps25h_read_pressure();
+		lps25h_read_temperature();
+
         Uint32 cur_time_ms = SDL_GetTicks();
         Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
 
