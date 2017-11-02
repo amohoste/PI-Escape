@@ -63,7 +63,6 @@ Level *load_level(int level_nr) {
 
     read_level(level, level_name);
 
-
     return level;
 }
 
@@ -84,18 +83,19 @@ char *create_level_name(int new_level_number) {
 }
 
 void read_level(Level *level, char *level_name) {
+	printf("reading level...");
     char **a = level->spel;
     int height = level->height;
     int width = level->width;
     FILE *file = fopen(level_name, "r");
-    char kar = (char) getc(file);
+    int kar = getc(file);
 
     int i = 0;
     int j = 0;
 
     /* eerste lijnen skippen */
     while (kar == '\n' || kar == '\r') {
-        kar = (char) getc(file);
+        kar = getc(file);
     }
 
     while (i < height) {
@@ -103,14 +103,14 @@ void read_level(Level *level, char *level_name) {
         while (kar != '\n' && kar != '\r' && kar != EOF) {
             a[i][j] = kar;
             j++;
-            kar = (char) getc(file);
+            kar = getc(file);
         };
         fill_empty_places(a[i], width);
-        kar = (char) getc(file);
+        kar = getc(file);
         i++;
     }
     fclose(file);
-
+	printf("done.\nClose file.\n");
 }
 
 void fill_empty_places(char *rij, int length) {
