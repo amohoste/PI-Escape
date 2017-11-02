@@ -4,6 +4,7 @@
 #define HTS221
 
 #include <stdint.h>
+#include <stdio.h>
 
 
 /*

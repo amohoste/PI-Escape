@@ -4,6 +4,8 @@
 #define LPS25H
 
 #include <stdint.h>
+#include <stdio.h>
+
 
 /*
 	Initializeert een i2c adapter(0x5c)
