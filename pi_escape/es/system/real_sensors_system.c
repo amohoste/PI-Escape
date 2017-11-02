@@ -28,7 +28,10 @@ void system_real_sensors_free(RealSensorsSystem* system) {
 }
 
 void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
-	system->humidity = hts221_read_humidity();
-	system->temperature = hts221_read_temperature();
-	system->pressure = lps25h_read_pressure();
+	double humidity = hts221_read_humidity();
+	double temperature = hts221_read_temperature();
+	double pressure = lps25h_read_pressure();
+	system->humidity = &humidity;
+	system->temperature = &temperature;
+	system->pressure = &pressure;
 }
