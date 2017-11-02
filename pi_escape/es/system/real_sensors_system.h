@@ -4,9 +4,9 @@
 #include <stdint.h>
 
 typedef struct RealSensorsSystem {
-	int pressure;
-	int humidity;
-	int temperature;
+	double* temperature;
+	double* pressure;
+	double* humidity;
 } RealSensorsSystem;
 
 #include "../engine.h"
