@@ -46,7 +46,6 @@ int hts221_init(int frequentie)
 
 	// file maken en configureer de slave
 	if ((file = i2c_init_adapter(ADDR)) == -1) {
-		close(file);
 		return -1;
 	}
 
@@ -60,7 +59,7 @@ int hts221_init(int frequentie)
 
 	printf("%d", i2c_read_byte_data(file, CTRL_REG1));
 	do {
-		sleep(2500);
+		// sleep(2500);
 		status = i2c_read_byte_data(file, CTRL_REG2);
 	} while (status != 0);
 

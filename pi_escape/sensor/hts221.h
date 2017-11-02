@@ -1,6 +1,5 @@
-#ifndef HTS221
 #ifdef RPI
-
+#ifndef HTS221
 #define HTS221
 
 #include <stdint.h>
@@ -58,6 +57,5 @@ typedef struct TemperatureLSB {
 	Een switch die de globale variable voor frequentie instelt
 	@param frequentie in hexadecimaal
 */
-#endif
 #endif /* HTS221 */
-
+#endif

@@ -2,9 +2,10 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include "pi_escape/sensor/i2c.h"
-#include "pi_escape/sensor/hts221.h"
-#include "pi_escape/sensor/lps25h.h"
+#ifdef RPI
+#include "pi_escape\sensor\hts221.h"
+#include "pi_escape\sensor\i2c.h"
+#endif 
 
 
 #include "util/sleep.h"
@@ -140,8 +141,9 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
-	hts221_init(0);
-	
+	#ifdef RPI
+	int test = hts221_init(0);
+	#endif
 
     while (!pi_escape_2->engine.context.is_exit_game) {
 		/*

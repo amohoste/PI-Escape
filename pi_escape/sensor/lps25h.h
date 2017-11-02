@@ -1,5 +1,5 @@
-#ifndef LPS25H
 #ifdef RPI
+#ifndef LPS25H
 #define LPS25H
 
 #include <stdint.h>
