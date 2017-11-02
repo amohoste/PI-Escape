@@ -140,13 +140,13 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
-
+	hts221_init(0);
 	
 
     while (!pi_escape_2->engine.context.is_exit_game) {
 		/*
 
-		hts221_init(0);
+		
 		lps25h_init(0);
 		printf("5555555555555555555555555555555555555555");
 		hts221_read_humidity();
