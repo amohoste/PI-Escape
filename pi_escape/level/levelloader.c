@@ -49,6 +49,8 @@ Level *load_level(int level_nr) {
     int rows = 0;
     int cols = 0;
 
+	printf("(r:%i, c:%i)", rows, cols);
+
     char *level_name = create_level_name(level_nr);
 
     rows_cols_read(level_name, &rows, &cols);

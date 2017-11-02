@@ -346,8 +346,10 @@ void gl_set_color(gl_color dest, GLfloat r, GLfloat g, GLfloat b, GLfloat a) {
 
 
 Graphics* graphics_alloc(int width, int height) {
+	printf("graphics_alloc...");
     Graphics* res = malloc(sizeof(Graphics));
     graphics_init(res, width, height);
+	printf("done\n");
     return res;
 }
 
