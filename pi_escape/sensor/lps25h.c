@@ -1,4 +1,5 @@
 #ifdef RPI
+#include <stdint.h>
 
 #include "../sensor/lps25h.h"
 #include "../sensor/i2c.h"

@@ -33,6 +33,5 @@ double lps25h_read_temperature();
 	Een switch die de globale variable voor frequentie instelt
 	@param frequentie in hexadecimaal
 */
-void init_initValue(frequentie);
 #endif /* LPS25H */
 #endif

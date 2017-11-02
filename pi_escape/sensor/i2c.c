@@ -1,5 +1,7 @@
 #ifdef RPI
-
+#include <stdint.h>
+#include <linux/i2c-dev.h>
+#include <fcntl.h>
 #include "../sensor/i2c.h"
 
 #define FILENAME "/dev/i2c-1" // de naam van de "file" waarop de i2c bus bevinden
