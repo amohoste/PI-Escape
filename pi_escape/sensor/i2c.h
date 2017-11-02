@@ -1,11 +1,9 @@
 #ifndef I2C
-#ifdef TARGET_LINUX_ARM
-#define RPI
+#ifdef RPI
+#define I2C
 
 #include <stdint.h>
-#include <linux/i2c-dev.h>
-#include <fcntl.h>
-#include <unistd.h>
+
 
 /*
 	Initializeert een i2c device
