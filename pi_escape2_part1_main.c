@@ -41,8 +41,10 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
+#ifdef RPI
 	hts221_init(0);
-	
+	printf("RPI");
+#endif // RPI
 
     while (!pi_escape_2->engine.context.is_exit_game) {
 		/*

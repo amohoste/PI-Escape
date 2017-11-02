@@ -1,3 +1,5 @@
+#ifdef RPI
+
 #include "real_sensors_system.h"
 #include "../../sensor/lps25h.h"
 #include "../../sensor/hts221.h"
@@ -35,3 +37,5 @@ void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
 	system->temperature = &temperature;
 	system->pressure = &pressure;
 }
+
+#endif // RPI
