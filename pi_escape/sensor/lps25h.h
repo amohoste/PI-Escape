@@ -1,5 +1,5 @@
 #ifndef LPS25H
-#ifdef TARGET_LINUX_ARM
+#ifdef RPI
 
 #define LPS25H
 

@@ -1,4 +1,4 @@
-#ifdef TARGET_LINUX_ARM
+#ifdef RPI
 
 #include "../sensor/lps25h.h"
 #include "../sensor/i2c.h"

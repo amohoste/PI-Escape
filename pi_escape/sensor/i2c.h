@@ -1,6 +1,6 @@
 #ifndef I2C
 #ifdef TARGET_LINUX_ARM
-#define I2C
+#define RPI
 
 #include <stdint.h>
 #include <linux/i2c-dev.h>

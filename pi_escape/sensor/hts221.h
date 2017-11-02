@@ -1,5 +1,5 @@
 #ifndef HTS221
-#ifdef TARGET_LINUX_ARM
+#ifdef RPI
 
 #define HTS221
 
