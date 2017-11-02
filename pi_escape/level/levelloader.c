@@ -49,15 +49,9 @@ Level *load_level(int level_nr) {
     int rows = 0;
     int cols = 0;
 
-	printf("(r:%i, c:%i)\n", rows, cols);
-
     char *level_name = create_level_name(level_nr);
 
-	printf("level_name: %c\n", level_name);
-
     rows_cols_read(level_name, &rows, &cols);
-
-	printf("(r:%i, c:%i)\n", rows, cols);
 
     Level *level = level_alloc(rows, cols, level_nr);
 
@@ -83,7 +77,6 @@ char *create_level_name(int new_level_number) {
 }
 
 void read_level(Level *level, char *level_name) {
-	printf("reading level...");
     char **a = level->spel;
     int height = level->height;
     int width = level->width;
@@ -110,7 +103,6 @@ void read_level(Level *level, char *level_name) {
         i++;
     }
     fclose(file);
-	printf("done.\nClose file.\n");
 }
 
 void fill_empty_places(char *rij, int length) {
@@ -124,7 +116,6 @@ void fill_empty_places(char *rij, int length) {
 
 /* Leest het aantal kolommen en rijen in een bestand */
 void rows_cols_read(char *level_name, int *rows, int *cols) {
-	printf("read rowds and cols\n");
     int c = 0;
     int max_col = 0;
     int rowsize = 0;
@@ -133,9 +124,6 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 
     /*bijhouden van rijen die misschien in het midden liggen*/
     int stack = 0;
-	//int count = 0;
-
-	printf("%i\n", EOF);
 
     if (file) {
         while (c != EOF) {
@@ -145,7 +133,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                 c = getc(file);
             }
 
-            while (c != EOF /*&& count < 200*/) {
+            while (c != EOF) {
                 rowsize += stack;
                 stack = 0;
                 kol++;
@@ -161,16 +149,11 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                     }
                 }
                 c =  getc(file);
-				//printf("character: %c as int %i\n", c, c);
-				// count++;
             }
-			//break;
             if (kol != 0) {
                 rowsize++;
             }
         }
-
-		printf("end of while\n");
     }
     *rows = rowsize;
     *cols = max_col;
