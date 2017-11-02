@@ -49,13 +49,15 @@ Level *load_level(int level_nr) {
     int rows = 0;
     int cols = 0;
 
-	printf("(r:%i, c:%i)", rows, cols);
+	printf("(r:%i, c:%i)\n", rows, cols);
 
     char *level_name = create_level_name(level_nr);
 
+	printf("level: %c\n", level_name);
+
     rows_cols_read(level_name, &rows, &cols);
 
-	printf("(r:%i, c:%i)", rows, cols);
+	printf("(r:%i, c:%i)\n", rows, cols);
 
     Level *level = level_alloc(rows, cols, level_nr);
 
