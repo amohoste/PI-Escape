@@ -133,7 +133,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 
     /*bijhouden van rijen die misschien in het midden liggen*/
     int stack = 0;
-	int count = 0;
+	//int count = 0;
 
 	printf("%i", EOF);
 
@@ -164,7 +164,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 				printf("character: %c as int %i\n", c, c);
 				// count++;
             }
-			break;
+			//break;
             if (kol != 0) {
                 rowsize++;
             }
