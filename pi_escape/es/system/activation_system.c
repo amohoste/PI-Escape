@@ -22,17 +22,22 @@ void system_activation_free(ActivationSystem* system) {
 
 
 void system_activation_update(ActivationSystem* system, Engine* engine) {
+	
 	// OR en AND entities zoeken
 	EntityIterator logicit;
 	search_entity_1(engine, COMP_CONNECTORLOGIC, &logicit);
 	while (next_entity(&logicit)) {
+		// Entity opvragen
 		EntityId logicconnector_entity_id = logicit.entity_id;
 		assert(logicconnector_entity_id != NO_ENTITY);
+
+
 		ConnectorLogicComponent* con = get_component(engine, logicconnector_entity_id, COMP_CONNECTORLOGIC);
-		if (con->type == AND) {
+
+		if (con->type == AND_LOGIC) {
 
 		}
-		else if (con->type == OR) {
+		else if (con->type == OR_LOGIC) {
 
 		}
 	}

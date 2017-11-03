@@ -34,6 +34,6 @@ typedef enum OneTimeAnimationType { ANIM_EXIT, ANIM_ERROR, ANIM_MOVE } OneTimeAn
 typedef enum ArtType { ART_DOOR, ART_PLAYER, ART_END, ART_WALL, ART_LOCK, ART_KEY,
     ART_CONNECTOR, ART_CONNECTOR_AND, ART_CONNECTOR_OR } ArtType;
 typedef enum ItemActionType { ACTION_PICKUP, ACTION_SWAP, ACTION_DROP } ItemActionType;
-typedef enum LogicType { AND, OR } LogicType;
+typedef enum LogicType { AND_LOGIC, OR_LOGIC } LogicType;
 
 #endif //PIESCAPE2_COMPONENT_ENUMS_H
