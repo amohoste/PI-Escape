@@ -34,7 +34,6 @@
 #define H_T_OUT_L 0x28
 #define H_T_OUT_H 0x29
 
-
 int file;
 TemperatureC tempC;
 TemperatureLSB tempLSB;

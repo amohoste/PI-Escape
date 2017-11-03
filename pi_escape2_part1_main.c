@@ -3,11 +3,6 @@
 #include <inttypes.h>
 #include <stdio.h>
 
-#include "pi_escape/sensor/i2c.h"
-#include "pi_escape/sensor/hts221.h"
-#include "pi_escape/sensor/lps25h.h"
-
-
 #include "util/sleep.h"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
@@ -41,22 +36,8 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
-#ifdef RPI
-	hts221_init(0);
-	printf("RPI");
-#endif // RPI
 
     while (!pi_escape_2->engine.context.is_exit_game) {
-		/*
-
-		
-		lps25h_init(0);
-		printf("5555555555555555555555555555555555555555");
-		hts221_read_humidity();
-		hts221_read_temperature();
-		lps25h_read_pressure();
-		lps25h_read_temperature();*/
-
         Uint32 cur_time_ms = SDL_GetTicks();
         Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
 

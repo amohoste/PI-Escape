@@ -49,6 +49,7 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 
 		// TODO continue moving while key is pressed down
 		// TODO check movehistory
+		// TODO work with animations
 
 		// Change location
 		int x = grid_comp->pos[0];
@@ -70,23 +71,6 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// Move
 		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
 	}
-
-	/*
-	// Gridlocationcomponent van deze entity opvragen
-	GridLocationComponent* lookat_grid_comp = get_component(engine, lookat_entity_id, COMP_GRIDLOCATION);
-
-	// printf("position = (%f,%f,%f)\n", cameraLookAt->pos[0], cameraLookAt->pos[1], cameraLookAt->pos[2]);
-	float x = lookat_grid_comp->pos[0] * 1.0f;
-	float y = lookat_grid_comp->pos[1] * 1.0f;
-	glmc_vec3_set(cameraLookAt->pos, x, y, 0.0f);
-
-	// Positie van waar gekeken wordt
-	float distance = cameraLookFrom->distance;
-	float xydegrees = cameraLookFrom->XYdegees;
-	float zdegrees = cameraLookFrom->Zdegrees;
-
-	glmc_vec3_set(cameraLookFrom->pos, distance * sinf(zdegrees) * cosf(xydegrees), distance * sinf(zdegrees) * sinf(xydegrees), distance * cosf(zdegrees));
-	*/
 }
 
 /*
@@ -130,6 +114,8 @@ int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 	Level* l = ctx->current_level;
 
 	int closed = 0;
+
+	// TODO
 
 	return closed;
 }

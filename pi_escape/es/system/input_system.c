@@ -66,8 +66,7 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 			move->right = 1;
 			break;
 		}
-#ifndef RPI
-		// Add sensor emulation if no real sensor system was loaded
+#ifndef RPI	// Add sensor emulation if no real sensor system was loaded
 		case SDLK_t: {
 			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
 				// lower temperature
