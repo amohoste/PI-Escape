@@ -182,8 +182,7 @@ typedef struct InputReceiverComponent {
 * Vorige beweging van de entity
 */
 typedef struct MoveHistoryComponent {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+	Direction previous;
 } MoveHistoryComponent;
 
 /*

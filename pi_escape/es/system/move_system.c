@@ -45,35 +45,46 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// MoveActionComponent van deze entity opvragen
 		MoveActionComponent* move_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_ACTION);
 
+		// MoveHistoryComponent van deze entity opvragen
+		MoveHistoryComponent* move_hist_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_HISTORY);
+
 		// TODO check movehistory
 
 		// Als er geen animatie bezig is
 		if (engine->es_memory.components[COMP_MOVE_ANIMATION][moveaction_entity_id].free) {
 
 			// Verander locatie
+
+			// Huidige locatie
 			int x = grid_comp->pos[0];
 			int y = grid_comp->pos[1];
-			if (move_comp->up) {
+
+			// Check voor diagonaal bewegen
+			int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
+			Direction prev = move_hist_comp->previous;
+			//printf("%i, %i, %i\n",notDiagonal ,(notDiagonal || prev != E), prev);
+			if (move_comp->up && (notDiagonal || prev != N)) {
 				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
 				moveanimation->dir = N;
+				move_hist_comp->previous = N;
 				moveanimation->starttime = clock();
 				x = x - 1;
-			}
-			else if (move_comp->down) {
+			} else if (move_comp->down && (notDiagonal || prev != S)) {
 				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
 				moveanimation->dir = S;
+				move_hist_comp->previous = S;
 				moveanimation->starttime = clock();
 				x = x + 1;
-			}
-			else if (move_comp->right) {
+			} else if (move_comp->right && (notDiagonal || prev != E)) {
 				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
 				moveanimation->dir = E;
+				move_hist_comp->previous = E;
 				moveanimation->starttime = clock();
 				y = y + 1;
-			}
-			else if (move_comp->left) {
+			} else if (move_comp->left && (notDiagonal || prev != W)) {
 				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
 				moveanimation->dir = W;
+				move_hist_comp->previous = W;
 				moveanimation->starttime = clock();
 				y = y - 1;
 			}
