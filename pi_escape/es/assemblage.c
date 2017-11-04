@@ -175,6 +175,8 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
 
     MoveActionComponent *move = create_component(engine, player_entity_id, COMP_MOVE_ACTION);
 
+	MoveHistoryComponent *moveHist = create_component(engine, player_entity_id, COMP_MOVE_HISTORY);
+
     ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
 
     return player_entity_id;
