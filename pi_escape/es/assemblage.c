@@ -21,8 +21,8 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_wall = IS_WALL(x, y);
             int has_or = IS_OR(x, y);
             int has_and = IS_AND(x, y);
-            int is_verbinding = IS_VERBINDING(x, y);
             int is_exit = IS_EXIT(x, y);
+			int is_exit = IS_VERBINDING(x, y);
 
             int walls[4];
             walls[S] = y == 0 || has_wall;
@@ -31,7 +31,7 @@ void create_level_entities(Level *l, Engine *engine) {
             walls[W] = x == 0 || has_wall;
 
             if (has_player) {
-                entityList[x][y] = create_player_entity(engine, x, y);
+                create_player_entity(engine, x, y);
             }
 
             if (has_door) {
@@ -39,28 +39,24 @@ void create_level_entities(Level *l, Engine *engine) {
             }
             if (has_lock) {
                 entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
-                create_verbinding_entities(engine, l, x, y);
+                //create_verbinding_entities(engine, l, x, y);
             }
             if (has_key) {
-                entityList[x][y] = create_key_entity(engine, x, y, l->spel[x][y]);
+                create_key_entity(engine, x, y, l->spel[x][y]);
             }
 
             if (has_or) {
                 entityList[x][y] = create_or_entity(engine, x, y);
-                create_verbinding_entities(engine, l, x, y);
+                //create_verbinding_entities(engine, l, x, y);
             }
 
             if (has_and) {
                 entityList[x][y] = create_and_entity(engine, x, y);
-                create_verbinding_entities(engine, l, x, y);
-            }
-
-            if (is_verbinding) {
-                create_verbinding_entities(engine, l, x, y);
+                //create_verbinding_entities(engine, l, x, y);
             }
 
             if (is_exit) {
-                entityList[x][y] = create_exit_entity(engine, x, y);
+                create_exit_entity(engine, x, y);
             }
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
@@ -68,6 +64,210 @@ void create_level_entities(Level *l, Engine *engine) {
 
         }
     }
+
+	/* Connections aanmaken */
+	for (int x = 0; x < l->height; x++) {
+		for (int y = 0; y < l->width; y++) {
+			int has_door = IS_DOOR(x, y);
+			int has_lock = IS_LOCK(x, y);
+
+			// Als je lock / door tegenkomt
+			if (has_door) {
+				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+				// Kijken of de down en upstream niet al toegekent zijn
+				if (!(connection->hasDownStream || connection->hasUpStream)) {
+					create_connections(l, engine, x, y, entityList);
+				}
+			} else if (has_lock) {
+				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+				// Kijken of de down en upstream niet al toegekend zijn
+				if (!(connection->hasDownStream || connection->hasUpStream)) {
+					create_connections(l, engine, x, y, entityList);
+				}
+			}
+			
+
+		}
+	}
+
+
+}
+
+void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList) {
+	int prevx = x;
+	int prevy = y;
+	Direction curdir;
+	EntityId id;
+	DirectionComponent *dir;
+
+	if (IS_LOCK(x, y)) {
+		ConnectionsComponent* lockconn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		lockconn->hasUpStream = 1;
+		EntityId id = create_verbinding_entities(engine, l, x, y, N, 1, 1);
+		// Richting aanpassen
+		DirectionComponent *dir = get_component(engine, id, COMP_DIRECTION);
+		curdir = dir->dir;
+		// Nieuwe locatie opvragen
+		nextLocation(&x, &y, &prevx, &prevy, l);
+	} else {
+		ConnectionsComponent* doorconn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		doorconn->hasUpStream = 1;
+		nextLocation(&x, &y, &prevx, &prevy, l);
+
+		id = create_verbinding_entities(engine, l, x, y, N, 1, 1);
+		dir = get_component(engine, id, COMP_DIRECTION);
+		curdir = dir->dir;
+
+		id = create_verbinding_entities(engine, l, x, y, curdir, 1, 0);
+		dir = get_component(engine, id, COMP_DIRECTION);
+		curdir = dir->dir;
+		nextLocation(&x, &y, &prevx, &prevy, l);
+	}
+
+	ArtComponent *art = get_component(engine, entityList[x][y], COMP_ART);
+	
+	while (!(art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR || art->type == ART_LOCK || art->type == ART_DOOR)) {
+		id = create_verbinding_entities(engine, l, x, y, curdir, 0, 0);
+		dir = get_component(engine, id, COMP_DIRECTION);
+		curdir = dir->dir;
+
+		id = create_verbinding_entities(engine, l, x, y, curdir, 1, 0);
+		dir = get_component(engine, id, COMP_DIRECTION);
+		curdir = dir->dir;
+
+		nextLocation(&x, &y, &prevx, &prevy, l);
+		art = get_component(engine, entityList[x][y], COMP_ART);
+	}
+	if (art->type == ART_LOCK || art->type == ART_DOOR) {
+		ConnectionsComponent* conn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		conn->hasUpStream = 1;
+	}
+	if (art->type == ART_LOCK || art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR) {
+		create_verbinding_entities(engine, l, x, y, curdir, 0, 0);
+	}
+}
+
+
+EntityId create_verbinding_entities(Engine *engine, Level *l, int x, int y, Direction lastdir, int any, int first) {
+	
+	if (first) {
+		if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+			return create_verbinding_entity(engine, l, x, y, W);
+		}
+		if (x < l->height - 1) {
+			if (IS_VERBINDING_DIRECTION(x + 1, y)) {
+				return create_verbinding_entity(engine, l, x, y, E);
+			}
+		}
+		if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+			return create_verbinding_entity(engine, l, x, y, S);
+		}
+		if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+			return create_verbinding_entity(engine, l, x, y, N);
+		}
+	} else if (any) {
+		if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+			if (lastdir != W) {
+				return create_verbinding_entity(engine, l, x, y, W);
+			}
+		}
+		if (x < l->height - 1) {
+			if (IS_VERBINDING_DIRECTION(x + 1, y)) {
+				if (lastdir != E) {
+					return create_verbinding_entity(engine, l, x, y, E);
+				}
+			}
+		}
+		if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+			if (lastdir != S) {
+				return create_verbinding_entity(engine, l, x, y, S);
+			}
+		}
+		if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+			if (lastdir != N) {
+				return create_verbinding_entity(engine, l, x, y, N);
+			}
+		}
+	}
+	else {
+		if (lastdir == W) {
+			return create_verbinding_entity(engine, l, x, y, E);
+		}
+
+		if (lastdir == E) {
+			return create_verbinding_entity(engine, l, x, y, W);
+		}
+			
+		if (lastdir == S) {
+			return create_verbinding_entity(engine, l, x, y, N);
+		}
+		
+		if (lastdir == N) {
+			return create_verbinding_entity(engine, l, x, y, S);
+		}
+	}
+	
+}
+
+
+ // Berekent volgende locatie en past x en y waarden aan
+ void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l) {
+	 if (*curx >= 1 && IS_VERBINDING_DIRECTION(*curx - 1, *cury)) {
+		 if (((*curx) - 1) != *prevx) {
+			 *prevx = *curx;
+			 *prevy = *cury;
+			 *curx = *curx - 1;
+			 return;
+		 }
+
+	 }
+
+	 if (*curx < l->height - 1 && *curx + 1 != *prevx) {
+		 if (IS_VERBINDING_DIRECTION(*curx + 1, *cury)) {
+			 *prevx = *curx;
+			 *prevy = *cury;
+			 *curx = *curx + 1;
+			 return;
+		 }
+	 }
+
+	 if (*cury >= 1 && IS_VERBINDING_DIRECTION(*curx, *cury - 1)) {
+		 if (*cury - 1 != *prevy) {
+			 *prevy = *cury;
+			 *prevx = *curx;
+			 *cury = *cury - 1;
+			 return;
+		 }
+	 }
+
+	 if (*cury < l->width - 1 && IS_VERBINDING_DIRECTION(*curx, *cury + 1)) {
+		 if (*cury + 1 != *prevy) {
+			 *prevy = *cury;
+			 *prevx = *curx;
+			 *cury = *cury + 1;
+			 return;
+		 }
+	 }
+ }
+
+EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction) {
+	EntityId verb_entity_id = get_new_entity_id(engine);
+
+	GridLocationComponent *gridLoc = create_component(engine, verb_entity_id, COMP_GRIDLOCATION);
+	glmc_ivec2_set(gridLoc->pos, x, y);
+
+	ArtComponent *art = create_component(engine, verb_entity_id, COMP_ART);
+	art->type = ART_CONNECTOR;
+
+	DirectionComponent *dir = create_component(engine, verb_entity_id, COMP_DIRECTION);
+	dir->dir = direction;
+
+	create_component(engine, verb_entity_id, COMP_CONNECTIONS);
+
+	ActivatableComponent *act = create_component(engine, verb_entity_id, COMP_ACTIVATABLE);
+	act->active = 0;
+
+	return verb_entity_id;
 }
 
 EntityId create_exit_entity(Engine *engine, int x, int y) {
@@ -82,60 +282,28 @@ EntityId create_exit_entity(Engine *engine, int x, int y) {
     ExitComponent *exit = create_component(engine, exit_entity_id, COMP_EXIT);
 }
 
-void create_verbinding_entities(Engine *engine, Level *l, int x, int y) {
-
-    //kijken of het vakje erboven of eronder aantoont hoe er moet worden bewogen
-    if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
-        create_verbinding_entity(engine, l, x, y, W);
-    }
-    if(x < l->height - 1) {
-        if (IS_VERBINDING_DIRECTION(x + 1, y)) {
-            create_verbinding_entity(engine, l, x, y, E);
-        }
-    }
-    if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
-        create_verbinding_entity(engine, l, x, y, S);
-    }
-    if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
-        create_verbinding_entity(engine, l, x, y, N);
-    }
-}
-
-EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction) {
-    EntityId verb_entity_id = get_new_entity_id(engine);
-
-    GridLocationComponent *gridLoc = create_component(engine, verb_entity_id, COMP_GRIDLOCATION);
-    glmc_ivec2_set(gridLoc->pos, x, y);
-
-    ArtComponent *art = create_component(engine, verb_entity_id, COMP_ART);
-    art->type = ART_CONNECTOR;
-
-    DirectionComponent *dir = create_component(engine, verb_entity_id, COMP_DIRECTION);
-    dir->dir = direction;
 
 
-    ActivatableComponent *act = create_component(engine, verb_entity_id, COMP_ACTIVATABLE);
-    act->active = 0;
 
-    return verb_entity_id;
-}
 
 EntityId create_and_entity(Engine *engine, int x, int y) {
-    EntityId or_entity_id = get_new_entity_id(engine);
+    EntityId and_entity_id = get_new_entity_id(engine);
 
-    GridLocationComponent *gridloc = create_component(engine, or_entity_id, COMP_GRIDLOCATION);
+    GridLocationComponent *gridloc = create_component(engine, and_entity_id, COMP_GRIDLOCATION);
     glmc_ivec2_set(gridloc->pos, x, y);
 
-    ArtComponent *art = create_component(engine, or_entity_id, COMP_ART);
+    ArtComponent *art = create_component(engine, and_entity_id, COMP_ART);
     art->type = ART_CONNECTOR_AND;
 
-    ConnectorLogicComponent *con = create_component(engine, or_entity_id, COMP_CONNECTORLOGIC);
+    ConnectorLogicComponent *con = create_component(engine, and_entity_id, COMP_CONNECTORLOGIC);
 	con->type = AND_LOGIC;
 
-    ActivatableComponent *act = create_component(engine, or_entity_id, COMP_ACTIVATABLE);
+	create_component(engine, and_entity_id, COMP_CONNECTIONS);
+
+    ActivatableComponent *act = create_component(engine, and_entity_id, COMP_ACTIVATABLE);
 	act->active = 0;
 
-    return or_entity_id;
+    return and_entity_id;
 }
 
 EntityId create_or_entity(Engine *engine, int x, int y) {
@@ -149,6 +317,8 @@ EntityId create_or_entity(Engine *engine, int x, int y) {
 
     ConnectorLogicComponent *con = create_component(engine, or_entity_id, COMP_CONNECTORLOGIC);
 	con->type = OR_LOGIC;
+
+	create_component(engine, or_entity_id, COMP_CONNECTIONS);
 
     ActivatableComponent *act = create_component(engine, or_entity_id, COMP_ACTIVATABLE);
 	act->active = 0;
@@ -193,6 +363,8 @@ EntityId create_door_entity(Engine *engine, Level *l, int x, int y) {
     ActivatableComponent *activatable = create_component(engine, door_entity_id, COMP_ACTIVATABLE);
     activatable->active = 0;
 
+	create_component(engine, door_entity_id, COMP_CONNECTIONS);
+
     DirectionComponent *directioncomponent = create_component(engine, door_entity_id, COMP_DIRECTION);
     if ((x > 1 && IS_WALL(x - 1, y)) || (x < l->width - 1 && IS_WALL(x + 1, y))) {
         directioncomponent->dir = E;
@@ -208,6 +380,8 @@ EntityId create_door_entity(Engine *engine, Level *l, int x, int y) {
 
 EntityId create_lock_entity(Engine *engine, int x, int y, char color) {
     EntityId lock_entity_id = get_new_entity_id(engine);
+
+	create_component(engine, lock_entity_id, COMP_CONNECTIONS);
 
     GridLocationComponent *gridloc = create_component(engine, lock_entity_id, COMP_GRIDLOCATION);
     glmc_ivec2_set(gridloc->pos, x, y);

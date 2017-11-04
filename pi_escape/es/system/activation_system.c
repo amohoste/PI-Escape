@@ -23,6 +23,10 @@ void system_activation_free(ActivationSystem* system) {
 
 void system_activation_update(ActivationSystem* system, Engine* engine) {
 	
+	// Connector entities zoeken
+	
+	
+	
 	// OR en AND entities zoeken
 	EntityIterator logicit;
 	search_entity_1(engine, COMP_CONNECTORLOGIC, &logicit);

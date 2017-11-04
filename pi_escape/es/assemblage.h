@@ -30,6 +30,10 @@ components aan te maken.
 
 void create_level_entities(Level *, Engine *engine);
 
+void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList);
+
+void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l);
+
 EntityId create_player_entity(Engine *engine, int x, int y);
 
 EntityId create_door_entity(Engine *engine, Level *l, int x, int y);
@@ -43,7 +47,7 @@ create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int ha
 
 EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction);
 
-void create_verbinding_entities(Engine *engine, Level *l, int x, int y);
+EntityId create_verbinding_entities(Engine *engine, Level *l, int x, int y, Direction lastdir, int any, int first);
 
 EntityId create_or_entity(Engine *engine, int x, int y);
 

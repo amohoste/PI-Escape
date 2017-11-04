@@ -148,7 +148,10 @@ typedef struct ActivatableComponent {
 typedef struct ConnectionsComponent {
     //TODO
 	// Houdt de "upstream" en "downstream" entity ID's bij
-	TO_IMPLEMENT_STRUCT;
+	EntityId upstream[3];
+	int hasUpStream;
+	EntityId downstream;
+	int hasDownStream;
 } ConnectionsComponent;
 
 /*
