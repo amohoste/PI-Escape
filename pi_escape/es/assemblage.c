@@ -148,6 +148,8 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entit
 
 	if (art->type == ART_DOOR) {
 		addDownStream(currConComp, entityList[x][y]);
+		ConnectionsComponent *doorComp = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		addUpStream(doorComp, id);
 
 	} else if (art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR) {
 		id = create_verbinding_entity_1(engine, l, x, y, prevdir);
