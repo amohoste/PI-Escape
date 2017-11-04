@@ -48,8 +48,6 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// MoveHistoryComponent van deze entity opvragen
 		MoveHistoryComponent* move_hist_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_HISTORY);
 
-		// TODO check movehistory
-
 		// Als er geen animatie bezig is
 		if (engine->es_memory.components[COMP_MOVE_ANIMATION][moveaction_entity_id].free) {
 
@@ -62,7 +60,6 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 			// Check voor diagonaal bewegen
 			int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
 			Direction prev = move_hist_comp->previous;
-			//printf("%i, %i, %i\n",notDiagonal ,(notDiagonal || prev != E), prev);
 			if (move_comp->up && (notDiagonal || prev != N)) {
 				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
 				moveanimation->dir = N;
@@ -96,10 +93,10 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 }
 
 /*
- * Check if the position at coords (x,y) is available for the player
+ * Collision detection voor de positie op coords (x,y)
  * 
- * returns 1 if the position is available
- *         0 if the position isn't available
+ * returns 1 als plaats vrij is
+ *         0 als plaats niet vrij is
  */
 int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 	Context* ctx = &(engine->context);
@@ -110,7 +107,7 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 
 	int available = 1;
 
-	// check position
+	// check positie
 	if (l->height > x && x >= 0 && l->width > y && y >= 0) {
 		char place = l->spel[x][y];
 
@@ -118,7 +115,7 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 		if (IS_DOOR(x, y) && doorIsClosed(system, engine, x, y)) available = 0;
 	}
 	else {
-		// position is out of bounds
+		// positie is out of bounds
 		available = 0;
 	}
 
@@ -126,10 +123,10 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 }
 
 /*
-* Check if the door at the given position is closed
+* Check of de deur op de gegeven deur gestolen is
 *
-* returns 1 if closed
-*         0 if open (or there isn't a door at the given position)
+* returns 1 als gesloten
+*         0 als open (of als er geen deur is)
 */
 int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 	Context* ctx = &(engine->context);
