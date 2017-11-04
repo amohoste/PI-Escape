@@ -2,6 +2,8 @@
 - Input System -
 Afhandelen van toetsenbord en muis input via SDL. Dit voegt 
 MoveActionComponent en ItemActionComponent toe wanneer nodig.
+Het vangt tevens toetsenbord input op voor sensor emulatie als 
+er geen echte sensoren aanwezig zijn.
 ****************************************************************/
 
 #ifndef INPUT_SYSTEM_H

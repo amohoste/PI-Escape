@@ -17,6 +17,10 @@ typedef struct Context {
     int demo;
     Level *current_level;
     int level_ended;
+	float fps;
+	double temperature;
+	double pressure;
+	double humidity;
     //TODO: add other context fields
 } Context;
 

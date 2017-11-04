@@ -22,3 +22,7 @@ void game_load_level(Game *g, Level *l) {
     Engine *engine = &g->engine;
     create_level_entities(l, engine);
 }
+
+void clear_level(Game *g) {
+    es_memory_manager_init(&g->engine.es_memory);
+}

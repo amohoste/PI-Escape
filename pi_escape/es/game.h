@@ -35,4 +35,6 @@ void game_free(Game*);
 
 void game_load_level(Game*, Level*);
 
+void clear_level(Game*);
+
 #endif //GAME_H

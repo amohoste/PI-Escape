@@ -57,7 +57,6 @@ Level *load_level(int level_nr) {
 
     read_level(level, level_name);
 
-
     return level;
 }
 
@@ -82,14 +81,14 @@ void read_level(Level *level, char *level_name) {
     int height = level->height;
     int width = level->width;
     FILE *file = fopen(level_name, "r");
-    char kar = (char) getc(file);
+    int kar = getc(file);
 
     int i = 0;
     int j = 0;
 
     /* eerste lijnen skippen */
     while (kar == '\n' || kar == '\r') {
-        kar = (char) getc(file);
+        kar = getc(file);
     }
 
     while (i < height) {
@@ -97,14 +96,13 @@ void read_level(Level *level, char *level_name) {
         while (kar != '\n' && kar != '\r' && kar != EOF) {
             a[i][j] = kar;
             j++;
-            kar = (char) getc(file);
+            kar = getc(file);
         };
         fill_empty_places(a[i], width);
-        kar = (char) getc(file);
+        kar = getc(file);
         i++;
     }
     fclose(file);
-
 }
 
 void fill_empty_places(char *rij, int length) {
@@ -118,7 +116,7 @@ void fill_empty_places(char *rij, int length) {
 
 /* Leest het aantal kolommen en rijen in een bestand */
 void rows_cols_read(char *level_name, int *rows, int *cols) {
-    char c = 'a';
+    int c = 0;
     int max_col = 0;
     int rowsize = 0;
     int kol = 0;
@@ -129,10 +127,10 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
 
     if (file) {
         while (c != EOF) {
-            c = (char) getc(file);
+            c =  getc(file);
             /* eerste regels */
             while (c == '\n' || c == '\r') {
-                c = (char) getc(file);
+                c = getc(file);
             }
 
             while (c != EOF) {
@@ -150,7 +148,7 @@ void rows_cols_read(char *level_name, int *rows, int *cols) {
                         stack++;
                     }
                 }
-                c = (char) getc(file);
+                c =  getc(file);
             }
             if (kol != 0) {
                 rowsize++;

@@ -35,20 +35,46 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	// Gridlocationcomponent van deze entity opvragen
 	GridLocationComponent* lookat_grid_comp = get_component(engine, lookat_entity_id, COMP_GRIDLOCATION);
 
-	// printf("position = (%f,%f,%f)\n", cameraLookAt->pos[0], cameraLookAt->pos[1], cameraLookAt->pos[2]);
 	float x = lookat_grid_comp->pos[0] * 1.0f;
 	float y = lookat_grid_comp->pos[1] * 1.0f;
-	glmc_vec3_set(cameraLookAt->pos, x , y, 0.0f);
+	float curx = cameraLookAt->pos[0];
+	float cury = cameraLookAt->pos[1];
+
+	// Calculate how much camera lookat should move / frame
+	float fps = engine->context.fps;
+	float move = 0.01 * (400 / fps);
+
+	// Calculate new camera lookat
+	if (curx != x || cury != y) {
+		if (curx < x) {
+			curx += move;
+			curx = MIN(curx, x);
+		} else if (curx > x) {
+			curx -= move;
+			curx = MAX(curx, x);
+		}
+
+		if (cury < y) {
+			cury += move;
+			cury = MIN(cury, y);
+		}
+		else if (cury > y) {
+			cury -= move;
+			cury = MAX(cury, y);
+		}
+		
+	}
+	// Set new camera lookat
+	glmc_vec3_set(cameraLookAt->pos, curx , cury, 0.0f);
 
 	// Positie van waar gekeken wordt
 	float distance = cameraLookFrom->distance;
 	float xydegrees = cameraLookFrom->XYdegees;
 	float zdegrees = cameraLookFrom->Zdegrees;
+	float dx = (distance * sinf(degreesToRadians(zdegrees)) * cosf(degreesToRadians(xydegrees)));
+	float dy = (distance * sinf(degreesToRadians(zdegrees)) * sinf(degreesToRadians(xydegrees)));
+	float dz = distance * cosf(degreesToRadians(zdegrees));
 
-	float dx = (distance * sinf(zdegrees) * cosf(xydegrees));
-	float dy = (distance * sinf(zdegrees) * sinf(xydegrees));
-	float dz = distance * cosf(zdegrees);
-
-	glmc_vec3_set(cameraLookFrom->pos, x + dx, y + dy , 0.0f + dz);
+	glmc_vec3_set(cameraLookFrom->pos, curx + dx, cury + dy , 0.0f + dz);
 
 }
