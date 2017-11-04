@@ -47,7 +47,9 @@ create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int ha
 
 EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction);
 
-EntityId create_verbinding_entities(Engine *engine, Level *l, int x, int y, Direction lastdir, int any, int first);
+EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir);
+EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Direction lastdir);
+EntityId create_first_verbinding_entity(Engine *engine, Level *l, int x, int y, int door);
 
 EntityId create_or_entity(Engine *engine, int x, int y);
 

@@ -22,7 +22,6 @@ void create_level_entities(Level *l, Engine *engine) {
             int has_or = IS_OR(x, y);
             int has_and = IS_AND(x, y);
             int is_exit = IS_EXIT(x, y);
-			int is_exit = IS_VERBINDING(x, y);
 
             int walls[4];
             walls[S] = y == 0 || has_wall;
@@ -70,6 +69,9 @@ void create_level_entities(Level *l, Engine *engine) {
 		for (int y = 0; y < l->width; y++) {
 			int has_door = IS_DOOR(x, y);
 			int has_lock = IS_LOCK(x, y);
+			if (x == 9 && y == 4) {
+				printf("test");
+			}
 
 			// Als je lock / door tegenkomt
 			if (has_door) {
@@ -85,8 +87,6 @@ void create_level_entities(Level *l, Engine *engine) {
 					create_connections(l, engine, x, y, entityList);
 				}
 			}
-			
-
 		}
 	}
 
@@ -96,44 +96,46 @@ void create_level_entities(Level *l, Engine *engine) {
 void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList) {
 	int prevx = x;
 	int prevy = y;
-	Direction curdir;
+	Direction prevdir;
 	EntityId id;
 	DirectionComponent *dir;
 
 	if (IS_LOCK(x, y)) {
+		// Connection component opvragen
 		ConnectionsComponent* lockconn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
 		lockconn->hasUpStream = 1;
-		EntityId id = create_verbinding_entities(engine, l, x, y, N, 1, 1);
+		id = create_first_verbinding_entity(engine, l, x, y, 0);
 		// Richting aanpassen
 		DirectionComponent *dir = get_component(engine, id, COMP_DIRECTION);
-		curdir = dir->dir;
+		prevdir = dir->dir;
 		// Nieuwe locatie opvragen
 		nextLocation(&x, &y, &prevx, &prevy, l);
 	} else {
+		// Is deur 
 		ConnectionsComponent* doorconn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
 		doorconn->hasUpStream = 1;
 		nextLocation(&x, &y, &prevx, &prevy, l);
 
-		id = create_verbinding_entities(engine, l, x, y, N, 1, 1);
+		id = create_first_verbinding_entity(engine, l, x, y, 1);
 		dir = get_component(engine, id, COMP_DIRECTION);
-		curdir = dir->dir;
+		prevdir = dir->dir;
 
-		id = create_verbinding_entities(engine, l, x, y, curdir, 1, 0);
+		id = create_verbinding_entity_2(engine, l, x, y, prevdir);
 		dir = get_component(engine, id, COMP_DIRECTION);
-		curdir = dir->dir;
+		prevdir = dir->dir;
 		nextLocation(&x, &y, &prevx, &prevy, l);
 	}
 
 	ArtComponent *art = get_component(engine, entityList[x][y], COMP_ART);
 	
 	while (!(art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR || art->type == ART_LOCK || art->type == ART_DOOR)) {
-		id = create_verbinding_entities(engine, l, x, y, curdir, 0, 0);
+		id = create_verbinding_entity_1(engine, l, x, y, prevdir);
 		dir = get_component(engine, id, COMP_DIRECTION);
-		curdir = dir->dir;
+		prevdir = dir->dir;
 
-		id = create_verbinding_entities(engine, l, x, y, curdir, 1, 0);
+		id = create_verbinding_entity_2(engine, l, x, y, prevdir);
 		dir = get_component(engine, id, COMP_DIRECTION);
-		curdir = dir->dir;
+		prevdir = dir->dir;
 
 		nextLocation(&x, &y, &prevx, &prevy, l);
 		art = get_component(engine, entityList[x][y], COMP_ART);
@@ -143,14 +145,75 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entit
 		conn->hasUpStream = 1;
 	}
 	if (art->type == ART_LOCK || art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR) {
-		create_verbinding_entities(engine, l, x, y, curdir, 0, 0);
+		create_verbinding_entity_1(engine, l, x, y, prevdir);
 	}
 }
 
 
-EntityId create_verbinding_entities(Engine *engine, Level *l, int x, int y, Direction lastdir, int any, int first) {
-	
-	if (first) {
+EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir) {
+	if (lastdir == W) {
+		return create_verbinding_entity(engine, l, x, y, E);
+	}
+
+	if (lastdir == E) {
+		return create_verbinding_entity(engine, l, x, y, W);
+	}
+
+	if (lastdir == S) {
+		return create_verbinding_entity(engine, l, x, y, N);
+	}
+
+	if (lastdir == N) {
+		return create_verbinding_entity(engine, l, x, y, S);
+	}
+}
+
+EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Direction lastdir) {
+	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+		if (IS_VERBINDING_DIRECTION(x - 1, y)) {
+			if (lastdir != W) {
+				return create_verbinding_entity(engine, l, x, y, W);
+			}
+		}
+	}
+	if (x < l->height - 1) {
+		if (IS_VERBINDING_DIRECTION(x + 1, y)) {
+			if (lastdir != E) {
+				return create_verbinding_entity(engine, l, x, y, E);
+			}
+		}
+	}
+	if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+		if (lastdir != S) {
+			return create_verbinding_entity(engine, l, x, y, S);
+		}
+	}
+	if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+		if (lastdir != N) {
+			return create_verbinding_entity(engine, l, x, y, N);
+		}
+	}
+}
+
+
+EntityId create_first_verbinding_entity(Engine *engine, Level *l, int x, int y, int door) {
+	if (door) {
+		if (x >= 1 && (IS_DOOR(x - 1, y) || IS_LOCK(x - 1, y))) {
+			return create_verbinding_entity(engine, l, x, y, W);
+		}
+		if (x < l->height - 1) {
+			if ((IS_DOOR(x + 1, y) || IS_LOCK(x + 1, y))) {
+				return create_verbinding_entity(engine, l, x, y, E);
+			}
+		}
+		if (y >= 1 && (IS_DOOR(x, y - 1) || IS_LOCK(x, y - 1))) {
+			return create_verbinding_entity(engine, l, x, y, S);
+		}
+		if (y < l->width - 1 && (IS_DOOR(x, y + 1) || IS_LOCK(x, y + 1))) {
+			return create_verbinding_entity(engine, l, x, y, N);
+		}
+	}
+	else {
 		if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
 			return create_verbinding_entity(engine, l, x, y, W);
 		}
@@ -165,48 +228,7 @@ EntityId create_verbinding_entities(Engine *engine, Level *l, int x, int y, Dire
 		if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
 			return create_verbinding_entity(engine, l, x, y, N);
 		}
-	} else if (any) {
-		if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
-			if (lastdir != W) {
-				return create_verbinding_entity(engine, l, x, y, W);
-			}
-		}
-		if (x < l->height - 1) {
-			if (IS_VERBINDING_DIRECTION(x + 1, y)) {
-				if (lastdir != E) {
-					return create_verbinding_entity(engine, l, x, y, E);
-				}
-			}
-		}
-		if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
-			if (lastdir != S) {
-				return create_verbinding_entity(engine, l, x, y, S);
-			}
-		}
-		if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
-			if (lastdir != N) {
-				return create_verbinding_entity(engine, l, x, y, N);
-			}
-		}
 	}
-	else {
-		if (lastdir == W) {
-			return create_verbinding_entity(engine, l, x, y, E);
-		}
-
-		if (lastdir == E) {
-			return create_verbinding_entity(engine, l, x, y, W);
-		}
-			
-		if (lastdir == S) {
-			return create_verbinding_entity(engine, l, x, y, N);
-		}
-		
-		if (lastdir == N) {
-			return create_verbinding_entity(engine, l, x, y, S);
-		}
-	}
-	
 }
 
 
