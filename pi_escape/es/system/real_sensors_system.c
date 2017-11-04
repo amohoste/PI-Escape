@@ -27,8 +27,8 @@ void system_real_sensors_free(RealSensorsSystem* system) {
 
 void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
 #ifdef RPI
-	engine->context.humidity = hts221_read_humidity();
-	engine->context.temperature = hts221_read_temperature();
-	engine->context.pressure = lps25h_read_pressure();
+	//engine->context.humidity = hts221_read_humidity();
+	//engine->context.temperature = hts221_read_temperature();
+	//engine->context.pressure = lps25h_read_pressure();
 #endif // RPI
 }
