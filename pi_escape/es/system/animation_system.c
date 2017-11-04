@@ -46,7 +46,7 @@ void system_animation_update(AnimationSystem* system, Engine* engine) {
 
 		// Free component if animation is completed
 		clock_t now = clock();
-		float passed_time_ms = ((now - move_anim_comp->starttime) / CLOCKS_PER_SEC) * 1000;
+		float passed_time_ms = ((float)(now - move_anim_comp->starttime) / CLOCKS_PER_SEC) * 1000;
 		if (passed_time_ms >= PLAYER_MOVE_MS) {
 			// End animation
 			free_component(engine, move_anim_entity_id, COMP_MOVE_ANIMATION);
