@@ -1,4 +1,4 @@
-/***************************************************************
+ /***************************************************************
 - Action System - 
 Zoekt naar entities met een ItemActionComponent component,
 en voert de actie uit indien mogelijk (oprapen, neerleggen,
@@ -23,7 +23,5 @@ void system_action_init(ActionSystem*);
 ActionSystem* system_action_alloc();
 void system_action_update(ActionSystem*, Engine*);
 void system_action_free(ActionSystem*);
-
-
 
 #endif
