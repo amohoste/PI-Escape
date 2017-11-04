@@ -67,88 +67,176 @@ void create_level_entities(Level *l, Engine *engine) {
 	/* Connections aanmaken */
 	for (int x = 0; x < l->height; x++) {
 		for (int y = 0; y < l->width; y++) {
-			int has_door = IS_DOOR(x, y);
 			int has_lock = IS_LOCK(x, y);
-			if (x == 9 && y == 4) {
-				printf("test");
-			}
 
-			// Als je lock / door tegenkomt
-			if (has_door) {
+			// Als je lock tegenkomt
+			if (has_lock) {
 				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-				// Kijken of de down en upstream niet al toegekent zijn
-				if (!(connection->hasDownStream || connection->hasUpStream)) {
-					create_connections(l, engine, x, y, entityList);
-				}
-			} else if (has_lock) {
-				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-				// Kijken of de down en upstream niet al toegekend zijn
-				if (!(connection->hasDownStream || connection->hasUpStream)) {
-					create_connections(l, engine, x, y, entityList);
-				}
-			}
+				create_connections(l, engine, x, y, entityList, 0);
+			} 
 		}
 	}
 
+	/* Connections aanmaken */
+	for (int x = 0; x < l->height; x++) {
+		for (int y = 0; y < l->width; y++) {
+			int has_logic = IS_OR(x, y) || IS_AND(x, y);
 
+			// Als je logic tegenkomt
+			if (has_logic) {
+				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+				create_connections(l, engine, x, y, entityList, 1);
+			}
+		}
+	}
 }
 
-void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList) {
+
+
+void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList, int logic) {
+	// Vorige x en y
 	int prevx = x;
 	int prevy = y;
 	Direction prevdir;
 	EntityId id;
 	DirectionComponent *dir;
+	ConnectionsComponent *currConComp;
 
-	if (IS_LOCK(x, y)) {
-		// Connection component opvragen
-		ConnectionsComponent* lockconn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-		lockconn->hasUpStream = 1;
-		id = create_first_verbinding_entity(engine, l, x, y, 0);
-		// Richting aanpassen
-		DirectionComponent *dir = get_component(engine, id, COMP_DIRECTION);
-		prevdir = dir->dir;
-		// Nieuwe locatie opvragen
-		nextLocation(&x, &y, &prevx, &prevy, l);
-	} else {
-		// Is deur 
-		ConnectionsComponent* doorconn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-		doorconn->hasUpStream = 1;
-		nextLocation(&x, &y, &prevx, &prevy, l);
+	// Connection component opvragen
+	currConComp = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+	
+	if (logic) {
+		id = create_first_verbinding_entity_logic(engine, l, currConComp, x, y);
+	}
+	else {
+		id = create_first_verbinding_entity_lock(engine, l, x, y);
+	}
+	
+	addDownStream(currConComp, id);
+	currConComp = get_component(engine, id, COMP_CONNECTIONS);
+	dir = get_component(engine, id, COMP_DIRECTION);
+	prevdir = dir->dir;
 
-		id = create_first_verbinding_entity(engine, l, x, y, 1);
-		dir = get_component(engine, id, COMP_DIRECTION);
-		prevdir = dir->dir;
-
-		id = create_verbinding_entity_2(engine, l, x, y, prevdir);
-		dir = get_component(engine, id, COMP_DIRECTION);
-		prevdir = dir->dir;
+	// Nieuwe locatie opvragen
+	if (logic) {
+		nextLocation_dir(&x, &y, &prevx, &prevy, prevdir);
+	}
+	else {
 		nextLocation(&x, &y, &prevx, &prevy, l);
 	}
+	
 
 	ArtComponent *art = get_component(engine, entityList[x][y], COMP_ART);
 	
-	while (!(art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR || art->type == ART_LOCK || art->type == ART_DOOR)) {
+	// Blijven toevoegen tot we een deur / logic tegenkomen
+	while (!(art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR || art->type == ART_DOOR)) {
 		id = create_verbinding_entity_1(engine, l, x, y, prevdir);
+		addDownStream(currConComp, id);
+		currConComp = get_component(engine, id, COMP_CONNECTIONS);
 		dir = get_component(engine, id, COMP_DIRECTION);
 		prevdir = dir->dir;
 
 		id = create_verbinding_entity_2(engine, l, x, y, prevdir);
+		addDownStream(currConComp, id);
+		currConComp = get_component(engine, id, COMP_CONNECTIONS);
 		dir = get_component(engine, id, COMP_DIRECTION);
 		prevdir = dir->dir;
 
 		nextLocation(&x, &y, &prevx, &prevy, l);
 		art = get_component(engine, entityList[x][y], COMP_ART);
 	}
-	if (art->type == ART_LOCK || art->type == ART_DOOR) {
-		ConnectionsComponent* conn = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-		conn->hasUpStream = 1;
-	}
-	if (art->type == ART_LOCK || art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR) {
-		create_verbinding_entity_1(engine, l, x, y, prevdir);
+
+	if (art->type == ART_DOOR) {
+		addDownStream(currConComp, entityList[x][y]);
+
+	} else if (art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR) {
+		id = create_verbinding_entity_1(engine, l, x, y, prevdir);
+		addDownStream(currConComp, id);
+		currConComp = get_component(engine, id, COMP_CONNECTIONS);
+		addDownStream(currConComp, entityList[x][y]);
+
+		// Upstream toevoegen
+		ConnectionsComponent *logicConnComp = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		addUpStream(logicConnComp, id);
 	}
 }
 
+int dir_in(Direction dir, DirectionComponent* locations[3], int n) {
+	for (int i = 0; i < n; i++) {
+		if (locations[i]->dir == dir) {
+			return 1;
+		}
+	}
+	return 0;
+}
+
+EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, ConnectionsComponent *comp, int x, int y) {
+	int n = 0;
+
+	DirectionComponent* locations[3];
+	if (comp->hasUpStream1) {
+		DirectionComponent *dirCom = get_component(engine, comp->upstream[0], COMP_DIRECTION);
+		locations[0] = dirCom;
+		n += 1;
+	}
+	if (comp->hasUpStream2) {
+		DirectionComponent *dirCom = get_component(engine, comp->upstream[1], COMP_DIRECTION);
+		locations[1] = dirCom;
+		n += 1;
+	}
+	if (comp->hasUpStream3) {
+		DirectionComponent *dirCom = get_component(engine, comp->upstream[2], COMP_DIRECTION);
+		locations[2] = dirCom;
+		n += 1;
+	}
+
+	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+		// Kijken of deze component niet al een upstream van de logic is
+		if (!dir_in(W, locations, n)) {
+			return create_verbinding_entity(engine, l, x, y, W);
+		}
+	}
+	if (x < l->height - 1) {
+		if (IS_VERBINDING_DIRECTION(x + 1, y)) {
+			// Kijken of deze component niet al een upstream van de logic is
+			if (!dir_in(E, locations, n)) {
+				return create_verbinding_entity(engine, l, x, y, E);
+			}
+		}
+	}
+	if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+		// Kijken of deze component niet al een upstream van de logic is
+		if (!dir_in(S, locations, n)) {
+			return create_verbinding_entity(engine, l, x, y, S);
+		}
+	}
+	if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+		// Kijken of deze component niet al een upstream van de logic is
+		if (!dir_in(N, locations, n)) {
+			return create_verbinding_entity(engine, l, x, y, N);
+		}
+	}
+}
+
+void addUpStream(ConnectionsComponent* conn, EntityId id) {
+	if (!conn->hasUpStream1) {
+		conn->upstream[0] = id;
+		conn->hasUpStream1 = 1;
+	}
+	else if (!conn->hasUpStream2) {
+		conn->upstream[1] = id;
+		conn->hasUpStream2 = 1;
+	}
+	else {
+		conn->upstream[2] = id;
+		conn->hasUpStream3 = 1;
+	}
+}
+
+void addDownStream(ConnectionsComponent* conn, EntityId id) {
+	conn->downstream = id;
+	conn->hasDownStream = 1;
+}
 
 EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir) {
 	if (lastdir == W) {
@@ -196,38 +284,44 @@ EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Dire
 }
 
 
-EntityId create_first_verbinding_entity(Engine *engine, Level *l, int x, int y, int door) {
-	if (door) {
-		if (x >= 1 && (IS_DOOR(x - 1, y) || IS_LOCK(x - 1, y))) {
-			return create_verbinding_entity(engine, l, x, y, W);
-		}
-		if (x < l->height - 1) {
-			if ((IS_DOOR(x + 1, y) || IS_LOCK(x + 1, y))) {
-				return create_verbinding_entity(engine, l, x, y, E);
-			}
-		}
-		if (y >= 1 && (IS_DOOR(x, y - 1) || IS_LOCK(x, y - 1))) {
-			return create_verbinding_entity(engine, l, x, y, S);
-		}
-		if (y < l->width - 1 && (IS_DOOR(x, y + 1) || IS_LOCK(x, y + 1))) {
-			return create_verbinding_entity(engine, l, x, y, N);
+
+EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, int y) {
+	
+	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+		return create_verbinding_entity(engine, l, x, y, W);
+	}
+	if (x < l->height - 1) {
+		if (IS_VERBINDING_DIRECTION(x + 1, y)) {
+			return create_verbinding_entity(engine, l, x, y, E);
 		}
 	}
-	else {
-		if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
-			return create_verbinding_entity(engine, l, x, y, W);
-		}
-		if (x < l->height - 1) {
-			if (IS_VERBINDING_DIRECTION(x + 1, y)) {
-				return create_verbinding_entity(engine, l, x, y, E);
-			}
-		}
-		if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
-			return create_verbinding_entity(engine, l, x, y, S);
-		}
-		if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
-			return create_verbinding_entity(engine, l, x, y, N);
-		}
+	if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+		return create_verbinding_entity(engine, l, x, y, S);
+	}
+	if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+		return create_verbinding_entity(engine, l, x, y, N);
+	}
+	
+}
+
+// Berekent volgende locatie en past x en y waarden aan
+void nextLocation_dir(int *curx, int *cury, int *prevx, int *prevy, Direction dir) {
+	if (dir == W) {
+		*prevx = *curx;
+		*prevy = *cury;
+		*curx= *curx - 1;
+	} else if (dir == E) {
+		*prevx = *curx;
+		*prevy = *cury;
+		*curx = *curx + 1;
+	}else if (dir == S) {
+		*prevx = *curx;
+		*prevy = *cury;
+		*cury = *cury - 1;
+	}else if (dir == N) {
+		*prevx = *curx;
+		*prevy = *cury;
+		*cury = *cury + 1;
 	}
 }
 

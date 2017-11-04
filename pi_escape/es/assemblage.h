@@ -30,7 +30,10 @@ components aan te maken.
 
 void create_level_entities(Level *, Engine *engine);
 
-void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList);
+void addDownStream(ConnectionsComponent* conn, EntityId id);
+void addUpStream(ConnectionsComponent* conn, EntityId id);
+
+void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList, int logic);
 
 void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l);
 
@@ -49,7 +52,10 @@ EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direct
 
 EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir);
 EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Direction lastdir);
-EntityId create_first_verbinding_entity(Engine *engine, Level *l, int x, int y, int door);
+EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, ConnectionsComponent *comp, int x, int y);
+EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, int y);
+void nextLocation_dir(int *curx, int *cury, int *prevx, int *prevy, Direction dir);
+
 
 EntityId create_or_entity(Engine *engine, int x, int y);
 

@@ -149,7 +149,9 @@ typedef struct ConnectionsComponent {
     //TODO
 	// Houdt de "upstream" en "downstream" entity ID's bij
 	EntityId upstream[3];
-	int hasUpStream;
+	int hasUpStream1;
+	int hasUpStream2;
+	int hasUpStream3;
 	EntityId downstream;
 	int hasDownStream;
 } ConnectionsComponent;
