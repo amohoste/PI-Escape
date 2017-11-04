@@ -15,8 +15,6 @@ te bewegen en langs muren te bewegen tot de eerste opening.
 #include <assert.h>
 #include <stdio.h>
 
-#define PLAYER_MOVE_MS 100
-
 MoveSystem* system_move_alloc() {
     MoveSystem* res = calloc(1, sizeof(MoveSystem));
     system_move_init(res);
@@ -41,6 +39,9 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		EntityId moveaction_entity_id = moveaction_it.entity_id;
 		assert(moveaction_entity_id != NO_ENTITY);
 
+		// TODO change gridlocation
+		// TODO add move animation comp
+
 		// Gridlocationcomponent van deze entity opvragen
 		GridLocationComponent* grid_comp = get_component(engine, moveaction_entity_id, COMP_GRIDLOCATION);
 
@@ -51,25 +52,44 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// TODO check movehistory
 		// TODO work with animations
 
-		// Change location
-		int x = grid_comp->pos[0];
-		int y = grid_comp->pos[1];
-		if (move_comp->up) {
-			x = x - 1;
-			move_comp->up = 0;
-		} else if (move_comp->right) {
-			y = y + 1;
-			move_comp->right = 0;
-		} else if (move_comp->down) {
-			x = x + 1;
-			move_comp->down = 0;
-		} else if (move_comp->left) {
-			y = y - 1;
-			move_comp->left = 0;
-		}
+		// If no animation is in progress
+		if (engine->es_memory.components[COMP_MOVE_ANIMATION][moveaction_entity_id].free) {
 
-		// Move
-		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
+			// Change location
+			int x = grid_comp->pos[0];
+			int y = grid_comp->pos[1];
+			if (move_comp->up) {
+				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
+				moveanimation->dir = N;
+				moveanimation->starttime = clock();
+				x = x - 1;
+				//move_comp->up = 0;
+			}
+			else if (move_comp->down) {
+				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
+				moveanimation->dir = S;
+				moveanimation->starttime = clock();
+				x = x + 1;
+				//move_comp->right = 0;
+			}
+			else if (move_comp->right) {
+				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
+				moveanimation->dir = E;
+				moveanimation->starttime = clock();
+				y = y + 1;
+				//move_comp->down = 0;
+			}
+			else if (move_comp->left) {
+				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
+				moveanimation->dir = W;
+				moveanimation->starttime = clock();
+				y = y - 1;
+				//move_comp->left = 0;
+			}
+
+			// Move
+			if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
+		}
 	}
 }
 

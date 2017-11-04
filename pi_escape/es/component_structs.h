@@ -12,6 +12,7 @@
 #include "../../util/util.h"
 
 #include <stdint.h>
+#include <time.h>
 #include <glmc.h>
 
 /*
@@ -71,6 +72,7 @@ typedef struct OneTimeAnimationComponent {
 typedef struct MoveAnimationComponent {
     //TODO
 	Direction dir;
+	clock_t starttime;
 } MoveAnimationComponent;
 
 /*
