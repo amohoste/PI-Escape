@@ -43,7 +43,7 @@ static char *test_memory_manager_has_component() {
     return 0;
 }
 
-static char *test_memory_manager_get_component() {
+static char *test_memory_manager_get_component_simple() {
     Graphics *g = graphics_alloc(0, 0);
     Game *pi_escape_2 = game_alloc(g);
     EntityId entity = get_new_entity_id(&pi_escape_2->engine);
@@ -53,6 +53,30 @@ static char *test_memory_manager_get_component() {
     free(pi_escape_2);
     graphics_free(g);
     free(g);
+    return 0;
+}
+
+static char *test_memory_manager_get_component_multi_components() {
+    Graphics *g = graphics_alloc(0, 0);
+    Game *pi_escape_2 = game_alloc(g);
+    EntityId entity = get_new_entity_id(&pi_escape_2->engine);
+    void *itemComponent = create_component(&pi_escape_2->engine, entity, COMP_ITEM);
+    create_component(&pi_escape_2->engine, entity, COMP_EXIT);
+    create_component(&pi_escape_2->engine, entity, COMP_ART);
+    mu_assert(itemComponent == get_component(&pi_escape_2->engine, entity, COMP_ITEM));
+    game_free(pi_escape_2);
+    free(pi_escape_2);
+    graphics_free(g);
+    free(g);
+    return 0;
+}
+
+/*
+ * Alle tests in veband met get_component
+ */
+static char *test_memory_manager_get_component(){
+    mu_run_test(test_memory_manager_get_component_simple);
+    mu_run_test(test_memory_manager_get_component_multi_components);
     return 0;
 }
 
@@ -70,7 +94,6 @@ static char *test_memory_manager_free_component() {
     return 0;
 }
 
-
 static char *test_load_levels() {
     mu_assert(test_filesdimensions());
     mu_assert(test_game1());
@@ -81,7 +104,7 @@ static char *all_tests() {
     //Basic memory manager test
     mu_run_test(test_memory_manager_create_component);
     mu_run_test(test_memory_manager_has_component);
-    mu_run_test(test_memory_manager_get_component);
+    test_memory_manager_get_component();
     mu_run_test(test_memory_manager_free_component);
 //    mu_run_test(test_load_levels);
     return 0;
