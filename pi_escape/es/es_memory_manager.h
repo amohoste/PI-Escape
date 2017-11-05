@@ -60,7 +60,6 @@ void* get_component(Engine* engine, EntityId entity_id, ComponentId component_id
 
 void* create_component(Engine* engine, EntityId entity_id, ComponentId component_id);
 void free_component(Engine* engine, EntityId entity_id, ComponentId component_id);
-void free_every_component(Engine* engine);
 
 EntityId get_new_entity_id(Engine* engine);
 
