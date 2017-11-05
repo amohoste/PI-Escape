@@ -56,6 +56,20 @@ static char *test_memory_manager_get_component() {
     return 0;
 }
 
+static char *test_memory_manager_free_component() {
+    Graphics *g = graphics_alloc(0, 0);
+    Game *pi_escape_2 = game_alloc(g);
+    EntityId entity = get_new_entity_id(&pi_escape_2->engine);
+    create_component(&pi_escape_2->engine, entity, COMP_ITEM);
+    free_component(&pi_escape_2->engine, entity, COMP_ITEM);
+    mu_assert(!has_component(&pi_escape_2->engine, entity, COMP_ITEM));
+    game_free(pi_escape_2);
+    free(pi_escape_2);
+    graphics_free(g);
+    free(g);
+    return 0;
+}
+
 
 static char *test_load_levels() {
     mu_assert(test_filesdimensions());
@@ -68,6 +82,7 @@ static char *all_tests() {
     mu_run_test(test_memory_manager_create_component);
     mu_run_test(test_memory_manager_has_component);
     mu_run_test(test_memory_manager_get_component);
+    mu_run_test(test_memory_manager_free_component);
     mu_run_test(test_load_levels);
     return 0;
 }
