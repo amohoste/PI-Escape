@@ -51,7 +51,7 @@ void system_lock_update(LockSystem* system, Engine* engine) {
 			ItemComponent *item = get_component(engine, key_entity_id, COMP_ITEM);
 			ItemColor color = item->color;
 
-			if (x == x1 && y == y1 && requiredKeyColor == color) {
+			if ((x == x1 && y == y1 && (requiredKeyColor == color || color == O || requiredKeyColor == O))) {
 				active = 1;
 			}
 		}
