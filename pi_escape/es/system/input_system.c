@@ -17,6 +17,7 @@ InputSystem* system_input_alloc() {
 }
 
 void system_input_init(InputSystem* system) {
+
 }
 
 
@@ -41,7 +42,7 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 
 		switch (keysym->sym) {
 		case SDLK_ESCAPE:
-			//ignore untile key released
+			//ignore until key released
 			break;
 		case SDLK_KP_ENTER: //fall-through
 		case SDLK_RETURN:   //fall-through
@@ -65,6 +66,40 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 			move->right = 1;
 			break;
 		}
+#ifndef RPI	// Add sensor emulation if no real sensor system was loaded
+		case SDLK_t: {
+			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+				// lower temperature
+				(&engine->context)->temperature -= 1;
+			} else if (keysym->mod & KMOD_CTRL) {
+				// increase temperature
+				(&engine->context)->temperature += 1;
+			}
+			break;
+		}
+		case SDLK_p: {
+			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+				// lower pressure
+				(&engine->context)->pressure -= 1;
+			}
+			else if (keysym->mod & KMOD_CTRL) {
+				// increase pressure
+				(&engine->context)->pressure += 1;
+			}
+			break;
+		}
+		case SDLK_h: {
+			if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+				// lower humidity
+				(&engine->context)->humidity -= 1;
+			}
+			else if (keysym->mod & KMOD_CTRL) {
+				// increase humidity
+				(&engine->context)->humidity += 1;
+			}
+			break;
+		}
+#endif // RPI
 		default:
 			break;
 		}
@@ -179,9 +214,5 @@ void system_input_update(InputSystem* system, Engine* engine) {
                 break;
             }
         }
-
-
-
-        
     }
 }
