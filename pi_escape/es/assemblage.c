@@ -165,8 +165,6 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
 
 	MoveHistoryComponent *moveHist = create_component(engine, player_entity_id, COMP_MOVE_HISTORY);
 
-    ItemActionComponent *itemaction = create_component(engine, player_entity_id, COMP_ITEMACTION);
-
     return player_entity_id;
 }
 
@@ -259,6 +257,8 @@ EntityId create_key_entity(Engine *engine, int x, int y, char color) {
 
     ArtComponent *art = create_component(engine, key_entity_id, COMP_ART);
     art->type = ART_KEY;
+
+	ItemActionComponent *itemaction = create_component(engine, key_entity_id, COMP_ITEMACTION);
 
     return key_entity_id;
 }
