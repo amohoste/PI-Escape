@@ -134,7 +134,6 @@ int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 
 	int closed = 0;
 
-	// TODO
 
 	return closed;
 }

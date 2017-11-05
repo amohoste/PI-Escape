@@ -150,7 +150,12 @@ typedef struct ActivatableComponent {
 typedef struct ConnectionsComponent {
     //TODO
 	// Houdt de "upstream" en "downstream" entity ID's bij
-	TO_IMPLEMENT_STRUCT;
+	EntityId upstream[3];
+	int hasUpStream1;
+	int hasUpStream2;
+	int hasUpStream3;
+	EntityId downstream;
+	int hasDownStream;
 } ConnectionsComponent;
 
 /*
@@ -166,6 +171,7 @@ typedef struct LockComponent {
 */
 typedef struct ConnectorLogicComponent {
     //TODO
+	LogicType type;
 	TO_IMPLEMENT_STRUCT;
 } ConnectorLogicComponent;
 

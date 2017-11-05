@@ -42,7 +42,12 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 
 	// Calculate how much camera lookat should move / frame
 	float fps = engine->context.fps;
+	
 	float move = 0.01 * (400 / fps);
+
+	if (fps == 0) {
+		move = 0.01f;
+	}
 
 	// Calculate new camera lookat
 	if (curx != x || cury != y) {
