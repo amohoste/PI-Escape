@@ -156,7 +156,7 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
 
     CameraLookFromComponent *cameralookfrom = create_component(engine, player_entity_id,
                                                                COMP_CAMERA_LOOK_FROM);
-    cameralookfrom->distance = 1.0f;
+    cameralookfrom->distance = 15.0f;
     cameralookfrom->XYdegees = 0.0f;
     cameralookfrom->Zdegrees = 25.0f;
     glmc_vec3_set(cameralookfrom->pos, 4.0f, -4.0f, 4.0f); //this normally gets overridden by camera system
