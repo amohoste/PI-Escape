@@ -22,7 +22,6 @@ int test_filesdimensions() {
 
 int test_filedimensions(int lvl, int nrows, int ncols) {
     
-
     // Level aanmaken en inlezen
     Level *l = load_level(lvl);
     assert(l->width == ncols);
