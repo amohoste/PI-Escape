@@ -61,14 +61,6 @@ void free_component(Engine *engine, EntityId entity_id, ComponentId component_id
     engine->es_memory.components[component_id][entity_id].free = 1;
 }
 
-void free_every_component(Engine *engine) {
-    for (int i = 0; i < COMPONENT_ID_SIZE; ++i) {
-        for (int j = 0; j < MAX_ENTITIES; ++j) {
-            engine->es_memory.components[i][j].free = 1;
-        }
-    }
-}
-
 EntityId get_new_entity_id(Engine *engine) {
     if (engine->es_memory.next_entity_id == MAX_ENTITIES) {
         fatal("Fatal error: Maximum number of entities used: %u", MAX_ENTITIES);
