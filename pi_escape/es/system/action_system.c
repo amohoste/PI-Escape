@@ -1,14 +1,3 @@
-/***************************************************************
-- Action System -
-Zoekt naar entities met een ItemActionComponent component,
-en voert de actie uit indien mogelijk (oprapen, neerleggen,
-of verwisselen van de sleutel). Er wordt hiervoor gekeken of
-op dezelfde locatie (GridLocationComponent) als een entity met
-een ContainerComponent en een ItemActionComponent een andere
-entity is die een ItemComponent heeft. De InContainerComponent
-wordt dan aangepast (verwijderd of toegevoegd).
-****************************************************************/
-
 #include "action_system.h"
 
 #include <assert.h>
@@ -32,4 +21,18 @@ void system_action_free(ActionSystem* system) {
 
 void system_action_update(ActionSystem* system, Engine* engine) {
     //TODO
+	// Sleutel omhoog getekend als InContainerComponent* container = get_component(engine, drawable_entity_id, COMP_INCONTAINER); != null
+	/*
+	EntityIterator player_it;
+	search_entity_2(engine, COMP_GRIDLOCATION, COMP_INPUTRECEIVER, &player_it);
+	next_entity(&player_it);
+	EntityId player_entity_id = player_it.entity_id;
+	assert(player_entity_id != NO_ENTITY);
+	t_ivec2 player_grid_pos;
+	GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
+	*/
+
+	EntityIterator itemaction_it;
+	search_entity_1(engine, COMP_ITEMACTION, &itemaction_it);
+	
 }
