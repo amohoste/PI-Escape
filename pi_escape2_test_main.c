@@ -83,7 +83,7 @@ static char *all_tests() {
     mu_run_test(test_memory_manager_has_component);
     mu_run_test(test_memory_manager_get_component);
     mu_run_test(test_memory_manager_free_component);
-    mu_run_test(test_load_levels);
+//    mu_run_test(test_load_levels);
     return 0;
 }
 
