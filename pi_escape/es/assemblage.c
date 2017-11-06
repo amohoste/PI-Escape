@@ -19,6 +19,8 @@ void create_level_entities(Level *l, Engine *engine) {
 		entityList[i] = (EntityId *)calloc((size_t)l->width, sizeof(EntityId));
 	}
 
+    engine->context.still_object_list = entityList;
+
 	/* Aanmaken van alle componenten behalve verbindingsstukken */
     for (int x = 0; x < l->height; x++) {
         for (int y = 0; y < l->width; y++) {
@@ -68,6 +70,10 @@ void create_level_entities(Level *l, Engine *engine) {
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
             EntityId wall = create_wall_entity(engine, l, x, y, has_floor, has_ceil, has_wall, walls);
+
+			if(IS_WALL(x,y)){
+				entityList[x][y] = wall;
+			}
 
         }
     }
@@ -429,7 +435,7 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **conne
 	}
 }
 
-/* Hulpfunctie die een verbindingsstuk creëert dat aan een logicastuk hangt, in de juiste richting */
+/* Hulpfunctie die een verbindingsstuk creï¿½ert dat aan een logicastuk hangt, in de juiste richting */
 EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, ConnectionsComponent *comp, int x, int y) {
 	int n = 0;
 
@@ -478,7 +484,7 @@ EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, Connecti
 	}
 }
 
-/* Hulpfunctie die een verbindingsstuk creëert dat aan een slot hangt, in de juiste richting */
+/* Hulpfunctie die een verbindingsstuk creï¿½ert dat aan een slot hangt, in de juiste richting */
 EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, int y) {
 
 	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
@@ -498,7 +504,7 @@ EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, in
 
 }
 
-/* Hulpfunctie die een verbindingsstuk creëert in de juiste richting indien hij het eerste stuk is dat op een bepaalde coördinaat terechtkomt */
+/* Hulpfunctie die een verbindingsstuk creï¿½ert in de juiste richting indien hij het eerste stuk is dat op een bepaalde coï¿½rdinaat terechtkomt */
 EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir) {
 	if (lastdir == W) {
 		return create_verbinding_entity(engine, l, x, y, E);
@@ -517,7 +523,7 @@ EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Dire
 	}
 }
 
-/* Hulpfunctie die een verbindingsstuk creëert in de juiste richting indien hij het tweede stuk is dat op een bepaalde coördinaat terechtkomt */
+/* Hulpfunctie die een verbindingsstuk creï¿½ert in de juiste richting indien hij het tweede stuk is dat op een bepaalde coï¿½rdinaat terechtkomt */
 EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Direction lastdir) {
 	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
 		if (IS_VERBINDING_DIRECTION(x - 1, y)) {
