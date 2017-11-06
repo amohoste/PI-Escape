@@ -1,6 +1,5 @@
 #ifdef RPI
 
-#include <stdio.h>
 #include <unistd.h>
 
 #include "../sensor/lps25h.h"
@@ -8,7 +7,7 @@
 
 #define ADDR 0x5c
 #define CTRL_REG1 0x20
-#define CTRL_REG2 0x21
+#define CTRL_REG4 0x23
 #define PRESS_OUT_XL 0x28
 #define PRESS_OUT_L 0x29
 #define PRESS_OUT_H 0x2A
@@ -32,11 +31,10 @@ int lps25h_init(int frequentie)
 	//TODO: change 0x84 to frequentie
 	i2c_write_byte_data(file, CTRL_REG1, 0x84);
 
-	i2c_write_byte_data(file, CTRL_REG2, 0x01);
-
+	i2c_write_byte_data(file, CTRL_REG4, 0x01);
 	do {
-		sleep(2500);
-		status = i2c_read_byte_data(file, CTRL_REG2);
+		usleep(2500);
+		status = i2c_read_byte_data(file, CTRL_REG4);
 	} while (status != 0);
 	
 	return 0;
@@ -54,13 +52,13 @@ double lps25h_read_pressure()
 
 	// pressure bepalen
 	double pressure = press_out_HLLX / 4096.0;
-	printf("Luchtdruk = %.0f", pressure);
 	return pressure;
 }
 
 double lps25h_read_temperature()
 {
 	//ophalen van waarde
+	// TODO vraag of dit klopt
 	uint8_t temp_out_L = i2c_read_byte_data(file, TEMP_OUT_L);
 	uint8_t temp_out_H = i2c_read_byte_data(file, TEMP_OUT_H);
 
@@ -69,7 +67,6 @@ double lps25h_read_temperature()
 
 	// bepalen van temperatuur in c
 	double temp_C = 42.5 + (temp_out_HL / 480);
-	printf("Temperatuur = %.2f°", temp_C);
 	return temp_C;
 }
 

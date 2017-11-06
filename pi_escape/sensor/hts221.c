@@ -1,6 +1,5 @@
 #ifdef RPI
 
-#include <stdio.h>
 #include <unistd.h>
 
 #include "../sensor/hts221.h"
@@ -10,7 +9,7 @@
 #define CLEAN_START 0x20
 
 #define CTRL_REG1 0x20
-#define CTRL_REG2 0x21
+#define CTRL_REG4 0x23
 
 #define T0_OUT_L 0x3C
 #define T0_OUT_H 0x3D
@@ -53,13 +52,10 @@ int hts221_init(int frequentie)
 	//TODO: change 0x84 to frequentie
 	i2c_write_byte_data(file, CTRL_REG1, 0x84);
 
-	i2c_write_byte_data(file, CTRL_REG2, 0x01);
-
-
-	printf("%d", i2c_read_byte_data(file, CTRL_REG1));
+	i2c_write_byte_data(file, CTRL_REG4, 0x01);
 	do {
-		// sleep(2500);
-		status = i2c_read_byte_data(file, CTRL_REG2);
+		usleep(2500);
+		status = i2c_read_byte_data(file, CTRL_REG4);
 	} while (status != 0);
 
 	tempC.t0_degC_x8 = i2c_read_byte_data(file, T0_degC_x8);
@@ -97,7 +93,6 @@ double hts221_read_humidity()
 	int16_t H_T_OUT = h_t_out_h << 8 | h_t_out_l;
 
 	double humidity = (h_m * H_T_OUT) + h_c;
-	printf("Luchtvochtigheid = %.2f°", humidity);
 	return humidity;
 }
 
@@ -118,7 +113,6 @@ double hts221_read_temperature()
 	int16_t T_out = t_out_h << 8 | t_out_l;
 
 	double temp_C = (t_m * T_out) + t_c;
-	printf("Temperatuur = %.2f°", temp_C);
 	return temp_C;
 }	
 #endif
