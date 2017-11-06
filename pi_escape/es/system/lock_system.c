@@ -52,7 +52,10 @@ void system_lock_update(LockSystem* system, Engine* engine) {
 			ItemColor color = item->color;
 
 			if ((x == x1 && y == y1 && (requiredKeyColor == color || color == O || requiredKeyColor == O))) {
-				active = 1;
+				if (!has_component(engine, key_entity_id, COMP_INCONTAINER)) {
+					active = 1;
+				}
+				
 			}
 		}
 		ActivatableComponent* activatable = get_component(engine, lock_entity_id, COMP_ACTIVATABLE);

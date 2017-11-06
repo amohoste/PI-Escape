@@ -11,7 +11,7 @@ ActionSystem* system_action_alloc() {
 }
 
 void system_action_init(ActionSystem* system) {
-    //TODO
+	system->prevAct = 0;
 }
 
 
@@ -38,14 +38,15 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 	next_entity(&player_it);
 	EntityId player_entity_id = player_it.entity_id;
 	assert(player_entity_id != NO_ENTITY);
-	ItemActionComponent* player_itemact = get_component(engine, player_entity_id, COMP_ITEMACTION);
+	InputReceiverComponent* player_input = get_component(engine, player_entity_id, COMP_INPUTRECEIVER);
 	
-	// Als player act
-	if (player_itemact->act) {
+	if (player_input->actkey && system->prevAct == 0) {
+		system->prevAct = 1;
 		GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
 		int player_x = player_grid_comp->pos[0];
 		int player_y = player_grid_comp->pos[1];
 
+		// Alle componenten met itemactioncomponent zoeken (sleutels)
 		EntityIterator itemaction_it;
 		search_entity_1(engine, COMP_ITEMACTION, &itemaction_it);
 		while (next_entity(&itemaction_it)) {
@@ -62,32 +63,15 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 				if (!has_component(engine, itemaction_entity_id, COMP_INCONTAINER)) {
 					create_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 				}
-
-			}
-
-			// Neerleggen als zelfde locatie slot met zelfde kleur heeft
-			ItemComponent *item = get_component(engine, itemaction_entity_id, COMP_ITEM);
-			ItemColor key_color = item->color;
-
-			EntityIterator lock_it;
-			search_entity_1(engine, COMP_LOCK, &lock_it);
-			while (next_entity(&lock_it)) {
-				EntityId lock_entity_id = lock_it.entity_id;
-				assert(lock_entity_id != NO_ENTITY);
-				GridLocationComponent* lockgrid = get_component(engine, lock_entity_id, COMP_GRIDLOCATION);
-				int lock_x = lockgrid->pos[0];
-				int lock_y = lockgrid->pos[1];
-				LockComponent *lock = get_component(engine, lock_entity_id, COMP_LOCK);
-				ItemColor requiredKeyColor = lock->requiredKeyColor;
-				// Todo: maybe general function to check wether key is equal to lock?
-				if ((requiredKeyColor == key_color || key_color == O || requiredKeyColor == O) && key_x == lock_x && key_y == lock_y) {
-					if (has_component(engine, itemaction_entity_id, COMP_INCONTAINER)) {
-						free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
-					}
+				else {
+					free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 				}
 
 			}
 		}
+	}
+	else if (!player_input->actkey && system->prevAct == 1) {
+		system->prevAct = 0;
 	}
 	
 }
