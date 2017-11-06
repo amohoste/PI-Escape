@@ -31,64 +31,59 @@ void system_move_free(MoveSystem* system) {
 }
 
 void system_move_update(MoveSystem* system, Engine* engine) {
-	// Entity zoeken met een MoveActionComponent
+	// Get player
+	EntityId player = engine->context.player;
+	assert(player != NO_ENTITY);
 
-	EntityIterator moveaction_it;
-	search_entity_1(engine, COMP_MOVE_ACTION, &moveaction_it);
-	while (next_entity(&moveaction_it)) {
-		EntityId moveaction_entity_id = moveaction_it.entity_id;
-		assert(moveaction_entity_id != NO_ENTITY);
+	// Gridlocationcomponent van deze entity opvragen
+	GridLocationComponent* grid_comp = get_component(engine, player, COMP_GRIDLOCATION);
 
-		// Gridlocationcomponent van deze entity opvragen
-		GridLocationComponent* grid_comp = get_component(engine, moveaction_entity_id, COMP_GRIDLOCATION);
+	// MoveActionComponent van deze entity opvragen
+	MoveActionComponent* move_comp = get_component(engine, player, COMP_MOVE_ACTION);
 
-		// MoveActionComponent van deze entity opvragen
-		MoveActionComponent* move_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_ACTION);
+	// MoveHistoryComponent van deze entity opvragen
+	MoveHistoryComponent* move_hist_comp = get_component(engine, player, COMP_MOVE_HISTORY);
 
-		// MoveHistoryComponent van deze entity opvragen
-		MoveHistoryComponent* move_hist_comp = get_component(engine, moveaction_entity_id, COMP_MOVE_HISTORY);
+	// Als er geen animatie bezig is
+	if (engine->es_memory.components[COMP_MOVE_ANIMATION][player].free) {
 
-		// Als er geen animatie bezig is
-		if (engine->es_memory.components[COMP_MOVE_ANIMATION][moveaction_entity_id].free) {
+		// Verander locatie
 
-			// Verander locatie
+		// Huidige locatie
+		int x = grid_comp->pos[0];
+		int y = grid_comp->pos[1];
 
-			// Huidige locatie
-			int x = grid_comp->pos[0];
-			int y = grid_comp->pos[1];
-
-			// Check voor diagonaal bewegen
-			int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
-			Direction prev = move_hist_comp->previous;
-			if (move_comp->up && (notDiagonal || prev != N)) {
-				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
-				moveanimation->dir = N;
-				move_hist_comp->previous = N;
-				moveanimation->starttime = clock();
-				x = x - 1;
-			} else if (move_comp->down && (notDiagonal || prev != S)) {
-				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
-				moveanimation->dir = S;
-				move_hist_comp->previous = S;
-				moveanimation->starttime = clock();
-				x = x + 1;
-			} else if (move_comp->right && (notDiagonal || prev != E)) {
-				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
-				moveanimation->dir = E;
-				move_hist_comp->previous = E;
-				moveanimation->starttime = clock();
-				y = y + 1;
-			} else if (move_comp->left && (notDiagonal || prev != W)) {
-				MoveAnimationComponent* moveanimation = create_component(engine, moveaction_entity_id, COMP_MOVE_ANIMATION);
-				moveanimation->dir = W;
-				move_hist_comp->previous = W;
-				moveanimation->starttime = clock();
-				y = y - 1;
-			}
-
-			// Beweeg
-			if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
+		// Check voor diagonaal bewegen
+		int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
+		Direction prev = move_hist_comp->previous;
+		if (move_comp->up && (notDiagonal || prev != N)) {
+			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+			moveanimation->dir = N;
+			move_hist_comp->previous = N;
+			moveanimation->starttime = clock();
+			x = x - 1;
+		} else if (move_comp->down && (notDiagonal || prev != S)) {
+			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+			moveanimation->dir = S;
+			move_hist_comp->previous = S;
+			moveanimation->starttime = clock();
+			x = x + 1;
+		} else if (move_comp->right && (notDiagonal || prev != E)) {
+			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+			moveanimation->dir = E;
+			move_hist_comp->previous = E;
+			moveanimation->starttime = clock();
+			y = y + 1;
+		} else if (move_comp->left && (notDiagonal || prev != W)) {
+			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+			moveanimation->dir = W;
+			move_hist_comp->previous = W;
+			moveanimation->starttime = clock();
+			y = y - 1;
 		}
+
+		// Beweeg
+		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
 	}
 }
 
