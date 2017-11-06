@@ -1,4 +1,4 @@
-//#ifdef RPI
+#ifdef RPI
 
 #include <stdint.h>
 #include <stdio.h>
@@ -124,4 +124,4 @@ double hts221_read_temperature()
 	printf("Temperatuur = %.2f°", temp_C);
 	return temp_C;
 }	
-//#endif
+#endif
