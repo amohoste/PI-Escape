@@ -14,7 +14,7 @@ wordt dan aangepast (verwijderd of toegevoegd).
 #define EMPTY_SYSTEM_STRUCT char c
 
 typedef struct ActionSystem {
-	EMPTY_SYSTEM_STRUCT;
+	int prevAct;
 } ActionSystem;
 
 #include "../engine.h"

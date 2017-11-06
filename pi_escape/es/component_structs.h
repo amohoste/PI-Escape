@@ -179,9 +179,7 @@ typedef struct ConnectorLogicComponent {
 * Geeft aan dat entity input ontvangt van muis en toetsenbord
 */
 typedef struct InputReceiverComponent {
-    //TODO
-	// Houdt geen velden bij (leeg)
-	TO_IMPLEMENT_STRUCT;
+	int actkey;
 } InputReceiverComponent;
 
 /*

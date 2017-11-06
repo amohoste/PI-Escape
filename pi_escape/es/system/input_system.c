@@ -38,7 +38,7 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 		MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
 		// get item action component of the entity
-		ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
+		InputReceiverComponent *inputreceiver = get_component(engine, entity_id, COMP_INPUTRECEIVER);
 
 		switch (keysym->sym) {
 		case SDLK_ESCAPE:
@@ -47,7 +47,7 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 		case SDLK_KP_ENTER: //fall-through
 		case SDLK_RETURN:   //fall-through
 		case SDLK_SPACE: {
-			itemaction->act = 1;
+			inputreceiver->actkey = 1;
 			break;
 		}
 		case SDLK_UP: {
@@ -120,7 +120,7 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 		MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
 		// get item action component of the entity
-		ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
+		InputReceiverComponent *inputreceiver = get_component(engine, entity_id, COMP_INPUTRECEIVER);
 
 		switch (keysym->sym) {
 		case SDLK_ESCAPE: {
@@ -130,7 +130,7 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 		case SDLK_KP_ENTER: //fall-through
 		case SDLK_RETURN:   //fall-through
 		case SDLK_SPACE: {
-			itemaction->act = 0;
+			inputreceiver->actkey = 0;
 			break;
 		}
 		case SDLK_UP: {
