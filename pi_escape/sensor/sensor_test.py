@@ -8,6 +8,6 @@ from sense_hat import SenseHat
 sense = SenseHat()
 
 print("Temperature from humidity: ", sense.get_temperature_from_humidity())
-print("Temperature from pressure: ", sense.get_temperature_from_humidity())
+print("Temperature from pressure: ", sense.get_temperature_from_pressure())
 print("Humidity: ", sense.get_humidity())
 print("Pressure: ", sense.get_pressure())
