@@ -5,11 +5,19 @@
 
 
 void create_level_entities(Level *l, Engine *engine) {
-    EntityId **entityList;
-    entityList = (EntityId **) calloc((size_t) l->height, sizeof(EntityId *));
+    // Lijst die ervoor zorgt dat het entityid van een connectie op een bepaalde locatie makkelijk kan worden opgevraagd
+	EntityId **connectionEntityList;
+    connectionEntityList = (EntityId **) calloc((size_t) l->height, sizeof(EntityId *));
     for (int i = 0; i < l->height; i++) {
-        entityList[i] = (EntityId *) calloc((size_t) l->width, sizeof(EntityId));
+        connectionEntityList[i] = (EntityId *) calloc((size_t) l->width, sizeof(EntityId));
     }
+
+	// EntityList voor context
+	EntityId **entityList;
+	entityList = (EntityId **)calloc((size_t)l->height, sizeof(EntityId *));
+	for (int i = 0; i < l->height; i++) {
+		entityList[i] = (EntityId *)calloc((size_t)l->width, sizeof(EntityId));
+	}
 
 	/* Aanmaken van alle componenten behalve verbindingsstukken */
     for (int x = 0; x < l->height; x++) {
@@ -36,21 +44,22 @@ void create_level_entities(Level *l, Engine *engine) {
             }
 
             if (has_door) {
-                entityList[x][y] = create_door_entity(engine, l, x, y);
+                connectionEntityList[x][y] = create_door_entity(engine, l, x, y);
+				entityList[x][y] = connectionEntityList[x][y];
             }
             if (has_lock) {
-                entityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
+                connectionEntityList[x][y] = create_lock_entity(engine, x, y, l->spel[x][y]);
             }
             if (has_key) {
                 create_key_entity(engine, x, y, l->spel[x][y]);
             }
 
             if (has_or) {
-                entityList[x][y] = create_or_entity(engine, x, y);
+                connectionEntityList[x][y] = create_or_entity(engine, x, y);
             }
 
             if (has_and) {
-                entityList[x][y] = create_and_entity(engine, x, y);
+                connectionEntityList[x][y] = create_and_entity(engine, x, y);
             }
 
             if (is_exit) {
@@ -64,7 +73,7 @@ void create_level_entities(Level *l, Engine *engine) {
     }
 
 	// Alle verbindingsstukken aanmaken
-	create_all_verbinding_entities(l, engine, entityList);
+	create_all_verbinding_entities(l, engine, connectionEntityList);
 	
 }
 
@@ -315,7 +324,7 @@ void create_wall(Engine *engine, int x, int y, Direction direction) {
  */
 
  /* Maakt alle verbindingsstukken aan */
-void create_all_verbinding_entities(Level *l, Engine *engine, EntityId **entityList) {
+void create_all_verbinding_entities(Level *l, Engine *engine, EntityId **connectionEntityList) {
 	/*
 	* Over het level lopen en voor elk slot alle volgende verbindingsstukken
 	* aanmaken tot er een deur / logicastuk tegengekomen wordt
@@ -326,8 +335,8 @@ void create_all_verbinding_entities(Level *l, Engine *engine, EntityId **entityL
 
 			// Als je lock tegenkomt
 			if (has_lock) {
-				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-				create_connections(l, engine, x, y, entityList, 0);
+				ConnectionsComponent* connection = get_component(engine, connectionEntityList[x][y], COMP_CONNECTIONS);
+				create_connections(l, engine, x, y, connectionEntityList, 0);
 			}
 		}
 	}
@@ -342,15 +351,15 @@ void create_all_verbinding_entities(Level *l, Engine *engine, EntityId **entityL
 
 			// Als je logic tegenkomt
 			if (has_logic) {
-				ConnectionsComponent* connection = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
-				create_connections(l, engine, x, y, entityList, 1);
+				ConnectionsComponent* connection = get_component(engine, connectionEntityList[x][y], COMP_CONNECTIONS);
+				create_connections(l, engine, x, y, connectionEntityList, 1);
 			}
 		}
 	}
 }
 
 /* Maakt de connecties aan vanaf een logicastuk / slot tot er een deur / logicastuk tegengekomen wordt */
-void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList, int logic) {
+void create_connections(Level *l, Engine *engine, int x, int y, EntityId **connectionEntityList, int logic) {
 	// Vorige x en y
 	int prevx = x;
 	int prevy = y;
@@ -360,7 +369,7 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entit
 	ConnectionsComponent *currConComp;
 
 	// Connection component opvragen
-	currConComp = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+	currConComp = get_component(engine, connectionEntityList[x][y], COMP_CONNECTIONS);
 
 	if (logic) {
 		id = create_first_verbinding_entity_logic(engine, l, currConComp, x, y);
@@ -382,7 +391,7 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entit
 		nextLocation(&x, &y, &prevx, &prevy, l);
 	}
 
-	ArtComponent *art = get_component(engine, entityList[x][y], COMP_ART);
+	ArtComponent *art = get_component(engine, connectionEntityList[x][y], COMP_ART);
 
 	// Blijven toevoegen tot we een deur / logic tegenkomen
 	while (!(art->type == ART_CONNECTOR_AND || art->type == ART_CONNECTOR_OR || art->type == ART_DOOR)) {
@@ -399,12 +408,12 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entit
 		prevdir = dir->dir;
 
 		nextLocation(&x, &y, &prevx, &prevy, l);
-		art = get_component(engine, entityList[x][y], COMP_ART);
+		art = get_component(engine, connectionEntityList[x][y], COMP_ART);
 	}
 
 	if (art->type == ART_DOOR) {
-		addDownStream(currConComp, entityList[x][y]);
-		ConnectionsComponent *doorComp = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		addDownStream(currConComp, connectionEntityList[x][y]);
+		ConnectionsComponent *doorComp = get_component(engine, connectionEntityList[x][y], COMP_CONNECTIONS);
 		addUpStream(doorComp, id);
 
 	}
@@ -412,10 +421,10 @@ void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entit
 		id = create_verbinding_entity_1(engine, l, x, y, prevdir);
 		addDownStream(currConComp, id);
 		currConComp = get_component(engine, id, COMP_CONNECTIONS);
-		addDownStream(currConComp, entityList[x][y]);
+		addDownStream(currConComp, connectionEntityList[x][y]);
 
 		// Upstream toevoegen
-		ConnectionsComponent *logicConnComp = get_component(engine, entityList[x][y], COMP_CONNECTIONS);
+		ConnectionsComponent *logicConnComp = get_component(engine, connectionEntityList[x][y], COMP_CONNECTIONS);
 		addUpStream(logicConnComp, id);
 	}
 }
