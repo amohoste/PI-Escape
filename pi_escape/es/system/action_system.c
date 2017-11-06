@@ -3,6 +3,7 @@
 #include <assert.h>
 
 #include <stdlib.h>
+#include "../assemblage.h"
 
 ActionSystem* system_action_alloc() {
     ActionSystem* res = calloc(1, sizeof(ActionSystem));
@@ -31,6 +32,9 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 	t_ivec2 player_grid_pos;
 	GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
 	*/
+	// Todo: later anders als je kan opvragen op coordinaat
+	Context* ctx = &(engine->context);
+	Level* l = ctx->current_level;
 
 	// Locatie speler opvragen
 	EntityIterator player_it;
@@ -60,11 +64,16 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 
 
 			if (key_x == player_x && key_y == player_y) {
+
 				if (!has_component(engine, itemaction_entity_id, COMP_INCONTAINER)) {
 					create_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 				}
 				else {
-					free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
+					// Kijken of niet op locatie van deur is
+					// TODO: later anders
+					if (!(IS_DOOR(key_x, key_y))) {
+						free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
+					}
 				}
 
 			}

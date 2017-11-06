@@ -308,6 +308,8 @@ void create_wall(Engine *engine, int x, int y, Direction direction) {
     art->type = ART_WALL;
     WallArtComponent *wall = create_component(engine, wall_entity_id, COMP_WALLART);
     wall->has_wall[direction] = 1;
+
+	BlockingComponent *block = create_component(engine, wall_entity_id, COMP_BLOCKING);
 }
 
 /*
