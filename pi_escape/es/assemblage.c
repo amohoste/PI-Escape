@@ -74,7 +74,7 @@ void create_level_entities(Level *l, Engine *engine) {
 
 	// Alle verbindingsstukken aanmaken
 	create_all_verbinding_entities(l, engine, connectionEntityList);
-	
+
 }
 
 EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction) {
