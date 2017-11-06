@@ -1,5 +1,4 @@
 #ifdef RPI
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -12,32 +11,48 @@
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 
-#include "sense_led.h"
-
-#define LENGTH_BUFFER 64
+#define FILEPATH "/dev/fb1"
+#define NUM_WORDS 64
 #define FILESIZE (NUM_WORDS * sizeof(uint16_t))
+
 #define RGB565_RED 0xF800
 
-void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
-	//array altijd 64 lang
-	int file;
-	struct fb_fix_screeninfo device_info;
-	if ((file = open(framebuffer, O_RDWR)) == -1) {
-		return -1;
+void display_ledgrid(void)
+{
+	int i;
+	int fbfd;
+	uint16_t *map;
+	uint16_t *p;
+	struct fb_fix_screeninfo fix_info;
+
+	/* open the led frame buffer device */
+	fbfd = open(FILEPATH, O_RDWR);
+	if (fbfd == -1) {
+		perror("Error (call to 'open')");
+		exit(EXIT_FAILURE);
 	}
-	if (ioctl(file, FBIOGET_FSCREENINFO, device_info) == -1) {
-		close(file);
-		return -1;
+
+	/* read fixed screen info for the open device */
+	if (ioctl(fbfd, FBIOGET_FSCREENINFO, &fix_info) == -1) {
+		perror("Error (call to 'ioctl')");
+		close(fbfd);
+		exit(EXIT_FAILURE);
 	}
-	printf("%s", device_info.id); // to see the real name
-	if (device_info.id != "RPi-Sense FB") {
-		close(file);
-		return -1;
+
+	/* now check the correct device has been found */
+	if (strcmp(fix_info.id, "RPi-Sense FB") != 0) {
+		printf("%s\n", "Error: RPi-Sense FB not found");
+		close(fbfd);
+		exit(EXIT_FAILURE);
 	}
-	map = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
+
+	/* map the led frame buffer device into memory */
+	map =
+		mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, fbfd, 0);
 	if (map == MAP_FAILED) {
-		close(file);
-		return -1;
+		close(fbfd);
+		perror("Error mmapping the file");
+		exit(EXIT_FAILURE);
 	}
 
 	/* set a pointer to the start of the memory area */
@@ -47,11 +62,27 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	memset(map, 0, FILESIZE);
 
 	/* light it up! */
-	for (i = 0; i < LENGTH_BUFFER; i++) {
+	for (i = 0; i < NUM_WORDS; i++) {
 		*(p + i) = RGB565_RED;
-		usleep(2500);
+		usleep(25);
 	}
+
+	/* flash white */
+	for (i = 0; i < 3; i++) {
+		usleep(250);
+		memset(map, 0xFF, FILESIZE);
+		usleep(250);
+		memset(map, 0, FILESIZE);
+	}
+	usleep(250);
+
+	/* clear the led matrix */
 	memset(map, 0, FILESIZE);
-	return 0;
+
+	/* un-map and close */
+	if (munmap(map, FILESIZE) == -1) {
+		perror("Error un-mmapping the file");
+	}
+	close(fbfd);
 }
 #endif // RPI
