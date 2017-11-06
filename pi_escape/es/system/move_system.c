@@ -132,8 +132,8 @@ int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 	Context* ctx = &(engine->context);
 	Level* l = ctx->current_level;
 
-	int closed = 0;
+	EntityId door = engine->context.still_object_list[x][y];
+	ActivatableComponent* actcomp = get_component(engine, door, COMP_ACTIVATABLE);
 
-
-	return closed;
+	return actcomp->active == 0;
 }
