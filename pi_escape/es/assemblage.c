@@ -297,7 +297,7 @@ create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int ha
     wall->has_wall[N] = walls[N];
     wall->has_wall[E] = walls[E];
     wall->has_wall[W] = walls[W];
-
+	
     if (x > 0 && wall->has_wall[W]) {
         create_wall(engine, x - 1, y, E);
     }
