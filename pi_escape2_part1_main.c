@@ -2,6 +2,8 @@
 #include <inttypes.h>
 #include <stdio.h>
 
+#include "pi_escape/sensor/lps25h.h"
+
 #include "util/sleep.h"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
@@ -135,6 +137,12 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
+#ifdef RPI
+	lps25h_init(0);
+	printf("%.2f\n", lps25h_read_pressure());
+	printf("%.2f\n", lps25h_read_temperature());
+#endif // RPI
+
 
     while (!pi_escape_2->engine.context.is_exit_game) {
         Uint32 cur_time_ms = SDL_GetTicks();
