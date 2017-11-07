@@ -29,19 +29,14 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 		printf("Ioctl failed.");
 		return;
 	}
-	/*if (device_info.id != "RPi-Sense FB") {
-		close(file);
-		printf("%s", device_info.id); // to see the real name
-		return;
-	}*/
 	mapping = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
 	if (map == MAP_FAILED) {
 		close(file);
 		printf("Mapping failed.");
 		return -1;
 	}
-	
-	pointer = map;
+
+	pointer = mapping;
 	memset(map, 0, FILESIZE);
 	for (i = 0; i < LENGTH_BUFFER; i++) {
 		SPGM_RGBTRIPLE rgb = ledgrid[i];
@@ -52,6 +47,6 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 
 unsigned long rgbTOhex(int r, int g, int b)
 {
-	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
+	return r << 11 | g << 5 | b);
 }
 #endif // RPI
