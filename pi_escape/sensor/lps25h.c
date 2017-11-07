@@ -7,7 +7,7 @@
 
 #define ADDR 0x5c
 #define CTRL_REG1 0x20
-#define CTRL_REG4 0x23
+#define CTRL_REG3 0x22
 #define PRESS_OUT_XL 0x28
 #define PRESS_OUT_L 0x29
 #define PRESS_OUT_H 0x2A
@@ -31,10 +31,10 @@ int lps25h_init(int frequentie)
 	//TODO: change 0x84 to frequentie
 	i2c_write_byte_data(file, CTRL_REG1, 0x84);
 
-	i2c_write_byte_data(file, CTRL_REG4, 0x01);
+	i2c_write_byte_data(file, CTRL_REG3, 0x01);
 	do {
 		usleep(2500);
-		status = i2c_read_byte_data(file, CTRL_REG4);
+		status = i2c_read_byte_data(file, CTRL_REG3);
 	} while (status != 0);
 	
 	return 0;
