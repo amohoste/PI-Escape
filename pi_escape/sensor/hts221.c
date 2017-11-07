@@ -9,7 +9,7 @@
 #define CLEAN_START 0x20
 
 #define CTRL_REG1 0x20
-#define CTRL_REG4 0x23
+#define CTRL_REG3 0x22
 
 #define T0_OUT_L 0x3C
 #define T0_OUT_H 0x3D
@@ -52,10 +52,10 @@ int hts221_init(int frequentie)
 	//TODO: change 0x84 to frequentie
 	i2c_write_byte_data(file, CTRL_REG1, 0x84);
 
-	i2c_write_byte_data(file, CTRL_REG4, 0x01);
+	i2c_write_byte_data(file, CTRL_REG3, 0x01);
 	do {
 		usleep(2500);
-		status = i2c_read_byte_data(file, CTRL_REG4);
+		status = i2c_read_byte_data(file, CTRL_REG3);
 	} while (status != 0);
 
 	tempC.t0_degC_x8 = i2c_read_byte_data(file, T0_degC_x8);
