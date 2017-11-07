@@ -18,6 +18,8 @@
 
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	int file;
+	uint16_t *mapping;
+	uint16_t *pointer;
 	printf("%d\n", FILESIZE);
 	struct fb_fix_screeninfo device_info;
 	if ((file = open(framebuffer, O_RDWR)) == -1) {
