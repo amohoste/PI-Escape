@@ -48,7 +48,7 @@ double lps25h_read_pressure()
 	uint8_t press_out_XL = i2c_read_byte_data(file, PRESS_OUT_XL);
 
 	// variablen naar goed formaat omzetten
-	uint32_t press_out_HLLX = press_out_H << 16 | press_out_L << 8 | press_out_XL;
+	int32_t press_out_HLLX = press_out_H << 16 | press_out_L << 8 | press_out_XL;
 
 	// pressure bepalen
 	double pressure = press_out_HLLX / 4096.0;
@@ -63,7 +63,7 @@ double lps25h_read_temperature()
 	uint8_t temp_out_H = i2c_read_byte_data(file, TEMP_OUT_H);
 
 	// combinatie maken van h en l 
-	uint16_t temp_out_HL = temp_out_H << 8 | temp_out_L;
+	int16_t temp_out_HL = temp_out_H << 8 | temp_out_L;
 
 	// bepalen van temperatuur in c
 	double temp_C = 42.5 + (temp_out_HL / 480);
