@@ -1,3 +1,4 @@
+#ifdef RPI
 #ifndef _SENSE_LED_H
 #define _SENSE_LED_H
 
@@ -6,4 +7,5 @@
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid,
 	const char* framebuffer);
 
+#endif
 #endif
