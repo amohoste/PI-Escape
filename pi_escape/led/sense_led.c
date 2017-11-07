@@ -17,6 +17,9 @@
 #define LENGTH_BUFFER 64
 #define FILESIZE (LENGTH_BUFFER * sizeof(SPGM_RGBTRIPLE))
 
+// name is RPI
+// filesize is 192
+
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	int file;
 	uint16_t *mapping;
@@ -35,7 +38,7 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	mapping = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
 	if (mapping == MAP_FAILED) {
 		close(file);
-		printf("Mapping failed.");
+		printf("%c", MAP_FAILED);
 		return;
 	}
 
