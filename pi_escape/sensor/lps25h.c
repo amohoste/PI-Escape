@@ -14,6 +14,7 @@
 #define TEMP_OUT_L 0x2B
 #define TEMP_OUT_H 0x2C
 #define CLEAN_START 0x20
+#define START_VALUE 0x80
 
 
 int filelps25h;
@@ -21,6 +22,9 @@ int filelps25h;
 int lps25h_init(int frequentie)
 {
 	uint8_t status;
+	if (frequentie > 4 && frequentie < 0) {
+		frequentie = 2;
+	}
 
 	// file maken en configureer de slave
 	if ((filelps25h = i2c_init_adapter(ADDR)) == -1) {
@@ -28,8 +32,7 @@ int lps25h_init(int frequentie)
 	}
 	i2c_write_byte_data(filelps25h, CTRL_REG1, CLEAN_START);
 
-	//TODO: change 0x84 to frequentie
-	i2c_write_byte_data(filelps25h, CTRL_REG1, 0x84);
+	i2c_write_byte_data(filelps25h, CTRL_REG1, START_VALUE | frequentie << 4);
 
 	i2c_write_byte_data(filelps25h, CTRL_REG4, 0x01);
 	do {
