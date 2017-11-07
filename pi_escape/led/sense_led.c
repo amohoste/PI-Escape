@@ -40,7 +40,7 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	}
 
 	pointer = mapping;
-	memset(map, 0, FILESIZE);
+	memset(mapping, 0, FILESIZE);
 	for (int i = 0; i < LENGTH_BUFFER; i++) {
 		SPGM_RGBTRIPLE rgb = ledgrid[i];
 		*(pointer + i) = rgb.rgbRed << 11 | rgb.rgbGreen << 5 | rgb.rgbBlue;
