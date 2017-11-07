@@ -4,6 +4,6 @@
 #include "../../util/rgb_triple.h"
 
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid,
-                     const char* framebuffer);
+	const char* framebuffer);
 
 #endif
