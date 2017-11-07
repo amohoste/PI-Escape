@@ -33,10 +33,10 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 		return;
 	}
 	mapping = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
-	if (map == MAP_FAILED) {
+	if (mapping == MAP_FAILED) {
 		close(file);
 		printf("Mapping failed.");
-		return -1;
+		return;
 	}
 
 	pointer = mapping;
