@@ -37,7 +37,7 @@ int main() {
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
 #ifdef RPI
-	SPGM_RGBTRIPLE[64] ledgrid;
+	SPGM_RGBTRIPLE ledgrid[64];
 	for (int i = 0; i <= 64; i++)
 	{
 		SPGM_RGBTRIPLE current;
