@@ -69,7 +69,7 @@ double lps25h_read_temperature()
 	int16_t temp_out_HL = temp_out_H << 8 | temp_out_L;
 
 	// bepalen van temperatuur in c
-	double temp_C = 42.5 + (temp_out_HL / 480);
+	double temp_C = 42.5 + (temp_out_HL / 480.0);
 	return temp_C;
 }
 
