@@ -11,6 +11,8 @@
 
 #include <assert.h>
 
+#define FREQUENCY 2;
+
 RealSensorsSystem* system_real_sensors_alloc() {
     RealSensorsSystem* res = calloc(1, sizeof(RealSensorsSystem));
     system_real_sensors_init(res);
@@ -19,8 +21,8 @@ RealSensorsSystem* system_real_sensors_alloc() {
 
 void system_real_sensors_init(RealSensorsSystem* system) {
 #ifdef RPI
-		hts221_init(2);
-		lps25h_init(2);
+		hts221_init(FREQUENCY);
+		lps25h_init(FREQUENCY);
 #endif // RPI
 }
 
