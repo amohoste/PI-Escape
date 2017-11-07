@@ -8,50 +8,50 @@
 #include <fcntl.h>
 #include <sys/mman.h>
 #include <stdint.h>
-#include <string.h>
 #include <linux/fb.h>
 #include <sys/ioctl.h>
 
 #include "sense_led.h"
 
 #define LENGTH_BUFFER 64
-#define FILESIZE (NUM_WORDS * sizeof(uint16_t))
-#define RGB565_RED 0xF800
+#define FILESIZE (LENGTH_BUFFER * sizeof(SPGM_RGBTRIPLE))
 
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
-	//array altijd 64 lang
 	int file;
+	printf("%d\n", FILESIZE);
 	struct fb_fix_screeninfo device_info;
 	if ((file = open(framebuffer, O_RDWR)) == -1) {
-		return -1;
+		printf("Reading file failed.");
+		return;
 	}
 	if (ioctl(file, FBIOGET_FSCREENINFO, device_info) == -1) {
 		close(file);
-		return -1;
+		printf("Ioctl failed.");
+		return;
 	}
-	printf("%s", device_info.id); // to see the real name
-	if (device_info.id != "RPi-Sense FB") {
+	/*if (device_info.id != "RPi-Sense FB") {
 		close(file);
-		return -1;
-	}
-	map = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
+		printf("%s", device_info.id); // to see the real name
+		return;
+	}*/
+	mapping = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
 	if (map == MAP_FAILED) {
 		close(file);
+		printf("Mapping failed.");
 		return -1;
 	}
-
-	/* set a pointer to the start of the memory area */
-	p = map;
-
-	/* clear the led matrix */
+	
+	pointer = map;
 	memset(map, 0, FILESIZE);
-
-	/* light it up! */
 	for (i = 0; i < LENGTH_BUFFER; i++) {
-		*(p + i) = RGB565_RED;
-		usleep(2500);
+		SPGM_RGBTRIPLE rgb = ledgrid[i];
+		*(pointer + i) = rgbTOhex(rgb.rgbRed, rgb.rgbGreen, rbg.Blue);
+		// usleep(2500);
 	}
-	memset(map, 0, FILESIZE);
-	return 0;
+}
+
+unsigned long rgbTOhex(int r, int g, int b)
+{
+	return ((r & 0xff) << 16) + ((g & 0xff) << 8) + (b & 0xff);
 }
 #endif // RPI

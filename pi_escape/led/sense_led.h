@@ -7,5 +7,7 @@
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid,
                      const char* framebuffer);
 
+unsigned long rgbTOhex(int, int, int);
+
 #endif
 #endif	
