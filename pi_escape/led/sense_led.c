@@ -38,9 +38,9 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 
 	pointer = mapping;
 	memset(map, 0, FILESIZE);
-	for (i = 0; i < LENGTH_BUFFER; i++) {
+	for (int i = 0; i < LENGTH_BUFFER; i++) {
 		SPGM_RGBTRIPLE rgb = ledgrid[i];
-		*(pointer + i) = rgb.rgbRed << 11 | rgb.rgbGreen << 5 | rbg.rgbBlue;
+		*(pointer + i) = rgb.rgbRed << 11 | rgb.rgbGreen << 5 | rgb.rgbBlue;
 		// usleep(2500);
 	}
 }
