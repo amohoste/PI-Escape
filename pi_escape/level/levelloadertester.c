@@ -21,8 +21,7 @@ int test_filesdimensions() {
 }
 
 int test_filedimensions(int lvl, int nrows, int ncols) {
-    LevelLoader *ll = levelloader_alloc();
-
+    
     // Level aanmaken en inlezen
     Level *l = load_level(lvl);
     assert(l->width == ncols);
@@ -46,29 +45,10 @@ int test_game1() {
             {' ', ' ', 'S', ' ', ' ', 'b', ' ', ' '}
     };
 
-
-    // Levelloader aanmaken
-    LevelLoader *ll = levelloader_alloc();
-
     // Level aanmaken en inlezen
     Level *l = load_level(8);
 
     assert(array_compare(l, arr, 11, 8) == 1);
-
-    return 1;
-}
-
-int test_few() {
-
-    // Levelloader aanmaken
-    LevelLoader *ll = levelloader_alloc();
-    ll->file = strdup("pi_escape/level/level_files/game1.lvl");
-
-    // Level aanmaken en inlezen
-    Level *l = load_level(1);
-
-    assert(l->spel[0][0] == ' ');
-    assert(l->spel[0][3] == 'E');
 
     return 1;
 }

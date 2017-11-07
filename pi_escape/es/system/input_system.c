@@ -17,6 +17,7 @@ InputSystem* system_input_alloc() {
 }
 
 void system_input_init(InputSystem* system) {
+
 }
 
 
@@ -24,99 +25,120 @@ void system_input_free(InputSystem* system) {
     
 }
 
-static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId input_recv_entity_id)
+static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId entity_id)
 {
-	// search entity
-	EntityIterator entityresolver;
-	search_entity_1(engine, COMP_MOVE_ACTION, &entityresolver);
-	while (next_entity(&entityresolver)) {
-		EntityId entity_id = entityresolver.entity_id;
-		assert(entity_id != NO_ENTITY);
+	assert(entity_id != NO_ENTITY);
 
-		// get move component of the entity
-		MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+	// get move component of the entity
+	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
-		// get item action component of the entity
-		ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
+	// get item action component of the entity
+	InputReceiverComponent *inputreceiver = get_component(engine, entity_id, COMP_INPUTRECEIVER);
 
-		switch (keysym->sym) {
-		case SDLK_ESCAPE:
-			//ignore untile key released
-			break;
-		case SDLK_KP_ENTER: //fall-through
-		case SDLK_RETURN:   //fall-through
-		case SDLK_SPACE: {
-			itemaction->act = 1;
-			break;
+	switch (keysym->sym) {
+	case SDLK_ESCAPE:
+		//ignore until key released
+		break;
+	case SDLK_KP_ENTER: //fall-through
+	case SDLK_RETURN:   //fall-through
+	case SDLK_SPACE: {
+		inputreceiver->actkey = 1;
+		break;
+	}
+	case SDLK_UP: {
+		move->up = 1;
+		break;
+	}
+	case SDLK_DOWN: {
+		move->down = 1;
+		break;
+	}
+	case SDLK_LEFT: {
+		move->left = 1;
+		break;
+	}
+	case SDLK_RIGHT: {
+		move->right = 1;
+		break;
+	}
+#ifndef RPI	// Add sensor emulation if no real sensor system was loaded
+	case SDLK_t: {
+		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+			// lower temperature
+			(&engine->context)->temperature -= 1;
+		} else if (keysym->mod & KMOD_CTRL) {
+			// increase temperature
+			(&engine->context)->temperature += 1;
 		}
-		case SDLK_UP: {
-			move->up = 1;
-			break;
+		break;
+	}
+	case SDLK_p: {
+		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+			// lower pressure
+			(&engine->context)->pressure -= 1;
 		}
-		case SDLK_DOWN: {
-			move->down = 1;
-			break;
+		else if (keysym->mod & KMOD_CTRL) {
+			// increase pressure
+			(&engine->context)->pressure += 1;
 		}
-		case SDLK_LEFT: {
-			move->left = 1;
-			break;
+		break;
+	}
+	case SDLK_h: {
+		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+			// lower humidity
+			(&engine->context)->humidity -= 1;
 		}
-		case SDLK_RIGHT: {
-			move->right = 1;
-			break;
+		else if (keysym->mod & KMOD_CTRL) {
+			// increase humidity
+			(&engine->context)->humidity += 1;
 		}
-		default:
-			break;
-		}
+		break;
+	}
+#endif // RPI
+	default:
+		break;
 	}
 }
 
-static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId inputReceiverEntity)
+static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId entity_id)
 {
-	// search entity
-	EntityIterator entityresolver;
-	search_entity_1(engine, COMP_MOVE_ACTION, &entityresolver);
-	while (next_entity(&entityresolver)) {
+	assert(entity_id != NO_ENTITY);
 
-		EntityId entity_id = entityresolver.entity_id;
-		assert(entity_id != NO_ENTITY);
+	// get move component of the entity
+	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
 
-		// get move component of the entity
-		MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+	// get item action component of the entity
+	InputReceiverComponent *inputreceiver = get_component(engine, entity_id, COMP_INPUTRECEIVER);
 
-		// get item action component of the entity
-		ItemActionComponent *itemaction = get_component(engine, entity_id, COMP_ITEMACTION);
-
-		switch (keysym->sym) {
-		case SDLK_ESCAPE: {
-			engine->context.is_exit_game = 1;
-			break;
-		}
-		case SDLK_KP_ENTER: //fall-through
-		case SDLK_RETURN:   //fall-through
-		case SDLK_SPACE: {
-			itemaction->act = 0;
-			break;
-		}
-		case SDLK_UP: {
-			move->up = 0;
-			break;
-		}
-		case SDLK_DOWN: {
-			move->down = 0;
-			break;
-		}
-		case SDLK_LEFT: {
-			move->left = 0;
-			break;
-		}
-		case SDLK_RIGHT: {
-			move->right = 0;
-			break;
-		}
-		default:
-			break;
-		}
+	switch (keysym->sym) {
+	case SDLK_ESCAPE: {
+		engine->context.is_exit_game = 1;
+		break;
+	}
+	case SDLK_KP_ENTER: //fall-through
+	case SDLK_RETURN:   //fall-through
+	case SDLK_SPACE: {
+		inputreceiver->actkey = 0;
+		break;
+	}
+	case SDLK_UP: {
+		move->up = 0;
+		break;
+	}
+	case SDLK_DOWN: {
+		move->down = 0;
+		break;
+	}
+	case SDLK_LEFT: {
+		move->left = 0;
+		break;
+	}
+	case SDLK_RIGHT: {
+		move->right = 0;
+		break;
+	}
+	default:
+		break;
 	}
 }
 
@@ -179,9 +201,5 @@ void system_input_update(InputSystem* system, Engine* engine) {
                 break;
             }
         }
-
-
-
-        
     }
 }

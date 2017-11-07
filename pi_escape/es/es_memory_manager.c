@@ -54,19 +54,11 @@ void free_component(Engine *engine, EntityId entity_id, ComponentId component_id
     fatal_if(entity_id == NO_ENTITY, "free_component(engine, entity_id==NO_ENTITY, component_id=%d)", component_id);
     assert(entity_id >= 0);
     assert(entity_id < MAX_ENTITIES);
-    assert(component_id >= 0);
+    assert(component_id >= 0); 
     assert(component_id < COMPONENT_ID_SIZE);
 
     assert(!engine->es_memory.components[component_id][entity_id].free);
     engine->es_memory.components[component_id][entity_id].free = 1;
-}
-
-void free_every_component(Engine *engine) {
-    for (int i = 0; i < COMPONENT_ID_SIZE; ++i) {
-        for (int j = 0; j < MAX_ENTITIES; ++j) {
-            engine->es_memory.components[i][j].free = 1;
-        }
-    }
 }
 
 EntityId get_new_entity_id(Engine *engine) {

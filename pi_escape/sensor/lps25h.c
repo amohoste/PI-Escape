@@ -1,4 +1,4 @@
-//#ifdef RPI
+#ifdef RPI
 
 #include <unistd.h>
 
@@ -70,4 +70,4 @@ double lps25h_read_temperature()
 	return temp_C;
 }
 
-//#endif
+#endif

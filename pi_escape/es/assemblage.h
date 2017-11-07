@@ -28,8 +28,6 @@ components aan te maken.
 //TODO
 //example: EntityId createKey(Engine* engine, t_ivec2 tvec2, ItemColor color);
 
-void create_level_entities(Level *, Engine *engine);
-
 EntityId create_player_entity(Engine *engine, int x, int y);
 
 EntityId create_door_entity(Engine *engine, Level *l, int x, int y);
@@ -43,8 +41,6 @@ create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int ha
 
 EntityId create_verbinding_entity(Engine *engine, Level *l, int x, int y, Direction direction);
 
-void create_verbinding_entities(Engine *engine, Level *l, int x, int y);
-
 EntityId create_or_entity(Engine *engine, int x, int y);
 
 EntityId create_and_entity(Engine *engine, int x, int y);
@@ -52,5 +48,18 @@ EntityId create_and_entity(Engine *engine, int x, int y);
 EntityId create_exit_entity(Engine *engine, int x, int y);
 
 void create_wall(Engine *engine, int x, int y, Direction direction);
+
+// Functies om de connectioncomponenten te initialiseren
+void create_all_verbinding_entities(Level *l, Engine *engine, EntityId **entityList);
+void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList, int logic);
+EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, ConnectionsComponent *comp, int x, int y);
+EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, int y);
+EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir);
+EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Direction lastdir);
+void nextLocation_dir(int *curx, int *cury, int *prevx, int *prevy, Direction dir);
+void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l);
+int dir_in(Direction dir, DirectionComponent* locations[3], int n);
+void addUpStream(ConnectionsComponent* conn, EntityId id);
+void addDownStream(ConnectionsComponent* conn, EntityId id);
 
 #endif

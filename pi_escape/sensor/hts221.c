@@ -1,4 +1,4 @@
-//#ifdef RPI
+#ifdef RPI
 
 #include <unistd.h>
 
@@ -31,7 +31,6 @@
 
 #define H_T_OUT_L 0x28
 #define H_T_OUT_H 0x29
-
 
 int file;
 TemperatureC tempC;
@@ -115,4 +114,4 @@ double hts221_read_temperature()
 	double temp_C = (t_m * T_out) + t_c;
 	return temp_C;
 }	
-//#endif
+#endif

@@ -1,9 +1,10 @@
-#ifdef RPI
-
 #include "real_sensors_system.h"
+
+#ifdef RPI
 #include "../../sensor/lps25h.h"
 #include "../../sensor/hts221.h"
 #include "../../sensor/i2c.h"
+#endif // RPI
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,9 +26,9 @@ void system_real_sensors_free(RealSensorsSystem* system) {
 }
 
 void system_real_sensors_update(RealSensorsSystem* system, Engine* engine) {
-	engine->context.humidity = hts221_read_humidity();
-	engine->context.temperature = hts221_read_temperature();
-	engine->context.pressure = lps25h_read_pressure();
-}
-
+#ifdef RPI
+	//engine->context.humidity = hts221_read_humidity();
+	//engine->context.temperature = hts221_read_temperature();
+	//engine->context.pressure = lps25h_read_pressure();
 #endif // RPI
+}

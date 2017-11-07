@@ -1,4 +1,4 @@
-//#ifdef RPI
+#ifdef RPI
 
 #include <fcntl.h>
 #include <linux/i2c-dev.h>
@@ -47,4 +47,4 @@ int i2c_read_byte_data(int file, uint8_t reg)
 	}
 	return buff[0];
 }
-//#endif
+#endif

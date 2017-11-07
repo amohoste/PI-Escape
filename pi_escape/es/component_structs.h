@@ -12,6 +12,7 @@
 #include "../../util/util.h"
 
 #include <stdint.h>
+#include <time.h>
 #include <glmc.h>
 
 /*
@@ -71,6 +72,7 @@ typedef struct OneTimeAnimationComponent {
 typedef struct MoveAnimationComponent {
     //TODO
 	Direction dir;
+	clock_t starttime;
 } MoveAnimationComponent;
 
 /*
@@ -148,7 +150,12 @@ typedef struct ActivatableComponent {
 typedef struct ConnectionsComponent {
     //TODO
 	// Houdt de "upstream" en "downstream" entity ID's bij
-	TO_IMPLEMENT_STRUCT;
+	EntityId upstream[3];
+	int hasUpStream1;
+	int hasUpStream2;
+	int hasUpStream3;
+	EntityId downstream;
+	int hasDownStream;
 } ConnectionsComponent;
 
 /*
@@ -164,6 +171,7 @@ typedef struct LockComponent {
 */
 typedef struct ConnectorLogicComponent {
     //TODO
+	LogicType type;
 	TO_IMPLEMENT_STRUCT;
 } ConnectorLogicComponent;
 
@@ -171,17 +179,14 @@ typedef struct ConnectorLogicComponent {
 * Geeft aan dat entity input ontvangt van muis en toetsenbord
 */
 typedef struct InputReceiverComponent {
-    //TODO
-	// Houdt geen velden bij (leeg)
-	TO_IMPLEMENT_STRUCT;
+	int actkey;
 } InputReceiverComponent;
 
 /*
 * Vorige beweging van de entity
 */
 typedef struct MoveHistoryComponent {
-    //TODO
-	TO_IMPLEMENT_STRUCT;
+	Direction previous;
 } MoveHistoryComponent;
 
 /*
