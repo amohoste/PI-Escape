@@ -2,7 +2,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
-#include "pi_escape/led/sense_led.h"
+
 #include "util/sleep.h"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
@@ -36,19 +36,6 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
-#ifdef RPI
-	SPGM_RGBTRIPLE ledgrid[64];
-	for (int i = 0; i <= 64; i++)
-	{
-		SPGM_RGBTRIPLE current;
-		current.rgbRed = ((i + 1) * 125) % 255;
-		current.rgbGreen = ((i + 1) * 75) % 255;
-		current.rgbBlue = ((i + 1) * 175) % 255;
-		ledgrid[i] = current;
-	}
-	display_ledgrid(ledgrid, "/dev/fb1");
-#endif // RPI
-
 
     while (!pi_escape_2->engine.context.is_exit_game) {
         Uint32 cur_time_ms = SDL_GetTicks();
