@@ -104,9 +104,12 @@ EntityId search_first_entity_3(Engine* engine, ComponentId component_id1, Compon
 }
 
 int next_entity(EntityIterator* res) {
+    // lijst_components = {1,5,7}
     for (EntityId entity_id = res->entity_id+1; entity_id < res->engine->es_memory.next_entity_id; entity_id++) {
         if (res->component_id_filter != 0) {
             for (ComponentId component_id = 0; component_id < COMPONENT_ID_SIZE; component_id++) {
+                //for nummer in lijst
+                    //check if has component
                 if (get_requires_component(res->component_id_filter, component_id) &&
                     res->engine->es_memory.components[component_id][entity_id].free) {
                     //no match. Try the next entity
@@ -144,6 +147,28 @@ void entitylist_add(EntityList* dest, EntityId entity_id) {
     }
     dest->entity_ids[dest->count++] = entity_id;
 }
+
+void componentlist_init(int initial_size, ComponentList* dest) {
+    dest->allocated = initial_size < 16 ? 16 : initial_size;
+    dest->component_ids = malloc(dest->allocated * sizeof(ComponentId));
+    dest->count = 0;
+    assert(dest->component_ids != NULL);
+}
+void compenentlist_free(ComponentList* dest) {
+    free(dest->component_ids);
+    dest->count = 0;
+    dest->allocated = 0;
+    dest->component_ids = NULL;
+}
+void compenentlist_add(ComponentList* dest, ComponentId component_id) {
+    if (dest->count + 1 == dest->allocated) {
+        int new_size = dest->allocated > 0 ? dest->allocated * 2 : 16;
+        dest->component_ids = realloc(dest->component_ids, new_size * sizeof(ComponentId));
+        dest->allocated = new_size;
+    }
+    dest->component_ids[dest->count++] = component_id;
+}
+
 
 
 

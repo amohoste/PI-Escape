@@ -77,6 +77,15 @@ void entitylist_init(int initial_size, EntityList* dest);
 void entitylist_free(EntityList* dest);
 void entitylist_add(EntityList* dest, EntityId entity_id);
 
+typedef struct ComponentList {
+    ComponentId* component_ids;
+    int count;
+    int allocated;
+} ComponentList;
+
+void compenentlist_init(int initial_size, ComponentList* dest);
+void compenentlist_free(ComponentList* dest);
+void compenentlist_add(ComponentList* dest, ComponentId component_id);
 
 
 
