@@ -83,9 +83,9 @@ typedef struct ComponentList {
     int allocated;
 } ComponentList;
 
-void compenentlist_init(int initial_size, ComponentList* dest);
-void compenentlist_free(ComponentList* dest);
-void compenentlist_add(ComponentList* dest, ComponentId component_id);
+void componentlist_init(int initial_size, ComponentList* dest);
+void componentlist_free(ComponentList* dest);
+void componentlist_add(ComponentList* dest, ComponentId component_id);
 
 
 
