@@ -378,7 +378,7 @@ void graphics_init(Graphics* graphics, int width, int height) {
     graphics->background_color[2] = 0.3f;
     
     graphics->width = width;
-    graphics->height = width;
+    graphics->height = height;
 
 #ifdef RPI
     bcm_host_init();
