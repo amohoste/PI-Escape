@@ -24,6 +24,7 @@ typedef struct Context {
 	double humidity;
     //TODO: add other context fields
     EntityId **still_object_list;
+	EntityId player;
 } Context;
 
 void context_init(Context*);

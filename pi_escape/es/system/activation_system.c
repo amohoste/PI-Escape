@@ -12,7 +12,7 @@ ActivationSystem* system_activation_alloc() {
 }
 
 void system_activation_init(ActivationSystem* system) {
-    //TODO
+	system->step = 50;
 }
 
 
@@ -193,26 +193,33 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 	
 	// Indien logica niet aangepast over alle andere lopen
 	if (!changed) {
-		EntityIterator it;
-		search_entity_2(engine, COMP_ACTIVATABLE, COMP_CONNECTIONS, &it);
-		while (next_entity(&it)) {
-			EntityId entity_id = it.entity_id;
-			assert(entity_id != NO_ENTITY);
-			ActivatableComponent* activatable = get_component(engine, entity_id, COMP_ACTIVATABLE);
-			if (activatable->active == 1) {
-				ConnectionsComponent *connection = get_component(engine, entity_id, COMP_CONNECTIONS);
-				if (connection->hasDownStream) {
-					EntityId next_id = connection->downstream;
-					if (!has_component(engine, next_id, COMP_CONNECTORLOGIC)) {
-						ActivatableComponent* next_activatable = get_component(engine, next_id, COMP_ACTIVATABLE);
-						if (next_activatable->active == 0) {
-							next_activatable->active = 1;
-							break;
+		if (system->step == 0) {
+			system->step = engine->context.fps / 50;
+			EntityIterator it;
+			search_entity_2(engine, COMP_ACTIVATABLE, COMP_CONNECTIONS, &it);
+			while (next_entity(&it)) {
+				EntityId entity_id = it.entity_id;
+				assert(entity_id != NO_ENTITY);
+				ActivatableComponent* activatable = get_component(engine, entity_id, COMP_ACTIVATABLE);
+				if (activatable->active == 1) {
+					ConnectionsComponent *connection = get_component(engine, entity_id, COMP_CONNECTIONS);
+					if (connection->hasDownStream) {
+						EntityId next_id = connection->downstream;
+						if (!has_component(engine, next_id, COMP_CONNECTORLOGIC)) {
+							ActivatableComponent* next_activatable = get_component(engine, next_id, COMP_ACTIVATABLE);
+							if (next_activatable->active == 0) {
+								next_activatable->active = 1;
+								break;
+							}
 						}
 					}
 				}
 			}
 		}
+		else {
+			system->step = system->step - 1;
+		}
+		
 	}
 
 	

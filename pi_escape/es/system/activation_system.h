@@ -10,7 +10,7 @@ bijgehouden om deze activatie stapsgewijs te laten verlopen.
 
 
 typedef struct ActivationSystem {
-	EMPTY_SYSTEM_STRUCT;
+	int step;
 } ActivationSystem;
 
 #include "../engine.h"

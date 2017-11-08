@@ -180,6 +180,8 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
 
 	MoveHistoryComponent *moveHist = create_component(engine, player_entity_id, COMP_MOVE_HISTORY);
 
+	engine->context.player = player_entity_id;
+
     return player_entity_id;
 }
 
@@ -297,7 +299,7 @@ create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int ha
     wall->has_wall[N] = walls[N];
     wall->has_wall[E] = walls[E];
     wall->has_wall[W] = walls[W];
-
+	
     if (x > 0 && wall->has_wall[W]) {
         create_wall(engine, x - 1, y, E);
     }
@@ -323,6 +325,8 @@ void create_wall(Engine *engine, int x, int y, Direction direction) {
     art->type = ART_WALL;
     WallArtComponent *wall = create_component(engine, wall_entity_id, COMP_WALLART);
     wall->has_wall[direction] = 1;
+
+	BlockingComponent *block = create_component(engine, wall_entity_id, COMP_BLOCKING);
 }
 
 /*
