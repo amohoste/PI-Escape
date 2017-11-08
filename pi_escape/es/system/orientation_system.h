@@ -1,3 +1,8 @@
+/***************************************************************
+- Orientation System -
+Afhandelen van IMU input (deel 2 van de opgave).
+****************************************************************/
+
 #ifndef ORIENTATION_SYSTEM_H
 #define ORIENTATION_SYSTEM_H
 

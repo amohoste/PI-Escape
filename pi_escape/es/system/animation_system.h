@@ -1,3 +1,9 @@
+/***************************************************************
+- Animation System -
+Beheert de timing van de animaties, en verwijdert 
+de animaties wanneer ze voltooid zijn.
+****************************************************************/
+
 #ifndef ANIMATION_SYSTEM_H
 #define ANIMATION_SYSTEM_H
 #define EMPTY_SYSTEM_STRUCT char c

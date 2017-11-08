@@ -1,17 +1,25 @@
+/***************************************************************
+- Real Sensor System -
+
+Haalt sensor data op via de functies gedeclareerd in de map 
+../../sensor en update de overeenkomstige velden in de context.
+****************************************************************/
+
 #ifndef REAL_SENSORS_SYSTEM_H
 #define REAL_SENSORS_SYSTEM_H
-#define TO_IMPLEMENT_STRUCT char c
-
+#define EMPTY_SYSTEM_STRUCT char c
 
 #include <stdint.h>
 
-
 typedef struct RealSensorsSystem {
-	TO_IMPLEMENT_STRUCT;
-	//TODO
+	EMPTY_SYSTEM_STRUCT;
 } RealSensorsSystem;
 
 #include "../engine.h"
+
+#include "../../sensor/lps25h.h"
+#include "../../sensor/hts221.h"
+#include "../../sensor/i2c.h"
 
 void system_real_sensors_init(RealSensorsSystem*);
 RealSensorsSystem* system_real_sensors_alloc();

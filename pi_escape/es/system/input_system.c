@@ -17,6 +17,7 @@ InputSystem* system_input_alloc() {
 }
 
 void system_input_init(InputSystem* system) {
+
 }
 
 
@@ -24,54 +25,121 @@ void system_input_free(InputSystem* system) {
     
 }
 
-static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId input_recv_entity_id)
+static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId entity_id)
 {
-    switch( keysym->sym ) {
-        case SDLK_ESCAPE:
-            //ignore untile key released
-            break;
-        case SDLK_KP_ENTER: //fall-through
-        case SDLK_RETURN:   //fall-through
-        case SDLK_SPACE: {
-            engine->context.demo = !engine->context.demo;
-            break;
-        }
-        default:
-            break;
-    }
-    
-    
-    
-    
+	assert(entity_id != NO_ENTITY);
+
+	// get move component of the entity
+	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+
+	// get item action component of the entity
+	InputReceiverComponent *inputreceiver = get_component(engine, entity_id, COMP_INPUTRECEIVER);
+
+	switch (keysym->sym) {
+	case SDLK_ESCAPE:
+		//ignore until key released
+		break;
+	case SDLK_KP_ENTER: //fall-through
+	case SDLK_RETURN:   //fall-through
+	case SDLK_SPACE: {
+		inputreceiver->actkey = 1;
+		break;
+	}
+	case SDLK_UP: {
+		move->up = 1;
+		break;
+	}
+	case SDLK_DOWN: {
+		move->down = 1;
+		break;
+	}
+	case SDLK_LEFT: {
+		move->left = 1;
+		break;
+	}
+	case SDLK_RIGHT: {
+		move->right = 1;
+		break;
+	}
+#ifndef RPI	// Add sensor emulation if no real sensor system was loaded
+	case SDLK_t: {
+		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+			// lower temperature
+			(&engine->context)->temperature -= 1;
+		} else if (keysym->mod & KMOD_CTRL) {
+			// increase temperature
+			(&engine->context)->temperature += 1;
+		}
+		break;
+	}
+	case SDLK_p: {
+		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+			// lower pressure
+			(&engine->context)->pressure -= 1;
+		}
+		else if (keysym->mod & KMOD_CTRL) {
+			// increase pressure
+			(&engine->context)->pressure += 1;
+		}
+		break;
+	}
+	case SDLK_h: {
+		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
+			// lower humidity
+			(&engine->context)->humidity -= 1;
+		}
+		else if (keysym->mod & KMOD_CTRL) {
+			// increase humidity
+			(&engine->context)->humidity += 1;
+		}
+		break;
+	}
+#endif // RPI
+	default:
+		break;
+	}
 }
 
-static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId inputReceiverEntity)
+static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym, EntityId entity_id)
 {
-    switch( keysym->sym ) {
-        case SDLK_ESCAPE:
-            engine->context.is_exit_game = 1;
-            break;
-        case SDLK_UP:{
-            engine->context.demo = !engine->context.demo;
-            break;
-        }
-        case SDLK_DOWN:{
-            engine->context.demo = !engine->context.demo;
-            break;
-        }
-        case SDLK_LEFT:{
-            engine->context.demo = !engine->context.demo;
-            break;
-        }
-        case SDLK_RIGHT:{
-            engine->context.demo = !engine->context.demo;
-            break;
-        }
-        default:
-            break;
-    }
-    
-    
+	assert(entity_id != NO_ENTITY);
+
+	// get move component of the entity
+	MoveActionComponent *move = get_component(engine, entity_id, COMP_MOVE_ACTION);
+
+	// get item action component of the entity
+	InputReceiverComponent *inputreceiver = get_component(engine, entity_id, COMP_INPUTRECEIVER);
+
+	switch (keysym->sym) {
+	case SDLK_ESCAPE: {
+		engine->context.is_exit_game = 1;
+		break;
+	}
+	case SDLK_KP_ENTER: //fall-through
+	case SDLK_RETURN:   //fall-through
+	case SDLK_SPACE: {
+		inputreceiver->actkey = 0;
+		break;
+	}
+	case SDLK_UP: {
+		move->up = 0;
+		break;
+	}
+	case SDLK_DOWN: {
+		move->down = 0;
+		break;
+	}
+	case SDLK_LEFT: {
+		move->left = 0;
+		break;
+	}
+	case SDLK_RIGHT: {
+		move->right = 0;
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void system_input_update(InputSystem* system, Engine* engine) {
@@ -109,6 +177,9 @@ void system_input_update(InputSystem* system, Engine* engine) {
                     
                     if (buttonDown) {
                         printf("Mouse dragged %f %f\n", mouseMotionEvent->xrel * 1.0f, mouseMotionEvent->yrel * 1.0f);
+						CameraLookFromComponent* cameraLookFrom = search_first_component(engine, COMP_CAMERA_LOOK_FROM);
+						cameraLookFrom->XYdegees = fmodf((cameraLookFrom->XYdegees + (mouseMotionEvent->xrel) / 5.0f), 360.0f);
+						cameraLookFrom->Zdegrees = fmodf((cameraLookFrom->Zdegrees + (mouseMotionEvent->yrel) / 5.0f), 360.0f);
                     } else {
                         //printf("Mouse moved %f %f\n", mouseMotionEvent->xrel * 1.0f, mouseMotionEvent->yrel * 1.0f);
                     }
@@ -129,18 +200,6 @@ void system_input_update(InputSystem* system, Engine* engine) {
                 }
                 break;
             }
-        }
-
-
-
-        //demo only, no use in real game
-        EntityIterator it;
-        search_entity_1(engine, COMP_ACTIVATABLE, &it);
-        while(next_entity(&it)) {
-            EntityId drawable_entity_id = it.entity_id;
-            assert(drawable_entity_id != NO_ENTITY);
-            ActivatableComponent* activatable = get_component(engine, drawable_entity_id, COMP_ACTIVATABLE);
-            activatable->active = engine->context.demo;
         }
     }
 }
