@@ -113,6 +113,7 @@ EntityId create_exit_entity(Engine *engine, int x, int y) {
     art->type = ART_END;
 
     ExitComponent *exit = create_component(engine, exit_entity_id, COMP_EXIT);
+    return exit_entity_id;
 }
 
 EntityId create_and_entity(Engine *engine, int x, int y) {
@@ -301,7 +302,7 @@ create_wall_entity(Engine *engine, Level *l, int x, int y, int has_floor, int ha
     wall->has_wall[N] = walls[N];
     wall->has_wall[E] = walls[E];
     wall->has_wall[W] = walls[W];
-	
+
     if (x > 0 && wall->has_wall[W]) {
         create_wall(engine, x - 1, y, E);
     }
@@ -462,7 +463,7 @@ EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, Connecti
 		n += 1;
 	}
 
-	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+	if (x >= 1 && (IS_VERBINDING_DIRECTION(x - 1, y))) {
 		// Kijken of deze component niet al een upstream van de logic is
 		if (!dir_in(W, locations, n)) {
 			return create_verbinding_entity(engine, l, x, y, W);
@@ -476,24 +477,25 @@ EntityId create_first_verbinding_entity_logic(Engine *engine, Level *l, Connecti
 			}
 		}
 	}
-	if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+	if (y >= 1 && (IS_VERBINDING_DIRECTION(x, y - 1))) {
 		// Kijken of deze component niet al een upstream van de logic is
 		if (!dir_in(S, locations, n)) {
 			return create_verbinding_entity(engine, l, x, y, S);
 		}
 	}
-	if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+	if (y < l->width - 1 && (IS_VERBINDING_DIRECTION(x, y + 1))) {
 		// Kijken of deze component niet al een upstream van de logic is
 		if (!dir_in(N, locations, n)) {
 			return create_verbinding_entity(engine, l, x, y, N);
 		}
 	}
+    return NULL;
 }
 
 /* Hulpfunctie die een verbindingsstuk cre�ert dat aan een slot hangt, in de juiste richting */
 EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, int y) {
 
-	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+	if (x >= 1 && (IS_VERBINDING_DIRECTION(x - 1, y))) {
 		return create_verbinding_entity(engine, l, x, y, W);
 	}
 	if (x < l->height - 1) {
@@ -501,60 +503,65 @@ EntityId create_first_verbinding_entity_lock(Engine *engine, Level *l, int x, in
 			return create_verbinding_entity(engine, l, x, y, E);
 		}
 	}
-	if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+	if (y >= 1 && (IS_VERBINDING_DIRECTION(x, y - 1))) {
 		return create_verbinding_entity(engine, l, x, y, S);
 	}
-	if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+	if (y < l->width - 1 && (IS_VERBINDING_DIRECTION(x, y + 1))) {
 		return create_verbinding_entity(engine, l, x, y, N);
 	}
 
+    return NULL;
 }
 
 /* Hulpfunctie die een verbindingsstuk cre�ert in de juiste richting indien hij het eerste stuk is dat op een bepaalde co�rdinaat terechtkomt */
 EntityId create_verbinding_entity_1(Engine *engine, Level *l, int x, int y, Direction lastdir) {
+    EntityId verbinding;
 	if (lastdir == W) {
-		return create_verbinding_entity(engine, l, x, y, E);
+		verbinding = create_verbinding_entity(engine, l, x, y, E);
 	}
 
 	if (lastdir == E) {
-		return create_verbinding_entity(engine, l, x, y, W);
+		verbinding = create_verbinding_entity(engine, l, x, y, W);
 	}
 
 	if (lastdir == S) {
-		return create_verbinding_entity(engine, l, x, y, N);
+		verbinding = create_verbinding_entity(engine, l, x, y, N);
 	}
 
 	if (lastdir == N) {
-		return create_verbinding_entity(engine, l, x, y, S);
+		verbinding = create_verbinding_entity(engine, l, x, y, S);
 	}
+    return verbinding;
 }
 
 /* Hulpfunctie die een verbindingsstuk cre�ert in de juiste richting indien hij het tweede stuk is dat op een bepaalde co�rdinaat terechtkomt */
 EntityId create_verbinding_entity_2(Engine *engine, Level *l, int x, int y, Direction lastdir) {
-	if (x >= 1 && IS_VERBINDING_DIRECTION(x - 1, y)) {
+    EntityId verbinding;
+	if (x >= 1 && (IS_VERBINDING_DIRECTION(x - 1, y))) {
 		if (IS_VERBINDING_DIRECTION(x - 1, y)) {
 			if (lastdir != W) {
-				return create_verbinding_entity(engine, l, x, y, W);
+				verbinding = create_verbinding_entity(engine, l, x, y, W);
 			}
 		}
 	}
 	if (x < l->height - 1) {
 		if (IS_VERBINDING_DIRECTION(x + 1, y)) {
 			if (lastdir != E) {
-				return create_verbinding_entity(engine, l, x, y, E);
+				verbinding = create_verbinding_entity(engine, l, x, y, E);
 			}
 		}
 	}
-	if (y >= 1 && IS_VERBINDING_DIRECTION(x, y - 1)) {
+	if (y >= 1 && (IS_VERBINDING_DIRECTION(x, y - 1))) {
 		if (lastdir != S) {
-			return create_verbinding_entity(engine, l, x, y, S);
+			verbinding = create_verbinding_entity(engine, l, x, y, S);
 		}
 	}
-	if (y < l->width - 1 && IS_VERBINDING_DIRECTION(x, y + 1)) {
+	if (y < l->width - 1 && (IS_VERBINDING_DIRECTION(x, y + 1))) {
 		if (lastdir != N) {
-			return create_verbinding_entity(engine, l, x, y, N);
+			verbinding = create_verbinding_entity(engine, l, x, y, N);
 		}
 	}
+    return verbinding;
 }
 
 /* Hulpfunctie die de meegegeven x en y waarden aanpast naar de volgende locatie van een verbindingsstuk gegeven een richting */
@@ -583,7 +590,7 @@ void nextLocation_dir(int *curx, int *cury, int *prevx, int *prevy, Direction di
 
 /* Hulpfunctie die de volgende locatie voor een verbindingsstuk berekent gegeven een level */
 void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l) {
-	if (*curx >= 1 && IS_VERBINDING_DIRECTION(*curx - 1, *cury)) {
+	if (*curx >= 1 && (IS_VERBINDING_DIRECTION(*curx - 1, *cury))) {
 		if (((*curx) - 1) != *prevx) {
 			*prevx = *curx;
 			*prevy = *cury;
@@ -602,7 +609,7 @@ void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l) {
 		}
 	}
 
-	if (*cury >= 1 && IS_VERBINDING_DIRECTION(*curx, *cury - 1)) {
+	if (*cury >= 1 && (IS_VERBINDING_DIRECTION(*curx, *cury - 1))) {
 		if (*cury - 1 != *prevy) {
 			*prevy = *cury;
 			*prevx = *curx;
@@ -611,7 +618,7 @@ void nextLocation(int *curx, int *cury, int *prevx, int *prevy, Level *l) {
 		}
 	}
 
-	if (*cury < l->width - 1 && IS_VERBINDING_DIRECTION(*curx, *cury + 1)) {
+	if (*cury < l->width - 1 && (IS_VERBINDING_DIRECTION(*curx, *cury + 1))) {
 		if (*cury + 1 != *prevy) {
 			*prevy = *cury;
 			*prevx = *curx;
