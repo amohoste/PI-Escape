@@ -1,6 +1,3 @@
-#include "sense_led.h"
+#ifdef RPI
 
-void display_ledgrid(SPGM_RGBTRIPLE* ledgrid,
-                     const char* framebuffer){
-    //TODO
-}
+#endif // RPI

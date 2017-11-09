@@ -1,8 +1,8 @@
 #ifdef RPI
 
-#include <stdint.h>
-#include <linux/i2c-dev.h>
 #include <fcntl.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
 #include <unistd.h>
 
 #include "../sensor/i2c.h"
@@ -11,11 +11,13 @@
 
 int i2c_init_adapter(int addr)
 {
-	int file = open(FILENAME, O_RDWR);
-
-	/*if (Ioctl(file, I2C_SLAVE, addr) < 0) {
+	int file;
+	if ((file = open(FILENAME, O_RDWR)) < 0) {
 		return -1;
-	}*/
+	}
+	if (ioctl(file, I2C_SLAVE, addr) < 0) {
+		return -1;
+	}
 	return file;
 }
 

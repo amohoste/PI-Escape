@@ -1,6 +1,6 @@
 #ifndef LPS25H
-//#ifdef RPI
 #define LPS25H
+#ifdef RPI
 
 #include <stdint.h>
 
@@ -34,4 +34,4 @@ double lps25h_read_temperature();
 	@param frequentie in hexadecimaal
 */
 #endif /* LPS25H */
-//#endif
+#endif
