@@ -28,6 +28,21 @@ void add_component_constraint(EntityListIterator *eli, int amount, ...) {
     eli->component_id_filter = mask;
 }
 
+/*
+ * Zet de waarde van de mask eerst op 0, soort van reset
+ */
+void set_component_constraint(EntityListIterator *eli, int amount, ...) {
+    eli->component_id_filter = 0;
+    va_list lijst;
+    uint32_t mask = eli->component_id_filter;
+    va_start(lijst, amount);
+    for (int i = 0; i < amount; ++i) {
+        mask = set_requires_component(mask, va_arg(lijst, ComponentId));
+    }
+    va_end(lijst);
+    eli->component_id_filter = mask;
+}
+
 int next_in_list_mask(EntityListIterator *eli) {
     ComponentList list;
     componentlist_init(3, &list);
