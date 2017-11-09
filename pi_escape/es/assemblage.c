@@ -91,10 +91,10 @@ void create_level_entities(Level *l, Engine *engine) {
             EntityId wall = create_wall_entity(engine, l, x, y, has_floor, has_ceil, has_wall, walls);
             entitylist_add(&entityGrid[x][y], wall);
 
-            BlockingComponent *blocking_component = create_component(engine, wall, COMP_BLOCKING);
 
             if (IS_WALL(x, y)) {
                 entityList[x][y] = wall;
+                BlockingComponent *blocking_component = create_component(engine, wall, COMP_BLOCKING);
             }
 
         }

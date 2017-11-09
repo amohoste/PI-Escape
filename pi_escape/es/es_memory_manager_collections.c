@@ -28,6 +28,21 @@ void add_component_constraint(EntityListIterator *eli, int amount, ...) {
     eli->component_id_filter = mask;
 }
 
+/*
+ * Zet de waarde van de mask eerst op 0, soort van reset
+ */
+void set_component_constraint(EntityListIterator *eli, int amount, ...) {
+    eli->component_id_filter = 0;
+    va_list lijst;
+    uint32_t mask = eli->component_id_filter;
+    va_start(lijst, amount);
+    for (int i = 0; i < amount; ++i) {
+        mask = set_requires_component(mask, va_arg(lijst, ComponentId));
+    }
+    va_end(lijst);
+    eli->component_id_filter = mask;
+}
+
 int next_in_list_mask(EntityListIterator *eli) {
     ComponentList list;
     componentlist_init(3, &list);
@@ -40,7 +55,7 @@ int next_in_list_mask(EntityListIterator *eli) {
 
     for (int index = eli->entity_id_index + 1; index < eli->entity_list->count; index++) {
         if (eli->component_id_filter != 0) {
-            for (ComponentId component_id = (ComponentId) 0; component_id < list.count; component_id++) {
+            for (int component_id =  0; component_id < list.count; component_id++) {
                 if (eli->engine->es_memory.components[list.component_ids[component_id]][eli->entity_list->entity_ids[index]].free) {
                     //no match. Try the next entity
                     goto next_entity_loop;
@@ -182,7 +197,7 @@ int next_entity(EntityIterator *res) {
 
     for (EntityId entity_id = res->entity_id + 1; entity_id < res->engine->es_memory.next_entity_id; entity_id++) {
         if (res->component_id_filter != 0) {
-            for (ComponentId component_id = 0; component_id < list.count; component_id++) {
+            for (int component_id = 0; component_id < list.count; component_id++) {
                 if (res->engine->es_memory.components[list.component_ids[component_id]][entity_id].free) {
                     //no match. Try the next entity
                     goto next_entity_loop;
