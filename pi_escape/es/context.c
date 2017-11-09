@@ -12,6 +12,11 @@ void context_init(Context* c) {
 	c->temperature = 0;
 	c->pressure = 0;
 	c->humidity = 0;
+
+    c->get =0;
+    c->has =0;
+    c->free =0;
+    c->create =0;
 }
 
 Context* context_alloc() {

@@ -25,6 +25,10 @@ typedef struct Context {
     //TODO: add other context fields
     EntityId **still_object_list;
 	EntityId player;
+    int get;
+	int has;
+	int free;
+	int create;
 } Context;
 
 void context_init(Context*);
