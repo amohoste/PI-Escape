@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-static int get_requires_component(uint32_t component_id_filter, ComponentId component_id) ;
+static int get_requires_component(uint32_t component_id_filter, ComponentId component_id);
 
 void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli, uint32_t component_mask) {
     eli->entity_list = &engine->es_memory.grid[x][y];
@@ -43,6 +43,14 @@ int next_in_list_mask(EntityListIterator *eli) {
     return 0;
 }
 
+
+void update_location(int old_x, int old_y, Engine *engine, EntityId entityId, int new_x, int new_y) {
+    GridLocationComponent *component = get_component(engine, entityId, COMP_GRIDLOCATION);
+    glmc_ivec2_set(component->pos,new_x, new_y);
+
+    entitylist_remove(&engine->es_memory.grid[old_x][old_y], entityId);
+    entitylist_add(&engine->es_memory.grid[new_x][new_y], entityId);
+}
 
 void search_component(Engine *engine,
                       ComponentId component_id,
@@ -192,11 +200,25 @@ void entitylist_free(EntityList *dest) {
 
 void entitylist_add(EntityList *dest, EntityId entity_id) {
     if (dest->count + 1 == dest->allocated) {
-        int new_size = dest->allocated > 0 ? dest->allocated * 2 : 16;
-        dest->entity_ids = realloc(dest->entity_ids, new_size * sizeof(EntityId));
-        dest->allocated = new_size;
+        entitylist_bigger(dest);
     }
     dest->entity_ids[dest->count++] = entity_id;
+}
+
+void entitylist_remove(EntityList *dest, EntityId entityId) {
+    for (int i = 0; i < dest->count; ++i) {
+        if (dest->entity_ids[i] == entityId) {
+            dest->entity_ids[i] = dest->entity_ids[dest->count - 1];
+            dest->entity_ids[dest->count - 1] = NULL;
+        }
+    }
+    dest->count--;
+}
+
+void entitylist_bigger(EntityList *dest) {
+    int new_size = dest->allocated > 0 ? dest->allocated * 2 : 16;
+    dest->entity_ids = realloc(dest->entity_ids, new_size * sizeof(EntityId));
+    dest->allocated = new_size;
 }
 
 void componentlist_init(int initial_size, ComponentList *dest) {
