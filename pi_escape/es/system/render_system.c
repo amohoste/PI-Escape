@@ -125,30 +125,24 @@ void system_render_update(RenderSystem* system, Engine* engine) {
 	float lightPower = 21.0f + (10.0f * sinf((M_PI_F / 2000.0f) * time));
 	t_vec3 light_gl_pos = { 2.0f, 2.0f, 1.0f };
 	if (player_grid_comp != NULL) {
+		float position;
+		if (player_move_anim_comp != NULL) position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
 		// If move animation is present and moving north
 		if (player_move_anim_comp != NULL && player_move_hist_comp->previous == N) {
-			float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
 			t_vec3 player_anim_gl_pos = { player_gl_pos[0] - position , player_gl_pos[1], player_gl_pos[2] };
 			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
-
 		// If move animation is present and moving south
 		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == S ) {
-			float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
 			t_vec3 player_anim_gl_pos = { player_gl_pos[0] + position, player_gl_pos[1], player_gl_pos[2] };
 			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
-		
 		// If move animation is present and moving west
 		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == W) {
-			float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
 			t_vec3 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[1], player_gl_pos[2] + position };
 			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
-
 		// If move animation is present and moving east
 		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == E) {
-		float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
 		t_vec3 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[1], player_gl_pos[2] - position };
 		glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
-		
 		// else
 		} else {
 			glmc_assign_vec3(light_gl_pos, player_gl_pos);
@@ -200,8 +194,30 @@ void system_render_update(RenderSystem* system, Engine* engine) {
                 break;
             }
             case ART_PLAYER: {
-                t_vec2 pos;
-                glmc_assign_vec2_from_ivec2(pos, grid->pos);
+				t_vec2 pos;
+
+				if (player_move_anim_comp != NULL) {
+					float position = -1 + player_move_anim_comp->position;
+					if (player_move_hist_comp->previous == N) {
+						t_vec2 player_anim_gl_pos = { player_gl_pos[0] - position , player_gl_pos[2] };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					}
+					else if (player_move_hist_comp->previous == S) {
+						t_vec2 player_anim_gl_pos = { player_gl_pos[0] + position, player_gl_pos[2] };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					}
+					else if (player_move_hist_comp->previous == W) {
+						t_vec2 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[2] + position };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					}
+					else if (player_move_hist_comp->previous == E) {
+						t_vec2 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[2] - position };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					}
+				} else {
+					glmc_assign_vec2_from_ivec2(pos, grid->pos);
+				}
+
                 gl_player_draw(&system->player, time, pos);
                 break;
             }
