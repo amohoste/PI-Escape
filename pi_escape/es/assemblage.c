@@ -89,10 +89,10 @@ void create_level_entities(Level *l, Engine *engine) {
 
             /* walls moeten altijd gemaakt worden voor de vloer enzo */
             EntityId wall = create_wall_entity(engine, l, x, y, has_floor, has_ceil, has_wall, walls);
+            entitylist_add(&entityGrid[x][y], wall);
 
             if (IS_WALL(x, y)) {
                 entityList[x][y] = wall;
-                entitylist_add(&entityGrid[x][y], wall);
             }
 
         }

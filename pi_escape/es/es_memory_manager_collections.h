@@ -11,6 +11,7 @@ typedef struct ComponentIterator ComponentIterator;
 typedef struct EntityList EntityList;
 typedef struct EntityIterator EntityIterator;
 typedef struct Engine Engine;
+typedef struct EntityListIterator EntityListIterator;
 
 #include "entity.h"
 #include "component_enums.h"
@@ -18,6 +19,17 @@ typedef struct Engine Engine;
 #include <stdint.h>
 
 #define NO_ENTITY (0xFFFFFFFF)
+
+typedef struct EntityListIterator{
+    EntityId entity_id;
+    uint32_t component_id_filter;
+    EntityList *entity_list;
+    int entity_id_index;
+    Engine *engine;
+} EntityListIterator;
+
+void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli, uint32_t component_mask);
+int next_in_list_mask(EntityListIterator *eli);
 
 typedef struct ComponentIterator {
     Engine* engine;
