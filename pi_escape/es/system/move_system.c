@@ -15,6 +15,8 @@ te bewegen en langs muren te bewegen tot de eerste opening.
 #include <assert.h>
 #include <stdio.h>
 
+#include <SDL_timer.h>
+
 MoveSystem* system_move_alloc() {
     MoveSystem* res = calloc(1, sizeof(MoveSystem));
     system_move_init(res);
@@ -47,8 +49,6 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 	// Als er geen animatie bezig is
 	if (engine->es_memory.components[COMP_MOVE_ANIMATION][player].free) {
 
-		// Verander locatie
-
 		// Huidige locatie
 		int x = grid_comp->pos[0];
 		int y = grid_comp->pos[1];
@@ -56,34 +56,35 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		// Check voor diagonaal bewegen
 		int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
 		Direction prev = move_hist_comp->previous;
-		if (move_comp->up && (notDiagonal || prev != N)) {
+		if (move_comp->up && (notDiagonal || prev != N) && availablePosition(system, engine, x-1, y)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = N;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = N;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			x = x - 1;
-		} else if (move_comp->down && (notDiagonal || prev != S)) {
+			glmc_ivec2_set(grid_comp->pos, x, y);
+		} else if (move_comp->down && (notDiagonal || prev != S) && availablePosition(system, engine, x + 1, y)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = S;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = S;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			x = x + 1;
-		} else if (move_comp->right && (notDiagonal || prev != E)) {
+			glmc_ivec2_set(grid_comp->pos, x, y);
+		} else if (move_comp->right && (notDiagonal || prev != E) && availablePosition(system, engine, x, y + 1)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = E;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = E;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			y = y + 1;
-		} else if (move_comp->left && (notDiagonal || prev != W)) {
+			glmc_ivec2_set(grid_comp->pos, x, y);
+		} else if (move_comp->left && (notDiagonal || prev != W) && availablePosition(system, engine, x, y - 1)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = W;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = W;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			y = y - 1;
+			glmc_ivec2_set(grid_comp->pos, x, y);
 		}
-
-		// Beweeg
-		if (availablePosition(system, engine, x, y)) glmc_ivec2_set(grid_comp->pos, x, y);
 	}
 }
 
