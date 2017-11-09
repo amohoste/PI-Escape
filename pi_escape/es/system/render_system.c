@@ -86,46 +86,75 @@ GameColor convert_key_color(ItemColor itemColor) {
 }
 
 void system_render_update(RenderSystem* system, Engine* engine) {
-    set_camera(system, engine);
-    
-    uint64_t time = engine->context.time;
+	set_camera(system, engine);
 
-    system->graphics->background_color[0] = 0.0f;
-    system->graphics->background_color[1] = 0.0f;
-    system->graphics->background_color[2] = 0.25f;
+	uint64_t time = engine->context.time;
 
-    t_vec4 wall_color;
-    wall_color[0] = 1.0f;
-    wall_color[1] = 0.0f;
-    wall_color[2] = 0.0f;
-    wall_color[3] = 1.0f;
+	system->graphics->background_color[0] = 0.0f;
+	system->graphics->background_color[1] = 0.0f;
+	system->graphics->background_color[2] = 0.25f;
 
-    t_vec4 floor_color;
-    floor_color[0] = 1.0f;
-    floor_color[1] = 0.0f;
-    floor_color[2] = 0.0f;
-    floor_color[3] = 1.0f;
+	t_vec4 wall_color;
+	wall_color[0] = 1.0f;
+	wall_color[1] = 0.0f;
+	wall_color[2] = 0.0f;
+	wall_color[3] = 1.0f;
+
+	t_vec4 floor_color;
+	floor_color[0] = 1.0f;
+	floor_color[1] = 0.0f;
+	floor_color[2] = 0.0f;
+	floor_color[3] = 1.0f;
 
 
-    EntityIterator player_it;
-    search_entity_2(engine, COMP_GRIDLOCATION, COMP_INPUTRECEIVER, &player_it);
-    next_entity(&player_it);
-    EntityId player_entity_id = player_it.entity_id;
-    assert(player_entity_id != NO_ENTITY);
-    
-    t_ivec2 player_grid_pos;
-    t_vec3 player_gl_pos;
-    GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
-    glmc_assign_ivec2(player_grid_pos, player_grid_comp->pos);
-    
-    level_pos_to_world_pos2i(player_grid_pos, player_gl_pos);
+	EntityIterator player_it;
+	search_entity_2(engine, COMP_GRIDLOCATION, COMP_INPUTRECEIVER, &player_it);
+	next_entity(&player_it);
+	EntityId player_entity_id = player_it.entity_id;
+	assert(player_entity_id != NO_ENTITY);
 
-    float lightPower = 21.0f + (10.0f * sinf((M_PI_F / 2000.0f) * time));
-    t_vec3 light_gl_pos = { 2.0f, 2.0f, 1.0f };
-    if (player_grid_comp != NULL) {
-        glmc_assign_vec3(light_gl_pos, player_gl_pos);
+	t_ivec2 player_grid_pos;
+	t_vec3 player_gl_pos;
+	GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
+	MoveAnimationComponent* player_move_anim_comp = get_component(engine, player_entity_id, COMP_MOVE_ANIMATION);
+	MoveHistoryComponent* player_move_hist_comp = get_component(engine, player_entity_id, COMP_MOVE_HISTORY);
+	glmc_assign_ivec2(player_grid_pos, player_grid_comp->pos);
+
+	level_pos_to_world_pos2i(player_grid_pos, player_gl_pos);
+
+	float lightPower = 21.0f + (10.0f * sinf((M_PI_F / 2000.0f) * time));
+	t_vec3 light_gl_pos = { 2.0f, 2.0f, 1.0f };
+	if (player_grid_comp != NULL) {
+		// If move animation is present and moving north
+		if (player_move_anim_comp != NULL && player_move_hist_comp->previous == N) {
+			float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
+			t_vec3 player_anim_gl_pos = { player_gl_pos[0] - position , player_gl_pos[1], player_gl_pos[2] };
+			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+
+		// If move animation is present and moving south
+		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == S ) {
+			float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
+			t_vec3 player_anim_gl_pos = { player_gl_pos[0] + position, player_gl_pos[1], player_gl_pos[2] };
+			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+		
+		// If move animation is present and moving west
+		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == W) {
+			float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
+			t_vec3 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[1], player_gl_pos[2] + position };
+			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+
+		// If move animation is present and moving east
+		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == E) {
+		float position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
+		t_vec3 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[1], player_gl_pos[2] - position };
+		glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+		
+		// else
+		} else {
+			glmc_assign_vec3(light_gl_pos, player_gl_pos);
+		}
     }
-    
+	printf("player: %i,%i and light: %f,%f,%f\n", player_grid_pos[0], player_grid_pos[1], light_gl_pos[0], light_gl_pos[1], light_gl_pos[2]);
     graphics_begin_draw_withlight(system->graphics, lightPower, light_gl_pos);
     
     EntityIterator draw_it;

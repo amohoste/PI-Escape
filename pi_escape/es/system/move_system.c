@@ -15,6 +15,8 @@ te bewegen en langs muren te bewegen tot de eerste opening.
 #include <assert.h>
 #include <stdio.h>
 
+#include <SDL_timer.h>
+
 MoveSystem* system_move_alloc() {
     MoveSystem* res = calloc(1, sizeof(MoveSystem));
     system_move_init(res);
@@ -58,27 +60,27 @@ void system_move_update(MoveSystem* system, Engine* engine) {
 		Direction prev = move_hist_comp->previous;
 		if (move_comp->up && (notDiagonal || prev != N)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = N;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = N;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			x = x - 1;
 		} else if (move_comp->down && (notDiagonal || prev != S)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = S;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = S;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			x = x + 1;
 		} else if (move_comp->right && (notDiagonal || prev != E)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = E;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = E;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			y = y + 1;
 		} else if (move_comp->left && (notDiagonal || prev != W)) {
 			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->dir = W;
+			moveanimation->position = 0.0f;
 			move_hist_comp->previous = W;
-			moveanimation->starttime = clock();
+			moveanimation->starttime = SDL_GetTicks();
 			y = y - 1;
 		}
 
