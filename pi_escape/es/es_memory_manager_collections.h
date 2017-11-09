@@ -88,6 +88,8 @@ typedef struct EntityList {
 void entitylist_init(int initial_size, EntityList* dest);
 void entitylist_free(EntityList* dest);
 void entitylist_add(EntityList* dest, EntityId entity_id);
+void entitylist_remove(EntityList* dest, EntityId entity_id);
+void entitylist_bigger(EntityList* dest);
 
 typedef struct ComponentList {
     ComponentId* component_ids;

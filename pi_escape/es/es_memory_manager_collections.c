@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <assert.h>
 
-static int get_requires_component(uint32_t component_id_filter, ComponentId component_id) ;
+static int get_requires_component(uint32_t component_id_filter, ComponentId component_id);
 
 void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli, uint32_t component_mask) {
     eli->entity_list = &engine->es_memory.grid[x][y];
@@ -192,11 +192,24 @@ void entitylist_free(EntityList *dest) {
 
 void entitylist_add(EntityList *dest, EntityId entity_id) {
     if (dest->count + 1 == dest->allocated) {
-        int new_size = dest->allocated > 0 ? dest->allocated * 2 : 16;
-        dest->entity_ids = realloc(dest->entity_ids, new_size * sizeof(EntityId));
-        dest->allocated = new_size;
+        entitylist_bigger(dest);
     }
     dest->entity_ids[dest->count++] = entity_id;
+}
+
+void entitylist_remove(EntityList *dest, EntityId entityId) {
+    for (int i = 0; i < dest->count; ++i) {
+        if (dest->entity_ids[i] == entityId) {
+            dest->entity_ids[i] = dest->entity_ids[dest->count - 1];
+            dest->entity_ids[dest->count - 1] = NULL;
+        }
+    }
+}
+
+void entitylist_bigger(EntityList *dest) {
+    int new_size = dest->allocated > 0 ? dest->allocated * 2 : 16;
+    dest->entity_ids = realloc(dest->entity_ids, new_size * sizeof(EntityId));
+    dest->allocated = new_size;
 }
 
 void componentlist_init(int initial_size, ComponentList *dest) {
