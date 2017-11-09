@@ -30,6 +30,7 @@ typedef struct EntityListIterator{
 
 void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli, uint32_t component_mask);
 int next_in_list_mask(EntityListIterator *eli);
+void update_location(int old_x, int old_y, Engine *engine, EntityId entityId, int new_x, int new_y);
 
 typedef struct ComponentIterator {
     Engine* engine;

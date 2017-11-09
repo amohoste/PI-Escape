@@ -44,6 +44,15 @@ int next_in_list_mask(EntityListIterator *eli) {
 }
 
 
+void update_location(int old_x, int old_y, Engine *engine, EntityId entityId, int new_x, int new_y) {
+    GridLocationComponent *component = get_component(engine, entityId, COMP_GRIDLOCATION);
+    component->pos[0] = new_x;
+    component->pos[1] = new_y;
+
+    entitylist_remove(&engine->es_memory.grid[old_x][old_y], entityId);
+    entitylist_add(&engine->es_memory.grid[new_x][new_y], entityId);
+}
+
 void search_component(Engine *engine,
                       ComponentId component_id,
                       ComponentIterator *res) {
@@ -204,6 +213,7 @@ void entitylist_remove(EntityList *dest, EntityId entityId) {
             dest->entity_ids[dest->count - 1] = NULL;
         }
     }
+    dest->count--;
 }
 
 void entitylist_bigger(EntityList *dest) {
