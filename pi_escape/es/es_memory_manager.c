@@ -1,4 +1,5 @@
 #include "es_memory_manager.h"
+#include "../../benchmarks/benchmarks.h"
 
 #include <assert.h>
 
@@ -28,6 +29,8 @@ int has_component(Engine *engine, EntityId entity_id, ComponentId component_id) 
 }
 
 void *get_component(Engine *engine, EntityId entity_id, ComponentId component_id) {
+	int param = 2;
+	register_get(param);
     fatal_if(entity_id == NO_ENTITY, "get_component(engine, entity_id==NO_ENTITY, component_id=%d)", component_id);
     assert(component_id < COMPONENT_ID_SIZE);
     assert(component_id >= 0);

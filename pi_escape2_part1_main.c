@@ -7,6 +7,7 @@
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
 #include "pi_escape/es/game.h"
+#include "benchmarks/benchmarks.h"
 
 #include <SDL.h>
 
@@ -65,6 +66,8 @@ int main() {
             float fps = 1.0f / time_ms_per_update * 1000.0f;
 			pi_escape_2->engine.context.fps = fps;
             printf("This second: %f updates. Average time per update: %f ms.\n", fps, time_ms_per_update);
+
+			benchmark();
 
             last_print_time_ms = cur_time_ms;
             update_count = 0;
