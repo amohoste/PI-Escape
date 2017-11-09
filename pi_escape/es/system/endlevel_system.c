@@ -22,18 +22,11 @@ void system_endlevel_free(EndLevelSystem *system) {
 }
 
 void system_endlevel_update(EndLevelSystem *system, Engine *engine) {
-    EntityListIterator eli;
-    uint32_t mask = (uint32_t) (1 << COMP_EXIT);
-    start_search_in_list(0,3,engine,&eli,mask);
-    next_in_list_mask(&eli);
-
     EntityId speler_id = search_first_entity_1(engine, COMP_MOVE_ACTION);
     GridLocationComponent *speler_grid = get_component(engine, speler_id, COMP_GRIDLOCATION);
 
     EntityId exit_id = search_first_entity_1(engine, COMP_EXIT);
     GridLocationComponent *exit_grid = get_component(engine, exit_id, COMP_GRIDLOCATION);
-
-    GridLocationComponent *exit_grid2 = get_component(engine, eli.entity_id, COMP_GRIDLOCATION);
 
     if (speler_grid->pos[0] == exit_grid->pos[0] && speler_grid->pos[1] == exit_grid->pos[1]) {
         engine->context.level_ended = 1;
