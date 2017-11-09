@@ -50,34 +50,29 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 		int player_x = player_grid_comp->pos[0];
 		int player_y = player_grid_comp->pos[1];
 
-		// Alle componenten met itemactioncomponent zoeken (sleutels)
-		EntityIterator itemaction_it;
-		search_entity_1(engine, COMP_ITEMACTION, &itemaction_it);
-		while (next_entity(&itemaction_it)) {
-			EntityId itemaction_entity_id = itemaction_it.entity_id;
+		EntityListIterator key_it;
+		add_component_constraint(&key_it, 1, COMP_ITEMACTION);
+		start_search_in_list(player_x, player_y, engine, &key_it);
+
+		while (next_in_list_mask(&key_it)) {
+			EntityId itemaction_entity_id = key_it.entity_id;
 			assert(itemaction_entity_id != NO_ENTITY);
 
-			// Oprapen als zelfde locatie speler heeft
-			GridLocationComponent* item_grid_comp = get_component(engine, itemaction_entity_id, COMP_GRIDLOCATION);
-			int key_x = item_grid_comp->pos[0];
-			int key_y = item_grid_comp->pos[1];
-
-
-			if (key_x == player_x && key_y == player_y) {
-
-				if (!has_component(engine, itemaction_entity_id, COMP_INCONTAINER)) {
-					create_component(engine, itemaction_entity_id, COMP_INCONTAINER);
-				}
-				else {
-					// Kijken of niet op locatie van deur is
-					// TODO: later anders
-					if (!(IS_DOOR(key_x, key_y))) {
-						free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
-					}
-				}
-
+			if (!has_component(engine, itemaction_entity_id, COMP_INCONTAINER)) {
+				create_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 			}
+			else {
+				// Kijken of niet op locatie van deur is
+				// TODO: later anders
+				if (!(IS_DOOR(player_x, player_y))) {
+					free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
+				}
+			}
+
+			
 		}
+		
+		
 	}
 	else if (!player_input->actkey && system->prevAct == 1) {
 		system->prevAct = 0;
