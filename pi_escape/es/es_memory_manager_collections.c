@@ -48,6 +48,7 @@ int next_in_list_mask(EntityListIterator *eli) {
             }
         }
         //all match, return it
+        eli->entity_id_index = index;
         eli->entity_id = eli->entity_list->entity_ids[index];
         return 1;
 
