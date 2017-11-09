@@ -91,6 +91,8 @@ void create_level_entities(Level *l, Engine *engine) {
             EntityId wall = create_wall_entity(engine, l, x, y, has_floor, has_ceil, has_wall, walls);
             entitylist_add(&entityGrid[x][y], wall);
 
+            BlockingComponent *blocking_component = create_component(engine, wall, COMP_BLOCKING);
+
             if (IS_WALL(x, y)) {
                 entityList[x][y] = wall;
             }
@@ -216,6 +218,8 @@ EntityId create_door_entity(Engine *engine, Level *l, int x, int y) {
 
     ActivatableComponent *activatable = create_component(engine, door_entity_id, COMP_ACTIVATABLE);
     activatable->active = 0;
+
+    BlockingComponent *blockingComponent = create_component(engine, door_entity_id, COMP_BLOCKING);
 
     create_component(engine, door_entity_id, COMP_CONNECTIONS);
 
