@@ -24,6 +24,7 @@ int has_component(Engine *engine, EntityId entity_id, ComponentId component_id) 
     assert(component_id >= 0);
     assert(entity_id < MAX_ENTITIES);
     assert(entity_id >= 0);
+    engine->context.has ++;
     return !engine->es_memory.components[component_id][entity_id].free;
 }
 
@@ -36,6 +37,7 @@ void *get_component(Engine *engine, EntityId entity_id, ComponentId component_id
     if (engine->es_memory.components[component_id][entity_id].free)
         return NULL;
     assert(!engine->es_memory.components[component_id][entity_id].free);
+    engine->context.get ++;
     return &engine->es_memory.components[component_id][entity_id].camera_lookfrom;
 }
 
@@ -47,6 +49,7 @@ void *create_component(Engine *engine, EntityId entity_id, ComponentId component
     assert(component_id < COMPONENT_ID_SIZE);
     assert(engine->es_memory.components[component_id][entity_id].free);
     engine->es_memory.components[component_id][entity_id].free = 0;
+    engine->context.create ++;
     return &engine->es_memory.components[component_id][entity_id].camera_lookfrom;
 }
 
@@ -59,6 +62,7 @@ void free_component(Engine *engine, EntityId entity_id, ComponentId component_id
 
     assert(!engine->es_memory.components[component_id][entity_id].free);
     engine->es_memory.components[component_id][entity_id].free = 1;
+    engine->context.free ++;
 }
 
 EntityId get_new_entity_id(Engine *engine) {

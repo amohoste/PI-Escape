@@ -28,7 +28,7 @@ int main() {
 
     //een level inladen kan je doen door gewoon op te  geven het hoeveelste level het is -> beginnend vanaf 1
     //vanaf level 7 worden de echte games geladen en niet de tutorials
-    Level *level = load_level(10);
+    Level *level = load_level(7);
     game_load_level(pi_escape_2, level);
 
     pi_escape_2->engine.context.current_level = level;
@@ -47,6 +47,11 @@ int main() {
         //kijken of er een nieuw level geladen moet worden
         if (pi_escape_2->engine.context.level_ended) {
 
+            printf("has: %d\n", pi_escape_2->engine.context.has);
+            printf("create: %d\n", pi_escape_2->engine.context.create);
+            printf("get: %d\n", pi_escape_2->engine.context.get);
+            printf("free: %d\n", pi_escape_2->engine.context.free);
+
             int new_level_nr = pi_escape_2->engine.context.current_level->nr + 1;
             if (new_level_nr > 10) {
                 pi_escape_2->engine.context.is_exit_game = 1;
@@ -58,12 +63,12 @@ int main() {
                 pi_escape_2->engine.context.level_ended = 0;
             }
         }
-		
+
         //print performance statistics each second
         if (diff_time_ms > 1000) {
             float time_ms_per_update = (float) diff_time_ms / (float) update_count;
             float fps = 1.0f / time_ms_per_update * 1000.0f;
-			pi_escape_2->engine.context.fps = fps;
+            pi_escape_2->engine.context.fps = fps;
             printf("This second: %f updates. Average time per update: %f ms.\n", fps, time_ms_per_update);
 
             last_print_time_ms = cur_time_ms;
