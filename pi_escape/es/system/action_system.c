@@ -51,8 +51,8 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 		int player_y = player_grid_comp->pos[1];
 
 		EntityListIterator key_it;
-		add_component_constraint(&key_it, 1, COMP_ITEMACTION);
 		start_search_in_list(player_x, player_y, engine, &key_it);
+		add_component_constraint(&key_it, 1, COMP_ITEMACTION);
 
 		while (next_in_list_mask(&key_it)) {
 			EntityId itemaction_entity_id = key_it.entity_id;
@@ -62,11 +62,14 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 				create_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 			}
 			else {
-				// Kijken of niet op locatie van deur is
-				// TODO: later anders
-				if (!(IS_DOOR(player_x, player_y))) {
+				// Kijken of we niet op deur neerzetten
+				EntityListIterator door_it;
+				start_search_in_list(player_x, player_y, engine, &door_it);
+				add_component_constraint(&door_it, 1, COMP_BLOCKING);
+				if (!next_in_list_mask(&door_it)) {
 					free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 				}
+				
 			}
 
 			
