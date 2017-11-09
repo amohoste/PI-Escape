@@ -154,7 +154,6 @@ void system_render_update(RenderSystem* system, Engine* engine) {
 			glmc_assign_vec3(light_gl_pos, player_gl_pos);
 		}
     }
-	printf("player: %i,%i and light: %f,%f,%f\n", player_grid_pos[0], player_grid_pos[1], light_gl_pos[0], light_gl_pos[1], light_gl_pos[2]);
     graphics_begin_draw_withlight(system->graphics, lightPower, light_gl_pos);
     
     EntityIterator draw_it;

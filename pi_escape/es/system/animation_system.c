@@ -6,7 +6,7 @@
 #include <SDL_timer.h>
 
 #define PLAYER_MOVE_MS 100	// player move animation takes this many ms
-
+ 
 AnimationSystem* system_animation_alloc() {
     AnimationSystem* res = calloc(1, sizeof(AnimationSystem));
     system_animation_init(res);
