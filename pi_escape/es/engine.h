@@ -27,6 +27,7 @@ typedef struct Engine Engine;
 #ifdef RPI
 #include "system/real_sensors_system.h"
 #include "system/orientation_system.h"
+#include "system/led_system.h"
 #endif
 #include <stdint.h>
 #include <glmc.h>
@@ -36,25 +37,26 @@ typedef struct Engine Engine;
 #include "es_memory_manager.h"
 
 typedef struct Engine {
-    Context context;
-    
-    //systems
-    RenderSystem* render_system;
-    InputSystem* input_system;
-    LockSystem* lock_system;
-    ActionSystem* action_system;
-    ActivationSystem* activation_system;
-    AnimationSystem* animation_system;
-    CameraSystem* camera_system;
-    ContainerSystem* container_system;
-    EndLevelSystem* end_system;
-    MoveSystem* move_system;
-    ProcessSensorSystem* process_sensor_system;
+	Context context;
+
+	//systems
+	RenderSystem* render_system;
+	InputSystem* input_system;
+	LockSystem* lock_system;
+	ActionSystem* action_system;
+	ActivationSystem* activation_system;
+	AnimationSystem* animation_system;
+	CameraSystem* camera_system;
+	ContainerSystem* container_system;
+	EndLevelSystem* end_system;
+	MoveSystem* move_system;
+	ProcessSensorSystem* process_sensor_system;
 #ifdef RPI
-    RealSensorsSystem* real_sensors_system;
-    OrientationSystem* orientation_system;
+	RealSensorsSystem* real_sensors_system;
+	OrientationSystem* orientation_system;
+	LedSystem* led_system;
 #endif
-    ESMemory es_memory;
+	ESMemory es_memory;
 } Engine;
 
 Engine* engine_alloc(Graphics*);
