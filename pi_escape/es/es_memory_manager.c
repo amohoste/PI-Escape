@@ -2,7 +2,7 @@
 #include "../../benchmarks/benchmarks.h"
 
 #include <assert.h>
-
+#define BENCHMARK
 
 void es_memory_manager_init(ESMemory *mem) {
     mem->next_entity_id = 0;

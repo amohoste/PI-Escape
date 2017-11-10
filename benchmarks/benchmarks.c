@@ -8,7 +8,7 @@ void register_has_comp(EntityId entity_id, ComponentId component_id) {
 }
 
 void register_get_comp(EntityId entity_id, ComponentId component_id) {
-	FILE *file = fopen("test.txt", "a");
+	FILE *file = fopen("benchmarks.txt", "a");
 	fprintf(file, "%i %i\n", GET_COMPONENT, entity_id, component_id);
 	fclose(file);
 }
