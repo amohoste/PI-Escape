@@ -26,6 +26,7 @@ void system_led_update(LedSystem *system, Engine *engine) {
 	EntityIterator key_it;
 	search_entity_1(engine, COMP_INCONTAINER, &key_it);
 	if (!next_entity(&key_it)) {
+		clear_ledgrid();
 		return;
 	}
 	EntityId key_entity_id = key_it.entity_id;
