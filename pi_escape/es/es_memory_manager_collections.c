@@ -7,12 +7,40 @@
 
 static int get_requires_component(uint32_t component_id_filter, ComponentId component_id);
 
-void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli, uint32_t component_mask) {
+
+void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli) {
     eli->entity_list = &engine->es_memory.grid[x][y];
     eli->entity_id = (EntityId) -1;
     eli->entity_id_index = -1;
     eli->engine = engine;
-    eli->component_id_filter = component_mask;
+    eli->component_id_filter = 0;
+}
+
+void add_component_constraint(EntityListIterator *eli, int amount, ...) {
+    va_list lijst;
+    uint32_t mask = eli->component_id_filter;
+    va_start(lijst, amount);
+    for (int i = 0; i < amount; ++i) {
+        mask = set_requires_component(mask, va_arg(lijst, ComponentId));
+    }
+    va_end(lijst);
+
+    eli->component_id_filter = mask;
+}
+
+/*
+ * Zet de waarde van de mask eerst op 0, soort van reset
+ */
+void set_component_constraint(EntityListIterator *eli, int amount, ...) {
+    eli->component_id_filter = 0;
+    va_list lijst;
+    uint32_t mask = eli->component_id_filter;
+    va_start(lijst, amount);
+    for (int i = 0; i < amount; ++i) {
+        mask = set_requires_component(mask, va_arg(lijst, ComponentId));
+    }
+    va_end(lijst);
+    eli->component_id_filter = mask;
 }
 
 int next_in_list_mask(EntityListIterator *eli) {
@@ -27,7 +55,7 @@ int next_in_list_mask(EntityListIterator *eli) {
 
     for (int index = eli->entity_id_index + 1; index < eli->entity_list->count; index++) {
         if (eli->component_id_filter != 0) {
-            for (ComponentId component_id = (ComponentId) 0; component_id < list.count; component_id++) {
+            for (int component_id =  0; component_id < list.count; component_id++) {
                 if (eli->engine->es_memory.components[list.component_ids[component_id]][eli->entity_list->entity_ids[index]].free) {
                     //no match. Try the next entity
                     goto next_entity_loop;
@@ -35,6 +63,7 @@ int next_in_list_mask(EntityListIterator *eli) {
             }
         }
         //all match, return it
+        eli->entity_id_index = index;
         eli->entity_id = eli->entity_list->entity_ids[index];
         return 1;
 
@@ -46,7 +75,7 @@ int next_in_list_mask(EntityListIterator *eli) {
 
 void update_location(int old_x, int old_y, Engine *engine, EntityId entityId, int new_x, int new_y) {
     GridLocationComponent *component = get_component(engine, entityId, COMP_GRIDLOCATION);
-    glmc_ivec2_set(component->pos,new_x, new_y);
+    glmc_ivec2_set(component->pos, new_x, new_y);
 
     entitylist_remove(&engine->es_memory.grid[old_x][old_y], entityId);
     entitylist_add(&engine->es_memory.grid[new_x][new_y], entityId);
@@ -168,7 +197,7 @@ int next_entity(EntityIterator *res) {
 
     for (EntityId entity_id = res->entity_id + 1; entity_id < res->engine->es_memory.next_entity_id; entity_id++) {
         if (res->component_id_filter != 0) {
-            for (ComponentId component_id = 0; component_id < list.count; component_id++) {
+            for (int component_id = 0; component_id < list.count; component_id++) {
                 if (res->engine->es_memory.components[list.component_ids[component_id]][entity_id].free) {
                     //no match. Try the next entity
                     goto next_entity_loop;

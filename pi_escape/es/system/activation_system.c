@@ -12,6 +12,7 @@ ActivationSystem* system_activation_alloc() {
 }
 
 void system_activation_init(ActivationSystem* system) {
+	// Houdt bij of frame is waarop connectors mogen oplichten (indien 0)
 	system->step = 50;
 }
 
@@ -23,39 +24,10 @@ void system_activation_free(ActivationSystem* system) {
 
 void system_activation_update(ActivationSystem* system, Engine* engine) {
 	
-	// Bij elke update
-	// Over alle locks lopen
-	EntityIterator lockit;
-	search_entity_1(engine, COMP_LOCK, &lockit);
-	while (next_entity(&lockit)) {
-		// Entity opvragen
-		EntityId lock_entity_id = lockit.entity_id;
-		assert(lock_entity_id != NO_ENTITY);
-		ActivatableComponent* activatable = get_component(engine, lock_entity_id, COMP_ACTIVATABLE);
-		
-		// Als slot gedeactiveerd
-		if (activatable->active == 0) {
-			EntityId curr = lock_entity_id;
-			ConnectionsComponent *connection = get_component(engine, curr, COMP_CONNECTIONS);
-			EntityId next = connection->downstream;
+	// Houdt bij of er al een logica aangezet is
+	int changed = 0;
 
-			// Zolang volgende component downstream heeft en deze geactiveerd is deze deactiveren
-			while (connection->hasDownStream && ! has_component(engine, next, COMP_CONNECTORLOGIC)) {
-				ActivatableComponent* activatable = get_component(engine, next, COMP_ACTIVATABLE);
-				if (activatable->active == 1) {
-					activatable->active = 0;
-					curr = connection->downstream;
-					connection = get_component(engine, curr, COMP_CONNECTIONS);
-					next = connection->downstream;
-				}
-				else {
-					break;
-				}
-			}
-		}
-	}
-
-	// Over alle logica lopen
+	// Eerst over alle logica lopen en controleren of deze aan / uit moeten gezet worden
 	EntityIterator logicit1;
 	search_entity_1(engine, COMP_CONNECTORLOGIC, &logicit1);
 	while (next_entity(&logicit1)) {
@@ -68,7 +40,7 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 		if (activatable->active == 1) {
 			ConnectorLogicComponent *logic = get_component(engine, logic_entity_id, COMP_CONNECTORLOGIC);
 			ConnectionsComponent *connection = get_component(engine, logic_entity_id, COMP_CONNECTIONS);
-			// Kijken of een uit is en indien dit zo is and uit zetten
+			// Kijken of er 1 uit is en indien dit zo is and uit zetten
 			if (logic->type == AND_LOGIC) {
 				if (connection->hasUpStream1) {
 					ActivatableComponent* active = get_component(engine, connection->upstream[0], COMP_ACTIVATABLE);
@@ -125,23 +97,9 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 				}
 			}
 		}
-	}
-	
-
-
-	// Om de x aantal seconden -> later aanpassen
-	// Over alle logica lopen
-	int changed = 0;
-	EntityIterator logicit2;
-	search_entity_1(engine, COMP_CONNECTORLOGIC, &logicit2);
-	while (next_entity(&logicit2)) {
-		// Entity opvragen
-		EntityId logic_entity_id = logicit2.entity_id;
-		assert(logic_entity_id != NO_ENTITY);
-		ActivatableComponent* activatable = get_component(engine, logic_entity_id, COMP_ACTIVATABLE);
-
-		// Als gedeactiveerd
-		if (activatable->active == 0) {
+		
+		// Indien step = 0
+		else if (system->step == 0) {
 			ConnectorLogicComponent *logic = get_component(engine, logic_entity_id, COMP_CONNECTORLOGIC);
 			ConnectionsComponent *connection = get_component(engine, logic_entity_id, COMP_CONNECTIONS);
 			// Kijken of een uit is en indien dit zo is and uit zetten
@@ -149,7 +107,7 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 				int status = 1;
 				if (connection->hasUpStream1) {
 					ActivatableComponent* active = get_component(engine, connection->upstream[0], COMP_ACTIVATABLE);
-					 status *= active->active;
+					status *= active->active;
 				}
 				if (connection->hasUpStream2) {
 					ActivatableComponent* active = get_component(engine, connection->upstream[1], COMP_ACTIVATABLE);
@@ -183,57 +141,84 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 				}
 			}
 
-			// Indien logica geactiveerd alle volgende activeren tot volgende null / logica is
-			// Als logica gedeactiveerd
+			// Als logica geactiveerd
 			if (activatable->active == 1) {
 				changed = 1;
 			}
 		}
 	}
 	
-	// Indien logica niet aangepast over alle andere lopen
-	if (!changed) {
-		if (system->step == 0) {
-			system->step = engine->context.fps / 50;
-			EntityIterator it;
-			search_entity_2(engine, COMP_ACTIVATABLE, COMP_CONNECTIONS, &it);
-			while (next_entity(&it)) {
-				EntityId entity_id = it.entity_id;
-				assert(entity_id != NO_ENTITY);
-				ActivatableComponent* activatable = get_component(engine, entity_id, COMP_ACTIVATABLE);
+
+	// Over alle locks lopen
+	EntityIterator lockit;
+	search_entity_1(engine, COMP_LOCK, &lockit);
+	while (next_entity(&lockit)) {
+		// Entity opvragen
+		EntityId lock_entity_id = lockit.entity_id;
+		assert(lock_entity_id != NO_ENTITY);
+		ActivatableComponent* activatable = get_component(engine, lock_entity_id, COMP_ACTIVATABLE);
+		
+		// Als slot gedeactiveerd
+		if (activatable->active == 0) {
+			EntityId curr = lock_entity_id;
+			ConnectionsComponent *connection = get_component(engine, curr, COMP_CONNECTIONS);
+			EntityId next = connection->downstream;
+
+			// Zolang volgende component downstream heeft en deze geactiveerd is deze deactiveren
+			while (connection->hasDownStream && ! has_component(engine, next, COMP_CONNECTORLOGIC)) {
+				ActivatableComponent* activatable = get_component(engine, next, COMP_ACTIVATABLE);
 				if (activatable->active == 1) {
-					ConnectionsComponent *connection = get_component(engine, entity_id, COMP_CONNECTIONS);
-					if (connection->hasDownStream) {
-						EntityId next_id = connection->downstream;
-						if (!has_component(engine, next_id, COMP_CONNECTORLOGIC)) {
-							ActivatableComponent* next_activatable = get_component(engine, next_id, COMP_ACTIVATABLE);
-							if (next_activatable->active == 0) {
-								next_activatable->active = 1;
-								break;
-							}
-						}
-					}
+					activatable->active = 0;
+					curr = connection->downstream;
+					connection = get_component(engine, curr, COMP_CONNECTIONS);
+					next = connection->downstream;
+				}
+				else {
+					break;
 				}
 			}
 		}
-		else {
-			system->step = system->step - 1;
+		else if (system->step == 0) {
+			// Indien logica niet geupdated, connectors updaten vanaf slot
+			if (!changed) {
+				EntityId curr = lock_entity_id;
+				ConnectionsComponent *connection = get_component(engine, curr, COMP_CONNECTIONS);
+				EntityId next = connection->downstream;
+
+				// Zolang volgende component downstream heeft en deze geactiveerd is deze deactiveren
+				while (connection->hasDownStream) {
+					// Indien logicacomponent niet geactiveerd is stoppen
+					if (has_component(engine, next, COMP_CONNECTORLOGIC)) {
+						ActivatableComponent* activatable = get_component(engine, next, COMP_ACTIVATABLE);
+						if (activatable->active == 0) {
+							break;
+						}
+					}
+
+					// Indien component niet geäctiveerd op 1 zetten en stoppen
+					ActivatableComponent* activatable = get_component(engine, next, COMP_ACTIVATABLE);
+					if (activatable->active == 0) {
+						activatable->active = 1;
+						break;
+					}
+					else {
+						curr = connection->downstream;
+						connection = get_component(engine, curr, COMP_CONNECTIONS);
+						next = connection->downstream;
+					}
+				}
+				
+			}
+
 		}
-		
 	}
 
-	
-	// TODO: deuren
-	//demo only, no use in real game
-	/*
-	EntityIterator it;
-	search_entity_1(engine, COMP_LOCK, &it);
-	while (next_entity(&it)) {
-		EntityId activatable_entity_id = it.entity_id;
-		assert(activatable_entity_id != NO_ENTITY);
-		ActivatableComponent* activatable = get_component(engine, activatable_entity_id, COMP_ACTIVATABLE);
-		activatable->active = 1;
-	}
-	*/
 
+	// Step decrementeren, als op 0 terugzetten op context.fps / 50 (zodat niet elke frame)
+	if (system->step != 0) {
+		system->step -= 1;
+	}
+	else {
+		system->step = engine->context.fps / 50;
+	}
 }

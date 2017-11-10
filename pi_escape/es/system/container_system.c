@@ -34,6 +34,7 @@ void system_container_update(ContainerSystem* system, Engine* engine) {
 	int player_x = player_grid_comp->pos[0];
 	int player_y = player_grid_comp->pos[1];
 
+	// Alle entities met incontainercomponent locatie speler geven
 	EntityIterator incontainer_it;
 	search_entity_1(engine, COMP_INCONTAINER, &incontainer_it);
 	while (next_entity(&incontainer_it)) {
@@ -41,8 +42,7 @@ void system_container_update(ContainerSystem* system, Engine* engine) {
 		assert(incontainer_entity_id != NO_ENTITY);
 
 		GridLocationComponent* item_grid_comp = get_component(engine, incontainer_entity_id, COMP_GRIDLOCATION);
-		item_grid_comp->pos[0] = player_x;
-		item_grid_comp->pos[1] = player_y;
+		update_location(item_grid_comp->pos[0], item_grid_comp->pos[1], engine, incontainer_entity_id, player_x, player_y);
 	}
 
 }

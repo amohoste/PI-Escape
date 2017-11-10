@@ -1,11 +1,12 @@
 #include "animation_system.h"
 
 #include <stdlib.h>
-#include <time.h>
 #include <assert.h>
 
-#define PLAYER_MOVE_MS 100	// player move animation takes this many ms
+#include <SDL_timer.h>
 
+#define PLAYER_MOVE_MS 100	// player move animation takes this many ms
+ 
 AnimationSystem* system_animation_alloc() {
     AnimationSystem* res = calloc(1, sizeof(AnimationSystem));
     system_animation_init(res);
@@ -44,10 +45,12 @@ void system_animation_update(AnimationSystem* system, Engine* engine) {
 		// Get MoveAnimationComponent
 		MoveAnimationComponent* move_anim_comp = get_component(engine, move_anim_entity_id, COMP_MOVE_ANIMATION);
 
+		// Update position
+		Uint32 cur_time_ms = SDL_GetTicks();
+		Uint32 diff_time_ms = cur_time_ms - move_anim_comp->starttime;
+		move_anim_comp->position = (float) diff_time_ms / PLAYER_MOVE_MS;
 		// Free component if animation is completed
-		clock_t now = clock();
-		float passed_time_ms = ((float)(now - move_anim_comp->starttime) / CLOCKS_PER_SEC) * 1000;
-		if (passed_time_ms >= PLAYER_MOVE_MS) {
+		if (move_anim_comp->position >= 1) {
 			// End animation
 			free_component(engine, move_anim_entity_id, COMP_MOVE_ANIMATION);
 		}

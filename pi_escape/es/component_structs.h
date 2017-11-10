@@ -12,8 +12,9 @@
 #include "../../util/util.h"
 
 #include <stdint.h>
-#include <time.h>
 #include <glmc.h>
+
+#include <SDL_timer.h>
 
 /*
 * Positie van waaruit camera kijkt
@@ -71,8 +72,8 @@ typedef struct OneTimeAnimationComponent {
 */
 typedef struct MoveAnimationComponent {
     //TODO
-	Direction dir;
-	clock_t starttime;
+	float position;
+	Uint32 starttime;
 } MoveAnimationComponent;
 
 /*
