@@ -13,11 +13,12 @@ typedef enum Functions {
 
 #include "../pi_escape/es/engine.h"
 
+#define MAX_RECORD_SIZE 10
+
 void register_has_comp(EntityId, ComponentId);
 void register_get_comp(EntityId, ComponentId);
 void register_create_comp(EntityId, ComponentId);
 void register_free_comp(EntityId, ComponentId);
 void register_get_ent_id();
-
-void benchmark();
+void clear_file(char*);
 #endif
