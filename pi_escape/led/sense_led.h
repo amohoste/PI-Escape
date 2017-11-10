@@ -7,8 +7,6 @@
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid,
                      const char* framebuffer);
 
-// aangezien de framebuffer altijd /dev/fb1 is
-void display_ledgrid_fb1(SPGM_RGBTRIPLE* ledgrid);
 
 void clear_ledgrid();
 
