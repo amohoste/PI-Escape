@@ -7,6 +7,10 @@
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
 #include "pi_escape/es/game.h"
+#ifdef RPI
+#include "pi_escape/led/sense_led.h"
+#endif // RPI
+
 
 #include <SDL.h>
 
@@ -75,7 +79,9 @@ int main() {
             update_count = 0;
         }
     }
-
+#ifdef RPI
+	clear_ledgrid();
+#endif // RPI
     game_free(pi_escape_2);
     free(pi_escape_2);
 
