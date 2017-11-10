@@ -2,7 +2,7 @@
 
 #include <inttypes.h>
 #include <stdio.h>
-
+#include "pi_escape/led/sense_led.h"
 #include "util/sleep.h"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
@@ -154,6 +154,18 @@ static char *all_tests() {
 
 int main() {
     printf("Running tests:\n\n");
+	#ifdef RPI
+	SPGM_RGBTRIPLE ledgrid[64];
+	for (int i = 0; i <= 64; i++)
+	    {
+		SPGM_RGBTRIPLE current;
+		current.rgbRed = ((i + 1) * 125) % 255;
+		current.rgbGreen = ((i + 1) * 75) % 255;
+		current.rgbBlue = ((i + 1) * 175) % 255;
+		ledgrid[i] = current;
+		}
+	display_ledgrid(ledgrid, "/dev/fb1");
+	#endif // RPI
     char *result = all_tests();
     if (result != 0) {
         printf("%s\n", result);

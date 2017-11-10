@@ -20,22 +20,20 @@
 // filesize is 192
 
 void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
-	int file;
+	int ledgridFile;
 	uint16_t *mapping;
 	uint16_t *pointer;
-	struct fb_fix_screeninfo device_info;
-	if ((file = open(framebuffer, O_RDWR)) == -1) {
+	struct fb_var_screeninfo device_info;
+	if ((ledgridFile = open(framebuffer, O_RDWR)) == -1) {
 		return;
 	}
-	/*
-	if (ioctl(file, FBIOGET_FSCREENINFO, device_info) == -1) {
-		close(file);
+	if (ioctl(ledgridFile, FBIOGET_VSCREENINFO, device_info) == -1) {
+		close(ledgridFile);
 		return;
 	}
-	*/
-	mapping = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, file, 0);
+	mapping = mmap(NULL, FILESIZE, PROT_READ | PROT_WRITE, MAP_SHARED, ledgridFile, 0);
 	if (mapping == MAP_FAILED) {
-		close(file);
+		close(ledgridFile);
 		return;
 	}
 
