@@ -24,7 +24,7 @@ void system_led_free(LedSystem *system) {
 
 void system_led_update(LedSystem *system, Engine *engine) {
 	EntityIterator key_it;
-	search_entity_1(engine, COMP_GRIDLOCATION, &key_it);
+	search_entity_1(engine, COMP_INCONTAINER, &key_it);
 	if (!next_entity(&key_it)) {
 		return;
 	}
