@@ -32,7 +32,6 @@ void system_led_update(LedSystem *system, Engine *engine) {
 	EntityId key_entity_id = key_it.entity_id;
 
 	ItemComponent *item = get_component(engine, key_entity_id, COMP_ITEM);
-	// hier loop het fout
 	switch (item->color) {
 	case A:
 		build_one_color((SPGM_RGBTRIPLE) { .rgbRed = 0, .rgbGreen = 0, .rgbBlue = 255 });
