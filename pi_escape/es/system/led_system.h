@@ -2,12 +2,12 @@
 #define LED_SYSTEM_H
 #ifdef RPI
 #define EMPTY_SYSTEM_STRUCT char c
-#include "../engine.h"
 
 typedef struct LedSystem {
 	EMPTY_SYSTEM_STRUCT;
 } LedSystem;
 
+#include "../engine.h"
 
 void system_led_init(LedSystem*);
 LedSystem* system_led_alloc();
