@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "led_system.h"
-#include "pi_escape/led/sense_led.h"
+#include "../../led/sense_led.h"
 #include "util/mythread.h"
 #include "../assemblage.h"
 
