@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include "led_system.h"
 #include "../../led/sense_led.h"
-#include "util/mythread.h"
 #include "../assemblage.h"
 
 
