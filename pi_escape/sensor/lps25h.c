@@ -8,16 +8,22 @@
 #define ADDR 0x5c
 #define CTRL_REG1 0x20
 #define CTRL_REG4 0x23
+#define STATUS_REG 0x27
+
 #define PRESS_OUT_XL 0x28
 #define PRESS_OUT_L 0x29
 #define PRESS_OUT_H 0x2A
+
 #define TEMP_OUT_L 0x2B
 #define TEMP_OUT_H 0x2C
+
 #define CLEAN_START 0x20
 #define START_VALUE 0x80
 
 
 int filelps25h;
+Temperature temp;
+Pressure pres;
 
 int lps25h_init(int frequentie)
 {
@@ -39,12 +45,17 @@ int lps25h_init(int frequentie)
 		usleep(2500);
 		status = i2c_read_byte_data(filelps25h, CTRL_REG4);
 	} while (status != 0);
-	
+	pres.pressure = -9999;
+	temp.temp_C = -9999;
 	return 0;
 }
 
 double lps25h_read_pressure()
 {
+	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	if ((status == 0 || status = 2) && pres.pressure != -9999) {
+		return pres.pressure;
+	}
 	// bepalen van variablen
 	uint8_t press_out_H = i2c_read_byte_data(filelps25h, PRESS_OUT_H);
 	uint8_t press_out_L = i2c_read_byte_data(filelps25h, PRESS_OUT_L);
@@ -54,14 +65,17 @@ double lps25h_read_pressure()
 	int32_t press_out_HLLX = press_out_H << 16 | press_out_L << 8 | press_out_XL;
 
 	// pressure bepalen
-	double pressure = press_out_HLLX / 4096.0;
-	return pressure;
+	pres.pressure = press_out_HLLX / 4096.0;
+	return pres.pressure;
 }
 
 double lps25h_read_temperature()
 {
+	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	if ((status == 0 || status = 1) && temp.temp_C != -9999) {
+		return temp.temp_C;
+	}
 	//ophalen van waarde
-	// TODO vraag of dit klopt
 	uint8_t temp_out_L = i2c_read_byte_data(filelps25h, TEMP_OUT_L);
 	uint8_t temp_out_H = i2c_read_byte_data(filelps25h, TEMP_OUT_H);
 
@@ -69,8 +83,8 @@ double lps25h_read_temperature()
 	int16_t temp_out_HL = temp_out_H << 8 | temp_out_L;
 
 	// bepalen van temperatuur in c
-	double temp_C = 42.5 + (temp_out_HL / 480.0);
-	return temp_C;
+	temp.temp_C = 42.5 + (temp_out_HL / 480.0);
+	return temp.tempC;
 }
 
 #endif
