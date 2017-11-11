@@ -54,18 +54,10 @@ typedef struct TemperatureLSB {
 } TemperatureLSB;
 
 typedef struct Temperature {
-	uint8_t t_out_l;
-	uint8_t t_out_h;
-	double T0_DegC;
-	double T1_DegC;
 	double temp_C;
 } Temperature;
 
 typedef struct Humidity {
-	uint8_t h_t_out_l;
-	uint8_t h_t_out_h;
-	double H0_rH;
-	double H1_rH;
 	double humidity;
 } Humidity;
 

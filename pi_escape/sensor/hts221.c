@@ -76,20 +76,24 @@ int hts221_init(int frequentie)
 	humLSB.h0_out_h = i2c_read_byte_data(filehts221, H0_T0_OUT_H);
 	humLSB.h1_out_l = i2c_read_byte_data(filehts221, H1_T0_OUT_L);
 	humLSB.h1_out_h = i2c_read_byte_data(filehts221, H1_T0_OUT_H);
-
+	Humidity.humidity = -9999;
+	Temperature.temp_C = -9999;
 	return 0;
 }
 
 double hts221_read_humidity()
 {
+	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	if ((status == 0 ||status = 2) && Humidity.humidity != -9999) {
+		return Humidity.humidity;
+	}
 	uint8_t h_t_out_l = i2c_read_byte_data(filehts221, H_T_OUT_L);
 	uint8_t h_t_out_h = i2c_read_byte_data(filehts221, H_T_OUT_H);
 
 	double H0_rH = i2c_read_byte_data(filehts221, H0_rH_x2) / 2.0;
 	double H1_rH = i2c_read_byte_data(filehts221, H1_rH_x2) / 2.0;
 
-	int status_reg = i2c_read_byte_data(filehts221, STATUS_REG);
-	printf("%d\n", status_reg);
+
 
 	int16_t H0_T0_OUT = humLSB.h0_out_h << 8 | humLSB.h0_out_l;
 	int16_t H1_T0_OUT = humLSB.h1_out_h << 8 | humLSB.h1_out_l;
@@ -100,12 +104,16 @@ double hts221_read_humidity()
 	/* make 16 bit value */
 	int16_t H_T_OUT = h_t_out_h << 8 | h_t_out_l;
 
-	double humidity = (h_m * H_T_OUT) + h_c;
+	Humidity.humidity = (h_m * H_T_OUT) + h_c;
 	return humidity;
 }
 
 double hts221_read_temperature()
 {
+	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	if ((status == 0 || status = 1) && Temperature.temp_C != -9999) {
+		return Temperature.temp_C;
+	}
 	uint8_t t_out_l = i2c_read_byte_data(filehts221, TEMP_OUT_L);
 	uint8_t t_out_h = i2c_read_byte_data(filehts221, TEMP_OUT_H);
 
@@ -121,7 +129,7 @@ double hts221_read_temperature()
 
 	int16_t T_out = t_out_h << 8 | t_out_l;
 
-	double temp_C = (t_m * T_out) + t_c;
-	return temp_C;
+	Temperature.temp_C = (t_m * T_out) + t_c;
+	return Temperature.temp_C;
 }	
 #endif
