@@ -48,7 +48,7 @@ int hts221_init(int frequentie)
 		return -1;
 	}
 
-	i2c_write_byte_data(filehts221, CTRL_REG1, CLEAN_START);
+	i2c_write_byte_data(hts221.filehts221, CTRL_REG1, CLEAN_START);
 
 	//TODO: change 0x84 to frequentie
 	i2c_write_byte_data(hts221.filehts221, CTRL_REG1, START_VALUE | frequentie);
@@ -91,8 +91,8 @@ double hts221_read_humidity()
 
 
 
-	int16_t H0_T0_OUT = humLSB.h0_out_h << 8 | humLSB.h0_out_l;
-	int16_t H1_T0_OUT = humLSB.h1_out_h << 8 | humLSB.h1_out_l;
+	int16_t H0_T0_OUT = hts221.h0_out_h << 8 | hts221.h0_out_l;
+	int16_t H1_T0_OUT = hts221.h1_out_h << 8 | hts221.h1_out_l;
 
 	double h_m = (H1_rH - H0_rH) / (H1_T0_OUT - H0_T0_OUT);
 	double h_c = H1_rH - (h_m * H1_T0_OUT);
@@ -106,18 +106,18 @@ double hts221_read_humidity()
 
 double hts221_read_temperature()
 {
-	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	int status = i2c_read_byte_data(hts221.filehts221, STATUS_REG);
 	if ((status == 0 || status == 1) && hts221.temp_C != -9999) {
 		return hts221.temp_C;
 	}
 	uint8_t t_out_l = i2c_read_byte_data(filehts221, TEMP_OUT_L);
 	uint8_t t_out_h = i2c_read_byte_data(filehts221, TEMP_OUT_H);
 
-	double T0_DegC = ((tempC.t1_t0_msb & 3) << 8 | tempC.t0_degC_x8) / 8.0;
-	double T1_DegC = (((tempC.t1_t0_msb & 12) >> 2) << 8 | tempC.t1_degC_x8) / 8.0;
+	double T0_DegC = ((hts221.t1_t0_msb & 3) << 8 | hts221.t0_degC_x8) / 8.0;
+	double T1_DegC = (((hts221.t1_t0_msb & 12) >> 2) << 8 | hts221.t1_degC_x8) / 8.0;
 
-	int16_t T0_out = tempLSB.t0_out_h << 8 | tempLSB.t0_out_l;
-	int16_t T1_out = tempLSB.t1_out_h << 8 | tempLSB.t1_out_l;
+	int16_t T0_out = hts221.t0_out_h << 8 | hts221.t0_out_l;
+	int16_t T1_out = hts221.t1_out_h << 8 | hts221.t1_out_l;
 
 	double t_m = (T1_DegC - T0_DegC) / (T1_out - T0_out);
 	double t_c = T1_DegC - (t_m * T1_out);
