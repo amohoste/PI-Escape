@@ -110,8 +110,8 @@ double hts221_read_temperature()
 	if ((status == 0 || status == 1) && hts221.temp_C != -9999) {
 		return hts221.temp_C;
 	}
-	uint8_t t_out_l = i2c_read_byte_data(filehts221, TEMP_OUT_L);
-	uint8_t t_out_h = i2c_read_byte_data(filehts221, TEMP_OUT_H);
+	uint8_t t_out_l = i2c_read_byte_data(hts221.filehts221, TEMP_OUT_L);
+	uint8_t t_out_h = i2c_read_byte_data(hts221.filehts221, TEMP_OUT_H);
 
 	double T0_DegC = ((hts221.t1_t0_msb & 3) << 8 | hts221.t0_degC_x8) / 8.0;
 	double T1_DegC = (((hts221.t1_t0_msb & 12) >> 2) << 8 | hts221.t1_degC_x8) / 8.0;

@@ -50,7 +50,7 @@ int lps25h_init(int frequentie)
 
 double lps25h_read_pressure()
 {
-	int status = i2c_read_byte_data(lps25h.filehts221, STATUS_REG);
+	int status = i2c_read_byte_data(lps25h.filelps25h, STATUS_REG);
 	if ((status == 0 || status == 2) && lps25h.pressure != -9999) {
 		return lps25h.pressure;
 	}
@@ -69,7 +69,7 @@ double lps25h_read_pressure()
 
 double lps25h_read_temperature()
 {
-	int status = i2c_read_byte_data(lps25h.filehts221, STATUS_REG);
+	int status = i2c_read_byte_data(lps25h.filelps25h, STATUS_REG);
 	if ((status == 0 || status == 1) && lps25h.temp_C != -9999) {
 		return lps25h.temp_C;
 	}
