@@ -35,6 +35,10 @@ void create_level_entities(Level *l, Engine *engine) {
     }
 
     engine->es_memory.grid = entityGrid;
+    
+    EntityList el;
+    entitylist_init(1, &el);
+    engine->es_memory.players = el;
 
     /* Aanmaken van alle componenten behalve verbindingsstukken */
     for (int x = 0; x < l->height; x++) {
@@ -57,7 +61,10 @@ void create_level_entities(Level *l, Engine *engine) {
             walls[W] = x == 0 || has_wall;
 
             if (has_player) {
-                entitylist_add(&entityGrid[x][y], create_player_entity(engine, x, y));
+                EntityId id = create_player_entity(engine, x, y);
+                entitylist_add(&entityGrid[x][y], id);
+                entitylist_add(&engine->es_memory.players, id);
+
             }
 
             if (has_door) {
