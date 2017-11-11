@@ -7,6 +7,10 @@
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
 #include "pi_escape/es/game.h"
+#ifdef RPI
+#include "pi_escape/led/sense_led.h"
+#endif // RPI
+
 
 #include <SDL.h>
 
@@ -36,7 +40,7 @@ int main() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 last_print_time_ms = start_time_ms;
     long update_count = 0;
-
+	
     while (!pi_escape_2->engine.context.is_exit_game) {
         Uint32 cur_time_ms = SDL_GetTicks();
         Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
@@ -70,12 +74,15 @@ int main() {
             float fps = 1.0f / time_ms_per_update * 1000.0f;
             pi_escape_2->engine.context.fps = fps;
             printf("This second: %f updates. Average time per update: %f ms.\n", fps, time_ms_per_update);
+			printf("Temperature: %f celcius\n", pi_escape_2->engine.context.temperature);
 
             last_print_time_ms = cur_time_ms;
             update_count = 0;
         }
     }
-
+#ifdef RPI
+	clear_ledgrid();
+#endif // RPI
     game_free(pi_escape_2);
     free(pi_escape_2);
 

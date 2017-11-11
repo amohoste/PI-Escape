@@ -29,6 +29,13 @@ double lps25h_read_pressure();
 double lps25h_read_temperature();
 
 
+typedef struct Lps25h {
+	int filelps25h;
+	double temp_C;
+	double pressure;
+} Lps25h;
+
+
 /*
 	Een switch die de globale variable voor frequentie instelt
 	@param frequentie in hexadecimaal

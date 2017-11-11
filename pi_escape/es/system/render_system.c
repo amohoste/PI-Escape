@@ -199,25 +199,22 @@ void system_render_update(RenderSystem* system, Engine* engine) {
 				if (player_move_anim_comp != NULL) {
 					float position = -1 + player_move_anim_comp->position;
 					if (player_move_hist_comp->previous == N) {
-						t_vec2 player_anim_gl_pos = { player_gl_pos[0] - position , player_gl_pos[2] };
+						t_vec2 player_anim_gl_pos = { grid->pos[0] - position, grid->pos[1] };
 						glmc_assign_vec2(pos, player_anim_gl_pos);
-					}
-					else if (player_move_hist_comp->previous == S) {
-						t_vec2 player_anim_gl_pos = { player_gl_pos[0] + position, player_gl_pos[2] };
+					} else if (player_move_hist_comp->previous == S) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0] + position, grid->pos[1] };
 						glmc_assign_vec2(pos, player_anim_gl_pos);
-					}
-					else if (player_move_hist_comp->previous == W) {
-						t_vec2 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[2] + position };
+					} else if (player_move_hist_comp->previous == W) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0], grid->pos[1] - position };
 						glmc_assign_vec2(pos, player_anim_gl_pos);
-					}
-					else if (player_move_hist_comp->previous == E) {
-						t_vec2 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[2] - position };
+					} else if (player_move_hist_comp->previous == E) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0], grid->pos[1] + position };
 						glmc_assign_vec2(pos, player_anim_gl_pos);
 					}
 				} else {
 					glmc_assign_vec2_from_ivec2(pos, grid->pos);
 				}
-
+				printf("(%f,%f,%f)\n", player_gl_pos[0], player_gl_pos[1], player_gl_pos[2]);
                 gl_player_draw(&system->player, time, pos);
                 break;
             }

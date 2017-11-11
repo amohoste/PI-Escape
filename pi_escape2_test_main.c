@@ -2,7 +2,6 @@
 
 #include <inttypes.h>
 #include <stdio.h>
-
 #include "util/sleep.h"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/level/levelloader.h"
