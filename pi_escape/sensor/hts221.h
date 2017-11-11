@@ -27,31 +27,23 @@ double hts221_read_humidity();
 double hts221_read_temperature();
 
 
-/*
-	struct dat de calibratie waarden van temperatuur bevat
-*/
-typedef struct TemperatureC{
-	uint8_t t0_degC_x8;
-	uint8_t t1_degC_x8;
-	uint8_t t1_t0_msb;
-} TemperatureC;
-
-/*
-	struct dat de calibratie waarden van vochtigheid bevat
-*/
-typedef struct HumidityLSB{
-	uint8_t h0_out_l;
-	uint8_t h0_out_h;
-	uint8_t h1_out_l;
-	uint8_t h1_out_h;
-} HumidityLSB;
-
-typedef struct TemperatureLSB {
+typedef struct Hts221 {
+	int filehts221;
+	double temp_C;
+	double humidity;
 	uint8_t t0_out_l;
 	uint8_t t0_out_h;
 	uint8_t t1_out_l;
 	uint8_t t1_out_h;
-} TemperatureLSB;
+	uint8_t h0_out_l;
+	uint8_t h0_out_h;
+	uint8_t h1_out_l;
+	uint8_t h1_out_h;
+	uint8_t t0_degC_x8;
+	uint8_t t1_degC_x8;
+	uint8_t t1_t0_msb;
+} Hts221;
+
 
 /*
 	Een switch die de globale variable voor frequentie instelt
