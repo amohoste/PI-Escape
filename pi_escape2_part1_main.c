@@ -16,7 +16,9 @@
 #include <SDL_timer.h>
 
 int main() {
-	clear_file("benchmarks.txt");
+	#ifdef BENCHMARK
+		clear_file("benchmarks.txt");
+	#endif // BENCMARK
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());

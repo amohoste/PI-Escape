@@ -8,18 +8,23 @@
 #undef main //Weird bug on windows where SDL overwrite main definition
 
 int main(int argc, char **argv){
+	#undef BENCHMARK
     // Get specified file
-	printf("Benchmark simulation started ...\n\n");
-	//if(argc > 0) return -1;
-	//char * benchmark_file = argv[0];
+	if(argc > 0) return -1;
+	char * benchmark_file = argv[0];
 
 	// Start simulation
+	printf("Benchmark simulation started ...\n");
+
+	clock_t start, end;
+	double cpu_time_used;
+	start = clock();
 
 	Engine* engine = calloc(1, sizeof(Engine));
 	es_memory_manager_init(&engine->es_memory);
 
 	// Go over all records in the file
-	FILE * file = fopen("benchmarks.txt", "r");
+	FILE * file = fopen(benchmark_file, "r");
 	char line[MAX_RECORD_SIZE];
 
 	int count = 0;
@@ -67,7 +72,11 @@ int main(int argc, char **argv){
 			}
 		}
 	}
-	printf("\nsimulation finished. %i calls.\n", count);
+
+	end = clock();
+	cpu_time_used = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+	printf("\nsimulation finished. %i calls in %f seconds.\n", count, cpu_time_used);
 	printf("Press any key to continue...");
 	getchar();
 
