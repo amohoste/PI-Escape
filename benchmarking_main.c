@@ -18,6 +18,7 @@ int main(int argc, char **argv){
 	// Start simulation
 
 	Engine* engine = calloc(1, sizeof(Engine));
+	es_memory_manager_init(&engine->es_memory);
 
 	// Go over all records in the file
 	FILE * file = fopen("benchmarks.txt", "r");
@@ -31,12 +32,18 @@ int main(int argc, char **argv){
 		int a = -1;
 		int b = -1;
 		int c = -1;
-		fscanf(file, "%i %i %i", &a, &b, &c);
+		// Read line
+		fgets(line, MAX_RECORD_SIZE, file);
+		sscanf(line, "%i %i %i", &a, &b, &c);
+
+		//fscanf(file, "%i %i %i", &a, &b, &c);
 		Functions function = (Functions)a;
 
 		Uint32 cur_time_ms = SDL_GetTicks();
 		Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
 		update_count++;
+
+		printf("%i %i %i\n", a, b, c);
 
 		// perform logged function
 		switch (function)
@@ -58,11 +65,10 @@ int main(int argc, char **argv){
 				break;
 			}
 			case GET_NEW_ENTITY_ID: {
-				has_component(engine, b, c);
+				get_new_entity_id(engine);
 				break;
 			}
 			default: {
-				get_new_entity_id(engine);
 				break;
 			}
 		}
