@@ -88,7 +88,7 @@ double hts221_read_humidity()
 	double H0_rH = i2c_read_byte_data(filehts221, H0_rH_x2) / 2.0;
 	double H1_rH = i2c_read_byte_data(filehts221, H1_rH_x2) / 2.0;
 
-	unit8_t status_reg = i2c_read_byte_data(filehts221, STATUS_REG);
+	uint_8 status_reg = i2c_read_byte_data(filehts221, STATUS_REG);
 	printf("%d\n", status_reg);
 
 	int16_t H0_T0_OUT = humLSB.h0_out_h << 8 | humLSB.h0_out_l;
@@ -112,7 +112,7 @@ double hts221_read_temperature()
 	double T0_DegC = ((tempC.t1_t0_msb & 3) << 8 | tempC.t0_degC_x8) / 8.0;
 	double T1_DegC = (((tempC.t1_t0_msb & 12) >> 2) << 8 | tempC.t1_degC_x8) / 8.0;
 
-	unit8_t status_reg = i2c_read_byte_data(filehts221, STATUS_REG);
+	uint8_t status_reg = i2c_read_byte_data(filehts221, STATUS_REG);
 
 	int16_t T0_out = tempLSB.t0_out_h << 8 | tempLSB.t0_out_l;
 	int16_t T1_out = tempLSB.t1_out_h << 8 | tempLSB.t1_out_l;
