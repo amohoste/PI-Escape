@@ -82,7 +82,7 @@ int hts221_init(int frequentie)
 double hts221_read_humidity()
 {
 	int status = i2c_read_byte_data(filehts221, STATUS_REG);
-	if ((status == 0 ||status = 2) && hts221.humidity != -9999) {
+	if ((status == 0 ||status == 2) && hts221.humidity != -9999) {
 		return hts221.humidity;
 	}
 	uint8_t h_t_out_l = i2c_read_byte_data(filehts221, H_T_OUT_L);
@@ -109,7 +109,7 @@ double hts221_read_humidity()
 double hts221_read_temperature()
 {
 	int status = i2c_read_byte_data(filehts221, STATUS_REG);
-	if ((status == 0 || status = 1) && hts221.temp_C != -9999) {
+	if ((status == 0 || status == 1) && hts221.temp_C != -9999) {
 		return hts221.temp_C;
 	}
 	uint8_t t_out_l = i2c_read_byte_data(filehts221, TEMP_OUT_L);
