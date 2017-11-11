@@ -212,8 +212,6 @@ EntityId create_player_entity(Engine *engine, int x, int y) {
 
     MoveAnimationComponent *animation = create_component(engine, player_entity_id, COMP_MOVE_ANIMATION);
 
-    engine->context.player = player_entity_id;
-
     return player_entity_id;
 }
 

@@ -33,59 +33,65 @@ void system_move_free(MoveSystem* system) {
 }
 
 void system_move_update(MoveSystem* system, Engine* engine) {
-	// Get player
-	EntityId player = engine->context.player;
-	assert(player != NO_ENTITY);
 
-	// Gridlocationcomponent van deze entity opvragen
-	GridLocationComponent* grid_comp = get_component(engine, player, COMP_GRIDLOCATION);
+	for (int i = 0; i < engine->es_memory.players.count; ++i) {
+		// Get player
+		EntityId player = engine->es_memory.players.entity_ids[i];
+		assert(player != NO_ENTITY);
 
-	// MoveActionComponent van deze entity opvragen
-	MoveActionComponent* move_comp = get_component(engine, player, COMP_MOVE_ACTION);
+		// Gridlocationcomponent van deze entity opvragen
+		GridLocationComponent* grid_comp = get_component(engine, player, COMP_GRIDLOCATION);
 
-	// MoveHistoryComponent van deze entity opvragen
-	MoveHistoryComponent* move_hist_comp = get_component(engine, player, COMP_MOVE_HISTORY);
+		// MoveActionComponent van deze entity opvragen
+		MoveActionComponent* move_comp = get_component(engine, player, COMP_MOVE_ACTION);
 
-	// Als er geen animatie bezig is
-	if (engine->es_memory.components[COMP_MOVE_ANIMATION][player].free) {
+		// MoveHistoryComponent van deze entity opvragen
+		MoveHistoryComponent* move_hist_comp = get_component(engine, player, COMP_MOVE_HISTORY);
 
-		// Huidige locatie
-		int x = grid_comp->pos[0];
-		int y = grid_comp->pos[1];
+		// Als er geen animatie bezig is
+		if (engine->es_memory.components[COMP_MOVE_ANIMATION][player].free) {
 
-		// Check voor diagonaal bewegen
-		int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
-		Direction prev = move_hist_comp->previous;
-		if (move_comp->up && (notDiagonal || prev != N) && availablePosition(system, engine, x-1, y)) {
-			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->position = 0.0f;
-			move_hist_comp->previous = N;
-			moveanimation->starttime = SDL_GetTicks();
-			x = x - 1;
-			glmc_ivec2_set(grid_comp->pos, x, y);
-		} else if (move_comp->down && (notDiagonal || prev != S) && availablePosition(system, engine, x + 1, y)) {
-			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->position = 0.0f;
-			move_hist_comp->previous = S;
-			moveanimation->starttime = SDL_GetTicks();
-			x = x + 1;
-			glmc_ivec2_set(grid_comp->pos, x, y);
-		} else if (move_comp->right && (notDiagonal || prev != E) && availablePosition(system, engine, x, y + 1)) {
-			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->position = 0.0f;
-			move_hist_comp->previous = E;
-			moveanimation->starttime = SDL_GetTicks();
-			y = y + 1;
-			glmc_ivec2_set(grid_comp->pos, x, y);
-		} else if (move_comp->left && (notDiagonal || prev != W) && availablePosition(system, engine, x, y - 1)) {
-			MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
-			moveanimation->position = 0.0f;
-			move_hist_comp->previous = W;
-			moveanimation->starttime = SDL_GetTicks();
-			y = y - 1;
-			glmc_ivec2_set(grid_comp->pos, x, y);
+			// Huidige locatie
+			int x = grid_comp->pos[0];
+			int y = grid_comp->pos[1];
+
+			// Check voor diagonaal bewegen
+			int notDiagonal = (move_comp->up + move_comp->down + move_comp->right + move_comp->left) != 2;
+			Direction prev = move_hist_comp->previous;
+			if (move_comp->up && (notDiagonal || prev != N) && availablePosition(system, engine, x - 1, y)) {
+				MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+				moveanimation->position = 0.0f;
+				move_hist_comp->previous = N;
+				moveanimation->starttime = SDL_GetTicks();
+				x = x - 1;
+				glmc_ivec2_set(grid_comp->pos, x, y);
+			}
+			else if (move_comp->down && (notDiagonal || prev != S) && availablePosition(system, engine, x + 1, y)) {
+				MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+				moveanimation->position = 0.0f;
+				move_hist_comp->previous = S;
+				moveanimation->starttime = SDL_GetTicks();
+				x = x + 1;
+				glmc_ivec2_set(grid_comp->pos, x, y);
+			}
+			else if (move_comp->right && (notDiagonal || prev != E) && availablePosition(system, engine, x, y + 1)) {
+				MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+				moveanimation->position = 0.0f;
+				move_hist_comp->previous = E;
+				moveanimation->starttime = SDL_GetTicks();
+				y = y + 1;
+				glmc_ivec2_set(grid_comp->pos, x, y);
+			}
+			else if (move_comp->left && (notDiagonal || prev != W) && availablePosition(system, engine, x, y - 1)) {
+				MoveAnimationComponent* moveanimation = create_component(engine, player, COMP_MOVE_ANIMATION);
+				moveanimation->position = 0.0f;
+				move_hist_comp->previous = W;
+				moveanimation->starttime = SDL_GetTicks();
+				y = y - 1;
+				glmc_ivec2_set(grid_comp->pos, x, y);
+			}
 		}
-	}
+	}	
 }
 
 /*
@@ -107,7 +113,7 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 	if (l->height > x && x >= 0 && l->width > y && y >= 0) {
 		char place = l->spel[x][y];
 
-		if (IS_WALL(x, y)) available = 0;
+		if (isBlocking(system, engine, x, y)) available = 0;
 		if (IS_DOOR(x, y) && doorIsClosed(system, engine, x, y)) available = 0;
 	}
 	else {
@@ -116,6 +122,25 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 	}
 
 	return available;
+}
+
+/*
+* Check of de plaats vrij is
+*
+* returns 1 als gesloten
+*         0 als open (of als er geen deur is)
+*/
+int isBlocking(MoveSystem* system, Engine* engine, int x, int y) {
+	int blocking = 0;
+
+	EntityListIterator eli;
+	uint32_t mask = (uint32_t)(1 << COMP_BLOCKING);
+	start_search_in_list(0, 3, engine, &eli, mask);
+	while (blocking == 0 && next_in_list_mask(&eli)) {
+		EntityId entity = (&eli)->entity_id;
+		if (has_component(engine, entity, COMP_BLOCKING)) blocking = 1;
+	}
+	return blocking;
 }
 
 /*
