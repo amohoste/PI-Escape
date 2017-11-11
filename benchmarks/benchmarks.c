@@ -30,6 +30,12 @@ void register_get_ent_id() {
 	fclose(file);
 }
 
+void register_new_level() {
+	FILE *file = fopen("benchmarks.txt", "a");
+	fprintf(file, "%i\n", NEW_LEVEL);
+	fclose(file);
+}
+
 void clear_file(char* dest) {
 	FILE *file = fopen(dest, "w");
 	fprintf(file, "");

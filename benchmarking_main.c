@@ -7,8 +7,6 @@
 
 #undef main //Weird bug on windows where SDL overwrite main definition
 
-#include <SDL_timer.h>
-
 int main(int argc, char **argv){
     // Get specified file
 	printf("Benchmark simulation started ...\n\n");
@@ -24,26 +22,18 @@ int main(int argc, char **argv){
 	FILE * file = fopen("benchmarks.txt", "r");
 	char line[MAX_RECORD_SIZE];
 
-	Uint32 start_time_ms = SDL_GetTicks();
-	Uint32 last_print_time_ms = start_time_ms;
-	long update_count = 0;
+	int count = 0;
 
 	while (!feof(file)) {
+		count++;
 		int a = -1;
 		int b = -1;
 		int c = -1;
+
 		// Read line
 		fgets(line, MAX_RECORD_SIZE, file);
 		sscanf(line, "%i %i %i", &a, &b, &c);
-
-		//fscanf(file, "%i %i %i", &a, &b, &c);
 		Functions function = (Functions)a;
-
-		Uint32 cur_time_ms = SDL_GetTicks();
-		Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
-		update_count++;
-
-		printf("%i %i %i\n", a, b, c);
 
 		// perform logged function
 		switch (function)
@@ -68,21 +58,18 @@ int main(int argc, char **argv){
 				get_new_entity_id(engine);
 				break;
 			}
+			case NEW_LEVEL: {
+				es_memory_manager_init(&engine->es_memory);
+				break;
+			}
 			default: {
 				break;
 			}
 		}
-
-		//print performance statistics each second
-		if (diff_time_ms > 1000) {
-			float time_ms_per_update = (float)diff_time_ms / (float)update_count;
-			float fps = 1.0f / time_ms_per_update * 1000.0f;
-			engine->context.fps = fps;
-			printf("This second: %f updates. Average time per update: %f ms.\n", fps, time_ms_per_update);
-			last_print_time_ms = cur_time_ms;
-			update_count = 0;
-		}
 	}
+	printf("\nsimulation finished. %i calls.\n", count);
+	printf("Press any key to continue...");
+	getchar();
 
     return 0;
 }

@@ -1,7 +1,7 @@
 #include "game.h"
 
 #include <stdlib.h>
-
+//#define BENCHMARK_FLAG
 void game_init(Game *game, Graphics *graphics) {
     game->graphics = graphics;
     engine_init(&game->engine, graphics);
@@ -24,5 +24,8 @@ void game_load_level(Game *g, Level *l) {
 }
 
 void clear_level(Game *g) {
+	#ifdef BENCHMARK_FLAG
+		register_new_level();
+	#endif // BENCHMARK_FLAG
     es_memory_manager_init(&g->engine.es_memory);
 }
