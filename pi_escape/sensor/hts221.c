@@ -36,11 +36,7 @@
 
 
 int filehts221;
-TemperatureC tempC;
-TemperatureLSB tempLSB;
-HumidityLSB humLSB;
-Temperature temp;
-Humidity humi;
+Hts221 hts221;
 
 int hts221_init(int frequentie)
 {
@@ -65,29 +61,29 @@ int hts221_init(int frequentie)
 		status = i2c_read_byte_data(filehts221, CTRL_REG3);
 	} while (status != 0);
 
-	tempC.t0_degC_x8 = i2c_read_byte_data(filehts221, T0_degC_x8);
-	tempC.t1_degC_x8 = i2c_read_byte_data(filehts221, T1_degC_x8);
-	tempC.t1_t0_msb = i2c_read_byte_data(filehts221, T1_T0_MSB);
+	hts221.t0_degC_x8 = i2c_read_byte_data(filehts221, T0_degC_x8);
+	hts221.t1_degC_x8 = i2c_read_byte_data(filehts221, T1_degC_x8);
+	hts221.t1_t0_msb = i2c_read_byte_data(filehts221, T1_T0_MSB);
 	
-	tempLSB.t0_out_l = i2c_read_byte_data(filehts221, T0_OUT_L);
-	tempLSB.t0_out_h = i2c_read_byte_data(filehts221, T0_OUT_H);
-	tempLSB.t1_out_l = i2c_read_byte_data(filehts221, T1_OUT_L);
-	tempLSB.t1_out_h = i2c_read_byte_data(filehts221, T1_OUT_H);
+	hts221.t0_out_l = i2c_read_byte_data(filehts221, T0_OUT_L);
+	hts221.t0_out_h = i2c_read_byte_data(filehts221, T0_OUT_H);
+	hts221.t1_out_l = i2c_read_byte_data(filehts221, T1_OUT_L);
+	hts221.t1_out_h = i2c_read_byte_data(filehts221, T1_OUT_H);
 
-	humLSB.h0_out_l = i2c_read_byte_data(filehts221, H0_T0_OUT_L);
-	humLSB.h0_out_h = i2c_read_byte_data(filehts221, H0_T0_OUT_H);
-	humLSB.h1_out_l = i2c_read_byte_data(filehts221, H1_T0_OUT_L);
-	humLSB.h1_out_h = i2c_read_byte_data(filehts221, H1_T0_OUT_H);
-	humi.humidity = -9999;
-	temp.temp_C = -9999;
+	hts221.h0_out_l = i2c_read_byte_data(filehts221, H0_T0_OUT_L);
+	hts221.h0_out_h = i2c_read_byte_data(filehts221, H0_T0_OUT_H);
+	hts221.h1_out_l = i2c_read_byte_data(filehts221, H1_T0_OUT_L);
+	hts221.h1_out_h = i2c_read_byte_data(filehts221, H1_T0_OUT_H);
+	hts221.humidity = -9999;
+	hts221.temp_C = -9999;
 	return 0;
 }
 
 double hts221_read_humidity()
 {
 	int status = i2c_read_byte_data(filehts221, STATUS_REG);
-	if ((status == 0 ||status = 2) && humi.humidity != -9999) {
-		return humi.humidity;
+	if ((status == 0 ||status = 2) && hts221.humidity != -9999) {
+		return hts221.humidity;
 	}
 	uint8_t h_t_out_l = i2c_read_byte_data(filehts221, H_T_OUT_L);
 	uint8_t h_t_out_h = i2c_read_byte_data(filehts221, H_T_OUT_H);
@@ -106,15 +102,15 @@ double hts221_read_humidity()
 	/* make 16 bit value */
 	int16_t H_T_OUT = h_t_out_h << 8 | h_t_out_l;
 
-	humi.humidity = (h_m * H_T_OUT) + h_c;
-	return humi;
+	hts221.humidity = (h_m * H_T_OUT) + h_c;
+	return hts221.humidity;
 }
 
 double hts221_read_temperature()
 {
 	int status = i2c_read_byte_data(filehts221, STATUS_REG);
-	if ((status == 0 || status = 1) && temp.temp_C != -9999) {
-		return temp.temp_C;
+	if ((status == 0 || status = 1) && hts221.temp_C != -9999) {
+		return hts221.temp_C;
 	}
 	uint8_t t_out_l = i2c_read_byte_data(filehts221, TEMP_OUT_L);
 	uint8_t t_out_h = i2c_read_byte_data(filehts221, TEMP_OUT_H);
@@ -130,7 +126,7 @@ double hts221_read_temperature()
 
 	int16_t T_out = t_out_h << 8 | t_out_l;
 
-	temp.temp_C = (t_m * T_out) + t_c;
-	return temp.temp_C;
+	hts221.temp_C = (t_m * T_out) + t_c;
+	return hts221.temp_C;
 }	
 #endif
