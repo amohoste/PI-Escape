@@ -2,8 +2,8 @@
 
 #include <unistd.h>
 
-#include "../sensor/hts221.h"
-#include "../sensor/i2c.h"
+#include "hts221.h"
+#include "i2c.h"
 
 #define ADDR 0x5f
 #define CTRL_REG1 0x20

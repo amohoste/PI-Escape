@@ -2,8 +2,8 @@
 
 #include <unistd.h>
 
-#include "../sensor/lps25h.h"
-#include "../sensor/i2c.h"
+#include "lps25h.h"
+#include "i2c.h"
 
 #define ADDR 0x5c
 #define CTRL_REG1 0x20

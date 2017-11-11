@@ -5,7 +5,7 @@
 #include <sys/ioctl.h>
 #include <unistd.h>
 
-#include "../sensor/i2c.h"
+#include "i2c.h"
 
 #define FILENAME "/dev/i2c-1" // de naam van de "file" waarop de i2c bus bevinden
 
