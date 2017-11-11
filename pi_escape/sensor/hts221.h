@@ -28,6 +28,7 @@ double hts221_read_temperature();
 
 
 typedef struct Hts221 {
+	int filehts221;
 	double temp_C;
 	double humidity;
 	uint8_t t0_out_l;

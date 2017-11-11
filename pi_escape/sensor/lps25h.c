@@ -21,7 +21,6 @@
 #define START_VALUE 0x80
 
 
-int filelps25h;
 Lps25h lps25h;
 
 int lps25h_init(int frequentie)
@@ -32,17 +31,17 @@ int lps25h_init(int frequentie)
 	}
 
 	// file maken en configureer de slave
-	if ((filelps25h = i2c_init_adapter(ADDR)) == -1) {
+	if ((lps25h.filelps25h = i2c_init_adapter(ADDR)) == -1) {
 		return -1;
 	}
-	i2c_write_byte_data(filelps25h, CTRL_REG1, CLEAN_START);
+	i2c_write_byte_data(lps25h.filelps25h, CTRL_REG1, CLEAN_START);
 
-	i2c_write_byte_data(filelps25h, CTRL_REG1, START_VALUE | frequentie << 4);
+	i2c_write_byte_data(lps25h.filelps25h, CTRL_REG1, START_VALUE | frequentie << 4);
 
-	i2c_write_byte_data(filelps25h, CTRL_REG4, 0x01);
+	i2c_write_byte_data(lps25h.filelps25h, CTRL_REG4, 0x01);
 	do {
 		usleep(2500);
-		status = i2c_read_byte_data(filelps25h, CTRL_REG4);
+		status = i2c_read_byte_data(lps25h.filelps25h, CTRL_REG4);
 	} while (status != 0);
 	lps25h.pressure = -9999;
 	lps25h.temp_C = -9999;
@@ -51,14 +50,14 @@ int lps25h_init(int frequentie)
 
 double lps25h_read_pressure()
 {
-	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	int status = i2c_read_byte_data(lps25h.filehts221, STATUS_REG);
 	if ((status == 0 || status == 2) && lps25h.pressure != -9999) {
 		return lps25h.pressure;
 	}
 	// bepalen van variablen
-	uint8_t press_out_H = i2c_read_byte_data(filelps25h, PRESS_OUT_H);
-	uint8_t press_out_L = i2c_read_byte_data(filelps25h, PRESS_OUT_L);
-	uint8_t press_out_XL = i2c_read_byte_data(filelps25h, PRESS_OUT_XL);
+	uint8_t press_out_H = i2c_read_byte_data(lps25h.filelps25h, PRESS_OUT_H);
+	uint8_t press_out_L = i2c_read_byte_data(lps25h.filelps25h, PRESS_OUT_L);
+	uint8_t press_out_XL = i2c_read_byte_data(lps25h.filelps25h, PRESS_OUT_XL);
 
 	// variablen naar goed formaat omzetten
 	int32_t press_out_HLLX = press_out_H << 16 | press_out_L << 8 | press_out_XL;
@@ -70,20 +69,20 @@ double lps25h_read_pressure()
 
 double lps25h_read_temperature()
 {
-	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	int status = i2c_read_byte_data(lps25h.filehts221, STATUS_REG);
 	if ((status == 0 || status == 1) && lps25h.temp_C != -9999) {
 		return lps25h.temp_C;
 	}
 	//ophalen van waarde
-	uint8_t temp_out_L = i2c_read_byte_data(filelps25h, TEMP_OUT_L);
-	uint8_t temp_out_H = i2c_read_byte_data(filelps25h, TEMP_OUT_H);
+	uint8_t temp_out_L = i2c_read_byte_data(lps25h.filelps25h, TEMP_OUT_L);
+	uint8_t temp_out_H = i2c_read_byte_data(lps25h.filelps25h, TEMP_OUT_H);
 
 	// combinatie maken van h en l 
 	int16_t temp_out_HL = temp_out_H << 8 | temp_out_L;
 
 	// bepalen van temperatuur in c
 	lps25h.temp_C = 42.5 + (temp_out_HL / 480.0);
-	return lps25h.tempC;
+	return lps25h.temp_C;
 }
 
 #endif

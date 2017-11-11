@@ -34,8 +34,6 @@
 #define CLEAN_START 0x20
 #define START_VALUE 0x80
 
-
-int filehts221;
 Hts221 hts221;
 
 int hts221_init(int frequentie)
@@ -46,34 +44,34 @@ int hts221_init(int frequentie)
 	}
 
 	// file maken en configureer de slave
-	if ((filehts221 = i2c_init_adapter(ADDR)) == -1) {
+	if ((hts221.filehts221 = i2c_init_adapter(ADDR)) == -1) {
 		return -1;
 	}
 
 	i2c_write_byte_data(filehts221, CTRL_REG1, CLEAN_START);
 
 	//TODO: change 0x84 to frequentie
-	i2c_write_byte_data(filehts221, CTRL_REG1, START_VALUE | frequentie);
+	i2c_write_byte_data(hts221.filehts221, CTRL_REG1, START_VALUE | frequentie);
 
-	i2c_write_byte_data(filehts221, CTRL_REG3, 0x01);
+	i2c_write_byte_data(hts221.filehts221, CTRL_REG3, 0x01);
 	do {
 		usleep(2500);
-		status = i2c_read_byte_data(filehts221, CTRL_REG3);
+		status = i2c_read_byte_data(hts221.filehts221, CTRL_REG3);
 	} while (status != 0);
 
-	hts221.t0_degC_x8 = i2c_read_byte_data(filehts221, T0_degC_x8);
-	hts221.t1_degC_x8 = i2c_read_byte_data(filehts221, T1_degC_x8);
-	hts221.t1_t0_msb = i2c_read_byte_data(filehts221, T1_T0_MSB);
+	hts221.t0_degC_x8 = i2c_read_byte_data(hts221.filehts221, T0_degC_x8);
+	hts221.t1_degC_x8 = i2c_read_byte_data(hts221.filehts221, T1_degC_x8);
+	hts221.t1_t0_msb = i2c_read_byte_data(hts221.filehts221, T1_T0_MSB);
 	
-	hts221.t0_out_l = i2c_read_byte_data(filehts221, T0_OUT_L);
-	hts221.t0_out_h = i2c_read_byte_data(filehts221, T0_OUT_H);
-	hts221.t1_out_l = i2c_read_byte_data(filehts221, T1_OUT_L);
-	hts221.t1_out_h = i2c_read_byte_data(filehts221, T1_OUT_H);
+	hts221.t0_out_l = i2c_read_byte_data(hts221.filehts221, T0_OUT_L);
+	hts221.t0_out_h = i2c_read_byte_data(hts221.filehts221, T0_OUT_H);
+	hts221.t1_out_l = i2c_read_byte_data(hts221.filehts221, T1_OUT_L);
+	hts221.t1_out_h = i2c_read_byte_data(hts221.filehts221, T1_OUT_H);
 
-	hts221.h0_out_l = i2c_read_byte_data(filehts221, H0_T0_OUT_L);
-	hts221.h0_out_h = i2c_read_byte_data(filehts221, H0_T0_OUT_H);
-	hts221.h1_out_l = i2c_read_byte_data(filehts221, H1_T0_OUT_L);
-	hts221.h1_out_h = i2c_read_byte_data(filehts221, H1_T0_OUT_H);
+	hts221.h0_out_l = i2c_read_byte_data(hts221.filehts221, H0_T0_OUT_L);
+	hts221.h0_out_h = i2c_read_byte_data(hts221.filehts221, H0_T0_OUT_H);
+	hts221.h1_out_l = i2c_read_byte_data(hts221.filehts221, H1_T0_OUT_L);
+	hts221.h1_out_h = i2c_read_byte_data(hts221.filehts221, H1_T0_OUT_H);
 	hts221.humidity = -9999;
 	hts221.temp_C = -9999;
 	return 0;
@@ -81,15 +79,15 @@ int hts221_init(int frequentie)
 
 double hts221_read_humidity()
 {
-	int status = i2c_read_byte_data(filehts221, STATUS_REG);
+	int status = i2c_read_byte_data(hts221.filehts221, STATUS_REG);
 	if ((status == 0 ||status == 2) && hts221.humidity != -9999) {
 		return hts221.humidity;
 	}
-	uint8_t h_t_out_l = i2c_read_byte_data(filehts221, H_T_OUT_L);
-	uint8_t h_t_out_h = i2c_read_byte_data(filehts221, H_T_OUT_H);
+	uint8_t h_t_out_l = i2c_read_byte_data(hts221.filehts221, H_T_OUT_L);
+	uint8_t h_t_out_h = i2c_read_byte_data(hts221.filehts221, H_T_OUT_H);
 
-	double H0_rH = i2c_read_byte_data(filehts221, H0_rH_x2) / 2.0;
-	double H1_rH = i2c_read_byte_data(filehts221, H1_rH_x2) / 2.0;
+	double H0_rH = i2c_read_byte_data(hts221.filehts221, H0_rH_x2) / 2.0;
+	double H1_rH = i2c_read_byte_data(hts221.filehts221, H1_rH_x2) / 2.0;
 
 
 
