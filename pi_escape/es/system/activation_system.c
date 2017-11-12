@@ -214,11 +214,11 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 	}
 
 
-	// Step decrementeren, als op 0 terugzetten op context.fps / 50 (zodat niet elke frame)
+	// Step decrementeren, als op 0 terugzetten op context.fps / 30 (zodat niet elke frame)
 	if (system->step != 0) {
 		system->step -= 1;
 	}
 	else {
-		system->step = engine->context.fps / 50;
+		system->step = engine->context.fps / 30;
 	}
 }
