@@ -114,7 +114,7 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 		char place = l->spel[x][y];
 
 		if (isBlocking(system, engine, x, y)) available = 0;
-		if (IS_DOOR(x, y) && doorIsClosed(system, engine, x, y)) available = 0;
+		if (isDoor(system, engine, x, y) && doorIsClosed(system, engine, x, y) == 0) available = 1;
 	}
 	else {
 		// positie is out of bounds
@@ -127,14 +127,14 @@ int availablePosition(MoveSystem* system, Engine* engine, int x, int y) {
 /*
 * Check of de plaats vrij is
 *
-* returns 1 als gesloten
-*         0 als open (of als er geen deur is)
+* returns 1 als niet vrij
+*         0 als vrij
 */
 int isBlocking(MoveSystem* system, Engine* engine, int x, int y) {
 	int blocking = 0;
 
 	EntityListIterator eli;
-	start_search_in_list(0, 3, engine, &eli);
+	start_search_in_list(x, y, engine, &eli);
 	add_component_constraint(&eli,1, COMP_BLOCKING);
 	while (blocking == 0 && next_in_list_mask(&eli)) {
 		EntityId entity = (&eli)->entity_id;
@@ -144,17 +144,38 @@ int isBlocking(MoveSystem* system, Engine* engine, int x, int y) {
 }
 
 /*
+* Check of er op de plaats zich een deur bevindt
+*
+* returns 1 is een deur
+*         0 is geen deur
+*/
+int isDoor(MoveSystem* system, Engine* engine, int x, int y) {
+	int isDoor = 0;
+
+	EntityListIterator eli;
+	start_search_in_list(x, y, engine, &eli);
+	add_component_constraint(&eli, 1, COMP_BLOCKING);
+	while (isDoor == 0 && next_in_list_mask(&eli)) if (has_component(engine, (&eli)->entity_id, COMP_ACTIVATABLE)) isDoor = 1;
+
+	return isDoor;
+}
+
+/*
 * Check of de deur op de gegeven deur gestolen is
 *
 * returns 1 als gesloten
 *         0 als open (of als er geen deur is)
 */
 int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
-	Context* ctx = &(engine->context);
-	Level* l = ctx->current_level;
+	int isClosed = 0;
 
-	EntityId door = engine->context.still_object_list[x][y];
-	ActivatableComponent* actcomp = get_component(engine, door, COMP_ACTIVATABLE);
+	EntityListIterator eli;
+	start_search_in_list(x, y, engine, &eli);
+	add_component_constraint(&eli, 1, COMP_ACTIVATABLE);
+	while (isClosed == 0 && next_in_list_mask(&eli)) {
+		ActivatableComponent* actcomp = get_component(engine, (&eli)->entity_id, COMP_ACTIVATABLE);
+		if (actcomp->active == 0) isClosed = 1;
+	}
 
-	return actcomp->active == 0;
+	return isClosed;
 }
