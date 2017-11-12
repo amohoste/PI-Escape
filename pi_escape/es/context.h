@@ -22,6 +22,9 @@ typedef struct Context {
 	double temperature;
 	double pressure;
 	double humidity;
+	t_vec4 wall_color;
+	t_vec4 floor_color;
+	t_vec3 world_color;
     //TODO: add other context fields
     EntityId **still_object_list;
 	EntityId player;

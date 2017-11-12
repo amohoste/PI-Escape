@@ -90,21 +90,21 @@ void system_render_update(RenderSystem* system, Engine* engine) {
 
 	uint64_t time = engine->context.time;
 
-	system->graphics->background_color[0] = 0.0f;
-	system->graphics->background_color[1] = 0.0f;
-	system->graphics->background_color[2] = 0.25f;
+	system->graphics->background_color[0] = engine->context.world_color[0];
+	system->graphics->background_color[1] = engine->context.world_color[1];
+	system->graphics->background_color[2] = engine->context.world_color[2];
 
 	t_vec4 wall_color;
-	wall_color[0] = 1.0f;
-	wall_color[1] = 0.0f;
-	wall_color[2] = 0.0f;
-	wall_color[3] = 1.0f;
+	wall_color[0] = engine->context.wall_color[0];
+	wall_color[1] = engine->context.wall_color[1];
+	wall_color[2] = engine->context.wall_color[2];
+	wall_color[3] = engine->context.wall_color[3];
 
 	t_vec4 floor_color;
-	floor_color[0] = 1.0f;
-	floor_color[1] = 0.0f;
-	floor_color[2] = 0.0f;
-	floor_color[3] = 1.0f;
+	floor_color[0] = engine->context.floor_color[0];
+	floor_color[1] = engine->context.floor_color[1];
+	floor_color[2] = engine->context.floor_color[2];
+	floor_color[3] = engine->context.floor_color[3];
 
 
 	EntityIterator player_it;

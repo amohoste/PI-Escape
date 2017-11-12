@@ -12,7 +12,17 @@ void context_init(Context* c) {
 	c->temperature = 0;
 	c->pressure = 0;
 	c->humidity = 0;
-
+	c->wall_color[0] = 1.0f;
+	c->wall_color[1] = 0.0f;
+	c->wall_color[2] = 0.0f;
+	c->wall_color[3] = 1.0f; 
+	c->floor_color[0] = 1.0f;
+	c->floor_color[1] = 0.0f;
+	c->floor_color[2] = 0.0f;
+	c->floor_color[3] = 1.0f; 
+	c->world_color[0] = 0.0f;
+	c->world_color[1] = 0.0f;
+	c->world_color[2] = 0.25f;
     c->get =0;
     c->has =0;
     c->free =0;
