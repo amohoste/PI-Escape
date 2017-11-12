@@ -8,14 +8,17 @@
 static int get_requires_component(uint32_t component_id_filter, ComponentId component_id);
 
 void free_entity_list_iterator(EntityListIterator *eli) {
-    //entitylist moet niet vrijgegeven worden want die wordt nog gebruikt door andere iterators
-    eli->engine = NULL;
-    eli->component_id_filter = 0;
-    eli->entity_id = 0;
-    eli->entity_list = NULL;
+    if(eli != NULL) {
+        //entitylist moet niet vrijgegeven worden want die wordt nog gebruikt door andere iterators
+        eli->engine = NULL;
+        eli->component_id_filter = 0;
+        eli->entity_id = 0;
+        eli->entity_list = NULL;
+    }
 }
 
 void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli) {
+    assert(eli != NULL);
     eli->entity_list = &engine->es_memory.grid[x][y];
     eli->entity_id = (EntityId) -1;
     eli->entity_id_index = -1;
@@ -24,6 +27,7 @@ void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli)
 }
 
 void add_component_constraint(EntityListIterator *eli, int amount, ...) {
+    assert(eli != NULL);
     va_list lijst;
     uint32_t mask = eli->component_id_filter;
     va_start(lijst, amount);
