@@ -8,7 +8,11 @@
 static int get_requires_component(uint32_t component_id_filter, ComponentId component_id);
 
 void free_entity_list_iterator(EntityListIterator *eli) {
-   entitylist_free(eli->entity_list);
+    //entitylist moet niet vrijgegeven worden want die wordt nog gebruikt door andere iterators
+    eli->engine = NULL;
+    eli->component_id_filter = 0;
+    eli->entity_id = 0;
+    eli->entity_list = NULL;
 }
 
 void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli) {
@@ -68,10 +72,12 @@ int next_in_list_mask(EntityListIterator *eli) {
         //all match, return it
         eli->entity_id_index = index;
         eli->entity_id = eli->entity_list->entity_ids[index];
+        componentlist_free(&list);
         return 1;
 
         next_entity_loop:;
     }
+    componentlist_free(&list);
     return 0;
 }
 
@@ -215,6 +221,7 @@ int next_entity(EntityIterator *res) {
     }
     return 0;
 }
+
 
 void entitylist_init(int initial_size, EntityList *dest) {
     dest->allocated = initial_size < 16 ? 16 : initial_size;
