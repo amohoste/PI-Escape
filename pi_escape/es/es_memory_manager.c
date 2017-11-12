@@ -40,7 +40,6 @@ void *get_component(Engine *engine, EntityId entity_id, ComponentId component_id
     if (engine->es_memory.components[component_id][entity_id].free) return NULL;
     assert(!engine->es_memory.components[component_id][entity_id].free);
 	if (engine->context.benchmarking) {
-		printf("log\n");
 		register_get_comp(entity_id, component_id);
 	}
     engine->context.get ++;

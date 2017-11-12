@@ -42,6 +42,7 @@ int main(int argc, char **argv){
 	int count = 0;
 
 	while (!feof(file)) {
+		count++;
 		int a = -1;
 		int b = -1;
 		int c = -1;
@@ -49,7 +50,6 @@ int main(int argc, char **argv){
 		// Read line
 		fgets(line, MAX_RECORD_SIZE, file);
 		sscanf(line, "%i %i %i", &a, &b, &c);
-		printf("%i %i %i\n", a, b, c);
 		Functions function = (Functions)a;
 
 		// perform logged function
@@ -57,32 +57,26 @@ int main(int argc, char **argv){
 		{
 			case HAS_COMPONENT: {
 				has_component(engine, b, c);
-				count++;
 				break;
 			}
 			case GET_COMPONENT: {
 				get_component(engine, b, c);
-				count++;
 				break;
 			}
 			case CREATE_COMPONENT: {
 				create_component(engine, b, c);
-				count++;
 				break;
 			}
 			case FREE_COMPONENT: {
 				free_component(engine, b, c);
-				count++;
 				break;
 			}
 			case GET_NEW_ENTITY_ID: {
 				get_new_entity_id(engine);
-				count++;
 				break;
 			}
 			case NEW_LEVEL: {
 				es_memory_manager_init(&engine->es_memory);
-				count++;
 				break;
 			}
 			default: {
