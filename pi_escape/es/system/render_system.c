@@ -197,7 +197,7 @@ void system_render_update(RenderSystem* system, Engine* engine) {
 				t_vec2 pos;
 
 				if (player_move_anim_comp != NULL) {
-					float position = -1.0f + player_move_anim_comp->position;
+					int position = -1 + (int) player_move_anim_comp->position;
 					if (player_move_hist_comp->previous == N) {
 						t_vec2 player_anim_gl_pos = { grid->pos[0] - position, grid->pos[1] };
 						glmc_assign_vec2(pos, player_anim_gl_pos);
