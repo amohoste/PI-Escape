@@ -50,6 +50,11 @@ endif()
 # We will use these lists later.
 #
 
+file(GLOB benchmarks_SRC
+        "benchmarks/*.h"
+        "benchmarks/*.c"
+        )
+
 file(GLOB es_SRC
         "pi_escape/es/*.h"
         "pi_escape/es/*.c"
@@ -142,6 +147,7 @@ endif()
 
 set(GAME_PART1_SRC_FILES ${GAME_PART1_SRC_FILES} ${level_SRC})
 set(GAME_PART1_SRC_FILES ${GAME_PART1_SRC_FILES} ${es_SRC})
+set(GAME_PART1_SRC_FILES ${GAME_PART1_SRC_FILES} ${benchmarks_SRC})
 set(GAME_PART1_SRC_FILES ${GAME_PART1_SRC_FILES} ${es_system_SRC})
 set(GAME_PART1_SRC_FILES ${GAME_PART1_SRC_FILES} ${util_C_SRC})
 set(GAME_PART1_SRC_FILES ${GAME_PART1_SRC_FILES} ${graphics_SRC})
@@ -185,6 +191,7 @@ source_group("game\\sensor" FILES ${sensor_SRC})
 source_group("game\\imu" FILES ${imu_SRC})
 source_group("game\\level" FILES ${level_SRC})
 source_group("game\\es" FILES ${es_SRC})
+source_group("game\\benchmarks" FILES ${benchmarks_SRC})
 source_group("game\\es\\system" FILES ${es_system_SRC})
 source_group("util" FILES ${util_CPP_SRC} ${util_C_SRC} ${test_C_SRC})
 source_group("game\\graphics" FILES ${graphics_SRC})

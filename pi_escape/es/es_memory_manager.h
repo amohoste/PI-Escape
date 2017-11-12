@@ -45,6 +45,9 @@ typedef struct ESMemory {
     EntityId next_entity_id;
 
     AllComponent components[COMPONENT_ID_SIZE][MAX_ENTITIES];
+    EntityList **grid;
+
+    EntityList players;
 } ESMemory;
 
 void es_memory_manager_init(ESMemory*);

@@ -8,8 +8,10 @@ de camera niet te snel van positie verandert.
 #define CAMERA_SYSTEM_H
 #define EMPTY_SYSTEM_STRUCT char c
 
+#ifndef MAX
 #define MAX(a,b) (((a) > (b)) ? (a) : (b))
 #define MIN(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 
 // Converts degrees to radians.
 #define degreesToRadians(angleDegrees) (angleDegrees * M_PI / 180.0)

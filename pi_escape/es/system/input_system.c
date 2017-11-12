@@ -10,6 +10,8 @@
 
 #include "../game_util.h"
 
+#define SENSOR_CHANGE_SIZE 0.2;
+
 InputSystem* system_input_alloc() {
     InputSystem* res = calloc(1, sizeof(InputSystem));
     system_input_init(res);
@@ -65,21 +67,21 @@ static void handleKeyDown(InputSystem* system, Engine* engine, SDL_keysym *keysy
 	case SDLK_t: {
 		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
 			// lower temperature
-			(&engine->context)->temperature -= 1;
+			(&engine->context)->temperature -= SENSOR_CHANGE_SIZE;
 		} else if (keysym->mod & KMOD_CTRL) {
 			// increase temperature
-			(&engine->context)->temperature += 1;
+			(&engine->context)->temperature += SENSOR_CHANGE_SIZE;
 		}
 		break;
 	}
 	case SDLK_p: {
 		if ((keysym->mod & KMOD_CTRL) && (keysym->mod & KMOD_SHIFT)) {
 			// lower pressure
-			(&engine->context)->pressure -= 1;
+			(&engine->context)->pressure -= SENSOR_CHANGE_SIZE;
 		}
 		else if (keysym->mod & KMOD_CTRL) {
 			// increase pressure
-			(&engine->context)->pressure += 1;
+			(&engine->context)->pressure += SENSOR_CHANGE_SIZE;
 		}
 		break;
 	}

@@ -7,6 +7,7 @@ Haalt sensor data op via de functies gedeclareerd in de map
 
 #ifndef REAL_SENSORS_SYSTEM_H
 #define REAL_SENSORS_SYSTEM_H
+#ifdef RPI
 #define EMPTY_SYSTEM_STRUCT char c
 
 #include <stdint.h>
@@ -26,4 +27,5 @@ RealSensorsSystem* system_real_sensors_alloc();
 void system_real_sensors_update(RealSensorsSystem*, Engine*);
 void system_real_sensors_free(RealSensorsSystem*);
 
-#endif //REAL_SENSORS_SYSTEM_H
+#endif // RPI
+#endif // REAL_SENSORS_SYSTEM_H
