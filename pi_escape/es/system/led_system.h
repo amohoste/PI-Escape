@@ -1,3 +1,10 @@
+/***************************************************************
+- Led System -
+
+Zet de led verlichting aan indien nodig, met behulp van functies
+van de file ../../led/sense_led.h.
+****************************************************************/
+
 #ifndef LED_SYSTEM_H
 #define LED_SYSTEM_H
 #ifdef RPI
@@ -15,4 +22,4 @@ void system_led_update(LedSystem*, Engine*);
 void system_led_free(LedSystem*);
 
 #endif // RPI
-#endif //LED_SYSTEM_H
+#endif // LED_SYSTEM_H

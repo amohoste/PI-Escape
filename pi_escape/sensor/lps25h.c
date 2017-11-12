@@ -34,6 +34,7 @@ int lps25h_init(int frequentie)
 	if ((lps25h.filelps25h = i2c_init_adapter(ADDR)) == -1) {
 		return -1;
 	}
+
 	i2c_write_byte_data(lps25h.filelps25h, CTRL_REG1, CLEAN_START);
 
 	i2c_write_byte_data(lps25h.filelps25h, CTRL_REG1, START_VALUE | frequentie << 4);
@@ -43,8 +44,10 @@ int lps25h_init(int frequentie)
 		usleep(2500);
 		status = i2c_read_byte_data(lps25h.filelps25h, CTRL_REG4);
 	} while (status != 0);
+
 	lps25h.pressure = -9999;
 	lps25h.temp_C = -9999;
+
 	return 0;
 }
 
@@ -73,6 +76,7 @@ double lps25h_read_temperature()
 	if ((status == 0 || status == 1) && lps25h.temp_C != -9999) {
 		return lps25h.temp_C;
 	}
+
 	//ophalen van waarde
 	uint8_t temp_out_L = i2c_read_byte_data(lps25h.filelps25h, TEMP_OUT_L);
 	uint8_t temp_out_H = i2c_read_byte_data(lps25h.filelps25h, TEMP_OUT_H);
@@ -85,4 +89,4 @@ double lps25h_read_temperature()
 	return lps25h.temp_C;
 }
 
-#endif
+#endif // RPI

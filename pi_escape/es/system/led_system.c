@@ -1,7 +1,6 @@
 #ifdef RPI
 
 #include <stdlib.h>
-#include <stdio.h>
 #include "led_system.h"
 #include "../../led/sense_led.h"
 #include "../assemblage.h"
@@ -14,12 +13,12 @@ LedSystem *system_led_alloc() {
 }
 
 void system_led_init(LedSystem *system) {
-	//TODO
+	// Not used
 }
 
 
 void system_led_free(LedSystem *system) {
-	//TODO
+	// Not used
 }
 
 void system_led_update(LedSystem *system, Engine *engine) {
