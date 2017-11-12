@@ -215,10 +215,12 @@ int next_entity(EntityIterator *res) {
         }
         //all match, return it
         res->entity_id = entity_id;
+        componentlist_free(&list);
         return 1;
 
         next_entity_loop:;
     }
+    componentlist_free(&list);
     return 0;
 }
 
