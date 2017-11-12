@@ -24,9 +24,9 @@ int has_component(Engine *engine, EntityId entity_id, ComponentId component_id) 
     assert(component_id >= 0);
     assert(entity_id < MAX_ENTITIES);
     assert(entity_id >= 0);
-	#ifdef BENCHMARK
+	#ifdef BENCHMARK_FLAG
 		register_has_comp(entity_id, component_id);
-	#endif // BENCHMARK
+	#endif // BENCHMARK_FLAG
     return !engine->es_memory.components[component_id][entity_id].free;
 }
 
@@ -38,9 +38,9 @@ void *get_component(Engine *engine, EntityId entity_id, ComponentId component_id
     assert(entity_id >= 0);
     if (engine->es_memory.components[component_id][entity_id].free) return NULL;
     assert(!engine->es_memory.components[component_id][entity_id].free);
-	#ifdef BENCHMARK
+	#ifdef BENCHMARK_FLAG
 		register_get_comp(entity_id, component_id);
-	#endif // BENCHMARK
+	#endif // BENCHMARK_FLAG
     return &engine->es_memory.components[component_id][entity_id].camera_lookfrom;
 }
 
@@ -52,9 +52,9 @@ void *create_component(Engine *engine, EntityId entity_id, ComponentId component
     assert(component_id < COMPONENT_ID_SIZE);
     assert(engine->es_memory.components[component_id][entity_id].free);
     engine->es_memory.components[component_id][entity_id].free = 0;
-	#ifdef BENCHMARK
+	#ifdef BENCHMARK_FLAG
 		register_create_comp(entity_id, component_id);
-	#endif // BENCHMARK
+	#endif // BENCHMARK_FLAG
     return &engine->es_memory.components[component_id][entity_id].camera_lookfrom;
 }
 
@@ -65,9 +65,9 @@ void free_component(Engine *engine, EntityId entity_id, ComponentId component_id
     assert(component_id >= 0); 
     assert(component_id < COMPONENT_ID_SIZE);
     assert(!engine->es_memory.components[component_id][entity_id].free);
-	#ifdef BENCHMARK
+	#ifdef BENCHMARK_FLAG
 		register_free_comp(entity_id, component_id);
-	#endif // BENCHMARK
+	#endif // BENCHMARK_FLAG
     engine->es_memory.components[component_id][entity_id].free = 1;
 }
 
@@ -75,8 +75,8 @@ EntityId get_new_entity_id(Engine *engine) {
     if (engine->es_memory.next_entity_id == MAX_ENTITIES) {
         fatal("Fatal error: Maximum number of entities used: %u", MAX_ENTITIES);
     }
-	#ifdef BENCHMARK
+	#ifdef BENCHMARK_FLAG
 		register_get_ent_id();
-	#endif // BENCHMARK
+	#endif // BENCHMARK_FLAG
     return engine->es_memory.next_entity_id++;
 }
