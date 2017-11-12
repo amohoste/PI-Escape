@@ -25,5 +25,8 @@ void game_load_level(Game *g, Level *l) {
 
 void clear_level(Game *g) {
     es_memory_manager_free(&g->engine.es_memory);
+	#ifdef BENCHMARK
+		register_new_level();
+	#endif // BENCHMARK
     es_memory_manager_init(&g->engine.es_memory);
 }

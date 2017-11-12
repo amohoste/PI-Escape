@@ -19,6 +19,9 @@
 #include <SDL_timer.h>
 
 int main() {
+	#ifdef BENCHMARK_FLAG
+		clear_file("benchmarks.txt");
+	#endif // BENCMARK_FLAG
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
@@ -74,7 +77,6 @@ int main() {
             float fps = 1.0f / time_ms_per_update * 1000.0f;
             pi_escape_2->engine.context.fps = fps;
             printf("This second: %f updates. Average time per update: %f ms.\n", fps, time_ms_per_update);
-
             last_print_time_ms = cur_time_ms;
             update_count = 0;
         }
