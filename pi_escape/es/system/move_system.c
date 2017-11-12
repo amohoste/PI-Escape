@@ -134,8 +134,8 @@ int isBlocking(MoveSystem* system, Engine* engine, int x, int y) {
 	int blocking = 0;
 
 	EntityListIterator eli;
-	uint32_t mask = (uint32_t)(1 << COMP_BLOCKING);
-	start_search_in_list(0, 3, engine, &eli, mask);
+	start_search_in_list(0, 3, engine, &eli);
+	add_component_constraint(&eli,1, COMP_BLOCKING);
 	while (blocking == 0 && next_in_list_mask(&eli)) {
 		EntityId entity = (&eli)->entity_id;
 		if (has_component(engine, entity, COMP_BLOCKING)) blocking = 1;
