@@ -67,8 +67,8 @@ char *create_level_name(int new_level_number) {
     int number = new_level_number <= 7 ? new_level_number : new_level_number - 7;
     int extra = (int) (new_level_number >= 7 ? strlen("game") : strlen("tutorial"));
     level_name = malloc(strlen("pi_escape/level/level_files/") + extra + 1 + strlen(".lvl") + 1);
-    level_name[0] = '\0';
 	if (level_name != 0) {
+		level_name[0] = '\0';
 		strcat(level_name, "pi_escape/level/level_files/");
 		strcat(level_name, new_level_number > 7 ? "game" : "tutorial");
 		//48 extra optellen zodat levelnaam correct is

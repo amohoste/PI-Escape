@@ -250,7 +250,7 @@ void entitylist_remove(EntityList *dest, EntityId entityId) {
     for (int i = 0; i < dest->count; ++i) {
         if (dest->entity_ids[i] == entityId) {
             dest->entity_ids[i] = dest->entity_ids[dest->count - 1];
-            dest->entity_ids[dest->count - 1] = NULL;
+            dest->entity_ids[dest->count - 1] = 0;
         }
     }
     dest->count--;
