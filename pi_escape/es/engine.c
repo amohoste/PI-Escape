@@ -6,28 +6,29 @@
 #include <SDL_timer.h>
 
 
-Engine* engine_alloc(Graphics* graphics) {
-	Engine* res = calloc(1, sizeof(Engine));
-	engine_init(res, graphics);
-	return res;
+Engine* engine_alloc(Graphics* graphics, int benchmarking) {
+    Engine* res = calloc(1, sizeof(Engine));
+    engine_init(res, graphics, benchmarking);
+    return res;
 }
-void engine_init(Engine* engine, Graphics* graphics) {
-	context_init(&engine->context);
-	assert(!engine->context.is_exit_game);
-
-	es_memory_manager_init(&engine->es_memory);
-
-	engine->render_system = system_render_alloc(graphics);
-	engine->input_system = system_input_alloc();
-	engine->lock_system = system_lock_alloc();
-	engine->action_system = system_action_alloc();
-	engine->activation_system = system_activation_alloc();
-	engine->animation_system = system_animation_alloc();
-	engine->camera_system = system_camera_alloc();
-	engine->container_system = system_container_alloc();
-	engine->end_system = system_endlevel_alloc();
-	engine->move_system = system_move_alloc();
-	engine->process_sensor_system = system_process_sensor_alloc();
+void engine_init(Engine* engine, Graphics* graphics, int benchmarking) {
+    context_init(&engine->context);
+	engine->context.benchmarking = benchmarking;
+    assert(!engine->context.is_exit_game);
+    
+    es_memory_manager_init(&engine->es_memory);
+    
+    engine->render_system = system_render_alloc(graphics);
+    engine->input_system = system_input_alloc();
+    engine->lock_system = system_lock_alloc();
+    engine->action_system = system_action_alloc();
+    engine->activation_system = system_activation_alloc();
+    engine->animation_system = system_animation_alloc();
+    engine->camera_system = system_camera_alloc();
+    engine->container_system = system_container_alloc();
+    engine->end_system = system_endlevel_alloc();
+    engine->move_system = system_move_alloc();
+    engine->process_sensor_system = system_process_sensor_alloc();
 #ifdef RPI
 	printf("RPI\n");
 	engine->real_sensors_system = system_real_sensors_alloc();

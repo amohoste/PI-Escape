@@ -2,14 +2,14 @@
 
 #include <stdlib.h>
 
-void game_init(Game *game, Graphics *graphics) {
+void game_init(Game *game, Graphics *graphics, int benchmarking) {
     game->graphics = graphics;
-    engine_init(&game->engine, graphics);
+    engine_init(&game->engine, graphics, benchmarking);
 }
 
-Game *game_alloc(Graphics *graphics) {
+Game *game_alloc(Graphics *graphics, int benchmarking) {
     Game *res = malloc(sizeof(Game));
-    game_init(res, graphics);
+    game_init(res, graphics, benchmarking);
     return res;
 }
 

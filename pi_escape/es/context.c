@@ -27,6 +27,7 @@ void context_init(Context* c) {
     c->has =0;
     c->free =0;
     c->create =0;
+	c->benchmarking = 0;
 }
 
 Context* context_alloc() {
