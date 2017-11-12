@@ -187,7 +187,7 @@ void system_render_update(RenderSystem* system, Engine* engine) {
                 break;
             }
             case ART_END: {
-                float exit_anim_pos = 0.0f; //TODO
+                float exit_anim_pos = 0.0f;
     
                 gl_floor_draw_color(&system->floor, grid->pos, 0, EXIT_TOUCH, exit_anim_pos, floor_color);
                 
@@ -214,7 +214,6 @@ void system_render_update(RenderSystem* system, Engine* engine) {
 				} else {
 					glmc_assign_vec2_from_ivec2(pos, grid->pos);
 				}
-				printf("(%f,%f,%f)\n", player_gl_pos[0], player_gl_pos[1], player_gl_pos[2]);
                 gl_player_draw(&system->player, time, pos);
                 break;
             }
