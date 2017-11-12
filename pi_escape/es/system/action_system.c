@@ -55,8 +55,12 @@ void system_action_update(ActionSystem* system, Engine* engine) {
 					if (!next_in_list_mask(&door_it)) {
 						free_component(engine, itemaction_entity_id, COMP_INCONTAINER);
 					}
+					// Listiterator free
+					free_entity_list_iterator(&door_it);
 				}
 			}
+			// Listiterator free
+			free_entity_list_iterator(&key_it);
 
 		}
 		else if (!player_input->actkey && system->prevAct == 1) {
