@@ -1,5 +1,5 @@
 #define __STDC_FORMAT_MACROS
-
+#define RUNNING
 #include <inttypes.h>
 #include <stdio.h>
 
@@ -16,9 +16,9 @@
 #include <SDL_timer.h>
 
 int main() {
-	#ifdef BENCHMARK_FLAG
+	#ifdef BENCHMARK
 		clear_file("benchmarks.txt");
-	#endif // BENCMARK_FLAG
+	#endif // BENCMARK
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
@@ -29,6 +29,10 @@ int main() {
 
     //initialise context, engine and assemblage, and add systems
     Game *pi_escape_2 = game_alloc(graphics);
+
+	#ifdef BENCHMARK
+		pi_escape_2->engine.context.benchmarking = 1;
+	#endif // BENCHMARK
 
     //een level inladen kan je doen door gewoon op te  geven het hoeveelste level het is -> beginnend vanaf 1
     //vanaf level 7 worden de echte games geladen en niet de tutorials

@@ -8,7 +8,6 @@
 #undef main //Weird bug on windows where SDL overwrite main definition
 
 int main(int argc, char **argv){
-	#undef BENCHMARK
     // Get specified file
 	if (argc < 2) { 
 		printf("No file specified. Press enter to quit.\n");

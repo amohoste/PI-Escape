@@ -12,6 +12,7 @@ void context_init(Context* c) {
 	c->temperature = 0;
 	c->pressure = 0;
 	c->humidity = 0;
+	c->benchmarking = 0;
 }
 
 Context* context_alloc() {
