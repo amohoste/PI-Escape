@@ -57,8 +57,8 @@ typedef struct Engine {
     ESMemory es_memory;
 } Engine;
 
-Engine* engine_alloc(Graphics*);
-void engine_init(Engine*, Graphics*);
+Engine* engine_alloc(Graphics*, int);
+void engine_init(Engine*, Graphics*, int);
 void engine_free(Engine*);
 
 void engine_update(Engine*);

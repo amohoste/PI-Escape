@@ -6,13 +6,14 @@
 #include <SDL_timer.h>
 
 
-Engine* engine_alloc(Graphics* graphics) {
+Engine* engine_alloc(Graphics* graphics, int benchmarking) {
     Engine* res = calloc(1, sizeof(Engine));
-    engine_init(res, graphics);
+    engine_init(res, graphics, benchmarking);
     return res;
 }
-void engine_init(Engine* engine, Graphics* graphics) {
+void engine_init(Engine* engine, Graphics* graphics, int benchmarking) {
     context_init(&engine->context);
+	engine->context.benchmarking = benchmarking;
     assert(!engine->context.is_exit_game);
     
     es_memory_manager_init(&engine->es_memory);
