@@ -140,6 +140,9 @@ int isBlocking(MoveSystem* system, Engine* engine, int x, int y) {
 		EntityId entity = (&eli)->entity_id;
 		if (has_component(engine, entity, COMP_BLOCKING)) blocking = 1;
 	}
+	// Listiterator free
+	free_entity_list_iterator(&eli);
+
 	return blocking;
 }
 
@@ -156,6 +159,9 @@ int isDoor(MoveSystem* system, Engine* engine, int x, int y) {
 	start_search_in_list(x, y, engine, &eli);
 	add_component_constraint(&eli, 1, COMP_BLOCKING);
 	while (isDoor == 0 && next_in_list_mask(&eli)) if (has_component(engine, (&eli)->entity_id, COMP_ACTIVATABLE)) isDoor = 1;
+
+	// Listiterator free
+	free_entity_list_iterator(&eli);
 
 	return isDoor;
 }
@@ -176,6 +182,8 @@ int doorIsClosed(MoveSystem* system, Engine* engine, int x, int y) {
 		ActivatableComponent* actcomp = get_component(engine, (&eli)->entity_id, COMP_ACTIVATABLE);
 		if (actcomp->active == 0) isClosed = 1;
 	}
+	// Listiterator free
+	free_entity_list_iterator(&eli);
 
 	return isClosed;
 }

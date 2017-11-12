@@ -219,6 +219,6 @@ void system_activation_update(ActivationSystem* system, Engine* engine) {
 		system->step -= 1;
 	}
 	else {
-		system->step = engine->context.fps / 30;
+		system->step = (int) engine->context.fps / 30;
 	}
 }

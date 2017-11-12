@@ -57,6 +57,10 @@ void system_lock_update(LockSystem* system, Engine* engine) {
 
 		ActivatableComponent* activatable = get_component(engine, lock_entity_id, COMP_ACTIVATABLE);
 		activatable->active = active;
+
+		// Listiterator free
+		free_entity_list_iterator(&key_it);
 	}
+	
 
 }
