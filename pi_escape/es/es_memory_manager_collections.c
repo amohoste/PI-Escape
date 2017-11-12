@@ -7,6 +7,9 @@
 
 static int get_requires_component(uint32_t component_id_filter, ComponentId component_id);
 
+void free_entity_list_iterator(EntityListIterator *eli) {
+   entitylist_free(eli->entity_list);
+}
 
 void start_search_in_list(int x, int y, Engine *engine, EntityListIterator *eli) {
     eli->entity_list = &engine->es_memory.grid[x][y];
@@ -55,7 +58,7 @@ int next_in_list_mask(EntityListIterator *eli) {
 
     for (int index = eli->entity_id_index + 1; index < eli->entity_list->count; index++) {
         if (eli->component_id_filter != 0) {
-            for (int component_id =  0; component_id < list.count; component_id++) {
+            for (int component_id = 0; component_id < list.count; component_id++) {
                 if (eli->engine->es_memory.components[list.component_ids[component_id]][eli->entity_list->entity_ids[index]].free) {
                     //no match. Try the next entity
                     goto next_entity_loop;
