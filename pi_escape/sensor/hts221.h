@@ -4,7 +4,6 @@
 
 #include <stdint.h>
 
-
 /*
 	Initializeert een i2c adapter(0x5f)
 	Initializeert calibratievariable
@@ -26,7 +25,6 @@ double hts221_read_humidity();
 */
 double hts221_read_temperature();
 
-
 typedef struct Hts221 {
 	int filehts221;
 	double temp_C;
@@ -44,10 +42,5 @@ typedef struct Hts221 {
 	uint8_t t1_t0_msb;
 } Hts221;
 
-
-/*
-	Een switch die de globale variable voor frequentie instelt
-	@param frequentie in hexadecimaal
-*/
-#endif /* HTS221 */
-#endif
+#endif //RPI
+#endif //HTS221

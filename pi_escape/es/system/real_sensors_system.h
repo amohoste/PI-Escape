@@ -27,5 +27,5 @@ RealSensorsSystem* system_real_sensors_alloc();
 void system_real_sensors_update(RealSensorsSystem*, Engine*);
 void system_real_sensors_free(RealSensorsSystem*);
 
-#endif
-#endif //REAL_SENSORS_SYSTEM_H
+#endif // RPI
+#endif // REAL_SENSORS_SYSTEM_H

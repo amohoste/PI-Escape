@@ -4,7 +4,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <math.h>
-#include <assert.h>
 
 #define PI 3.14159265359
 
@@ -15,14 +14,13 @@ ProcessSensorSystem* system_process_sensor_alloc() {
 }
 
 void system_process_sensor_init(ProcessSensorSystem* system) {
-	system->humidity = 0;
-	system->pressure = 0;
-	system->temperature = 0;
+	system->humidity = 0.5f;
+	system->pressure = 0.5f;
+	system->temperature = 0.5f;
 }
 
 void system_process_sensor_free(ProcessSensorSystem* system) {
-    //TODO
-    
+    // Not used
 }
 
 void system_process_sensor_update(ProcessSensorSystem* system, Engine* engine) {

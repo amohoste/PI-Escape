@@ -1,7 +1,10 @@
-/***************************************************************
+/******************************************************************
 - Process Sensor System -
 
-****************************************************************/
+Bepaalt aan de hand van de velden in context de kleuren voor de 
+achtergrond, de muren en de vloeren, deze velden worden ingevult  
+door real sensor system(in het geval RPI) ander door input system.
+******************************************************************/
 
 #ifndef PROCESS_SENSOR_SYSTEM_H
 #define PROCESS_SENSOR_SYSTEM_H
