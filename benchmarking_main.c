@@ -5,6 +5,8 @@
 #include "pi_escape/level/levelloader.h"
 #include "pi_escape/es/game.h"
 
+#include <time.h>
+
 #undef main //Weird bug on windows where SDL overwrite main definition
 
 int main(int argc, char **argv){
