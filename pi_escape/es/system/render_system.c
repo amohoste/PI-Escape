@@ -86,46 +86,68 @@ GameColor convert_key_color(ItemColor itemColor) {
 }
 
 void system_render_update(RenderSystem* system, Engine* engine) {
-    set_camera(system, engine);
-    
-    uint64_t time = engine->context.time;
+	set_camera(system, engine);
 
-    system->graphics->background_color[0] = 0.0f;
-    system->graphics->background_color[1] = 0.0f;
-    system->graphics->background_color[2] = 0.25f;
+	uint64_t time = engine->context.time;
 
-    t_vec4 wall_color;
-    wall_color[0] = 1.0f;
-    wall_color[1] = 0.0f;
-    wall_color[2] = 0.0f;
-    wall_color[3] = 1.0f;
+	system->graphics->background_color[0] = engine->context.world_color[0];
+	system->graphics->background_color[1] = engine->context.world_color[1];
+	system->graphics->background_color[2] = engine->context.world_color[2];
 
-    t_vec4 floor_color;
-    floor_color[0] = 1.0f;
-    floor_color[1] = 0.0f;
-    floor_color[2] = 0.0f;
-    floor_color[3] = 1.0f;
+	t_vec4 wall_color;
+	wall_color[0] = engine->context.wall_color[0];
+	wall_color[1] = engine->context.wall_color[1];
+	wall_color[2] = engine->context.wall_color[2];
+	wall_color[3] = engine->context.wall_color[3];
+
+	t_vec4 floor_color;
+	floor_color[0] = engine->context.floor_color[0];
+	floor_color[1] = engine->context.floor_color[1];
+	floor_color[2] = engine->context.floor_color[2];
+	floor_color[3] = engine->context.floor_color[3];
 
 
-    EntityIterator player_it;
-    search_entity_2(engine, COMP_GRIDLOCATION, COMP_INPUTRECEIVER, &player_it);
-    next_entity(&player_it);
-    EntityId player_entity_id = player_it.entity_id;
-    assert(player_entity_id != NO_ENTITY);
-    
-    t_ivec2 player_grid_pos;
-    t_vec3 player_gl_pos;
-    GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
-    glmc_assign_ivec2(player_grid_pos, player_grid_comp->pos);
-    
-    level_pos_to_world_pos2i(player_grid_pos, player_gl_pos);
+	EntityIterator player_it;
+	search_entity_2(engine, COMP_GRIDLOCATION, COMP_INPUTRECEIVER, &player_it);
+	next_entity(&player_it);
+	EntityId player_entity_id = player_it.entity_id;
+	assert(player_entity_id != NO_ENTITY);
 
-    float lightPower = 21.0f + (10.0f * sinf((M_PI_F / 2000.0f) * time));
-    t_vec3 light_gl_pos = { 2.0f, 2.0f, 1.0f };
-    if (player_grid_comp != NULL) {
-        glmc_assign_vec3(light_gl_pos, player_gl_pos);
+	t_ivec2 player_grid_pos;
+	t_vec3 player_gl_pos;
+	GridLocationComponent* player_grid_comp = get_component(engine, player_entity_id, COMP_GRIDLOCATION);
+	MoveAnimationComponent* player_move_anim_comp = get_component(engine, player_entity_id, COMP_MOVE_ANIMATION);
+	MoveHistoryComponent* player_move_hist_comp = get_component(engine, player_entity_id, COMP_MOVE_HISTORY);
+	glmc_assign_ivec2(player_grid_pos, player_grid_comp->pos);
+
+	level_pos_to_world_pos2i(player_grid_pos, player_gl_pos);
+
+	float lightPower = 21.0f + (10.0f * sinf((M_PI_F / 2000.0f) * time));
+	t_vec3 light_gl_pos = { 2.0f, 2.0f, 1.0f };
+	if (player_grid_comp != NULL) {
+		float position;
+		if (player_move_anim_comp != NULL) position = -1 + player_move_anim_comp->position;	// -1 to correct for previous position of player 
+		// If move animation is present and moving north
+		if (player_move_anim_comp != NULL && player_move_hist_comp->previous == N) {
+			t_vec3 player_anim_gl_pos = { player_gl_pos[0] - position , player_gl_pos[1], player_gl_pos[2] };
+			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+		// If move animation is present and moving south
+		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == S ) {
+			t_vec3 player_anim_gl_pos = { player_gl_pos[0] + position, player_gl_pos[1], player_gl_pos[2] };
+			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+		// If move animation is present and moving west
+		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == W) {
+			t_vec3 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[1], player_gl_pos[2] + position };
+			glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+		// If move animation is present and moving east
+		} else if (player_move_anim_comp != NULL && player_move_hist_comp->previous == E) {
+		t_vec3 player_anim_gl_pos = { player_gl_pos[0], player_gl_pos[1], player_gl_pos[2] - position };
+		glmc_assign_vec3(light_gl_pos, player_anim_gl_pos);
+		// else
+		} else {
+			glmc_assign_vec3(light_gl_pos, player_gl_pos);
+		}
     }
-    
     graphics_begin_draw_withlight(system->graphics, lightPower, light_gl_pos);
     
     EntityIterator draw_it;
@@ -165,15 +187,33 @@ void system_render_update(RenderSystem* system, Engine* engine) {
                 break;
             }
             case ART_END: {
-                float exit_anim_pos = 0.0f; //TODO
+                float exit_anim_pos = 0.0f;
     
                 gl_floor_draw_color(&system->floor, grid->pos, 0, EXIT_TOUCH, exit_anim_pos, floor_color);
                 
                 break;
             }
             case ART_PLAYER: {
-                t_vec2 pos;
-                glmc_assign_vec2_from_ivec2(pos, grid->pos);
+				t_vec2 pos;
+
+				if (player_move_anim_comp != NULL) {
+					float position = -1 + player_move_anim_comp->position;
+					if (player_move_hist_comp->previous == N) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0] - position, grid->pos[1] };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					} else if (player_move_hist_comp->previous == S) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0] + position, grid->pos[1] };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					} else if (player_move_hist_comp->previous == W) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0], grid->pos[1] - position };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					} else if (player_move_hist_comp->previous == E) {
+						t_vec2 player_anim_gl_pos = { grid->pos[0], grid->pos[1] + position };
+						glmc_assign_vec2(pos, player_anim_gl_pos);
+					}
+				} else {
+					glmc_assign_vec2_from_ivec2(pos, grid->pos);
+				}
                 gl_player_draw(&system->player, time, pos);
                 break;
             }

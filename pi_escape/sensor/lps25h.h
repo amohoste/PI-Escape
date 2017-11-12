@@ -1,9 +1,8 @@
 #ifndef LPS25H
-//#ifdef RPI
 #define LPS25H
+#ifdef RPI
 
 #include <stdint.h>
-
 
 /*
 	Initializeert een i2c adapter(0x5c)
@@ -28,10 +27,11 @@ double lps25h_read_pressure();
 */
 double lps25h_read_temperature();
 
+typedef struct Lps25h {
+	int filelps25h;
+	double temp_C;
+	double pressure;
+} Lps25h;
 
-/*
-	Een switch die de globale variable voor frequentie instelt
-	@param frequentie in hexadecimaal
-*/
-#endif /* LPS25H */
-//#endif
+#endif //RPI
+#endif //LPS25H

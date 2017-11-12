@@ -24,7 +24,6 @@ void system_lock_free(LockSystem* system) {
 
 void system_lock_update(LockSystem* system, Engine* engine) {
     // Alle sloten opzoeken
-	
 	EntityIterator lock_it;
 	search_entity_1(engine, COMP_LOCK, &lock_it);
 	while (next_entity(&lock_it)) {
@@ -37,27 +36,25 @@ void system_lock_update(LockSystem* system, Engine* engine) {
 		LockComponent *lock = get_component(engine, lock_entity_id, COMP_LOCK);
 		ItemColor requiredKeyColor = lock->requiredKeyColor;
 
-		// Over alle sleutels lopen en als locatie gelijk is lock activeren
-		EntityIterator key_it;
-		search_entity_1(engine, COMP_ITEM, &key_it);
-		while (next_entity(&key_it)) {
+		EntityListIterator key_it;
+		start_search_in_list(x, y, engine, &key_it);
+		add_component_constraint(&key_it, 1, COMP_ITEM);
+
+		while (next_in_list_mask(&key_it)) {
 			EntityId key_entity_id = key_it.entity_id;
 			assert(key_entity_id != NO_ENTITY);
-
-			GridLocationComponent* keygrid = get_component(engine, key_entity_id, COMP_GRIDLOCATION);
-			int x1 = keygrid->pos[0];
-			int y1 = keygrid->pos[1];
 
 			ItemComponent *item = get_component(engine, key_entity_id, COMP_ITEM);
 			ItemColor color = item->color;
 
-			if ((x == x1 && y == y1 && (requiredKeyColor == color || color == O || requiredKeyColor == O))) {
+			if (requiredKeyColor == color || color == O || requiredKeyColor == O) {
 				if (!has_component(engine, key_entity_id, COMP_INCONTAINER)) {
 					active = 1;
 				}
-				
+
 			}
 		}
+
 		ActivatableComponent* activatable = get_component(engine, lock_entity_id, COMP_ACTIVATABLE);
 		activatable->active = active;
 	}

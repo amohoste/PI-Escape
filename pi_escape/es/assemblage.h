@@ -49,6 +49,8 @@ EntityId create_exit_entity(Engine *engine, int x, int y);
 
 void create_wall(Engine *engine, int x, int y, Direction direction);
 
+void create_level_entities(Level* l, Engine * engine);
+
 // Functies om de connectioncomponenten te initialiseren
 void create_all_verbinding_entities(Level *l, Engine *engine, EntityId **entityList);
 void create_connections(Level *l, Engine *engine, int x, int y, EntityId **entityList, int logic);

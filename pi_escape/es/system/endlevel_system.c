@@ -22,27 +22,16 @@ void system_endlevel_free(EndLevelSystem *system) {
 }
 
 void system_endlevel_update(EndLevelSystem *system, Engine *engine) {
-    EntityIterator moveaction_it;
-    EntityId speler_id;
-    search_entity_1(engine, COMP_MOVE_ACTION, &moveaction_it);
-    while (next_entity(&moveaction_it)) {
-        speler_id = moveaction_it.entity_id;
+
+    for (int i = 0; i < engine->es_memory.players.count; ++i) {
+        EntityId speler_id = engine->es_memory.players.entity_ids[i];
+        GridLocationComponent *speler_grid = get_component(engine, speler_id, COMP_GRIDLOCATION);
+
+        EntityId exit_id = search_first_entity_1(engine, COMP_EXIT);
+        GridLocationComponent *exit_grid = get_component(engine, exit_id, COMP_GRIDLOCATION);
+
+        if (speler_grid->pos[0] == exit_grid->pos[0] && speler_grid->pos[1] == exit_grid->pos[1]) {
+            engine->context.level_ended = 1;
+        }
     }
-
-    // Gridlocationcomponent van deze entity opvragen
-    GridLocationComponent *speler_grid = get_component(engine, speler_id, COMP_GRIDLOCATION);
-
-    EntityIterator exit_it;
-    EntityId exit_id;
-    search_entity_1(engine, COMP_EXIT, &exit_it);
-    while (next_entity(&exit_it)) {
-        exit_id = exit_it.entity_id;
-    }
-
-    GridLocationComponent *exit_grid = get_component(engine, exit_id, COMP_GRIDLOCATION);
-
-    if (speler_grid->pos[0] == exit_grid->pos[0] && speler_grid->pos[1] == exit_grid->pos[1]) {
-        engine->context.level_ended = 1;
-    }
-
 }

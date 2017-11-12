@@ -25,9 +25,9 @@ void system_camera_update(CameraSystem* system, Engine* engine) {
 	CameraLookFromComponent* cameraLookFrom = search_first_component(engine, COMP_CAMERA_LOOK_FROM);
 	CameraLookAtComponent* cameraLookAt = search_first_component(engine, COMP_CAMERA_LOOK_AT);
 
-	// Entity zoeken die CameraLookatComponent en GridLocationComponent bevat
+	// Entity zoeken die CameraLookatComponent bevat
 	EntityIterator lookat_it;
-	search_entity_2(engine, COMP_GRIDLOCATION, COMP_CAMERA_LOOK_AT, &lookat_it);
+	search_entity_1(engine, COMP_CAMERA_LOOK_AT, &lookat_it);
 	next_entity(&lookat_it);
 	EntityId lookat_entity_id = lookat_it.entity_id;
 	assert(lookat_entity_id != NO_ENTITY);
