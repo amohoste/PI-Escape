@@ -4,12 +4,22 @@
 #include "../graphics/opengl_game_renderer.h"
 
 #include <vector>
+#include <map>
 #include <string>
+#include <cstdlib>
+#include <iostream>
+#include <fstream>
 
 //for format of .fnt file, see http://www.angelcode.com/products/bmfont/doc/file_format.html
 
 class GlyphDrawCommand {
 private:
+	const int pos_ltop_x;
+	const int pos_ltop_y;
+	const int glyph_x;
+	const int glyph_y;
+	const int glyph_w;
+	const int glyph_h;
     const t_vec4& color;
 public:
     /**
@@ -36,6 +46,12 @@ public:
     GlyphDrawCommand changeAlpha(float a) const;
 
     const t_vec4& getColor() const;
+	const int getPos_ltop_x() const;
+	const int getPos_ltop_y() const;
+	const int getGlyph_x() const;
+	const int getGlyph_y() const;
+	const int getGlyph_w() const;
+	const int getGlyph_h() const;
     //TODO extend this class where needed
 };
 
