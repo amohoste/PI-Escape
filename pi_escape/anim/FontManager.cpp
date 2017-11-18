@@ -9,36 +9,38 @@ GlyphDrawCommand GlyphDrawCommand::changeColor(float r, float g, float b) const 
     t_vec4 col;
 	glmc_vec4_set(col, r, g, b, color[3]);
 
-    return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col);
+    return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance);
 }
 
 GlyphDrawCommand GlyphDrawCommand::changeAlpha(float a) const {
 	t_vec4 col;
 	glmc_vec4_set(col, color[0], color[1], color[2], a);
 
-	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col);
+	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance);
 }
 
 GlyphDrawCommand GlyphDrawCommand::move(int x_offset, int y_offset) const {
-	return GlyphDrawCommand(pos_ltop_x + x_offset, pos_ltop_y + y_offset, glyph_x, glyph_y, glyph_w, glyph_h, color);
+	return GlyphDrawCommand(pos_ltop_x + x_offset, pos_ltop_y + y_offset, glyph_x, glyph_y, glyph_w, glyph_h, color, xoffset, yoffset, xadvance);
 }
 
 GlyphDrawCommand  GlyphDrawCommand::changeColor(const t_vec4& newColor) const {
-	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, newColor);
+	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, newColor, xoffset, yoffset, xadvance);
 }
 
 GlyphDrawCommand  GlyphDrawCommand::changeColor(float r, float g, float b, float a) const {
 	t_vec4 col;
 	glmc_vec4_set(col, r, g, b,a);
 
-	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col);
+	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance);
 }
 
 GlyphDrawCommand::GlyphDrawCommand(const int pos_ltop_x, const int pos_ltop_y, const int glyph_x, const int glyph_y,
-                                   const int glyph_w, const int glyph_h, const t_vec4 &color) : pos_ltop_x(pos_ltop_x), pos_ltop_y(pos_ltop_y), glyph_x(glyph_x), glyph_y(glyph_y), glyph_w(glyph_w), glyph_h(glyph_h), color(color) {
+                                   const int glyph_w, const int glyph_h, const t_vec4 &color, const int xoffset, const int yoffset, const int xadvance) :pos_ltop_x(pos_ltop_x), 
+								   pos_ltop_y(pos_ltop_y), glyph_x(glyph_x), glyph_y(glyph_y), glyph_w(glyph_w), glyph_h(glyph_h), color(color), xoffset(xoffset), yoffset(yoffset), xadvance(xadvance) {
 }
 
-GlyphDrawCommand::GlyphDrawCommand(const GlyphDrawCommand &orig) : pos_ltop_x(orig.pos_ltop_x), pos_ltop_y(orig.pos_ltop_y), glyph_x(orig.glyph_x), glyph_y(orig.glyph_y), glyph_w(orig.glyph_w), glyph_h(orig.glyph_h), color(orig.color) {
+GlyphDrawCommand::GlyphDrawCommand(const GlyphDrawCommand &orig) : pos_ltop_x(orig.pos_ltop_x), pos_ltop_y(orig.pos_ltop_y), glyph_x(orig.glyph_x), glyph_y(orig.glyph_y), glyph_w(orig.glyph_w),
+																   glyph_h(orig.glyph_h), color(orig.color), xoffset(orig.xoffset), yoffset(orig.yoffset), xadvance(orig.xadvance) {
 }
 
 const t_vec4 &GlyphDrawCommand::getColor() const {
@@ -69,25 +71,112 @@ const int GlyphDrawCommand::getGlyph_h() const {
 	return glyph_h;
 }
 
+GlyphDrawCommand GlyphDrawCommand::duplicate() const {
+	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, color, xoffset, yoffset, xadvance);
+}
+
+
+
+
 /*
 * FontManager code
 */
+FontManager::FontManager(Graphics * graphics) {
+
+}
+
 void FontManager::loadFont(const std::string& fontName, const std::string& fontImageFilename, const std::string& fontMetaFilename) {
 	
 	map<char, GlyphDrawCommand> charInfo;
 
 	string l;
+	string path = "pi_escape/graphics/" + fontMetaFilename;
+	ifstream in(path);
+	std::string::size_type sz; // alias voor size_t
 
-	ifstream in("pi_escape/graphics/" + fontMetaFilename);
 	while (!in.eof()) {
-		string s;
-		if (getline(in, s, ' ')) {
+		string line;
+		getline(in, line);
 
-			if (s == "char") {
+		stringstream data(line);
+		string item;
+
+		if (getline(data, item, ' ')) {
+
+			// Kijken of lijn begint met char
+			if (item == "char") {
+
+				// Nodige dingen
+				char karakter;
+				const int pos_ltop_x = 0;
+				const int pos_ltop_y = 0;
+				int glyph_x;
+				int glyph_y;
+				int glyph_w;
+				int glyph_h;
+				int xoffset;
+				int yoffset;
+				int xadvance;
+				t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+				// Waarden inlezen
+				while (getline(data, item, ' ')) {
+
+					size_t pos = item.find("=");
+
+					string var = item.substr(0, pos);
+					string value = item.substr(pos + 1);    
+					int iValue = std::stoi(value, &sz);
+
+					if (var == "id") {
+						karakter = static_cast<char>(iValue);
+					}
+					else if (var == "x") {
+						glyph_x = iValue;
+					}
+					else if (var == "y") {
+						glyph_y = iValue;
+					}
+					else if (var == "width") {
+						glyph_w = iValue;
+					}
+					else if (var == "height") {
+						glyph_h = iValue;
+					}
+					else if (var == "xoffset") {
+						xoffset = iValue;
+					}
+					else if (var == "yoffset") {
+						yoffset = iValue;
+					}
+					else if (var == "xadvance") {
+						xadvance = iValue;
+					}
+					
+				}
+				
+				// Karakter toevoegen aan map met overeenkomstige glyphdrawcommand
+				pair<char, GlyphDrawCommand> tmp(karakter, GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance));
+				charInfo.insert(tmp);
 
 			}
 
 		}
 	}
-	in.close();
+	in.close();
+	charMap = charInfo;
+}
+
+vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, int y) const {
+	
+	vector<GlyphDrawCommand> result;
+
+	for (int i = 0; i < text.length(); i++) {
+		char c = text[i];
+		map<char, GlyphDrawCommand>::const_iterator it = charMap.find(c);
+		if (it != charMap.end()) {
+			result.push_back((it->second).duplicate());
+		}
+	}
+	return result;
 }

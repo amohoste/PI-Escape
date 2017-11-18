@@ -9,6 +9,11 @@
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
+#include <sstream>
+#include <algorithm>
+#include <iterator>
+
+using namespace std;
 
 //for format of .fnt file, see http://www.angelcode.com/products/bmfont/doc/file_format.html
 
@@ -20,6 +25,9 @@ private:
 	const int glyph_y;
 	const int glyph_w;
 	const int glyph_h;
+	const int xoffset;
+	const int yoffset;
+	const int xadvance;
     const t_vec4& color;
 public:
     /**
@@ -33,9 +41,10 @@ public:
      * @param color The color the glyph should have. Note that this includes the alpha (1.0f = opaque, 0.0f = transparent)
      */
     GlyphDrawCommand(const int pos_ltop_x, const int pos_ltop_y,
-                     const int glyph_x, const int glyph_y,
+					 const int glyph_x, const int glyph_y,
                      const int glyph_w, const int glyph_h,
-                     const t_vec4& color);
+                     const t_vec4& color, const int xoffset, 
+					 const int yoffset, const int xadvance);
     GlyphDrawCommand(const GlyphDrawCommand& orig);
 
     //these method create a NEW GlyphDrawCommand based on a transformation of this one
@@ -44,6 +53,7 @@ public:
     GlyphDrawCommand changeColor(float r, float g, float b, float a) const;
     GlyphDrawCommand changeColor(float r, float g, float b) const;
     GlyphDrawCommand changeAlpha(float a) const;
+	GlyphDrawCommand duplicate() const;
 
     const t_vec4& getColor() const;
 	const int getPos_ltop_x() const;
@@ -61,13 +71,14 @@ enum TextVerticalPosition { TEXT_TOP, TEXT_MIDDLE, TEXT_BOTTOM };
 class FontManager {
 private:
     //TODO extend this class where needed
+	map<char, GlyphDrawCommand> charMap;
 public:
     FontManager(Graphics* graphics);
-    virtual ~FontManager();
+    // virtual ~FontManager();
     
-    void loadFont(const std::string& fontName,
-                  const std::string& fontImageFilename,
-                  const std::string& fontMetaFilename);
+    void loadFont(const string& fontName,
+                  const string& fontImageFilename,
+                  const string& fontMetaFilename);
 
     //these method set attibutes for the next  makeGlyphDrawCommands call
     void setHpos(TextJustification hpos);
@@ -76,9 +87,9 @@ public:
     void setScale(const t_vec2& scale);
     void setColor(float colorR, float colorG, float colorB, float colorA);
     void setScale(float xScale, float yScale);
-    void setFont(const std::string& fontName);
+    void setFont(const string& fontName);
 
-    std::vector<GlyphDrawCommand> makeGlyphDrawCommands(std::string text, int x, int y) const;
+    vector<GlyphDrawCommand> makeGlyphDrawCommands(string text, int x, int y) const;
     
     void draw(const GlyphDrawCommand& glyphDraw) const;
 };

@@ -7,11 +7,11 @@ extern "C"
 
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/es/game.h"
-
 #ifdef __cplusplus
 }
 #endif
 
+#include "pi_escape\anim\FontManager.h"
 
 #include <SDL.h>
 #undef main //Weird bug on windows where SDL overwrite main definition
@@ -34,6 +34,11 @@ int main() {
     gl_glyph_init(&glGlyph, graphics, (char*) "pi_escape/graphics/zorque72.png");
 
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+
+	FontManager m(graphics);
+	m.loadFont("t", "t", "zorque72.fnt");
+	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("hallo", 1, 1);
 
     //this is a demo of gl_glyph_draw
 
