@@ -81,17 +81,28 @@ GlyphDrawCommand GlyphDrawCommand::duplicate() const {
 /*
 * FontManager code
 */
-FontManager::FontManager(Graphics * graphics) {
-
+FontManager::FontManager(Graphics * graphics, GLGlyph glGlyph) : graphics(graphics), glGlyph(glGlyph) {
 }
 
 void FontManager::loadFont(const std::string& fontName, const std::string& fontImageFilename, const std::string& fontMetaFilename) {
+	string path = "pi_escape/graphics/";
 	
+	// Initializeren glyph
+	string imagePath = path + fontImageFilename;
+
+	char * charImagePath = new char[imagePath.length() + 1];
+	strcpy(charImagePath, imagePath.c_str());
+
+	GLGlyph glGlyph;
+	// gl_glyph_init(&glGlyph, graphics, (char*) "pi_escape/graphics/zorque72.png");
+	// TODO free
+
 	map<char, GlyphDrawCommand> charInfo;
+	map<char, vector<pair<char, int>>> kernings;
 
 	string l;
-	string path = "pi_escape/graphics/" + fontMetaFilename;
-	ifstream in(path);
+	
+	ifstream in(path + fontMetaFilename);
 	std::string::size_type sz; // alias voor size_t
 
 	while (!in.eof()) {
@@ -160,6 +171,50 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 				charInfo.insert(tmp);
 
 			}
+			else if (item == "kerning") {
+				// Nodige dingen
+				char firstChar;
+				char secondChar;
+				int amount;
+
+				// Waarden inlezen
+				while (getline(data, item, ' ')) {
+
+					size_t pos = item.find("=");
+
+					string var = item.substr(0, pos);
+					string value = item.substr(pos + 1);
+					int iValue = std::stoi(value, &sz);
+
+					if (var == "first") {
+						firstChar = static_cast<char>(iValue);
+					}
+					else if (var == "second") {
+						secondChar = static_cast<char>(iValue);
+					}
+					else if (var == "amount") {
+						amount = iValue;
+					}
+
+				}
+
+				// Karakter toevoegen aan map met overeenkomstige glyphdrawcommand
+				pair<char, int> tmp(secondChar, amount);
+				map<char, vector<pair<char, int>>>::iterator it = kernings.find(firstChar);
+				if (it != kernings.end())
+				{
+					// Already vector for the given character
+					it->second.push_back(tmp);
+				}
+				else {
+					// Nieuwe vector maken en toevoegen aan map
+					vector<pair<char, int>> newVec;
+					newVec.push_back(tmp);
+					pair<char, vector<pair<char, int>>> toevoegen(firstChar, newVec);
+					kernings.insert(toevoegen);
+				}
+
+			}
 
 		}
 	}
@@ -179,4 +234,9 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 		}
 	}
 	return result;
+}
+
+void FontManager::draw(const GlyphDrawCommand & glyphDraw) {
+
+	// gl_glyph_draw(&glGlyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
 }

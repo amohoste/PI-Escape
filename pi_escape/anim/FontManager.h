@@ -2,7 +2,7 @@
 #define PIESCAPE2_FONTMANAGER_H
 
 #include "../graphics/opengl_game_renderer.h"
-
+#include "../graphics/gl_glyph.h"
 #include <vector>
 #include <map>
 #include <string>
@@ -12,6 +12,7 @@
 #include <sstream>
 #include <algorithm>
 #include <iterator>
+
 
 using namespace std;
 
@@ -72,8 +73,10 @@ class FontManager {
 private:
     //TODO extend this class where needed
 	map<char, GlyphDrawCommand> charMap;
+	GLGlyph glGlyph;
+	Graphics* graphics;
 public:
-    FontManager(Graphics* graphics);
+    FontManager(Graphics* graphics, GLGlyph glGlyph);
     // virtual ~FontManager();
     
     void loadFont(const string& fontName,
@@ -91,7 +94,7 @@ public:
 
     vector<GlyphDrawCommand> makeGlyphDrawCommands(string text, int x, int y) const;
     
-    void draw(const GlyphDrawCommand& glyphDraw) const;
+    void draw(const GlyphDrawCommand& glyphDraw);
 };
 
 #endif //PIESCAPE2_FONTMANAGER_H
