@@ -36,8 +36,10 @@ int main() {
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 	FontManager m(graphics);
-	m.loadFont("t", "arcade72.png", "arcade72.fnt");
-	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen liquor jugs.", 0, 751);
+	m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
+	m.loadFont("base", "base72.png", "base72.fnt");
+	m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
+	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen liquor jugs.1234567890°,./;-_", 0, 500);
 
     //this is a demo of gl_glyph_draw
 
@@ -48,24 +50,13 @@ int main() {
 
         glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
 
-		GlyphDrawCommand test = result[0];
-		t_vec4 testvec;
-		glmc_assign_vec4(testvec, test.getColor());
-		/*
-		GlyphDrawCommand glyphDraw = result[0];
-		gl_glyph_draw(&glGlyph, 481, 750, glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), col);
-
-		GlyphDrawCommand glyphDraw2 = result[1];
-		gl_glyph_draw(&glGlyph, 534, 751, glyphDraw2.getGlyph_x(), glyphDraw2.getGlyph_y(), glyphDraw2.getGlyph_w(), glyphDraw2.getGlyph_h(), col);
-		GlyphDrawCommand glyphDraw3 = result[2];
-		gl_glyph_draw(&glGlyph, 570, 751, glyphDraw3.getGlyph_x(), glyphDraw3.getGlyph_y(), glyphDraw3.getGlyph_w(), glyphDraw3.getGlyph_h(), col);
-		*/
-
 		vector<GlyphDrawCommand>::iterator i = result.begin();
+		m.setFont("zorque");
 		while (i != result.end()) {
 			m.draw(*i);
 			i++;
 		}
+		
 		/*
 		gl_glyph_draw(&glGlyph, 481, 750, 2, 215, 48, 51, col);
 		gl_glyph_draw(&glGlyph, 534, 751, 52, 109, 35, 51, col);
@@ -93,6 +84,8 @@ int main() {
         Uint32 cur_time_ms = SDL_GetTicks();
         diff_time_ms = cur_time_ms - start_time_ms;
     }
+
+	
 
     gl_glyph_free(&glGlyph);
     graphics_free(graphics);
