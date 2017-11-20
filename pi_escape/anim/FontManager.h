@@ -40,6 +40,7 @@ private:
 	const int yoffset;
 	const int xadvance;
     const t_vec4& color;
+	GLGlyph *glglyph;
 	
 public:
     /**
@@ -56,7 +57,7 @@ public:
 					 const int glyph_x, const int glyph_y,
                      const int glyph_w, const int glyph_h,
                      const t_vec4& color, const int xoffset, 
-					 const int yoffset, const int xadvance);
+					 const int yoffset, const int xadvance, GLGlyph *glglyph);
     GlyphDrawCommand(const GlyphDrawCommand& orig);
 
     //these method create a NEW GlyphDrawCommand based on a transformation of this one
@@ -77,6 +78,7 @@ public:
 	const int getXoffset() const;
 	const int getYoffset() const;
 	const int getXadvance() const;
+	GLGlyph* get_glglyph() const;
     //TODO extend this class where needed
 
 	// TOdo deconstructor voor glyph
@@ -85,15 +87,26 @@ public:
 enum TextJustification { TEXT_LEFT, TEXT_CENTER, TEXT_RIGHT };
 enum TextVerticalPosition { TEXT_TOP, TEXT_MIDDLE, TEXT_BOTTOM };
 
+class Font {
+	friend class FontManager;
+
+private:
+	map<char, GlyphDrawCommand> charMap;
+	map<char, map<char, int>> charKernings;
+	GLGlyph* glGlyph;
+
+public:
+	Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings, GLGlyph* glGlyph);
+	Font(const Font& orig);
+	Font();
+};
+
 class FontManager {
 private:
     //TODO extend this class where needed
-	map<string, pair<map<char, GlyphDrawCommand>, map<char, map<char, int>>>> fonts;
-	
-	map<char, GlyphDrawCommand> charMap;
-	map<char, map<char, int>> charKernings;
+	map<string, Font> fonts;
+	Font curFont;
 	Graphics* graphics;
-	GLGlyph glGlyph;
 public:
     FontManager(Graphics* graphics);
     // virtual ~FontManager();
@@ -115,13 +128,6 @@ public:
     void draw(const GlyphDrawCommand& glyphDraw);
 };
 
-class Font {
-	friend class FontManager;
 
-private:
-	map<char, GlyphDrawCommand> charMap;
-	map<char, map<char, int>> charKernings;
-	GLGlyph glGlyph;
-};
 
 #endif //PIESCAPE2_FONTMANAGER_H

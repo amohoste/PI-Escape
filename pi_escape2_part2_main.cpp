@@ -39,6 +39,8 @@ int main() {
 	m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
 	m.loadFont("base", "base72.png", "base72.fnt");
 	m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
+
+	m.setFont("zorque");
 	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen liquor jugs.1234567890°,./;-_", 0, 500);
 
     //this is a demo of gl_glyph_draw
@@ -51,7 +53,7 @@ int main() {
         glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
 
 		vector<GlyphDrawCommand>::iterator i = result.begin();
-		m.setFont("zorque");
+		
 		while (i != result.end()) {
 			m.draw(*i);
 			i++;
