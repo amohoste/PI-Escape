@@ -71,12 +71,19 @@ const int GlyphDrawCommand::getGlyph_h() const {
 	return glyph_h;
 }
 
+const int GlyphDrawCommand::getXoffset() const {
+	return xoffset;;
+}
+const int GlyphDrawCommand::getYoffset() const {
+	return yoffset;
+}
+const int GlyphDrawCommand::getXadvance() const {
+	return xadvance;
+}
+
 GlyphDrawCommand GlyphDrawCommand::duplicate() const {
 	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, color, xoffset, yoffset, xadvance);
 }
-
-
-
 
 /*
 * FontManager code
@@ -220,18 +227,28 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 	}
 	in.close();
 	charMap = charInfo;
+	charKernings = kernings;
 }
 
 vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, int y) const {
 	
 	vector<GlyphDrawCommand> result;
+	char prevChar;
+	int x1 = x;
 
 	for (int i = 0; i < text.length(); i++) {
 		char c = text[i];
 		map<char, GlyphDrawCommand>::const_iterator it = charMap.find(c);
 		if (it != charMap.end()) {
-			result.push_back((it->second).duplicate());
-		}
+			GlyphDrawCommand found = (it->second);
+			// Als i groter dan 0 is eerst kerning tov vorige character berekenen
+			if (i < 0) {
+
+			}
+			result.push_back(found.move(x1 + found.getXoffset(), y - found.getYoffset()));
+			prevChar = c;
+			x1 += found.getXadvance();
+		} 
 	}
 	return result;
 }

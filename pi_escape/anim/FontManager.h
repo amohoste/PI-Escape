@@ -73,6 +73,9 @@ public:
 	const int getGlyph_y() const;
 	const int getGlyph_w() const;
 	const int getGlyph_h() const;
+	const int getXoffset() const;
+	const int getYoffset() const;
+	const int getXadvance() const;
     //TODO extend this class where needed
 };
 
@@ -83,6 +86,7 @@ class FontManager {
 private:
     //TODO extend this class where needed
 	map<char, GlyphDrawCommand> charMap;
+	map<char, vector<pair<char, int>>> charKernings;
 	GLGlyph glGlyph;
 	Graphics* graphics;
 public:
