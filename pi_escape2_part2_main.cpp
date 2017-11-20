@@ -35,7 +35,7 @@ int main() {
 
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-	FontManager m(graphics, glGlyph);
+	FontManager m(graphics);
 	m.loadFont("t", "zorque72.png", "zorque72.fnt");
 	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("hallo", 1, 1);
 
@@ -51,14 +51,16 @@ int main() {
 		GlyphDrawCommand test = result[0];
 		t_vec4 testvec;
 		glmc_assign_vec4(testvec, test.getColor());
-
+		/*
 		GlyphDrawCommand glyphDraw = result[0];
-		gl_glyph_draw(&glGlyph, 481, 750, glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
+		gl_glyph_draw(&glGlyph, 481, 750, glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), col);
 
 		GlyphDrawCommand glyphDraw2 = result[1];
-		gl_glyph_draw(&glGlyph, 534, 751, glyphDraw2.getGlyph_x(), glyphDraw2.getGlyph_y(), glyphDraw2.getGlyph_w(), glyphDraw2.getGlyph_h(), testvec);
+		gl_glyph_draw(&glGlyph, 534, 751, glyphDraw2.getGlyph_x(), glyphDraw2.getGlyph_y(), glyphDraw2.getGlyph_w(), glyphDraw2.getGlyph_h(), col);
 		GlyphDrawCommand glyphDraw3 = result[2];
-		gl_glyph_draw(&glGlyph, 570, 751, glyphDraw3.getGlyph_x(), glyphDraw3.getGlyph_y(), glyphDraw3.getGlyph_w(), glyphDraw3.getGlyph_h(), testvec);
+		gl_glyph_draw(&glGlyph, 570, 751, glyphDraw3.getGlyph_x(), glyphDraw3.getGlyph_y(), glyphDraw3.getGlyph_w(), glyphDraw3.getGlyph_h(), col);
+		*/
+		m.draw(result[2]);
 		/*
 		gl_glyph_draw(&glGlyph, 481, 750, 2, 215, 48, 51, col);
 		gl_glyph_draw(&glGlyph, 534, 751, 52, 109, 35, 51, col);

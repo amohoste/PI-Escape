@@ -1,8 +1,18 @@
 #ifndef PIESCAPE2_FONTMANAGER_H
 #define PIESCAPE2_FONTMANAGER_H
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #include "../graphics/opengl_game_renderer.h"
 #include "../graphics/gl_glyph.h"
+#ifdef __cplusplus
+}
+#endif
+
+
 #include <vector>
 #include <map>
 #include <string>
@@ -76,7 +86,7 @@ private:
 	GLGlyph glGlyph;
 	Graphics* graphics;
 public:
-    FontManager(Graphics* graphics, GLGlyph glGlyph);
+    FontManager(Graphics* graphics);
     // virtual ~FontManager();
     
     void loadFont(const string& fontName,

@@ -81,7 +81,8 @@ GlyphDrawCommand GlyphDrawCommand::duplicate() const {
 /*
 * FontManager code
 */
-FontManager::FontManager(Graphics * graphics, GLGlyph glGlyph) : graphics(graphics), glGlyph(glGlyph) {
+FontManager::FontManager(Graphics * graphics) : graphics(graphics) {
+
 }
 
 void FontManager::loadFont(const std::string& fontName, const std::string& fontImageFilename, const std::string& fontMetaFilename) {
@@ -93,8 +94,7 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 	char * charImagePath = new char[imagePath.length() + 1];
 	strcpy(charImagePath, imagePath.c_str());
 
-	GLGlyph glGlyph;
-	// gl_glyph_init(&glGlyph, graphics, (char*) "pi_escape/graphics/zorque72.png");
+	gl_glyph_init(&glGlyph, graphics, charImagePath);
 	// TODO free
 
 	map<char, GlyphDrawCommand> charInfo;
@@ -237,6 +237,6 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 }
 
 void FontManager::draw(const GlyphDrawCommand & glyphDraw) {
-
-	// gl_glyph_draw(&glGlyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
+	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+	gl_glyph_draw(&glGlyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), col);
 }
