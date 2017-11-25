@@ -8,8 +8,6 @@ extern "C"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/es/game.h"
 
-
-
 #ifdef __cplusplus
 }
 #endif
@@ -18,27 +16,32 @@ extern "C"
 
 #include <SDL.h>
 #undef main //Weird bug on windows where SDL overwrite main definition
+
 #include <SDL_timer.h>
 
 #include <string>
 #include <cassert>
 
+
+
 using namespace std;
 
 int main() {
+	//_CrtSetBreakAlloc(12906);
     int imgFlags = IMG_INIT_PNG;
     if(!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
     }
 
     Graphics* graphics = graphics_alloc(0, 0);
-
+	
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 	FontManager m(graphics);
+	
 	m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
-	m.loadFont("base", "base72.png", "base72.fnt");
-	m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
+	//m.loadFont("base", "base72.png", "base72.fnt");
+	//m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
 	m.setFont("zorque");
 	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen liquor jugs.1234567890°,./;-_", 0, 500);
@@ -47,7 +50,7 @@ int main() {
 
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 diff_time_ms = 0;
-    while (diff_time_ms < 5000) {
+    while (diff_time_ms < 500) {
         graphics_begin_draw(graphics);
 
         glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
@@ -55,7 +58,7 @@ int main() {
 		vector<GlyphDrawCommand>::iterator i = result.begin();
 		
 		while (i != result.end()) {
-			//m.draw(*i);
+			m.draw(*i);
 			i++;
 		}
 		
@@ -69,6 +72,5 @@ int main() {
 
     graphics_free(graphics);
     free(graphics);
-	_CrtDumpMemoryLeaks();
     return 0;
 }

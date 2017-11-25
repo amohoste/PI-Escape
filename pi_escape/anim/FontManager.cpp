@@ -99,8 +99,6 @@ FontManager::FontManager(Graphics * gr) {
 
 FontManager::~FontManager()
 {
-	
-
 	delete graphics;
 }
 
@@ -156,8 +154,9 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 					int xoffset;
 					int yoffset;
 					int xadvance;
-					t_vec4& col = *new t_vec4[4];
-					glmc_vec4_set(col, 1.0f, 0.0f, 0.0f, 1.0f);
+					t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+					//t_vec4& col = *new t_vec4[4];
+					//glmc_vec4_set(col, 1.0f, 0.0f, 0.0f, 1.0f);
 
 					// Waarden inlezen
 					while (getline(data, item, ' ')) {
@@ -200,7 +199,6 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 
 					pair<char, GlyphDrawCommand> tmp(karakter, c);
 					charInfo.insert(tmp);
-
 				}
 				else if (item == "kerning") {
 					// Nodige dingen
@@ -311,8 +309,9 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 void FontManager::draw(const GlyphDrawCommand & glyphDraw) {
 	string fontName = glyphDraw.getfont();
 	GLGlyph* glglyph = glyphMap.find(fontName)->second;
+	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-	gl_glyph_draw(glglyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
+	gl_glyph_draw(glglyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), col);
 }
 
 void FontManager::setFont(const string & fontName) {
