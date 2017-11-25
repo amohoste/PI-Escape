@@ -8,9 +8,7 @@ extern "C"
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/es/game.h"
 
-// Memory leaks
-#include <stdlib.h>
-#include <crtdbg.h>
+
 
 #ifdef __cplusplus
 }
@@ -35,9 +33,6 @@ int main() {
 
     Graphics* graphics = graphics_alloc(0, 0);
 
-    GLGlyph glGlyph;
-    gl_glyph_init(&glGlyph, graphics, (char*) "pi_escape/graphics/zorque72.png");
-
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 	FontManager m(graphics);
@@ -60,7 +55,7 @@ int main() {
 		vector<GlyphDrawCommand>::iterator i = result.begin();
 		
 		while (i != result.end()) {
-			m.draw(*i);
+			//m.draw(*i);
 			i++;
 		}
 		
@@ -70,9 +65,8 @@ int main() {
         diff_time_ms = cur_time_ms - start_time_ms;
     }
 
-	
+	m.free();
 
-    gl_glyph_free(&glGlyph);
     graphics_free(graphics);
     free(graphics);
 	_CrtDumpMemoryLeaks();

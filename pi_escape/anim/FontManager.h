@@ -40,7 +40,7 @@ private:
 	const int yoffset;
 	const int xadvance;
     const t_vec4& color;
-	GLGlyph *glglyph;
+	string font;
 	
 public:
     /**
@@ -57,7 +57,7 @@ public:
 					 const int glyph_x, const int glyph_y,
                      const int glyph_w, const int glyph_h,
                      const t_vec4& color, const int xoffset, 
-					 const int yoffset, const int xadvance, GLGlyph *glglyph);
+					 const int yoffset, const int xadvance, string font);
     GlyphDrawCommand(const GlyphDrawCommand& orig);
 
     //these method create a NEW GlyphDrawCommand based on a transformation of this one
@@ -77,8 +77,7 @@ public:
 	const int getXoffset() const;
 	const int getYoffset() const;
 	const int getXadvance() const;
-	GLGlyph* get_glglyph() const;
-
+	const string getfont() const;
     //TODO extend this class where needed
 
 	// TOdo deconstructor voor glyph
@@ -93,20 +92,19 @@ class Font {
 private:
 	map<char, GlyphDrawCommand> charMap;
 	map<char, map<char, int>> charKernings;
-	GLGlyph* glGlyph;
 
 public:
-	Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings, GLGlyph* glGlyph);
+	Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings);
 	Font(const Font& orig);
 	Font();
 	Font& operator=(const Font& rhs);
-	virtual ~Font();
 };
 
 class FontManager {
 private:
     //TODO extend this class where needed
 	map<string, Font> fonts;
+	map<string, GLGlyph*> glyphMap;
 	Font curFont;
 	Graphics* graphics;
 public:
@@ -124,6 +122,8 @@ public:
     void setScale(const t_vec2& scale);
     void setColor(float colorR, float colorG, float colorB, float colorA);
     void setFont(const string& fontName);
+
+	void free();
 
     vector<GlyphDrawCommand> makeGlyphDrawCommands(string text, int x, int y) const;
     
