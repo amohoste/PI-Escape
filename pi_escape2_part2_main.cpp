@@ -59,28 +59,6 @@ int main() {
 			i++;
 		}
 		
-		/*
-		gl_glyph_draw(&glGlyph, 481, 750, 2, 215, 48, 51, col);
-		gl_glyph_draw(&glGlyph, 534, 751, 52, 109, 35, 51, col);
-		gl_glyph_draw(&glGlyph, 570, 698, 214, 495, 51, 14, col);
-		gl_glyph_draw(&glGlyph, 624, 750, 2, 215, 48, 51, col);
-		gl_glyph_draw(&glGlyph, 677, 751, 52, 109, 35, 51, col);
-		gl_glyph_draw(&glGlyph, 714, 751, 127, 268, 39, 52, col);
-		gl_glyph_draw(&glGlyph, 757, 750, 53, 428, 41, 51, col);
-		gl_glyph_draw(&glGlyph, 801, 751, 2, 268, 48, 52, col);
-		gl_glyph_draw(&glGlyph, 852, 698, 214, 495, 51, 14, col);
-		gl_glyph_draw(&glGlyph, 906, 750, 44, 56, 46, 51, col);
-		gl_glyph_draw(&glGlyph, 954, 750, 82, 162, 41, 51, col);
-		gl_glyph_draw(&glGlyph, 997, 751, 2, 2, 48, 52, col);
-		gl_glyph_draw(&glGlyph, 1049, 751, 103, 215, 58, 51, col);
-		gl_glyph_draw(&glGlyph, 1165, 750, 52, 2, 42, 51, col);
-		gl_glyph_draw(&glGlyph, 1213, 751, 94, 335, 38, 52, col);
-		gl_glyph_draw(&glGlyph, 1254, 751, 2, 2, 48, 52, col);
-		gl_glyph_draw(&glGlyph, 1306, 750, 18, 322, 58, 51, col);
-		gl_glyph_draw(&glGlyph, 1368, 750, 53, 428, 41, 51, col);
-		gl_glyph_draw(&glGlyph, 1412, 751, 52, 109, 35, 51, col);
-		gl_glyph_draw(&glGlyph, 1451, 750, 52, 2, 42, 51, col);
-		*/
         graphics_end_draw(graphics);
 
         Uint32 cur_time_ms = SDL_GetTicks();

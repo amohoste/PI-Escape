@@ -6,14 +6,16 @@ using namespace std;
 * GlyphDrawCommand code 
 */
 GlyphDrawCommand GlyphDrawCommand::changeColor(float r, float g, float b) const {
-    t_vec4 col;
+
+	t_vec4& col = *new t_vec4[4];
+	
 	glmc_vec4_set(col, r, g, b, color[3]);
 
     return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, glglyph);
 }
 
 GlyphDrawCommand GlyphDrawCommand::changeAlpha(float a) const {
-	t_vec4 col;
+	t_vec4& col = *new t_vec4[4];
 	glmc_vec4_set(col, color[0], color[1], color[2], a);
 
 	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, glglyph);
@@ -28,7 +30,7 @@ GlyphDrawCommand  GlyphDrawCommand::changeColor(const t_vec4& newColor) const {
 }
 
 GlyphDrawCommand  GlyphDrawCommand::changeColor(float r, float g, float b, float a) const {
-	t_vec4 col;
+	t_vec4& col = *new t_vec4[4];
 	glmc_vec4_set(col, r, g, b,a);
 
 	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, glglyph);
@@ -143,7 +145,8 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 					int xoffset;
 					int yoffset;
 					int xadvance;
-					t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+					t_vec4& col = *new t_vec4[4];
+					glmc_vec4_set(col, 1.0f, 0.0f, 0.0f, 1.0f);
 
 					// Waarden inlezen
 					while (getline(data, item, ' ')) {
@@ -280,8 +283,7 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 }
 
 void FontManager::draw(const GlyphDrawCommand & glyphDraw) {
-	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
-	gl_glyph_draw(glyphDraw.get_glglyph(), glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), col);
+	gl_glyph_draw(glyphDraw.get_glglyph(), glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
 }
 
 void FontManager::setFont(const string & fontName) {
