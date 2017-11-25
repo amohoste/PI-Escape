@@ -5,16 +5,15 @@ using namespace std;
 /***************************************************************
  GlyphDrawCommand code
 ****************************************************************/
-
 GlyphDrawCommand GlyphDrawCommand::changeColor(float r, float g, float b) const {
-	t_vec4& col = *new t_vec4[4];
+	t_vec4 col;
 	glmc_vec4_set(col, r, g, b, color[3]);
 
     return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, font);
 }
 
 GlyphDrawCommand GlyphDrawCommand::changeAlpha(float a) const {
-	t_vec4& col = *new t_vec4[4];
+	t_vec4 col;
 	glmc_vec4_set(col, color[0], color[1], color[2], a);
 
 	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, font);
@@ -29,22 +28,26 @@ GlyphDrawCommand  GlyphDrawCommand::changeColor(const t_vec4& newColor) const {
 }
 
 GlyphDrawCommand  GlyphDrawCommand::changeColor(float r, float g, float b, float a) const {
-	t_vec4& col = *new t_vec4[4];
+	t_vec4 col;
 	glmc_vec4_set(col, r, g, b,a);
 
 	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, font);
 }
 
 GlyphDrawCommand::GlyphDrawCommand(const int pos_ltop_x, const int pos_ltop_y, const int glyph_x, const int glyph_y,
-                                   const int glyph_w, const int glyph_h, const t_vec4 &color, const int xoffset, const int yoffset, const int xadvance,string font) :pos_ltop_x(pos_ltop_x),
-								   pos_ltop_y(pos_ltop_y), glyph_x(glyph_x), glyph_y(glyph_y), glyph_w(glyph_w), glyph_h(glyph_h), color(color), xoffset(xoffset), yoffset(yoffset), xadvance(xadvance), font(font) { }
+                                   const int glyph_w, const int glyph_h, const t_vec4 &colors, const int xoffset, const int yoffset, const int xadvance,string font) :pos_ltop_x(pos_ltop_x),
+								   pos_ltop_y(pos_ltop_y), glyph_x(glyph_x), glyph_y(glyph_y), glyph_w(glyph_w), glyph_h(glyph_h), xoffset(xoffset), yoffset(yoffset), xadvance(xadvance), font(font), color(*new t_vec4[4]) {
+	
+	// Kleuren kopiëren naar de color van onze klasse
+	memcpy(color, colors, sizeof(colors));
 
-
+}
 
 GlyphDrawCommand::GlyphDrawCommand(const GlyphDrawCommand &orig) : pos_ltop_x(orig.pos_ltop_x), pos_ltop_y(orig.pos_ltop_y), glyph_x(orig.glyph_x), glyph_y(orig.glyph_y), glyph_w(orig.glyph_w),
-																   glyph_h(orig.glyph_h), color(orig.color), xoffset(orig.xoffset), yoffset(orig.yoffset), xadvance(orig.xadvance), font(orig.font) { }
-
-
+																   glyph_h(orig.glyph_h), color(*new t_vec4[4]), xoffset(orig.xoffset), yoffset(orig.yoffset), xadvance(orig.xadvance), font(orig.font) {
+	// Kleuren kopiëren naar de color van onze klasse
+	memcpy(color, orig.color, sizeof(orig.color));
+}
 
 const t_vec4 &GlyphDrawCommand::getColor() const {
     return color;
@@ -77,9 +80,11 @@ const int GlyphDrawCommand::getGlyph_h() const {
 const int GlyphDrawCommand::getXoffset() const {
 	return xoffset;;
 }
+
 const int GlyphDrawCommand::getYoffset() const {
 	return yoffset;
 }
+
 const int GlyphDrawCommand::getXadvance() const {
 	return xadvance;
 }
@@ -88,27 +93,31 @@ const string GlyphDrawCommand::getfont() const {
 	return font;
 }
 
+GlyphDrawCommand::~GlyphDrawCommand() {
+	delete color;
+}
 
 /***************************************************************
  FontManager code
 ****************************************************************/
-FontManager::FontManager(Graphics * gr) {
+FontManager::FontManager(Graphics * gr) : color(*new t_vec4[4]) {
 	graphics = new Graphics;
 	*graphics = *gr;
+
+	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+	memcpy(color, col, sizeof(col));
 }
 
-FontManager::~FontManager()
-{
+FontManager::~FontManager() {
 	delete graphics;
+	delete color;
 }
 
 void FontManager::free() {
-	// Alle glglyphs in map freen
+	// Alle glglyphs in map freên
 	map<std::string, GLGlyph*>::iterator it = glyphMap.begin();
 
-	// Iterate over the map using Iterator till end.
-	while (it != glyphMap.end())
-	{
+	while (it != glyphMap.end()) {
 		gl_glyph_free(it->second);
 		delete(it->second);
 		it++;
@@ -123,6 +132,22 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 	// Als font nog niet is ingeladen inladen in fonts
 	if (fontIt == fonts.end()) {
 
+		// Glyph toevoegen aan map
+		GLGlyph* glGlyph = new GLGlyph;
+
+		string imagePath = path + fontImageFilename;
+
+		char * charImagePath = new char[imagePath.length() + 1];
+		strcpy(charImagePath, imagePath.c_str());
+
+		gl_glyph_init(glGlyph, graphics, charImagePath);
+		delete charImagePath;
+
+		pair<string, GLGlyph*> glyphPair(fontName, glGlyph);
+		glyphMap.insert(glyphPair);
+
+
+		// Charinfo en charkernings inlezen en toevoegen
 		map<char, GlyphDrawCommand> charInfo;
 		map<char, map<char, int>> kernings;
 
@@ -155,8 +180,7 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 					int yoffset;
 					int xadvance;
 					t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
-					//t_vec4& col = *new t_vec4[4];
-					//glmc_vec4_set(col, 1.0f, 0.0f, 0.0f, 1.0f);
+
 
 					// Waarden inlezen
 					while (getline(data, item, ' ')) {
@@ -252,29 +276,11 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 
 		pair<string, Font> toevoegen(fontName, f);
 		fonts.insert(toevoegen);
-		
-		// Glyph toevoegen aan map
-		GLGlyph* glGlyph = new GLGlyph;
-		string path = "pi_escape/graphics/";
-
-		// Initializeren glyph
-		string imagePath = path + fontImageFilename;
-
-		char * charImagePath = new char[imagePath.length() + 1];
-		strcpy(charImagePath, imagePath.c_str());
-
-		gl_glyph_init(glGlyph, graphics, charImagePath);
-		delete charImagePath;
-
-		pair<string, GLGlyph*> glyphPair(fontName, glGlyph);
-		glyphMap.insert(glyphPair);
 	}
-
 	
 	// Charmap en kernings aanpassen naar huidig font
 	Font font = (fonts.find(fontName)->second);
 	curFont = font;
-	_CrtDumpMemoryLeaks();
 }
 
 vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, int y) const {
@@ -299,7 +305,7 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 					}
 				}
 			}
-			result.push_back(found.move(x1 + found.getXoffset(), y - found.getYoffset()));
+			result.push_back(found.move(x1 + found.getXoffset(), y - found.getYoffset()).changeColor(color));
 			prevChar = c;
 			x1 += found.getXadvance();
 		} 
@@ -312,29 +318,39 @@ void FontManager::draw(const GlyphDrawCommand & glyphDraw) {
 	GLGlyph* glglyph = glyphMap.find(fontName)->second;
 	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-	gl_glyph_draw(glglyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), col);
+	gl_glyph_draw(glglyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
+}
+
+void FontManager::setColor(const t_vec4 & col) {
+	memcpy(color, col, sizeof(col));
+}
+
+void FontManager::setColor(float colorR, float colorG, float colorB, float colorA) {
+	t_vec4 col;
+	glmc_vec4_set(col, colorR, colorG, colorB, colorA);
+	memcpy(color, col, sizeof(col));
 }
 
 void FontManager::setFont(const string & fontName) {
 
-	// TODO checken of bestaat
-
-	// Charmap en kernings aanpassen naar huidig font
-	Font font = (fonts.find(fontName)->second);
-	curFont = font;
+	map<string, Font>::const_iterator fontIt = fonts.find(fontName);
+	// Als font bestaat
+	if (fontIt != fonts.end()) {
+		// Charmap en kernings aanpassen naar huidig font
+		Font font = (fonts.find(fontName)->second);
+		curFont = font;
+	}
 }
 
 /***************************************************************
  Font code
 ****************************************************************/
-
 Font::Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings) 
 													: charMap(charMap), charKernings(charKernings) { }
 
 Font::Font(const Font & orig): charMap(orig.charMap), charKernings(orig.charKernings) { }
 
 Font::Font() { }
-
 
 Font& Font::operator= (const Font & other) {
 	if (this != &other) // protect against invalid self-assignment

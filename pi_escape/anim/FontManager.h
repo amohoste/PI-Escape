@@ -39,8 +39,8 @@ private:
 	const int xoffset;
 	const int yoffset;
 	const int xadvance;
-    const t_vec4& color;
-	string font;
+    t_vec4& color;
+	const string font;
 	
 public:
     /**
@@ -78,9 +78,7 @@ public:
 	const int getYoffset() const;
 	const int getXadvance() const;
 	const string getfont() const;
-    //TODO extend this class where needed
-
-	// TOdo deconstructor voor glyph
+	virtual ~GlyphDrawCommand();
 };
 
 enum TextJustification { TEXT_LEFT, TEXT_CENTER, TEXT_RIGHT };
@@ -102,11 +100,17 @@ public:
 
 class FontManager {
 private:
-    //TODO extend this class where needed
+	Graphics* graphics;
+
+	Font curFont;
+
 	map<string, Font> fonts;
 	map<string, GLGlyph*> glyphMap;
-	Font curFont;
-	Graphics* graphics;
+	
+	t_vec4& color;
+	//enum TextJustification;
+	//enum TextVerticalPosition;
+
 public:
     FontManager(Graphics* graphics);
     virtual ~FontManager();
@@ -119,7 +123,6 @@ public:
     void setHpos(TextJustification hpos);
     void setVpos(TextVerticalPosition vpos);
     void setColor(const t_vec4& color);
-    void setScale(const t_vec2& scale);
     void setColor(float colorR, float colorG, float colorB, float colorA);
     void setFont(const string& fontName);
 

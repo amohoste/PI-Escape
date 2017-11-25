@@ -24,6 +24,7 @@ extern "C"
 using namespace std;
 
 int main() {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
     int imgFlags = IMG_INIT_PNG;
     if(!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
@@ -36,10 +37,11 @@ int main() {
 	FontManager m(graphics);
 	
 	m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
-	//m.loadFont("base", "base72.png", "base72.fnt");
-	//m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
+	m.loadFont("base", "base72.png", "base72.fnt");
+	m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
 	m.setFont("zorque");
+	m.setColor(0.4f, 0.4f, 0.4f, 1.0f);
 	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen liquor jugs.1234567890°,./;-_", 0, 500);
 
     //this is a demo of gl_glyph_draw
