@@ -91,8 +91,14 @@ GLGlyph* GlyphDrawCommand::get_glglyph() const {
 /***************************************************************
  FontManager code
 ****************************************************************/
-FontManager::FontManager(Graphics * graphics) : graphics(graphics) {
+FontManager::FontManager(Graphics * gr) {
+	graphics = new Graphics;
+	*graphics = *gr;
+}
 
+FontManager::~FontManager()
+{
+	delete graphics;
 }
 
 void FontManager::loadFont(const std::string& fontName, const std::string& fontImageFilename, const std::string& fontMetaFilename) {

@@ -7,6 +7,11 @@ extern "C"
 
 #include "pi_escape/graphics/opengl_game_renderer.h"
 #include "pi_escape/es/game.h"
+
+// Memory leaks
+#include <stdlib.h>
+#include <crtdbg.h>
+
 #ifdef __cplusplus
 }
 #endif
@@ -55,7 +60,7 @@ int main() {
 		vector<GlyphDrawCommand>::iterator i = result.begin();
 		
 		while (i != result.end()) {
-			m.draw((*i).move(30, 0));
+			m.draw(*i);
 			i++;
 		}
 		
@@ -70,6 +75,6 @@ int main() {
     gl_glyph_free(&glGlyph);
     graphics_free(graphics);
     free(graphics);
-
+	_CrtDumpMemoryLeaks();
     return 0;
 }

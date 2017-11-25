@@ -111,7 +111,7 @@ private:
 	Graphics* graphics;
 public:
     FontManager(Graphics* graphics);
-    // virtual ~FontManager();
+    virtual ~FontManager();
     
     void loadFont(const string& fontName,
                   const string& fontImageFilename,
