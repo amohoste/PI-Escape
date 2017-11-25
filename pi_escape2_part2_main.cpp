@@ -13,21 +13,17 @@ extern "C"
 #endif
 
 #include "pi_escape\anim\FontManager.h"
-
 #include <SDL.h>
 #undef main //Weird bug on windows where SDL overwrite main definition
 
+#include <stdlib.h>  
+#include <crtdbg.h> 
 #include <SDL_timer.h>
-
 #include <string>
-#include <cassert>
-
-
 
 using namespace std;
 
 int main() {
-	//_CrtSetBreakAlloc(12906);
     int imgFlags = IMG_INIT_PNG;
     if(!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
@@ -69,7 +65,6 @@ int main() {
     }
 
 	m.free();
-
     graphics_free(graphics);
     free(graphics);
     return 0;

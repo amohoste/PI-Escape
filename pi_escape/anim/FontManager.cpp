@@ -274,6 +274,7 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 	// Charmap en kernings aanpassen naar huidig font
 	Font font = (fonts.find(fontName)->second);
 	curFont = font;
+	_CrtDumpMemoryLeaks();
 }
 
 vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, int y) const {
