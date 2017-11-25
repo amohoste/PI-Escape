@@ -66,7 +66,6 @@ public:
     GlyphDrawCommand changeColor(float r, float g, float b, float a) const;
     GlyphDrawCommand changeColor(float r, float g, float b) const;
     GlyphDrawCommand changeAlpha(float a) const;
-	GlyphDrawCommand duplicate() const;
 
     const t_vec4& getColor() const;
 	const int getPos_ltop_x() const;
@@ -79,6 +78,7 @@ public:
 	const int getYoffset() const;
 	const int getXadvance() const;
 	GLGlyph* get_glglyph() const;
+
     //TODO extend this class where needed
 
 	// TOdo deconstructor voor glyph
@@ -99,6 +99,8 @@ public:
 	Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings, GLGlyph* glGlyph);
 	Font(const Font& orig);
 	Font();
+	Font& operator=(const Font& rhs);
+	virtual ~Font();
 };
 
 class FontManager {

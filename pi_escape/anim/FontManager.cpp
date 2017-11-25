@@ -2,13 +2,12 @@
 
 using namespace std;
 
-/* 
-* GlyphDrawCommand code 
-*/
-GlyphDrawCommand GlyphDrawCommand::changeColor(float r, float g, float b) const {
+/***************************************************************
+ GlyphDrawCommand code
+****************************************************************/
 
+GlyphDrawCommand GlyphDrawCommand::changeColor(float r, float g, float b) const {
 	t_vec4& col = *new t_vec4[4];
-	
 	glmc_vec4_set(col, r, g, b, color[3]);
 
     return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, col, xoffset, yoffset, xadvance, glglyph);
@@ -87,13 +86,11 @@ GLGlyph* GlyphDrawCommand::get_glglyph() const {
 	return glglyph;
 }
 
-GlyphDrawCommand GlyphDrawCommand::duplicate() const {
-	return GlyphDrawCommand(pos_ltop_x, pos_ltop_y, glyph_x, glyph_y, glyph_w, glyph_h, color, xoffset, yoffset, xadvance, glglyph);
-}
 
-/*
-* FontManager code
-*/
+
+/***************************************************************
+ FontManager code
+****************************************************************/
 FontManager::FontManager(Graphics * graphics) : graphics(graphics) {
 
 }
@@ -295,18 +292,36 @@ void FontManager::setFont(const string & fontName) {
 	curFont = font;
 }
 
-/*
-* Font code
-*/
+/***************************************************************
+ Font code
+****************************************************************/
 
-Font::Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings, GLGlyph* glGlyph) : charMap(charMap), charKernings(charKernings), glGlyph(glGlyph) {
-	
+Font::Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings, GLGlyph* gl) : charMap(charMap), charKernings(charKernings) {
+	glGlyph = new GLGlyph;
+	*glGlyph = *gl;
 }
 
-Font::Font(const Font & orig): charMap(orig.charMap), charKernings(orig.charKernings), glGlyph(orig.glGlyph) {
+Font::Font(const Font & orig): charMap(orig.charMap), charKernings(orig.charKernings) {
+	glGlyph = new GLGlyph;
+	*glGlyph = *orig.glGlyph;
 }
 
-Font::Font()
-{
+Font::Font() {
+	glGlyph = new GLGlyph;
+}
+
+Font::~Font() {
+	delete glGlyph;
+}
+
+Font& Font::operator= (const Font & other) {
+	if (this != &other) // protect against invalid self-assignment
+	{
+		*glGlyph = *other.glGlyph;
+		charMap = other.charMap;
+		charKernings = other.charKernings;
+	}
+	// by convention, always return *this
+	return *this;
 }
 

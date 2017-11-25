@@ -55,7 +55,7 @@ int main() {
 		vector<GlyphDrawCommand>::iterator i = result.begin();
 		
 		while (i != result.end()) {
-			m.draw(*i);
+			m.draw((*i).move(30, 0));
 			i++;
 		}
 		
