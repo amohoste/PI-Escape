@@ -49,7 +49,7 @@ int main() {
 	m.setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
 	// Vector met glyphdrawcommands aanmaken
-	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen", 0, 0);
+	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("PIESCAPE 2", 0, 0);
 
     //this is a demo of gl_glyph_draw
     Uint32 start_time_ms = SDL_GetTicks();
