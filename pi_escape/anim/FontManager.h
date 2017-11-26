@@ -83,13 +83,14 @@ public:
 enum TextJustification { TEXT_LEFT, TEXT_CENTER, TEXT_RIGHT };
 enum TextVerticalPosition { TEXT_TOP, TEXT_MIDDLE, TEXT_BOTTOM };
 
+/**
+* Hulp (container) klasse die twee maps bevat
+*/
 class Font {
 	friend class FontManager;
-
 private:
 	map<char, GlyphDrawCommand> charMap;
 	map<char, map<char, int>> charKernings;
-
 public:
 	Font(map<char, GlyphDrawCommand> charMap, map<char, map<char, int>> charKernings);
 	Font(const Font& orig);
@@ -108,7 +109,6 @@ private:
 	TextVerticalPosition vpos;
 public:
     FontManager(Graphics* graphics);
-    virtual ~FontManager();
     
     void loadFont(const string& fontName,
                   const string& fontImageFilename,
@@ -120,7 +120,8 @@ public:
     void setColor(const t_vec4& color);
     void setColor(float colorR, float colorG, float colorB, float colorA);
     void setFont(const string& fontName);
-
+	
+	virtual ~FontManager();
 	void free();
 
     vector<GlyphDrawCommand> makeGlyphDrawCommands(string text, int x, int y) const;

@@ -42,10 +42,11 @@ int main() {
 
 	m.setFont("zorque");
 	m.setColor(0.4f, 0.4f, 0.4f, 1.0f);
+	m.setHpos(TEXT_CENTER);
+	m.setVpos(TEXT_MIDDLE);
 	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen", 0, 0);
 
     //this is a demo of gl_glyph_draw
-
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 diff_time_ms = 0;
 
@@ -55,9 +56,8 @@ int main() {
         glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
 
 		vector<GlyphDrawCommand>::iterator i = result.begin();
-		
 		while (i != result.end()) {
-			m.draw(*i);
+			m.draw((*i).changeColor(col));
 			i++;
 		}
 		
@@ -67,7 +67,8 @@ int main() {
         diff_time_ms = cur_time_ms - start_time_ms;
     }
 
-	m.free();
+	m.free(); // Fontmanager moet vrijgemaakt worden voor de graphics vrijgemaakt worden!
+
     graphics_free(graphics);
     free(graphics);
     return 0;
