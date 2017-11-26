@@ -93,6 +93,25 @@ const string GlyphDrawCommand::getfont() const {
 	return font;
 }
 
+GlyphDrawCommand & GlyphDrawCommand::operator=(const GlyphDrawCommand & other) {
+	if (this != &other) // protect against invalid self-assignment
+	{
+		pos_ltop_x = other.pos_ltop_x;
+		pos_ltop_y = other.pos_ltop_y;
+		glyph_x = other.glyph_x;
+		glyph_y = other.glyph_y;
+		glyph_w = other.glyph_w;
+		glyph_h = other.glyph_h;
+		xoffset = other.xoffset;
+		yoffset = other.yoffset;
+		xadvance = other.xadvance;
+		memcpy(color, other.color, sizeof(other.color));
+		font = other.font;
+	}
+	// by convention, always return *this
+	return *this;
+}
+
 GlyphDrawCommand::~GlyphDrawCommand() {
 	delete color;
 }
@@ -106,6 +125,9 @@ FontManager::FontManager(Graphics * gr) : color(*new t_vec4[4]) {
 
 	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 	memcpy(color, col, sizeof(col));
+
+	hpos = TEXT_RIGHT;
+	vpos = TEXT_MIDDLE;
 }
 
 FontManager::~FontManager() {
@@ -155,7 +177,8 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 
 		ifstream in(path + fontMetaFilename);
 		std::string::size_type sz; // alias voor size_t
-
+	
+		
 		while (!in.eof()) {
 			string line;
 			getline(in, line);
@@ -285,6 +308,19 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 
 vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, int y) const {
 	
+	int y1 = y;
+
+	if (vpos == TEXT_MIDDLE) {
+		y1 = (y + graphics->height + 72) / 2;
+	}
+	else if (vpos == TEXT_BOTTOM) {
+		y1 = y + 72;
+	}
+	else {
+		y1 = graphics->height;
+	}
+
+
 	vector<GlyphDrawCommand> result;
 	char prevChar;
 	int x1 = x;
@@ -305,10 +341,34 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 					}
 				}
 			}
-			result.push_back(found.move(x1 + found.getXoffset(), y - found.getYoffset()).changeColor(color));
+			result.push_back(found.move(x1 + found.getXoffset(), y1 - found.getYoffset()).changeColor(color));
 			prevChar = c;
 			x1 += found.getXadvance();
 		} 
+	}
+
+	int movex = 0;
+
+	if (hpos == TEXT_CENTER) {
+		int middle = (x + graphics->width) / 2;
+		int textmiddle = (x + x1) / 2;
+		movex = middle - textmiddle;
+	}
+	else if (hpos == TEXT_RIGHT) {
+		movex = graphics->width - x1;
+	}
+
+	
+	if (movex != 0) {
+		
+		vector<GlyphDrawCommand>::iterator i = result.begin();
+
+		while (i != result.end()) {
+			GlyphDrawCommand replacement = *i;
+			i = result.erase(i);
+			i = result.insert(i, replacement.move(movex, 0));
+			i++;
+		}
 	}
 	return result;
 }
@@ -319,6 +379,14 @@ void FontManager::draw(const GlyphDrawCommand & glyphDraw) {
 	t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
 	gl_glyph_draw(glglyph, glyphDraw.getPos_ltop_x(), glyphDraw.getPos_ltop_y(), glyphDraw.getGlyph_x(), glyphDraw.getGlyph_y(), glyphDraw.getGlyph_w(), glyphDraw.getGlyph_h(), glyphDraw.getColor());
+}
+
+void FontManager::setHpos(TextJustification hpos) {
+	this->hpos = hpos;
+}
+
+void FontManager::setVpos(TextVerticalPosition vpos) {
+	this->vpos = vpos;
 }
 
 void FontManager::setColor(const t_vec4 & col) {

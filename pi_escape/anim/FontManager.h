@@ -30,17 +30,17 @@ using namespace std;
 
 class GlyphDrawCommand {
 private:
-	const int pos_ltop_x;
-	const int pos_ltop_y;
-	const int glyph_x;
-	const int glyph_y;
-	const int glyph_w;
-	const int glyph_h;
-	const int xoffset;
-	const int yoffset;
-	const int xadvance;
+	int pos_ltop_x;
+	int pos_ltop_y;
+	int glyph_x;
+	int glyph_y;
+	int glyph_w;
+	int glyph_h;
+	int xoffset;
+	int yoffset;
+	int xadvance;
     t_vec4& color;
-	const string font;
+	string font;
 	
 public:
     /**
@@ -78,6 +78,7 @@ public:
 	const int getYoffset() const;
 	const int getXadvance() const;
 	const string getfont() const;
+	GlyphDrawCommand& operator=(const GlyphDrawCommand& other);
 	virtual ~GlyphDrawCommand();
 };
 
@@ -101,16 +102,12 @@ public:
 class FontManager {
 private:
 	Graphics* graphics;
-
 	Font curFont;
-
 	map<string, Font> fonts;
 	map<string, GLGlyph*> glyphMap;
-	
 	t_vec4& color;
-	//enum TextJustification;
-	//enum TextVerticalPosition;
-
+	TextJustification hpos;
+	TextVerticalPosition vpos;
 public:
     FontManager(Graphics* graphics);
     virtual ~FontManager();
@@ -121,7 +118,7 @@ public:
 
     //these method set attibutes for the next  makeGlyphDrawCommands call
     void setHpos(TextJustification hpos);
-    void setVpos(TextVerticalPosition vpos);
+	void setVpos(TextVerticalPosition vpos);
     void setColor(const t_vec4& color);
     void setColor(float colorR, float colorG, float colorB, float colorA);
     void setFont(const string& fontName);
@@ -132,7 +129,6 @@ public:
     
     void draw(const GlyphDrawCommand& glyphDraw);
 };
-
 
 
 #endif //PIESCAPE2_FONTMANAGER_H
