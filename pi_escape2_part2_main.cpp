@@ -48,6 +48,7 @@ int main() {
 
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 diff_time_ms = 0;
+
     while (diff_time_ms < 5000) {
         graphics_begin_draw(graphics);
 

@@ -5,13 +5,13 @@
 extern "C"
 {
 #endif
-
+// C includes
 #include "../graphics/opengl_game_renderer.h"
 #include "../graphics/gl_glyph.h"
+
 #ifdef __cplusplus
 }
 #endif
-
 
 #include <vector>
 #include <map>
@@ -22,7 +22,6 @@ extern "C"
 #include <sstream>
 #include <algorithm>
 #include <iterator>
-
 
 using namespace std;
 
@@ -41,7 +40,6 @@ private:
 	int xadvance;
     t_vec4& color;
 	string font;
-	
 public:
     /**
      * Create a draw command

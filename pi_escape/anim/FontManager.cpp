@@ -113,7 +113,7 @@ GlyphDrawCommand & GlyphDrawCommand::operator=(const GlyphDrawCommand & other) {
 }
 
 GlyphDrawCommand::~GlyphDrawCommand() {
-	delete color;
+	delete []color;
 }
 
 /***************************************************************
@@ -132,7 +132,7 @@ FontManager::FontManager(Graphics * gr) : color(*new t_vec4[4]) {
 
 FontManager::~FontManager() {
 	delete graphics;
-	delete color;
+	delete []color;
 }
 
 void FontManager::free() {
@@ -163,7 +163,7 @@ void FontManager::loadFont(const std::string& fontName, const std::string& fontI
 		strcpy(charImagePath, imagePath.c_str());
 
 		gl_glyph_init(glGlyph, graphics, charImagePath);
-		delete charImagePath;
+		delete []charImagePath;
 
 		pair<string, GLGlyph*> glyphPair(fontName, glGlyph);
 		glyphMap.insert(glyphPair);
