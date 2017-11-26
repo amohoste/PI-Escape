@@ -34,16 +34,21 @@ int main() {
 	
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
+	// Fontmanager aanmaken
 	FontManager m(graphics);
 	
+	// Fonts inladen
 	m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
 	m.loadFont("base", "base72.png", "base72.fnt");
 	m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
-	m.setFont("zorque");
-	m.setColor(0.4f, 0.4f, 0.4f, 1.0f);
-	m.setHpos(TEXT_CENTER);
-	m.setVpos(TEXT_MIDDLE);
+	// Font, kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
+	m.setFont("zorque"); // indien niet gebruikt laatst ingelezen font als font
+	m.setColor(0.4f, 0.4f, 0.4f, 1.0f); // Default { 1.0f, 0.0f, 0.0f, 1.0f }
+	m.setHpos(TEXT_CENTER); // Default TEXT_LEFT
+	m.setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
+
+	// Vector met glyphdrawcommands aanmaken
 	vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("Pack my box with five dozen", 0, 0);
 
     //this is a demo of gl_glyph_draw
@@ -55,6 +60,7 @@ int main() {
 
         glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
 
+		// Glyphdrawcommands tekenen en als kleur col nemen
 		vector<GlyphDrawCommand>::iterator i = result.begin();
 		while (i != result.end()) {
 			m.draw((*i).changeColor(col));
