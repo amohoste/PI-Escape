@@ -424,4 +424,3 @@ Font& Font::operator= (const Font & other) {
 
 	return *this;
 }
-
