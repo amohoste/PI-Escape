@@ -113,7 +113,7 @@ GlyphDrawCommand & GlyphDrawCommand::operator=(const GlyphDrawCommand & other) {
 }
 
 GlyphDrawCommand::~GlyphDrawCommand() {
-	delete []color;
+	delete []& color;
 }
 
 /***************************************************************
@@ -132,7 +132,7 @@ FontManager::FontManager(Graphics * gr) : color(*new t_vec4[4]) {
 
 FontManager::~FontManager() {
 	delete graphics;
-	delete []color;
+	delete [] &color;
 }
 
 void FontManager::free() {
