@@ -7,18 +7,17 @@
 
 class EntryBuilder;
 
-class MovieBuilder : public EntryBuilder{
+class MovieBuilder{
 public:
-    MovieBuilder& setDuration(long l);
-    MovieBuilder& addText(const char* string);
-    MovieBuilder& setFont(const char* string);
+    MovieBuilder& addText(const char* text);
+    MovieBuilder& setFont(const char* text);
     MovieBuilder& setColor(t_vec4 color);
     MovieBuilder& setPos_percent(float x, float y);
-    MovieBuilder& setStartTime(long start);
-    MovieBuilder& setEndTime(long end);
+    MovieBuilder& setStartTime(long l);
+    MovieBuilder& setEndTime(long l);
+    MovieBuilder& addAnimation(Animation* animation, long l, long p);
     MovieBuilder& endText();
-
-
+    MovieBuilder& setDuration(long d);
     MovieDefinition* build();
 };
 
