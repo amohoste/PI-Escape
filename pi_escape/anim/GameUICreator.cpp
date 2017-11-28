@@ -13,25 +13,24 @@ GameUICreator::~GameUICreator() {
 //TODO: uncomment the code below, and make it work
 
 EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
-    return entryBuilder;
-//    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0))
-//                    , ACTIVATE, MENUSTATECHANGE_START, false, 1000l)
-//            .addAnimation(new ReverseAnimation(new FadeInAnimation())
-//                    , OTHER_ACTIVATED, MENUSTATECHANGE_START, false, 1000l)
-//            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0))
-//                    , OTHER_ACTIVATED, MENUSTATECHANGE_START, false, 1000l)
-//            .addAnimation(
-//                    new ReverseAnimation(
-//                    new GlyphIteratingAnimation(
-//                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
-//                            1.5f))
-//                    , DEFAULT, MENUSTATECHANGE_START, false, 500l)
-//            .addAnimation(
-//                    new GlyphIteratingAnimation(
-//                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 10))),
-//                            1.5f)
-//                    , HOVER, MENUSTATECHANGE_START, true, 2000l)
-//            .addAnimation(new RainbowColorAnimation(), HOVER, MENUSTATECHANGE_START, true, 1000l);
+    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0))
+                    , ACTIVATE,  false, 1000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation())
+                    , OTHER_ACTIVATED,  false, 1000l)
+            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0))
+                    , OTHER_ACTIVATED,  false, 1000l)
+            .addAnimation(
+                    new ReverseAnimation(
+                    new GlyphIteratingAnimation(
+                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
+                            1.5f))
+                    , DEFAULT,  false, 500l)
+            .addAnimation(
+                    new GlyphIteratingAnimation(
+                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 10))),
+                            1.5f)
+                    , HOVER,  true, 2000l)
+            .addAnimation(new RainbowColorAnimation(), HOVER, true, 1000l);
 }
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
@@ -113,11 +112,12 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
                     new GlyphIteratingAnimation(new FadeInAnimation(), 1.0f), 0000l, 3000l)
             .endText();
 
-    return builder.build();
+    return std::shared_ptr<MovieDefinition>(builder.build());
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
     MovieBuilder builder;
+    builder.addText("Hallo dit zijn decredits");
 
     return builder.build();
 }

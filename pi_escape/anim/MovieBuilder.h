@@ -16,10 +16,11 @@ public:
     MovieBuilder& setPos_percent(float x, float y);
     MovieBuilder& setStartTime(long start);
     MovieBuilder& setEndTime(long end);
+    MovieBuilder& endText();
 
-    std::shared_ptr<MovieDefinition> build();
 
-
+    MovieDefinition* build();
 };
+
 
 #endif //PIESCAPE2_ANIMATIONSEQUENCEBUILDER_H
