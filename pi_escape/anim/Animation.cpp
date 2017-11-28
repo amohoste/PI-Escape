@@ -60,3 +60,72 @@ std::vector<GlyphDrawCommand> ColorAnimation::applyTransform(const std::vector<G
 }
 
 //TODO implement the rest of the animations
+
+GlyphIteratingAnimation::GlyphIteratingAnimation(Animation * animation, float overlap)
+{
+}
+
+GlyphIteratingAnimation::~GlyphIteratingAnimation()
+{
+}
+
+std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
+{
+	return std::vector<GlyphDrawCommand>();
+}
+
+RepeatAnimation::RepeatAnimation(Animation * animation, int repeats, bool startIn, bool endIn, bool cycleInOut)
+{
+}
+
+RepeatAnimation::RepeatAnimation(Animation * animation, int repeats)
+{
+}
+
+RepeatAnimation::~RepeatAnimation()
+{
+}
+
+std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
+{
+	return std::vector<GlyphDrawCommand>();
+}
+
+SineAnimation::SineAnimation(Animation * animation)
+{
+}
+
+SineAnimation::~SineAnimation()
+{
+}
+
+std::vector<GlyphDrawCommand> SineAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
+{
+	return std::vector<GlyphDrawCommand>();
+}
+
+ReverseAnimation::ReverseAnimation(Animation * animation)
+{
+}
+
+ReverseAnimation::~ReverseAnimation()
+{
+}
+
+std::vector<GlyphDrawCommand> ReverseAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
+{
+	return std::vector<GlyphDrawCommand>();
+}
+
+InOutAnimation::InOutAnimation(Animation * animation)
+{
+}
+
+InOutAnimation::~InOutAnimation()
+{
+}
+
+std::vector<GlyphDrawCommand> InOutAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
+{
+	return std::vector<GlyphDrawCommand>();
+}
