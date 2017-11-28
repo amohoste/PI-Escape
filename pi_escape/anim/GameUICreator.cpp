@@ -119,7 +119,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
     MovieBuilder builder;
     builder.addText("Hallo dit zijn decredits");
 
-    return builder.build();
+    return shared_ptr<MovieDefinition>(builder.build());
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
@@ -165,5 +165,5 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
             .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
             .endText();
 
-    return builder.build();
+    return shared_ptr<MovieDefinition>(builder.build());
 }

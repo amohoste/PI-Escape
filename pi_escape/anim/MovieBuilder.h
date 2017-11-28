@@ -1,7 +1,6 @@
 #ifndef PIESCAPE2_ANIMATIONSEQUENCEBUILDER_H
 #define PIESCAPE2_ANIMATIONSEQUENCEBUILDER_H
 
-#include <bits/shared_ptr.h>
 #include "Animation.h"
 #include "Movie.h"
 

@@ -7,8 +7,11 @@
 class Menu;
 
 class EntryBuilder;
+class MenuDefinition{
+public:
+};
 
-class MenuBuilder : public EntryBuilder{
+class MenuBuilder{
 public:
     EntryBuilder& addEntry();
     MenuDefinition* build();

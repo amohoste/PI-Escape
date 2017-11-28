@@ -165,7 +165,7 @@ endif()
 add_executable(pi_escape2_part1 pi_escape2_part1_main.c ${GAME_PART1_SRC_FILES})
 
 
-add_executable(pi_escape2_part2 pi_escape2_part2_main.cpp ${ANIM_SRC} ${GAME_PART1_SRC_FILES})
+add_executable(pi_escape2_part2 pi_escape2_part2_main.cpp ${ANIM_SRC} ${GAME_PART1_SRC_FILES} pi_escape/anim/EntryBuilder.cpp pi_escape/anim/EntryBuilder.h)
 
 add_executable(pi_escape2_benchmark benchmarking_main.c ${GAME_PART1_SRC_FILES})
 add_executable(pi_escape2_part1_benchmark pi_escape2_part1_main.c ${GAME_PART1_SRC_FILES})

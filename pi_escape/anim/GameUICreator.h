@@ -10,6 +10,7 @@
 
 enum MenuState{ACTIVATE,OTHER_ACTIVATED,HOVER, DEFAULT};
 
+
 class GameUICreator {
 protected:
 public:
