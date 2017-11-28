@@ -9,6 +9,8 @@
 #include "Animation.h"
 #include "GameUICreator.h"
 
+enum MenuState{ACTIVATE,OTHER_ACTIVATED,HOVER, DEFAULT};
+
 class EntryBuilder {
 public:
     EntryBuilder &addAnimation(Animation* animation, MenuState activate, bool repeat, long duration);

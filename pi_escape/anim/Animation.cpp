@@ -129,3 +129,33 @@ std::vector<GlyphDrawCommand> InOutAnimation::applyTransform(const std::vector<G
 {
 	return std::vector<GlyphDrawCommand>();
 }
+
+MoveAnimation::MoveAnimation(int x, int y) {
+
+}
+
+MoveAnimation::MoveAnimation(int *relPos) {
+
+}
+
+MoveAnimation::~MoveAnimation() {
+
+}
+
+std::vector<GlyphDrawCommand>
+MoveAnimation::applyTransform(const std::vector<GlyphDrawCommand> &draws, float position) const {
+    return vector<GlyphDrawCommand>();
+}
+
+RainbowColorAnimation::RainbowColorAnimation() {
+
+}
+
+RainbowColorAnimation::~RainbowColorAnimation() {
+
+}
+
+std::vector<GlyphDrawCommand>
+RainbowColorAnimation::applyTransform(const std::vector<GlyphDrawCommand> &draws, float position) const {
+    return vector<GlyphDrawCommand>();
+}

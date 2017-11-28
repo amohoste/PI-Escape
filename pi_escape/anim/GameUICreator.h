@@ -1,14 +1,17 @@
 #ifndef PIESCAPE2_GAMEUICREATOR_H
 #define PIESCAPE2_GAMEUICREATOR_H
 
+
 #include "Menu.h"
 #include "Movie.h"
+#include "MenuBuilder.h"
+#include "MovieBuilder.h"
+#include "EntryBuilder.h"
+#include "Animation.h"
 
 #include <string>
 #include <utility>
 #include <memory>
-
-enum MenuState{ACTIVATE,OTHER_ACTIVATED,HOVER, DEFAULT};
 
 
 class GameUICreator {
