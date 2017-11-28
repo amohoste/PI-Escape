@@ -13,6 +13,7 @@ extern "C"
 #endif
 
 #include "pi_escape/anim/FontManager.h"
+#include "pi_escape/anim/GameUICreator.h"
 #include <SDL.h>
 #undef main //Weird bug on windows where SDL overwrite main definition
 
@@ -30,6 +31,10 @@ int main() {
     Graphics* graphics = graphics_alloc(0, 0);
 	
     t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
+
+    GameUICreator *gc = new GameUICreator;
+
+    gc->createIntro();
 
 	// Fontmanager aanmaken
 	FontManager m(graphics);
@@ -69,6 +74,8 @@ int main() {
         Uint32 cur_time_ms = SDL_GetTicks();
         diff_time_ms = cur_time_ms - start_time_ms;
     }
+
+    delete gc;
 
 	m.free(); // Fontmanager moet vrijgemaakt worden voor de graphics vrijgemaakt worden!
 
