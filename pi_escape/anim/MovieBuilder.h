@@ -7,6 +7,10 @@
 class EntryBuilder;
 
 class MovieBuilder{
+private:
+    const char* text;
+    long start;
+    long end;
 public:
     MovieBuilder& addText(const char* text);
     MovieBuilder& setFont(const char* text);
@@ -18,6 +22,7 @@ public:
     MovieBuilder& endText();
     MovieBuilder& setDuration(long d);
     MovieDefinition* build();
+
 };
 
 

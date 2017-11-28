@@ -2,7 +2,7 @@
 
 //TODO
 MovieBuilder &MovieBuilder::addText(const char *text) {
-    //todo
+    this->text = text;
     return *this;
 }
 
@@ -22,12 +22,12 @@ MovieBuilder &MovieBuilder::setPos_percent(float x, float y) {
 }
 
 MovieBuilder &MovieBuilder::setStartTime(long l) {
-    //todo
+    this->start = l;
     return *this;
 }
 
 MovieBuilder &MovieBuilder::setEndTime(long l) {
-    //todo
+    this->end = l;
     return *this;
 }
 
