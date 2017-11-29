@@ -11,8 +11,8 @@ MovieBuilder &MovieBuilder::setFont(const char *font) {
     return *this;
 }
 
-MovieBuilder &MovieBuilder::setColor(float *color) {
-    this->color = color;
+MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
+    this->color = *color;
     return *this;
 }
 

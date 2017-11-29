@@ -8,7 +8,16 @@
  * A sequence of text animations, such as an intro, credits, ...
  */
 class MovieDefinition {
-    //TODO
+public:
+    MovieDefinition(long duration);
+    long duration;
+//    const long start;
+//    const long end;
+//    const int x;
+//    const int y;
+//    const float color;
+//    const char* font;
+//    const char* text;
 };
 
 

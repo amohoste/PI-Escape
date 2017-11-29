@@ -12,7 +12,7 @@ private:
     long start;
     long end;
     const char *font;
-    float *color;
+    float color;
     float x;
     float y;
     long duration;

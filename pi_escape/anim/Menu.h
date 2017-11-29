@@ -6,7 +6,7 @@
 
 //TODO
 
-const class MenuDefinition {
+class MenuDefinition {
 private:
 };
 
