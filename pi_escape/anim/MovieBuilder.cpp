@@ -6,18 +6,19 @@ MovieBuilder &MovieBuilder::addText(const char *text) {
     return *this;
 }
 
-MovieBuilder &MovieBuilder::setFont(const char *text) {
-    //todo
+MovieBuilder &MovieBuilder::setFont(const char *font) {
+    this->font = font;
     return *this;
 }
 
 MovieBuilder &MovieBuilder::setColor(float *color) {
-    //todo
+    this->color = color;
     return *this;
 }
 
 MovieBuilder &MovieBuilder::setPos_percent(float x, float y) {
-    //todo
+    this->x =x;
+    this->y =y;
     return *this;
 }
 
@@ -42,7 +43,7 @@ MovieBuilder &MovieBuilder::endText() {
 }
 
 MovieBuilder &MovieBuilder::setDuration(long d) {
-    //todo
+    this->duration = d;
     return *this;
 }
 

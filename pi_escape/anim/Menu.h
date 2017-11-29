@@ -6,6 +6,8 @@
 
 //TODO
 
-class MenuDefinition;
+const class MenuDefinition {
+private:
+};
 
 #endif //PIESCAPE2_MENU_H
