@@ -4,6 +4,17 @@
 #include "Animation.h"
 #include "Menu.h"
 
-//TODO
+class Menu;
+
+class EntryBuilder;
+class MenuDefinition{
+public:
+};
+
+class MenuBuilder{
+public:
+    EntryBuilder& addEntry();
+    MenuDefinition* build();
+};
 
 #endif //PIESCAPE2_MENUBUILDER_H

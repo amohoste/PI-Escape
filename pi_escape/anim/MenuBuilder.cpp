@@ -1,5 +1,15 @@
 #include "MenuBuilder.h"
+#include "EntryBuilder.h"
 
 using namespace std;
 
-//TODO
+
+EntryBuilder &MenuBuilder::addEntry() {
+    //todo
+    EntryBuilder skip;
+    return skip;
+}
+
+MenuDefinition *MenuBuilder::build() {
+    return nullptr;
+}
