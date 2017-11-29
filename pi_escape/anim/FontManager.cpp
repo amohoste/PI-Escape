@@ -92,24 +92,6 @@ const string GlyphDrawCommand::getfont() const {
 	return font;
 }
 
-GlyphDrawCommand & GlyphDrawCommand::operator=(const GlyphDrawCommand & other) {
-	if (this != &other) {
-		pos_ltop_x = other.pos_ltop_x;
-		pos_ltop_y = other.pos_ltop_y;
-		glyph_x = other.glyph_x;
-		glyph_y = other.glyph_y;
-		glyph_w = other.glyph_w;
-		glyph_h = other.glyph_h;
-		xoffset = other.xoffset;
-		yoffset = other.yoffset;
-		xadvance = other.xadvance;
-		memcpy(color, other.color, sizeof(other.color));
-		font = other.font;
-	}
-
-	return *this;
-}
-
 GlyphDrawCommand::~GlyphDrawCommand() {
 	delete []& color;
 }
@@ -355,17 +337,23 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 	}
 	
 	if (movex != 0) {
-		vector<GlyphDrawCommand>::iterator i = result.begin();
+		vector<GlyphDrawCommand> new_result;
 
-		while (i != result.end()) {
-			GlyphDrawCommand replacement = *i;
-			i = result.erase(i);
-			i = result.insert(i, replacement.move(movex, 0));
-			i++;
+		vector<GlyphDrawCommand>::iterator it = result.begin();
+
+		while (it != result.end()) {
+			const GlyphDrawCommand& cur = *it;
+			new_result.push_back(cur.move(movex, 0));
+			it++;
 		}
+		return new_result;
+	}
+	else {
+		// Als niets verplaatst moet worden kunnen we gewoon result teruggeven
+		return result;
 	}
 
-	return result;
+	
 }
 
 void FontManager::draw(const GlyphDrawCommand & glyphDraw) {

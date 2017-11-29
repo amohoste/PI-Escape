@@ -29,17 +29,17 @@ using namespace std;
 
 class GlyphDrawCommand {
 private:
-	int pos_ltop_x;
-	int pos_ltop_y;
-	int glyph_x;
-	int glyph_y;
-	int glyph_w;
-	int glyph_h;
-	int xoffset;
-	int yoffset;
-	int xadvance;
-    t_vec4& color;
-	string font;
+	const int pos_ltop_x;
+	const int pos_ltop_y;
+	const int glyph_x;
+	const int glyph_y;
+	const int glyph_w;
+	const int glyph_h;
+	const int xoffset;
+	const int yoffset;
+	const int xadvance;
+	t_vec4& color;
+	const string font;
 public:
     /**
      * Create a draw command
@@ -76,7 +76,6 @@ public:
 	const int getYoffset() const;
 	const int getXadvance() const;
 	const string getfont() const;
-	GlyphDrawCommand& operator=(const GlyphDrawCommand& other);
 	virtual ~GlyphDrawCommand();
 };
 
