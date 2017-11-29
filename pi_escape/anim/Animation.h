@@ -61,6 +61,7 @@ public:
 /** Move text position relatively */
 class MoveAnimation : public Animation {
 private:
+	t_ivec2 newPos;
 public:
     MoveAnimation(t_ivec2 relPos);
     MoveAnimation(int x, int y);

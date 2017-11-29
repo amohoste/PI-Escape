@@ -68,6 +68,12 @@ std::vector<GlyphDrawCommand> ColorAnimation::applyTransform(const std::vector<G
 /***************************************************************
  RainbowColorAnimation
 ****************************************************************/
+RainbowColorAnimation::RainbowColorAnimation() {
+
+}
+
+RainbowColorAnimation::~RainbowColorAnimation() {
+}
 
 std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
 {
@@ -76,17 +82,19 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
 		const GlyphDrawCommand& cur = *it;
 
+		// Hue berekenen en omzetten naar rgb
 		float hue = 360.0f * position;
 		vector<float> rgb = hsv_to_rgb(hue);
-		//hsv_to_rgb(rgb, hue);
 
-
-		//res.push_back(replacement);
+		t_vec4 newcolor;
+		glmc_vec4_set(newcolor, rgb[0], rgb[1], rgb[2], cur.getColor);
+		
+		GlyphDrawCommand replacement = cur.changeColor(newcolor[0], newcolor[1], newcolor[2]);
+		res.push_back(replacement);
 	}
 
 	return res;
 }
-
 
 std::vector<float> RainbowColorAnimation::hsv_to_rgb(float hue) const {
 	std::vector<float> result(3);
@@ -98,7 +106,8 @@ std::vector<float> RainbowColorAnimation::hsv_to_rgb(float hue) const {
 
 	if (hue == 360.0f) {
 		h = 0.0f;
-	} else {
+	}
+	else {
 		h = hue / 60.0f;
 	}
 
@@ -147,11 +156,32 @@ std::vector<float> RainbowColorAnimation::hsv_to_rgb(float hue) const {
 	return result;
 }
 
-RainbowColorAnimation::RainbowColorAnimation() {
+/***************************************************************
+ MoveAnimation
+****************************************************************/
+MoveAnimation::MoveAnimation(t_ivec2 relPos) 
+	: newPos{ relPos[0], relPos[1] } {}
+
+MoveAnimation::MoveAnimation(int x, int y) 
+	: newPos{ x, y } {}
+
+MoveAnimation::~MoveAnimation() {
 
 }
 
-RainbowColorAnimation::~RainbowColorAnimation()
-{
-}
+std::vector<GlyphDrawCommand> MoveAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
+	std::vector<GlyphDrawCommand> res;
 
+	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
+		const GlyphDrawCommand& cur = *it;
+		
+		t_ivec2 curPos;
+		curPos[0] = cur.getPos_ltop_x() + ((newPos[0] - cur.getPos_ltop_x()) * position);
+		curPos[1] = cur.getPos_ltop_y() + ((newPos[1] - cur.getPos_ltop_y()) * position);
+
+		GlyphDrawCommand replacement = cur.move(curPos[0], curPos[1]);
+		res.push_back(replacement);
+	}
+
+	return res;
+}
