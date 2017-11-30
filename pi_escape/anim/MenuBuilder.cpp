@@ -16,7 +16,10 @@ MenuDefinition *MenuBuilder::build() {
 
 
 EntryBuilder &EntryBuilder::addAnimation(Animation *animation, MenuState activate, bool repeat, long duration) {
-    //todo
+    this->repeat = repeat;
+    this->duration = duration;
+    this->menuState = activate;
+    this->animation = animation;
     return *this;
 }
 

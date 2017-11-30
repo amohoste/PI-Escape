@@ -19,6 +19,10 @@ private:
     const char *font;
     char mnemonic;
     const char *action;
+    bool repeat;
+    long duration;
+    MenuState menuState;
+    Animation *animation;
 public:
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
@@ -35,6 +39,8 @@ public:
     EntryBuilder &setMnemonic(char c);
 
     EntryBuilder &buildEntryWithAction(const char *action);
+
+
 };
 
 class MenuBuilder {
