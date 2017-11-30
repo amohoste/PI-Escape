@@ -20,6 +20,8 @@ private:
 public:
     MovieBuilder();
 
+    ~MovieBuilder();
+
     MovieBuilder &addText(const char *text);
 
     MovieBuilder &setFont(const char *font);

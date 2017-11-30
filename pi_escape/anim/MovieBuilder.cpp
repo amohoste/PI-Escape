@@ -1,7 +1,10 @@
 #include "MovieBuilder.h"
 
 MovieBuilder::MovieBuilder(): color(*new t_vec4[4]){
-    //todo deconstructor voor lijst
+}
+
+MovieBuilder::~MovieBuilder(){
+    delete []& this->color;
 }
 
 MovieBuilder &MovieBuilder::addText(const char *text) {
@@ -15,7 +18,6 @@ MovieBuilder &MovieBuilder::setFont(const char *font) {
 }
 
 MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
-    //todo deconstructor
     glmc_assign_vec4(this->color, color);
     return *this;
 }
