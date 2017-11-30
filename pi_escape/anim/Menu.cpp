@@ -10,7 +10,7 @@ MenuDefinition::MenuDefinition(vector<Entry *> entries) : entries(std::move(entr
 }
 
 MenuDefinition::~MenuDefinition() {
-    delete this->entries;
+    //entries
 }
 
 void MenuModel::setMenuDefinition(MenuDefinition *menuDefinition) {

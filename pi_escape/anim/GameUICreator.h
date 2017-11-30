@@ -12,6 +12,7 @@
 #include <utility>
 #include <memory>
 
+class MenuDefinition;
 
 class GameUICreator {
 protected:
