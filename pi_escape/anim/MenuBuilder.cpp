@@ -20,10 +20,8 @@ void addEntry(MenuBuilder *mb, Entry *entry) {
 
 
 EntryBuilder &EntryBuilder::addAnimation(Animation *animation, MenuState activate, bool repeat, long duration) {
-    this->repeat = repeat;
-    this->duration = duration;
-    this->menuState = activate;
-    this->animation = animation;
+    EntryAnimation *ea = new EntryAnimation(animation, activate, repeat, duration);
+    this->animations.push_back(ea);
     return *this;
 }
 
@@ -59,7 +57,9 @@ EntryBuilder &EntryBuilder::setMnemonic(char c) {
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
     this->action = action;
-    addEntry(this->menuBuilder, new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic, this->action, this-> repeat, this->duration, this->menuState, this->animation));
+    addEntry(this->menuBuilder,
+             new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
+                       this->action, this->font, this->animations));
     return *this;
 }
 
@@ -67,11 +67,23 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
     this->menuBuilder = menuBuilder;
 }
 
-Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
-             const char *short_text, char mnemonic, const char *action, bool repeat, long duration,
-             MenuState menuState, Animation animation) : duration(duration), enabled_on_pc(enabled_on_pc),
-                                                         enabled_on_pi(enabled_on_pi), long_text(long_text),
-                                                         short_text(short_text), mnemonic(mnemonic), action(action),
-                                                         repeat(repeat) {
+
+EntryAnimation::EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : duration(
+        duration), menuState(menuState), repeat(repeat), animation(animation) {
+
+}
+
+Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text, const char *short_text, char mnemonic,
+             const char *action, const char *font, const vector<EntryAnimation *> &animations) : enabled_on_pi(
+        enabled_on_pi),
+                                                                                                 enabled_on_pc(
+                                                                                                         enabled_on_pc),
+                                                                                                 long_text(long_text),
+                                                                                                 short_text(short_text),
+                                                                                                 mnemonic(mnemonic),
+                                                                                                 action(action),
+                                                                                                 font(font),
+                                                                                                 animations(
+                                                                                                         animations) {
 
 }
