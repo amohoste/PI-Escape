@@ -10,13 +10,6 @@ enum MenuState {
 
 class Menu;
 
-class MenuBuilder {
-public:
-    EntryBuilder &addEntry();
-
-    MenuDefinition *build();
-};
-
 class EntryBuilder {
 public:
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
@@ -34,6 +27,12 @@ public:
     EntryBuilder &setMnemonic(char c);
 
     EntryBuilder &buildEntryWithAction(const char *action);
+};
+
+class MenuBuilder {
+public:
+    EntryBuilder &addEntry();
+    MenuDefinition *build();
 };
 
 #endif //PIESCAPE2_MENUBUILDER_H
