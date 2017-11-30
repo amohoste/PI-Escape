@@ -59,12 +59,12 @@ EntryBuilder &EntryBuilder::setMnemonic(char c) {
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
     this->action = action;
-    addEntry(this->menuBuilder, new Entry());
+    addEntry(this->menuBuilder, new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic, this->action, this-> repeat, this->duration, this->menuState, this->animation));
     return *this;
 }
 
 void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
-    this->menuBuilder = menuBuilder
+    this->menuBuilder = menuBuilder;
 }
 
 Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
