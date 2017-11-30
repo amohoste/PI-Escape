@@ -9,15 +9,15 @@
  */
 class MovieDefinition {
 public:
-    MovieDefinition(long duration);
-    long duration;
-//    const long start;
-//    const long end;
-//    const int x;
-//    const int y;
-//    const float color;
-//    const char* font;
-//    const char* text;
+    MovieDefinition(long duration, long start, long end, int x, int y ,float* color, const char* font, const char* text);
+    const long duration;
+    const long start;
+    const long end;
+    const int x;
+    const int y;
+    const float* color;
+    const char* font;
+    const char* text;
 };
 
 
