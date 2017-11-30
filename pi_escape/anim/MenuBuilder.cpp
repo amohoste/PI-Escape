@@ -11,7 +11,7 @@ EntryBuilder &MenuBuilder::getEntryBuilder() {
 }
 
 MenuDefinition *MenuBuilder::build() {
-    return nullptr;
+    return new MenuDefinition(this->entries);
 }
 
 void addEntry(MenuBuilder *mb, Entry *entry) {

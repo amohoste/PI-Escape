@@ -10,6 +10,8 @@ enum MenuState {
 
 class Menu;
 
+class MenuDefinition;
+
 class MenuBuilder;
 
 class EntryAnimation;
@@ -24,7 +26,7 @@ private:
     const char *font;
     char mnemonic;
     const char *action;
-    vector<EntryAnimation*> animations;
+    vector<EntryAnimation *> animations;
 public:
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
@@ -65,10 +67,11 @@ public:
     const char mnemonic;
     const char *action;
     const char *font;
-    const vector<EntryAnimation*> animations;
+    const vector<EntryAnimation *> animations;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
-          const char *short_text, char mnemonic, const char *action, const char *font, const vector<EntryAnimation*> &animations);
+          const char *short_text, char mnemonic, const char *action, const char *font,
+          const vector<EntryAnimation *> &animations);
 };
 
 class MenuBuilder {
