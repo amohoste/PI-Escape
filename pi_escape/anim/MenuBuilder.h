@@ -11,6 +11,14 @@ enum MenuState {
 class Menu;
 
 class EntryBuilder {
+private:
+    bool enabled_on_pc;
+    bool enabled_on_pi;
+    const char *long_text;
+    const char *short_text;
+    const char *font;
+    char mnemonic;
+    const char *action;
 public:
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
@@ -32,6 +40,7 @@ public:
 class MenuBuilder {
 public:
     EntryBuilder &addEntry();
+
     MenuDefinition *build();
 };
 

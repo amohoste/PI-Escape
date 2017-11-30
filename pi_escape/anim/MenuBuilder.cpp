@@ -20,36 +20,36 @@ EntryBuilder &EntryBuilder::addAnimation(Animation *animation, MenuState activat
 }
 
 EntryBuilder &EntryBuilder::setEnabledOnPc(bool b) {
-    //todo
+    this->enabled_on_pc = b;
     return *this;
 }
 
 EntryBuilder &EntryBuilder::setEnabledOnPi(bool b) {
-    //todo
+    this->enabled_on_pi = b;
     return *this;
 }
 
 EntryBuilder &EntryBuilder::setLongText(const char *text) {
-    //todo
+    this->long_text = text;
     return *this;
 }
 
 EntryBuilder &EntryBuilder::setShortText(const char *text) {
-    //todo
+    this->short_text = text;
     return *this;
 }
 
 EntryBuilder &EntryBuilder::setFontName(const char *text) {
-    //todo
+    this->font = text;
     return *this;
 }
 
 EntryBuilder &EntryBuilder::setMnemonic(char c) {
-    //todo
+    this->mnemonic = c;
     return *this;
 }
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
-    //todo
+    this->action = action;
     return *this;
 }
