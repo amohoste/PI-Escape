@@ -1,6 +1,9 @@
 #include "MovieBuilder.h"
 
-//TODO
+MovieBuilder::MovieBuilder(): color(*new t_vec4[4]){
+    //todo deconstructor voor lijst
+}
+
 MovieBuilder &MovieBuilder::addText(const char *text) {
     this->text = text;
     return *this;
@@ -12,7 +15,8 @@ MovieBuilder &MovieBuilder::setFont(const char *font) {
 }
 
 MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
-    this->color = *color;
+    //todo deconstructor
+    glmc_assign_vec4(this->color, color);
     return *this;
 }
 
@@ -48,6 +52,5 @@ MovieBuilder &MovieBuilder::setDuration(long d) {
 }
 
 MovieDefinition *MovieBuilder::build() {
-    //todo
-    return nullptr;
+    return new MovieDefinition(this->duration, this->start, this->end,this->x, this->y, this->color, this->font, this->text);
 }

@@ -3,6 +3,7 @@
 
 #include "Animation.h"
 #include "Movie.h"
+#include "glmc.h"
 
 class EntryBuilder;
 
@@ -12,11 +13,13 @@ private:
     long start;
     long end;
     const char *font;
-    float color;
+    t_vec4& color;
     float x;
     float y;
     long duration;
 public:
+    MovieBuilder();
+
     MovieBuilder &addText(const char *text);
 
     MovieBuilder &setFont(const char *font);
