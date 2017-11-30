@@ -50,21 +50,21 @@ class EntryAnimation {
 private:
     const Animation *animation;
     const MenuState menuState;
-    const bool repeat;
     const long duration;
+    const bool repeat;
 public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
 };
 
 class Entry {
 public:
-    const bool enabled_on_pc;
     const bool enabled_on_pi;
+    const bool enabled_on_pc;
     const char *long_text;
     const char *short_text;
-    const char *font;
     const char mnemonic;
     const char *action;
+    const char *font;
     const vector<EntryAnimation*> animations;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,

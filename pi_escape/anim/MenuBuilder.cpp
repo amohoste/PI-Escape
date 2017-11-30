@@ -68,8 +68,8 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
 }
 
 
-EntryAnimation::EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : duration(
-        duration), menuState(menuState), repeat(repeat), animation(animation) {
+EntryAnimation::EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : animation(
+        animation), menuState(menuState), duration(duration), repeat(repeat) {
 
 }
 
