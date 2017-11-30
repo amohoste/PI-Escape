@@ -12,6 +12,7 @@ class Menu;
 
 class EntryBuilder {
 private:
+    MenuBuilder *menuBuilder;
     bool enabled_on_pc;
     bool enabled_on_pi;
     const char *long_text;
@@ -40,16 +41,37 @@ public:
 
     EntryBuilder &buildEntryWithAction(const char *action);
 
+    void setMenuBuilder(MenuBuilder *menuBuilder);
 
+};
+
+class Entry {
+public:
+    const bool enabled_on_pc;
+    const bool enabled_on_pi;
+    const char *long_text;
+    const char *short_text;
+    const char *font;
+    const char mnemonic;
+    const const char *action;
+    const bool repeat;
+    const long duration;
+    const MenuState menuState;
+    const Animation *animation;
+
+    Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
+          const char *short_text, char mnemonic, const char *action, bool repeat, long duration, MenuState menuState, Animation animation);
 };
 
 class MenuBuilder {
 private:
-    vector<EntryBuilder *> entries;
+    vector<Entry *> entries;
 public:
-    EntryBuilder &addEntry();
+    EntryBuilder &getEntryBuilder();
 
     MenuDefinition *build();
+
+    friend void addEntry(MenuBuilder *mb, Entry *entry);
 };
 
 #endif //PIESCAPE2_MENUBUILDER_H

@@ -7,7 +7,7 @@
 //TODO
 
 class MenuDefinition {
-private:
+public:
 };
 
 #endif //PIESCAPE2_MENU_H

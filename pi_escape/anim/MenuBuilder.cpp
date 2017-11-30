@@ -3,15 +3,19 @@
 using namespace std;
 
 
-EntryBuilder &MenuBuilder::addEntry() {
+EntryBuilder &MenuBuilder::getEntryBuilder() {
     EntryBuilder *eb = new EntryBuilder();
-    entries.push_back(eb);
+    eb->setMenuBuilder(this); //zodat we later een referentie hebben voor de entries
     EntryBuilder &ref = *eb;
     return ref;
 }
 
 MenuDefinition *MenuBuilder::build() {
     return nullptr;
+}
+
+void addEntry(MenuBuilder *mb, Entry *entry) {
+    mb->entries.push_back(entry);
 }
 
 
@@ -55,5 +59,19 @@ EntryBuilder &EntryBuilder::setMnemonic(char c) {
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
     this->action = action;
+    addEntry(this->menuBuilder, new Entry());
     return *this;
+}
+
+void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
+    this->menuBuilder = menuBuilder
+}
+
+Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
+             const char *short_text, char mnemonic, const char *action, bool repeat, long duration,
+             MenuState menuState, Animation animation) : duration(duration), enabled_on_pc(enabled_on_pc),
+                                                         enabled_on_pi(enabled_on_pi), long_text(long_text),
+                                                         short_text(short_text), mnemonic(mnemonic), action(action),
+                                                         repeat(repeat) {
+
 }

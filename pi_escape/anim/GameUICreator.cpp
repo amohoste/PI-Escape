@@ -35,7 +35,7 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
 
-    addMainMenuAnimation(builder.addEntry())
+    addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Start Tutorial")
             .setShortText("Tut")
@@ -44,7 +44,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .buildEntryWithAction("start tutorial");
 
 
-    addMainMenuAnimation(builder.addEntry())
+    addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Start Game")
             .setShortText("Go")
@@ -52,7 +52,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setFontName("arcade")
             .buildEntryWithAction("start game");
 
-    addMainMenuAnimation(builder.addEntry())
+    addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Exit")
             .setShortText("Exit")
