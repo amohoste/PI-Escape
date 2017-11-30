@@ -4,9 +4,10 @@ using namespace std;
 
 
 EntryBuilder &MenuBuilder::addEntry() {
-    //todo
-    EntryBuilder skip;
-    return skip;
+    EntryBuilder *eb = new EntryBuilder();
+    entries.push_back(eb);
+    EntryBuilder &ref = *eb;
+    return ref;
 }
 
 MenuDefinition *MenuBuilder::build() {

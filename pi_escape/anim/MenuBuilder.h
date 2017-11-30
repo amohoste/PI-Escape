@@ -38,6 +38,8 @@ public:
 };
 
 class MenuBuilder {
+private:
+    vector<EntryBuilder *> entries;
 public:
     EntryBuilder &addEntry();
 
