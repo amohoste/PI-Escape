@@ -39,7 +39,7 @@ MovieBuilder &MovieBuilder::setEndTime(long l) {
 }
 
 MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long l, long p) {
-    //todo
+    this->animations.push_back(animation);
     return *this;
 }
 
@@ -54,5 +54,5 @@ MovieBuilder &MovieBuilder::setDuration(long d) {
 }
 
 MovieDefinition *MovieBuilder::build() {
-    return new MovieDefinition(this->duration, this->start, this->end,this->x, this->y, this->color, this->font, this->text);
+    return new MovieDefinition(this->duration, this->start, this->end,this->x, this->y, this->color, this->font, this->text, this->animations);
 }

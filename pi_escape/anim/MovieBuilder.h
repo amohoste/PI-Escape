@@ -17,6 +17,7 @@ private:
     float x;
     float y;
     long duration;
+    std::vector<Animation*> animations;
 public:
     MovieBuilder();
 
