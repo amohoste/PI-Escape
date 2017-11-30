@@ -6,7 +6,6 @@
 #include "Movie.h"
 #include "MenuBuilder.h"
 #include "MovieBuilder.h"
-#include "EntryBuilder.h"
 #include "Animation.h"
 
 #include <string>
