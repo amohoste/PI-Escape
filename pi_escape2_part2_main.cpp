@@ -39,6 +39,7 @@ int main() {
     const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
     MenuModel *model = new MenuModel;
     MenuView *view = new MenuView;
+    view->setModel(model);
     model->addListener(view);
     model->setMenuDefinition(ptr);
 

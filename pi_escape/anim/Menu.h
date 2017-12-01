@@ -16,7 +16,7 @@ class MenuDefinition {
 public:
     const vector<Entry *> entries;
 
-    MenuDefinition(vector<Entry *> entries);
+    explicit MenuDefinition(vector<Entry *> entries);
 
     ~MenuDefinition();
 };
@@ -28,19 +28,25 @@ private:
 public:
     MenuModel();
 
-    void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
+    void setMenuDefinition(const shared_ptr<MenuDefinition> &menuDefinition);
     void setTime(uint64_t time) override;
     int isDone() const override;
 
     void addListener(MenuView *view);
 
     void fireInvalidationEvent();
+
+    shared_ptr<MenuDefinition> getMenuDefinition();
 };
 
 class MenuView : UIView {
+private:
+    MenuModel *model;
 public:
+    MenuView();
     void draw() override;
     void invalidated();
+    void setModel(MenuModel *model);
 };
 
 class MenuController : UIController {

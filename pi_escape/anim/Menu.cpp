@@ -14,8 +14,8 @@ MenuDefinition::~MenuDefinition() {
     //listeners
 }
 
-void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
-    this->menuDefinition = std::move(menuDefinition);
+void MenuModel::setMenuDefinition(const shared_ptr<MenuDefinition> &menuDefinition) {
+    this->menuDefinition = menuDefinition;
     this->fireInvalidationEvent();
 }
 
@@ -42,9 +42,22 @@ void MenuModel::fireInvalidationEvent() {
     }
 }
 
+shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
+    return shared_ptr<MenuDefinition>();
+}
+
 
 void MenuView::draw() {
-    cout << "functie draw opgeroepen" << endl;
+    const vector<Entry *> &entries = this->model->getMenuDefinition().get()->entries;
+    if(!entries.empty()) {
+        cout << "hallo" << endl;
+        vector<Entry *>::const_iterator i = entries.begin();
+        while (i != entries.end()) {
+            cout << *i << endl;
+            i++;
+        }
+    }
+    cout << "gedaan" << endl;
 
 }
 
@@ -52,3 +65,13 @@ void MenuView::invalidated() {
     cout << "I am invalidated" << endl;
     this->draw();
 }
+
+void MenuView::setModel(MenuModel *model) {
+    this->model = model;
+
+}
+
+MenuView::MenuView() {
+
+}
+
