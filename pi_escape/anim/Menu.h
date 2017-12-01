@@ -10,6 +10,7 @@
 
 //TODO
 class Entry;
+class MenuView;
 
 class MenuDefinition {
 public:
@@ -23,14 +24,23 @@ public:
 class MenuModel : UIModel {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
+    vector<MenuView> listeners;
 public:
+    MenuModel();
+
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
     void setTime(uint64_t time) override;
     int isDone() const override;
+
+    void addListener(MenuView view);
+
+    void fireInvalidationEvent();
 };
 
 class MenuView : UIView {
+public:
     void draw() override;
+    void invalidated();
 };
 
 class MenuController : UIController {
