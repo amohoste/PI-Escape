@@ -5,6 +5,8 @@
 #include "Animation.h"
 #include "MenuBuilder.h"
 #include "GameUICreator.h"
+#include <memory>
+#include <iostream>
 
 //TODO
 class Entry;
@@ -20,9 +22,11 @@ public:
 
 class MenuModel : UIModel {
 private:
-    MenuDefinition *menuDefinition;
+    shared_ptr<MenuDefinition> menuDefinition;
 public:
-    void setMenuDefinition(MenuDefinition *menuDefinition);
+    void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
+    void setTime(uint64_t time) override;
+    int isDone() const override;
 };
 
 class MenuView : UIView {

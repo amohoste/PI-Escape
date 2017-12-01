@@ -36,6 +36,10 @@ int main() {
 
     gc->createIntro();
 
+    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
+    MenuModel *model = new MenuModel;
+    model->setMenuDefinition(ptr);
+
 	// Fontmanager aanmaken
 	FontManager m(graphics);
 	

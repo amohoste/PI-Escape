@@ -13,10 +13,22 @@ MenuDefinition::~MenuDefinition() {
     //entries
 }
 
-void MenuModel::setMenuDefinition(MenuDefinition *menuDefinition) {
+void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->menuDefinition = menuDefinition;
 }
 
+void MenuModel::setTime(uint64_t) {
+    //todo
+}
+
+int MenuModel::isDone() const {
+    //todo
+    return 0;
+}
+
+
+
 void MenuView::draw() {
+    cout << "functie draw opgeroepen" << endl;
 
 }
