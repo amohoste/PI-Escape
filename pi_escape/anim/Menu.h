@@ -24,7 +24,7 @@ public:
 class MenuModel : UIModel {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
-    vector<MenuView> listeners;
+    vector<MenuView*> listeners;
 public:
     MenuModel();
 
@@ -32,7 +32,7 @@ public:
     void setTime(uint64_t time) override;
     int isDone() const override;
 
-    void addListener(MenuView view);
+    void addListener(MenuView *view);
 
     void fireInvalidationEvent();
 };

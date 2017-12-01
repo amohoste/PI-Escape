@@ -15,7 +15,8 @@ MenuDefinition::~MenuDefinition() {
 }
 
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
-    this->menuDefinition = menuDefinition;
+    this->menuDefinition = std::move(menuDefinition);
+    this->fireInvalidationEvent();
 }
 
 void MenuModel::setTime(uint64_t) {
@@ -31,13 +32,13 @@ MenuModel::MenuModel() {
 
 }
 
-void MenuModel::addListener(MenuView view) {
+void MenuModel::addListener(MenuView *view) {
     this->listeners.push_back(view);
 }
 
 void MenuModel::fireInvalidationEvent() {
-    for(std::vector<MenuView>::iterator it = this->listeners.begin(); it != this->listeners.end(); ++it) {
-        it.base()->invalidated();
+    for(int i =0; i <this->listeners.size(); i++){
+        this->listeners[i]->invalidated();
     }
 }
 
