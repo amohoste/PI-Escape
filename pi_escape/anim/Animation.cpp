@@ -77,6 +77,7 @@ RainbowColorAnimation::~RainbowColorAnimation() {
 
 std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const
 {
+
 	std::vector<GlyphDrawCommand> res;
 
 	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
@@ -84,10 +85,12 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 
 		// Hue berekenen en omzetten naar rgb
 		float hue = 360.0f * position;
-		vector<float> rgb = hsv_to_rgb(hue);
+		const t_vec3* rgb = hsv_to_rgb(hue);
+
+		//vector<float> rgb = hsv_to_rgb(hue);
 
 		t_vec4 newcolor;
-		glmc_vec4_set(newcolor, rgb[0], rgb[1], rgb[2], cur.getColor);
+		glmc_vec4_set(newcolor, (*rgb)[0], (*rgb)[1], (*rgb)[2], cur.getColor()[3]);
 		
 		GlyphDrawCommand replacement = cur.changeColor(newcolor[0], newcolor[1], newcolor[2]);
 		res.push_back(replacement);
@@ -96,8 +99,9 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 	return res;
 }
 
-std::vector<float> RainbowColorAnimation::hsv_to_rgb(float hue) const {
-	std::vector<float> result(3);
+const t_vec3* RainbowColorAnimation::hsv_to_rgb(float hue) const {
+	//std::vector<float> result(3);
+	t_vec3 result;
 
 	// Voor onze noden moeten we enkel de hue kunnen laten veranderen
 	float s = 1.0f;
@@ -121,6 +125,7 @@ std::vector<float> RainbowColorAnimation::hsv_to_rgb(float hue) const {
 		result[0] = v;
 		result[1] = t;
 		result[2] = p;
+		//glmc_vec3_set(result, )
 	}
 	else if (1.0f <= h && h < 2) {
 		result[0] = q;
@@ -153,7 +158,7 @@ std::vector<float> RainbowColorAnimation::hsv_to_rgb(float hue) const {
 		result[2] = 0.0f;
 	}
 
-	return result;
+	return &result;
 }
 
 /***************************************************************
