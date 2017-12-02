@@ -61,7 +61,6 @@ void MenuView::draw() {
         }
     }
     t_vec4 col = {1.0f, 0.0f, 0.0f, 1.0f};
-    //this is a demo of gl_glyph_draw
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 diff_time_ms = 0;
     while (this->model->isDone()) {
