@@ -25,6 +25,7 @@ class MenuModel : UIModel {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView*> listeners;
+    int done;
 public:
     MenuModel();
 
