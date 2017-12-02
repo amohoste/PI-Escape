@@ -12,12 +12,15 @@
 
 // TODO add 2d array support
 
-void display_ledgrid(SPGM_RGBTRIPLE*, const char*);
-
+// Show an empty square
 void clear_ledgrid();
 
+// Show one color square
 void build_one_color(SPGM_RGBTRIPLE);
 
+// Show rainbow square
 void build_rainbow();
 
+// Show square corresponding to the given array of colours
+void build_array_fake(SPGM_RGBTRIPLE**);
 #endif

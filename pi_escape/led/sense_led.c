@@ -78,4 +78,8 @@ void build_rainbow_sense() {
 	}
 	display_ledgrid(ledgrid, FRAMEBUFFER);
 }
+
+void build_array_sense(square) {
+	// TODO
+}
 #endif // RPI

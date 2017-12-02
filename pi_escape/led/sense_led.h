@@ -11,5 +11,7 @@ void clear_sense_ledgrid();
 void build_one_color_sense(SPGM_RGBTRIPLE color);
 
 void build_rainbow_sense();
+
+void build_array_sense(square);
 #endif // RPI
 #endif // _SENSE_LED_H
