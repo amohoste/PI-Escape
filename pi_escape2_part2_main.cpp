@@ -79,12 +79,15 @@ int main() {
 
      const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
     MenuModel *model = new MenuModel;
+    MenuController *controller = new MenuController;
     MenuView *view = new MenuView;
     model->addListener(view);
     view->setModel(model);
+    controller->setMenuModel(model);
     view->setFontManager(&m);
     view->setGraphics(graphics);
     model->setMenuDefinition(ptr);
+
 
     delete gc;
 

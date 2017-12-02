@@ -34,6 +34,7 @@ public:
 
     void setTime(uint64_t time) override;
     int isDone() const override;
+    void setDone(int i);
 
     void addListener(MenuView *view);
     void fireInvalidationEvent();
@@ -57,6 +58,14 @@ public:
 };
 
 class MenuController : UIController {
+private:
+    MenuModel *model;
+public:
+    ~MenuController() override ;
+    MenuController() override ;
+    void onKey(SDLKey key) override;
+    void onExitKey() override;
+    void setMenuModel(MenuModel *model);
 
 };
 

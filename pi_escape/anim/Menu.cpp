@@ -45,6 +45,10 @@ shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
     return this->menuDefinition;
 }
 
+void MenuModel::setDone(int i) {
+    this->done = i;
+}
+
 
 void MenuView::draw() {
     const vector<Entry *> &entries = this->model->getMenuDefinition()->entries;
@@ -108,3 +112,20 @@ void MenuView::setFontManager(FontManager *fm) { this->fontManager = fm; }
 void MenuView::setGraphics(Graphics *graphics) {
     this->graphics = graphics;
 }
+
+void MenuController::onKey(SDLKey key) {
+    this->model->setDone(0);
+}
+
+void MenuController::setMenuModel(MenuModel *model) {
+    this->model = model;
+}
+
+MenuController::~MenuController() {
+
+}
+
+void MenuController::onExitKey() {
+
+}
+
