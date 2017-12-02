@@ -80,6 +80,8 @@ void MenuView::draw() {
     }
 
     while (this->model->isDone()) {
+        Uint32 start_time_ms = SDL_GetTicks();
+
         //events registreren
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -100,7 +102,10 @@ void MenuView::draw() {
             }
         }
         graphics_end_draw(graphics);
-        model->setTime(model->getTime() + 1);
+
+        Uint32 cur_time_ms = SDL_GetTicks();
+
+        model->setTime(model->getTime() + (cur_time_ms - start_time_ms));
     }
 }
 
