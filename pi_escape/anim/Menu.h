@@ -28,15 +28,15 @@ private:
 public:
     MenuModel();
 
-    void setMenuDefinition(const shared_ptr<MenuDefinition> &menuDefinition);
+    void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
+    shared_ptr<MenuDefinition> getMenuDefinition();
+
     void setTime(uint64_t time) override;
     int isDone() const override;
 
     void addListener(MenuView *view);
-
     void fireInvalidationEvent();
 
-    shared_ptr<MenuDefinition> getMenuDefinition();
 };
 
 class MenuView : UIView {

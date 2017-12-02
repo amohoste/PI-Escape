@@ -14,8 +14,8 @@ MenuDefinition::~MenuDefinition() {
     //listeners
 }
 
-void MenuModel::setMenuDefinition(const shared_ptr<MenuDefinition> &menuDefinition) {
-    this->menuDefinition = menuDefinition;
+void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
+    this->menuDefinition = std::move(menuDefinition);
     this->fireInvalidationEvent();
 }
 
@@ -37,28 +37,23 @@ void MenuModel::addListener(MenuView *view) {
 }
 
 void MenuModel::fireInvalidationEvent() {
-    for(int i =0; i <this->listeners.size(); i++){
+    for (int i = 0; i < this->listeners.size(); i++) {
         this->listeners[i]->invalidated();
     }
 }
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
-    return shared_ptr<MenuDefinition>();
+    return this->menuDefinition;
 }
 
 
 void MenuView::draw() {
-    const vector<Entry *> &entries = this->model->getMenuDefinition().get()->entries;
-    if(!entries.empty()) {
-        cout << "hallo" << endl;
-        vector<Entry *>::const_iterator i = entries.begin();
-        while (i != entries.end()) {
-            cout << *i << endl;
-            i++;
+    const vector<Entry *> &entries = this->model->getMenuDefinition()->entries;
+    if (!entries.empty()) {
+        for(Entry* entry: entries){
+            cout << entry->long_text << endl;
         }
     }
-    cout << "gedaan" << endl;
-
 }
 
 void MenuView::invalidated() {
@@ -68,7 +63,6 @@ void MenuView::invalidated() {
 
 void MenuView::setModel(MenuModel *model) {
     this->model = model;
-
 }
 
 MenuView::MenuView() {
