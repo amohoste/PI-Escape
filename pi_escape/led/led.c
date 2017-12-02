@@ -1,6 +1,7 @@
 #include "led.h"
 
 void display_ledgrid(SPGM_RGBTRIPLE* colour, const char* framebuffer) {
+	printf("display_fake_ledgrid");
 #ifdef RPI
 	display_sense_ledgrid(colour, framebuffer);
 #endif // RPI
@@ -19,6 +20,7 @@ void clear_ledgrid() {
 }
 
 void build_one_color(SPGM_RGBTRIPLE colour) {
+	printf("build_one_color");
 #ifdef RPI
 	build_one_color_sense(colour);
 #endif // RPI

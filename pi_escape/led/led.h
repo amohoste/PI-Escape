@@ -2,8 +2,13 @@
 #define LED_H
 
 #include "../../util/rgb_triple.h"
-#include "fake_led.h"
+
+#ifdef RPI
 #include "sense_led.h"
+#endif // RPI
+#ifndef RPI
+#include "fake_led.h"
+#endif // !RPI
 
 // TODO add 2d array support
 
