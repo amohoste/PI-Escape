@@ -47,7 +47,7 @@ private:
 public:
     MenuView();
     void draw() override;
-    void drawEntry(Entry* entry);
+    vector<GlyphDrawCommand> drawEntry(Entry* entry);
 
     void setFontManager(FontManager *fm);
     void setGraphics(Graphics *graphics);
