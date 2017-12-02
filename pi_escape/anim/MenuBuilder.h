@@ -56,6 +56,8 @@ private:
     const bool repeat;
 public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
+
+    const Animation* getAnimation();
 };
 
 class Entry {

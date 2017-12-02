@@ -73,6 +73,10 @@ EntryAnimation::EntryAnimation(Animation *animation, MenuState menuState, bool r
 
 }
 
+Animation const *EntryAnimation::getAnimation() {
+    return animation;
+}
+
 Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text, const char *short_text, char mnemonic,
              const char *action, const char *font, const vector<EntryAnimation *> &animations) : enabled_on_pi(
         enabled_on_pi),

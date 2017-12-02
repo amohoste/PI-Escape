@@ -44,6 +44,7 @@ public:
     void up();
     void down();
 
+    void select();
 };
 
 class MenuView : UIView {

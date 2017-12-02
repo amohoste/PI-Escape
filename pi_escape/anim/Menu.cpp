@@ -61,6 +61,10 @@ void MenuModel::down() {
     fireInvalidationEvent();
 }
 
+void MenuModel::select() {
+    done = 0;
+}
+
 
 void MenuView::draw() {
     const vector<Entry *> &entries = this->model->getMenuDefinition()->entries;
@@ -119,7 +123,10 @@ vector<GlyphDrawCommand> MenuView::drawEntry(Entry *entry, int x_offset, int y_o
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
     // Vector met glyphdrawcommands aanmaken
-    return m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
+    const vector<GlyphDrawCommand> &command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
+
+    FadeInAnimation *animation = new FadeInAnimation();
+    return animation->applyTransform(command, 0.5f);
 }
 
 void MenuView::setFontManager(FontManager *fm) { this->fontManager = fm; }
@@ -145,6 +152,7 @@ void MenuController::onKey(SDLKey key) {
             this->model->up();
             break;
         case SDLK_RETURN:
+            this->model->select();
             break;
         default:
             break;
