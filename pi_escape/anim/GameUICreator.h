@@ -6,13 +6,13 @@
 #include "Movie.h"
 #include "MenuBuilder.h"
 #include "MovieBuilder.h"
-#include "EntryBuilder.h"
 #include "Animation.h"
 
 #include <string>
 #include <utility>
 #include <memory>
 
+class MenuDefinition;
 
 class GameUICreator {
 protected:
