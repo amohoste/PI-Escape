@@ -70,7 +70,7 @@ void MenuView::draw() {
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
-                this->fontManager->draw((*i).changeColor(col));
+                this->fontManager->draw(*i);
                 i++;
             }
             Uint32 cur_time_ms = SDL_GetTicks();
