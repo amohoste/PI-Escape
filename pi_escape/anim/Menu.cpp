@@ -53,7 +53,7 @@ void MenuView::draw() {
     int i = -1;
     if (!entries.empty()) {
         for (Entry *entry: entries) {
-            commands.push_back(drawEntry(entry, i* 300,0));
+            commands.push_back(drawEntry(entry,0, i* 300));
             i++;
         }
     }
@@ -101,7 +101,7 @@ vector<GlyphDrawCommand> MenuView::drawEntry(Entry *entry, int x_offset, int y_o
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
     // Vector met glyphdrawcommands aanmaken
-    return m->makeGlyphDrawCommands(entry->long_text, y_offset, x_offset);
+    return m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 }
 
 void MenuView::setFontManager(FontManager *fm) { this->fontManager = fm; }
