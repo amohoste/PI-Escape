@@ -72,11 +72,8 @@ void MenuView::draw() {
             i++;
         }
     }
-    t_vec4 col = {1.0f, 0.0f, 0.0f, 1.0f};
-    Uint32 start_time_ms = SDL_GetTicks();
-    Uint32 diff_time_ms = 0;
-    while (this->model->isDone()) {
 
+    while (this->model->isDone()) {
         //events registreren
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
@@ -87,16 +84,14 @@ void MenuView::draw() {
             }
         }
 
+        //tekenen
         graphics_begin_draw(graphics);
-        glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
                 this->fontManager->draw(*i);
                 i++;
             }
-            Uint32 cur_time_ms = SDL_GetTicks();
-            diff_time_ms = cur_time_ms - start_time_ms;
         }
         graphics_end_draw(graphics);
     }
