@@ -75,10 +75,10 @@ void MenuView::draw() {
                 this->fontManager->draw((*i).changeColor(col));
                 i++;
             }
-            graphics_end_draw(graphics);
             Uint32 cur_time_ms = SDL_GetTicks();
             diff_time_ms = cur_time_ms - start_time_ms;
         }
+        graphics_end_draw(graphics);
     }
 }
 

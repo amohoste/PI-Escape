@@ -62,7 +62,6 @@ private:
     MenuModel *model;
 public:
     ~MenuController() override ;
-    MenuController() override ;
     void onKey(SDLKey key) override;
     void onExitKey() override;
     void setMenuModel(MenuModel *model);
