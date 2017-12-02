@@ -16,7 +16,8 @@ MenuDefinition::~MenuDefinition() {
 
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->menuDefinition = std::move(menuDefinition);
-    this->selected = 0;
+    this->selectedInt = 0;
+    this->updateSelected();
     this->fireInvalidationEvent();
 }
 
@@ -53,18 +54,29 @@ void MenuModel::setDone(int i) {
 }
 
 void MenuModel::up() {
-    selected = selected == 0 ? 0 : selected - 1;
-    cout << selected << endl;
+    selectedInt = selectedInt == 0 ? 0 : selectedInt - 1;
+    this->updateSelected();
     fireInvalidationEvent();
 }
 
 void MenuModel::down() {
-    selected = selected == this->menuDefinition.get()->entries.size() - 1 ? selected : selected + 1;
+    selectedInt = selectedInt == this->menuDefinition.get()->entries.size() - 1 ? selectedInt : selectedInt + 1;
+    this->updateSelected();
     fireInvalidationEvent();
 }
 
 void MenuModel::select() {
     done = 0;
+}
+
+Entry *MenuModel::getSelectedEntry() {
+    return selected;
+}
+
+void MenuModel::updateSelected() {
+    //omgekeerd tellen beetje onlogisch maarja
+    this->selected = this->menuDefinition.get()->entries[this->menuDefinition.get()->entries.size() - 1 -
+                                                         this->selectedInt];
 }
 
 
@@ -135,10 +147,12 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
 //    for (EntryAnimation *ea : entry->animations) {
-    FadeInAnimation *animation = new FadeInAnimation();
-    command = animation->applyTransform(command, getPosition(time, 1000));
+    if (entry == this->model->getSelectedEntry()) {
+        FadeInAnimation *animation = new FadeInAnimation();
+        command = animation->applyTransform(command, getPosition(time, 1000));
 //        command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
 //    }
+    }
 
     return command;
 

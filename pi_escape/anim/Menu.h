@@ -29,7 +29,10 @@ private:
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView *> listeners;
     int done;
-    int selected;
+    int selectedInt;
+    Entry *selected;
+
+    void updateSelected();
 public:
     MenuModel();
 
@@ -53,6 +56,7 @@ public:
 
     void select();
 
+    Entry* getSelectedEntry();
 };
 
 class MenuView : UIView {
