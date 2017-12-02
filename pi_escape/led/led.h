@@ -22,5 +22,5 @@ void build_one_color(SPGM_RGBTRIPLE);
 void build_rainbow();
 
 // Show square corresponding to the given array of colours
-void build_array_fake(SPGM_RGBTRIPLE**);
+void build_array(SPGM_RGBTRIPLE**);
 #endif
