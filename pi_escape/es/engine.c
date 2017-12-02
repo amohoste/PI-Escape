@@ -28,11 +28,11 @@ void engine_init(Engine* engine, Graphics* graphics) {
     engine->end_system = system_endlevel_alloc();
     engine->move_system = system_move_alloc();
     engine->process_sensor_system = system_process_sensor_alloc();
+	engine->led_system = system_led_alloc();
 #ifdef RPI
 	printf("RPI\n");
 	engine->real_sensors_system = system_real_sensors_alloc();
 	engine->orientation_system = system_orientation_alloc();
-	engine->led_system = system_led_alloc();
 #endif
 
 	assert(engine->render_system != NULL);
@@ -46,10 +46,10 @@ void engine_init(Engine* engine, Graphics* graphics) {
 	assert(engine->end_system != NULL);
 	assert(engine->move_system != NULL);
 	assert(engine->process_sensor_system != NULL);
+	assert(engine->led_system != NULL);
 #ifdef RPI
 	assert(engine->real_sensors_system != NULL);
 	assert(engine->orientation_system != NULL);
-	assert(engine->led_system != NULL);
 #endif
 }
 
@@ -68,13 +68,12 @@ void engine_free(Engine* e) {
 	system_endlevel_free(e->end_system);
 	system_move_free(e->move_system);
 	system_process_sensor_free(e->process_sensor_system);
+	system_led_free(e->led_system);
 #ifdef RPI
 	system_real_sensors_free(e->real_sensors_system);
 	system_orientation_free(e->orientation_system);
-	system_led_free(e->led_system);
 	free(e->real_sensors_system);
 	free(e->orientation_system);
-	free(e->led_system);
 #endif
 
 	es_memory_manager_free(&e->es_memory);
@@ -90,6 +89,7 @@ void engine_free(Engine* e) {
 	free(e->end_system);
 	free(e->move_system);
 	free(e->process_sensor_system);
+	free(e->led_system);
 
 	//note: don't free graphics here
 }
@@ -109,8 +109,8 @@ void engine_update(Engine* engine) {
 #ifdef RPI
 	system_real_sensors_update(engine->real_sensors_system, engine);
 	system_orientation_update(engine->orientation_system, engine);
-	system_led_update(engine->led_system, engine);
 #endif
+	system_led_update(engine->led_system, engine);
 	system_process_sensor_update(engine->process_sensor_system, engine);
 	system_render_update(engine->render_system, engine);
 }

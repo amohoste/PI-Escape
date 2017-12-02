@@ -135,8 +135,8 @@ else()
     string (REPLACE "pi_escape/es/system/orientation_system.h" "" es_system_SRC "${es_system_SRC}")
     string (REPLACE "pi_escape/es/system/sensor_system.c" "" es_system_SRC "${es_system_SRC}")
     string (REPLACE "pi_escape/es/system/sensor_system.h" "" es_system_SRC "${es_system_SRC}")
-    string (REPLACE "pi_escape/es/system/led_system.c" "" es_system_SRC "${es_system_SRC}")
-    string (REPLACE "pi_escape/es/system/led_system.h" "" es_system_SRC "${es_system_SRC}")
+    # string (REPLACE "pi_escape/es/system/led_system.c" "" es_system_SRC "${es_system_SRC}")
+    # string (REPLACE "pi_escape/es/system/led_system.h" "" es_system_SRC "${es_system_SRC}")
 endif()
 
 

@@ -24,10 +24,10 @@ typedef struct Engine Engine;
 #include "system/activation_system.h"
 #include "system/action_system.h"
 #include "system/process_sensor_system.h"
+#include "system/led_system.h"
 #ifdef RPI
 #include "system/real_sensors_system.h"
 #include "system/orientation_system.h"
-#include "system/led_system.h"
 #endif
 #include <stdint.h>
 #include <glmc.h>
@@ -51,10 +51,10 @@ typedef struct Engine {
 	EndLevelSystem* end_system;
 	MoveSystem* move_system;
 	ProcessSensorSystem* process_sensor_system;
+	LedSystem* led_system;
 #ifdef RPI
 	RealSensorsSystem* real_sensors_system;
 	OrientationSystem* orientation_system;
-	LedSystem* led_system;
 #endif
 	ESMemory es_memory;
 } Engine;
