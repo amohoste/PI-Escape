@@ -20,8 +20,9 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->fireInvalidationEvent();
 }
 
-void MenuModel::setTime(uint64_t) {
-    //todo
+void MenuModel::setTime(uint64_t time) {
+    this->time = time;
+    fireInvalidationEvent();
 }
 
 int MenuModel::isDone() const {
@@ -29,6 +30,7 @@ int MenuModel::isDone() const {
 }
 
 MenuModel::MenuModel() {
+    time = 0;
     done = 1;
 }
 
@@ -72,7 +74,7 @@ void MenuView::draw() {
     int i = -1;
     if (!entries.empty()) {
         for (Entry *entry: entries) {
-            commands.push_back(drawEntry(entry, 0, i * 300));
+            commands.push_back(drawEntry(entry, 0, i * 300, model->getTime()));
             i++;
         }
     }
@@ -98,6 +100,7 @@ void MenuView::draw() {
             }
         }
         graphics_end_draw(graphics);
+        model->setTime(model->getTime() + 1);
     }
 }
 
@@ -113,7 +116,8 @@ MenuView::MenuView() {
 
 }
 
-vector<GlyphDrawCommand> MenuView::drawEntry(Entry *entry, int x_offset, int y_offset) {
+vector<GlyphDrawCommand>
+MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     FontManager *m = this->fontManager;
 
     // Font, kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
@@ -123,10 +127,16 @@ vector<GlyphDrawCommand> MenuView::drawEntry(Entry *entry, int x_offset, int y_o
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
     // Vector met glyphdrawcommands aanmaken
-    const vector<GlyphDrawCommand> &command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
+    vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
+//    for (EntryAnimation *ea : entry->animations) {
     FadeInAnimation *animation = new FadeInAnimation();
-    return animation->applyTransform(command, 0.5f);
+    command = animation->applyTransform(command, getPosition(time, 1000));
+//        command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+//    }
+
+    return command;
+
 }
 
 void MenuView::setFontManager(FontManager *fm) { this->fontManager = fm; }
@@ -169,5 +179,9 @@ MenuController::~MenuController() {
 
 void MenuController::onExitKey() {
 
+}
+
+float getPosition(uint64_t time, long duration) {
+    return (time % duration) / (float) duration;
 }
 

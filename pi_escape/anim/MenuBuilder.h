@@ -58,6 +58,7 @@ public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
 
     const Animation* getAnimation();
+    const long getDuration();
 };
 
 class Entry {
@@ -86,5 +87,7 @@ public:
 
     friend void addEntry(MenuBuilder *mb, Entry *entry);
 };
+
+float getPosition(uint64_t time, long duration);
 
 #endif //PIESCAPE2_MENUBUILDER_H
