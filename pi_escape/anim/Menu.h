@@ -42,9 +42,12 @@ public:
 class MenuView : UIView {
 private:
     MenuModel *model;
+    FontManager* fontManager;
 public:
     MenuView();
+    void setFontManager(FontManager* fm);
     void draw() override;
+    void drawItem(Entry* entry);
     void invalidated();
     void setModel(MenuModel *model);
 };
