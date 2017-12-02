@@ -41,10 +41,16 @@ public:
 
 class MenuView : UIView {
 private:
+    FontManager *fontManager;
     MenuModel *model;
+    Graphics *graphics;
 public:
     MenuView();
     void draw() override;
+    void drawEntry(Entry* entry);
+
+    void setFontManager(FontManager *fm);
+    void setGraphics(Graphics *graphics);
     void invalidated();
     void setModel(MenuModel *model);
 };

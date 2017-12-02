@@ -36,12 +36,7 @@ int main() {
 
     gc->createIntro();
 
-    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
-    MenuModel *model = new MenuModel;
-    MenuView *view = new MenuView;
-    model->addListener(view);
-    view->setModel(model);
-    model->setMenuDefinition(ptr);
+
 
 	// Fontmanager aanmaken
 	FontManager m(graphics);
@@ -81,6 +76,15 @@ int main() {
         Uint32 cur_time_ms = SDL_GetTicks();
         diff_time_ms = cur_time_ms - start_time_ms;
     }
+
+     const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
+    MenuModel *model = new MenuModel;
+    MenuView *view = new MenuView;
+    model->addListener(view);
+    view->setModel(model);
+    view->setFontManager(&m);
+    view->setGraphics(graphics);
+    model->setMenuDefinition(ptr);
 
     delete gc;
 
