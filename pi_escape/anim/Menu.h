@@ -11,6 +11,7 @@
 //TODO
 class Entry;
 class MenuView;
+class MenuController;
 
 class MenuDefinition {
 public:
@@ -26,6 +27,7 @@ private:
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView*> listeners;
     int done;
+    int selected;
 public:
     MenuModel();
 
@@ -39,6 +41,9 @@ public:
     void addListener(MenuView *view);
     void fireInvalidationEvent();
 
+    void up();
+    void down();
+
 };
 
 class MenuView : UIView {
@@ -46,6 +51,7 @@ private:
     FontManager *fontManager;
     MenuModel *model;
     Graphics *graphics;
+    MenuController* controller;
 public:
     MenuView();
     void draw() override;
@@ -55,6 +61,8 @@ public:
     void setGraphics(Graphics *graphics);
     void invalidated();
     void setModel(MenuModel *model);
+
+    void setController(MenuController *pController);
 };
 
 class MenuController : UIController {

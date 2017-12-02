@@ -16,6 +16,7 @@ MenuDefinition::~MenuDefinition() {
 
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->menuDefinition = std::move(menuDefinition);
+    this->selected = 0;
     this->fireInvalidationEvent();
 }
 
@@ -49,6 +50,17 @@ void MenuModel::setDone(int i) {
     this->done = i;
 }
 
+void MenuModel::up() {
+    selected = selected == 0 ? 0 : selected - 1;
+    cout << selected << endl;
+    fireInvalidationEvent();
+}
+
+void MenuModel::down() {
+    selected = selected == this->menuDefinition.get()->entries.size() - 1 ? selected : selected + 1;
+    fireInvalidationEvent();
+}
+
 
 void MenuView::draw() {
     const vector<Entry *> &entries = this->model->getMenuDefinition()->entries;
@@ -56,7 +68,7 @@ void MenuView::draw() {
     int i = -1;
     if (!entries.empty()) {
         for (Entry *entry: entries) {
-            commands.push_back(drawEntry(entry,0, i* 300));
+            commands.push_back(drawEntry(entry, 0, i * 300));
             i++;
         }
     }
@@ -64,6 +76,17 @@ void MenuView::draw() {
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 diff_time_ms = 0;
     while (this->model->isDone()) {
+
+        //events registreren
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_KEYDOWN:
+                    this->controller->onKey(event.key.keysym.sym);
+
+            }
+        }
+
         graphics_begin_draw(graphics);
         glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
         for (vector<GlyphDrawCommand> vec : commands) {
@@ -110,8 +133,27 @@ void MenuView::setGraphics(Graphics *graphics) {
     this->graphics = graphics;
 }
 
+void MenuView::setController(MenuController *pController) {
+    this->controller = pController;
+}
+
+/**
+ * juiste reactie bij de juiste ingedrukte toets
+ * @param key de toest die is ingedrukt
+ */
 void MenuController::onKey(SDLKey key) {
-    this->model->setDone(0);
+    switch (key) {
+        case SDLK_DOWN:
+            this->model->down();
+            break;
+        case SDLK_UP:
+            this->model->up();
+            break;
+        case SDLK_RETURN:
+            break;
+        default:
+            break;
+    }
 }
 
 void MenuController::setMenuModel(MenuModel *model) {

@@ -86,8 +86,8 @@ int main() {
     controller->setMenuModel(model);
     view->setFontManager(&m);
     view->setGraphics(graphics);
+    view->setController(controller);
     model->setMenuDefinition(ptr);
-
 
     delete gc;
 
