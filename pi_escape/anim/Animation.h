@@ -76,6 +76,8 @@ public:
 /** Apply an animation to each glyph in turn */
 class GlyphIteratingAnimation : public Animation {
 private:
+	Animation* animation;
+	float overlap;
 public:
     /**
      * @param animation

@@ -191,20 +191,51 @@ std::vector<GlyphDrawCommand> MoveAnimation::applyTransform(const std::vector<Gl
 /***************************************************************
  GlyphIteratingAnimation
 ****************************************************************/
-GlyphIteratingAnimation::GlyphIteratingAnimation(Animation * animation, float overlap) {
+GlyphIteratingAnimation::GlyphIteratingAnimation(Animation * animation, float overlap) : animation(animation), overlap(overlap) {
 }
 
 GlyphIteratingAnimation::~GlyphIteratingAnimation() {
 }
 
 std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
-	return std::vector<GlyphDrawCommand>();
+	
+	std::vector<GlyphDrawCommand> res;
+
+	int size = draws.size();
+	float amount = 1.0f / size;
+
+	int i = 0;
+	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
+		
+		const GlyphDrawCommand& cur = *it;
+
+		if (i * amount < position && position < (i + 1) * amount) {
+			const GlyphDrawCommand& cur = *it;
+
+			std::vector<GlyphDrawCommand> tmp;
+			tmp.push_back(cur);
+
+			std::vector<GlyphDrawCommand> newGlyph = animation->applyTransform(tmp, (size * position) - i);
+
+			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
+			res.push_back(*it1);
+		}
+		else {
+			res.push_back(cur);
+		}
+		
+		i++;
+	}
+
+	return res;
+	
 }
 
 /***************************************************************
  RepeatAnimation
 ****************************************************************/
 RepeatAnimation::RepeatAnimation(Animation * animation, int repeats, bool startIn, bool endIn, bool cycleInOut) {
+
 }
 
 RepeatAnimation::RepeatAnimation(Animation * animation, int repeats) {
