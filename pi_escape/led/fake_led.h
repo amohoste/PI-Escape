@@ -10,8 +10,14 @@
 
 #include "../../util/rgb_triple.h"
 
+// Help functions
+/////////////////
+
 // Write bitmap to bmp file
 void display_fake_ledgrid(SPGM_RGBTRIPLE*, const char*);
+
+// Function used by led.c functions
+///////////////////////////////////
 
 // Create an empty square
 EXTERNC void clear_fake_ledgrid();
