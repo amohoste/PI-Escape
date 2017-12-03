@@ -87,8 +87,6 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 		float hue = 360.0f * position;
 		const t_vec3* rgb = hsv_to_rgb(hue);
 
-		//vector<float> rgb = hsv_to_rgb(hue);
-
 		t_vec4 newcolor;
 		glmc_vec4_set(newcolor, (*rgb)[0], (*rgb)[1], (*rgb)[2], cur.getColor()[3]);
 		
@@ -100,7 +98,6 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 }
 
 const t_vec3* RainbowColorAnimation::hsv_to_rgb(float hue) const {
-	//std::vector<float> result(3);
 	t_vec3 result;
 
 	// Voor onze noden moeten we enkel de hue kunnen laten veranderen
