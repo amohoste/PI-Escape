@@ -40,7 +40,7 @@ void MenuModel::addListener(MenuView *view) {
 }
 
 void MenuModel::fireInvalidationEvent() {
-    for (int i = 0; i < this->listeners.size(); i++) {
+    for (unsigned int i = 0; i < this->listeners.size(); i++) {
         this->listeners[i]->invalidated();
     }
 }

@@ -30,7 +30,7 @@ private:
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView *> listeners;
     int done;
-    int selectedInt;
+    unsigned int selectedInt;
     Entry *selected;
 
     void updateSelected();
