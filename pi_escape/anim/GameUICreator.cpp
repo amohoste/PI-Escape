@@ -8,8 +8,6 @@ GameUICreator::~GameUICreator() {
 
 }
 
-//TODO: uncomment the code below, and make it work
-
 EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
     return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0)), ACTIVATE, false, 1000l)
             .addAnimation(new ReverseAnimation(new FadeInAnimation()), OTHER_ACTIVATED, false, 1000l)
@@ -27,7 +25,13 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
+    deque<Level*> level_names;
+    for (int i = 7; i < 10; ++i) {
+        level_names.push_back(load_level(i));
+    }
+//    game(&level_names);
     cout << "game should start" << endl;
+    m->setDone(0);
 }
 
 void tutorial(MenuModel *m) {
@@ -175,3 +179,4 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
+

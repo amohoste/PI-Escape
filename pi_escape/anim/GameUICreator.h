@@ -1,6 +1,9 @@
 #ifndef PIESCAPE2_GAMEUICREATOR_H
 #define PIESCAPE2_GAMEUICREATOR_H
 
+extern "C" {
+#include "../level/levelloader.h"
+};
 
 #include "Menu.h"
 #include "Movie.h"
@@ -11,6 +14,8 @@
 #include <string>
 #include <utility>
 #include <memory>
+#include <deque>
+
 
 class MenuDefinition;
 
@@ -29,7 +34,6 @@ public:
 
     std::shared_ptr<MovieDefinition> createOutro();
 };
-
 
 
 #endif //PIESCAPE2_GAMEUICREATOR_H
