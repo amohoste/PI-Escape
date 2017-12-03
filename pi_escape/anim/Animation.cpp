@@ -237,17 +237,20 @@ std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std:
 /***************************************************************
  RepeatAnimation
 ****************************************************************/
-RepeatAnimation::RepeatAnimation(Animation * animation, int repeats, bool startIn, bool endIn, bool cycleInOut) {
+RepeatAnimation::RepeatAnimation(Animation * animation, int repeats, bool startIn, bool endIn, bool cycleInOut) : animation(animation), repeats(repeats), startIn(startIn), endIn(endIn), cycleInOut(cycleInOut) {
 
 }
 
-RepeatAnimation::RepeatAnimation(Animation * animation, int repeats) {
+RepeatAnimation::RepeatAnimation(Animation * animation, int repeats) : animation(animation), repeats(repeats), startIn(true), endIn(false), cycleInOut(true) {
+	// TODO: juiste standaardwaarden
 }
 
 RepeatAnimation::~RepeatAnimation() {
 }
 
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
+	
+	
 	return std::vector<GlyphDrawCommand>();
 }
 
@@ -267,25 +270,40 @@ std::vector<GlyphDrawCommand> SineAnimation::applyTransform(const std::vector<Gl
 /***************************************************************
  ReverseAnimation
 ****************************************************************/
-ReverseAnimation::ReverseAnimation(Animation * animation) {
+ReverseAnimation::ReverseAnimation(Animation * animation) : animation(animation) {
 }
 
 ReverseAnimation::~ReverseAnimation() {
 }
 
 std::vector<GlyphDrawCommand> ReverseAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
-	return std::vector<GlyphDrawCommand>();
+	
+	std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, 1.0 - position);
+
+	return res;
+
 }
 
 /***************************************************************
  InOutAnimation
 ****************************************************************/
-InOutAnimation::InOutAnimation(Animation * animation) {
+InOutAnimation::InOutAnimation(Animation * animation) : animation(animation) {
 }
 
 InOutAnimation::~InOutAnimation() {
 }
 
 std::vector<GlyphDrawCommand> InOutAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
-	return std::vector<GlyphDrawCommand>();
+	
+	if (position < 0.5) {
+		std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, 2 * position);
+
+		return res;
+	}
+	else {
+		std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, 2 * (1.0 - position));
+
+		return res;
+	}
+
 }

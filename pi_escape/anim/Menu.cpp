@@ -149,7 +149,8 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
 //    for (EntryAnimation *ea : entry->animations) {
     if (entry == this->model->getSelectedEntry()) {
         //FadeInAnimation *animation = new FadeInAnimation();
-		GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new MoveAnimation(20, 10), 1.0);
+		//GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new RainbowColorAnimation(), 2.0);
+		InOutAnimation *animation = new InOutAnimation(new MoveAnimation(20, 20));
 		//RainbowColorAnimation *animation = new RainbowColorAnimation();
         command = animation->applyTransform(command, getPosition(time, 1000));
 //        command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
