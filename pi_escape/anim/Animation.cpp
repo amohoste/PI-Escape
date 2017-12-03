@@ -209,13 +209,16 @@ std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std:
 		
 		const GlyphDrawCommand& cur = *it;
 
-		if (i * amount < position && position < (i + 1) * amount) {
+		float begin = fmax(0.0f, (i - overlap) * amount);
+		float end = fmin(1.0f, ((i + 1) + overlap) * amount);
+
+		if ( begin <= position && position <= end ) {
 			const GlyphDrawCommand& cur = *it;
 
 			std::vector<GlyphDrawCommand> tmp;
 			tmp.push_back(cur);
 
-			std::vector<GlyphDrawCommand> newGlyph = animation->applyTransform(tmp, (size * position) - i);
+			std::vector<GlyphDrawCommand> newGlyph = animation->applyTransform(tmp, (position - begin) / (end - begin));
 
 			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
 			res.push_back(*it1);
