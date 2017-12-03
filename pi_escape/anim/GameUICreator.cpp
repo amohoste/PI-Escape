@@ -1,7 +1,6 @@
 #include "GameUICreator.h"
 
 
-
 GameUICreator::GameUICreator() {}
 
 
@@ -12,24 +11,31 @@ GameUICreator::~GameUICreator() {
 //TODO: uncomment the code below, and make it work
 
 EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
-    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0))
-                    , ACTIVATE,  false, 1000l)
-            .addAnimation(new ReverseAnimation(new FadeInAnimation())
-                    , OTHER_ACTIVATED,  false, 1000l)
-            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0))
-                    , OTHER_ACTIVATED,  false, 1000l)
+    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0)), ACTIVATE, false, 1000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), OTHER_ACTIVATED, false, 1000l)
+            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0)), OTHER_ACTIVATED, false, 1000l)
             .addAnimation(
                     new ReverseAnimation(
-                    new GlyphIteratingAnimation(
-                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
-                            1.5f))
-                    , DEFAULT,  false, 500l)
+                            new GlyphIteratingAnimation(
+                                    new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
+                                    1.5f)), DEFAULT, false, 500l)
             .addAnimation(
                     new GlyphIteratingAnimation(
                             new InOutAnimation(new SineAnimation(new MoveAnimation(0, 10))),
-                            1.5f)
-                    , HOVER,  true, 2000l)
+                            1.5f), HOVER, true, 2000l)
             .addAnimation(new RainbowColorAnimation(), HOVER, true, 1000l);
+}
+
+void start_game(MenuModel *m) {
+    cout << "game should start" << endl;
+}
+
+void tutorial(MenuModel *m) {
+    cout << "tutorial should start" << endl;
+}
+
+void endMenu(MenuModel *m) {
+    m->setDone(0);
 }
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
@@ -41,6 +47,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setShortText("Tut")
             .setMnemonic('T')
             .setFontName("arcade")
+            .setFunction(tutorial)
             .buildEntryWithAction("start tutorial");
 
 
@@ -50,6 +57,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setShortText("Go")
             .setMnemonic('G')
             .setFontName("arcade")
+            .setFunction(start_game)
             .buildEntryWithAction("start game");
 
     addMainMenuAnimation(builder.getEntryBuilder())
@@ -58,6 +66,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setShortText("Exit")
             .setMnemonic('E')
             .setFontName("arcade")
+            .setFunction(endMenu)
             .buildEntryWithAction("quit");
 
     return std::shared_ptr<MenuDefinition>(builder.build());

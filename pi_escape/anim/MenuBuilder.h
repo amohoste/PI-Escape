@@ -18,6 +18,10 @@ class MenuBuilder;
 
 class EntryAnimation;
 
+class MenuModel;
+
+using func_t = std::add_pointer<void(MenuModel *)>::type;
+
 class EntryBuilder {
 private:
     MenuBuilder *menuBuilder;
@@ -28,6 +32,7 @@ private:
     const char *font;
     char mnemonic;
     const char *action;
+    func_t function;
     vector<EntryAnimation *> animations_active;
     vector<EntryAnimation *> animations_other;
     vector<EntryAnimation *> animations_hover;
@@ -49,6 +54,8 @@ public:
     EntryBuilder &setMnemonic(char c);
 
     EntryBuilder &buildEntryWithAction(const char *action);
+
+    EntryBuilder &setFunction(func_t function);
 
     void setMenuBuilder(MenuBuilder *menuBuilder);
 
@@ -81,11 +88,13 @@ public:
     const vector<EntryAnimation *> animations_other;
     const vector<EntryAnimation *> animations_hover;
     const vector<EntryAnimation *> animations_default;
+    const func_t function;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
           const char *short_text, char mnemonic, const char *action, const char *font,
           const vector<EntryAnimation *> &animations_active, const vector<EntryAnimation *> &animations_other,
-          const vector<EntryAnimation *> &animations_hover, const vector<EntryAnimation *> &animations_default);
+          const vector<EntryAnimation *> &animations_hover, const vector<EntryAnimation *> &animations_default,
+          func_t function);
 };
 
 class MenuBuilder {

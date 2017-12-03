@@ -30,3 +30,4 @@ void clear_level(Game *g) {
 	#endif // BENCHMARK
     es_memory_manager_init(&g->engine.es_memory);
 }
+

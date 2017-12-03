@@ -66,7 +66,7 @@ void MenuModel::down() {
 }
 
 void MenuModel::select() {
-    done = 0;
+    selected->function(this);
 }
 
 Entry *MenuModel::getSelectedEntry() {

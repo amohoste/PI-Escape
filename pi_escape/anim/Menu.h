@@ -84,7 +84,7 @@ public:
     void setController(MenuController *pController);
 };
 
-class MenuController : UIController {
+class MenuController : public UIController {
 private:
     MenuModel *model;
 public:
