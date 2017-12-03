@@ -2,6 +2,7 @@
 #define PIESCAPE2_MENUBUILDER_H
 
 #include <deque>
+#include <list>
 #include "Animation.h"
 #include "Menu.h"
 
@@ -27,8 +28,12 @@ private:
     const char *font;
     char mnemonic;
     const char *action;
-    vector<EntryAnimation *> animations;
+    vector<EntryAnimation *> animations_active;
+    vector<EntryAnimation *> animations_other;
+    vector<EntryAnimation *> animations_hover;
+    vector<EntryAnimation *> animations_default;
 public:
+
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
     EntryBuilder &setEnabledOnPc(bool b);
@@ -58,7 +63,8 @@ private:
 public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
 
-    const Animation* getAnimation();
+    const Animation *getAnimation();
+
     const long getDuration();
 };
 
@@ -71,11 +77,15 @@ public:
     const char mnemonic;
     const char *action;
     const char *font;
-    const vector<EntryAnimation *> animations;
+    const vector<EntryAnimation *> animations_active;
+    const vector<EntryAnimation *> animations_other;
+    const vector<EntryAnimation *> animations_hover;
+    const vector<EntryAnimation *> animations_default;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
           const char *short_text, char mnemonic, const char *action, const char *font,
-          const vector<EntryAnimation *> &animations);
+          const vector<EntryAnimation *> &animations_active, const vector<EntryAnimation *> &animations_other,
+          const vector<EntryAnimation *> &animations_hover, const vector<EntryAnimation *> &animations_default);
 };
 
 class MenuBuilder {

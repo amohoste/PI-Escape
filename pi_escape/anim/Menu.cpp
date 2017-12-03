@@ -145,12 +145,16 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-//    for (EntryAnimation *ea : entry->animations) {
     if (entry == this->model->getSelectedEntry()) {
-        FadeInAnimation *animation = new FadeInAnimation();
-        command = animation->applyTransform(command, getPosition(time, 1000));
-//        command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-//    }
+        //de hover animaties oproepen
+        for (EntryAnimation *ea : entry->animations_hover) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+        }
+    } else {
+        //de default
+        for (EntryAnimation *ea : entry->animations_default) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+        }
     }
 
     return command;
