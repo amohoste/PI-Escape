@@ -1,6 +1,7 @@
 #ifndef PIESCAPE2_MENUBUILDER_H
 #define PIESCAPE2_MENUBUILDER_H
 
+#include <deque>
 #include "Animation.h"
 #include "Menu.h"
 
@@ -79,7 +80,7 @@ public:
 
 class MenuBuilder {
 private:
-    vector<Entry *> entries;
+    std::deque<Entry *> entries;
 public:
     EntryBuilder &getEntryBuilder();
 

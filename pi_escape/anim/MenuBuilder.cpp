@@ -15,7 +15,7 @@ MenuDefinition *MenuBuilder::build() {
 }
 
 void addEntry(MenuBuilder *mb, Entry *entry) {
-    mb->entries.push_back(entry);
+    mb->entries.push_front(entry);
 }
 
 

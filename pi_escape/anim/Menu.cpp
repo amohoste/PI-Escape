@@ -5,7 +5,7 @@
 using namespace std;
 
 //TODO
-MenuDefinition::MenuDefinition(vector<Entry *> entries) : entries(std::move(entries)) {
+MenuDefinition::MenuDefinition(deque<Entry *> entries) : entries(std::move(entries)) {
 
 }
 
@@ -74,14 +74,13 @@ Entry *MenuModel::getSelectedEntry() {
 }
 
 void MenuModel::updateSelected() {
-    //omgekeerd tellen beetje onlogisch maarja
     this->selected = this->menuDefinition.get()->entries[this->menuDefinition.get()->entries.size() - 1 -
                                                          this->selectedInt];
 }
 
 
 void MenuView::draw() {
-    const vector<Entry *> &entries = this->model->getMenuDefinition()->entries;
+    const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
     vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
     int i = -1;
     if (!entries.empty()) {

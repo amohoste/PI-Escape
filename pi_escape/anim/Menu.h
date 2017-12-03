@@ -7,6 +7,7 @@
 #include "GameUICreator.h"
 #include <memory>
 #include <iostream>
+#include <deque>
 
 //TODO
 class Entry;
@@ -17,9 +18,9 @@ class MenuController;
 
 class MenuDefinition {
 public:
-    const vector<Entry *> entries;
+    const deque<Entry *> entries;
 
-    explicit MenuDefinition(vector<Entry *> entries);
+    explicit MenuDefinition(deque<Entry *> entries);
 
     ~MenuDefinition();
 };
