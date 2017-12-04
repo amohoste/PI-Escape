@@ -1,3 +1,4 @@
+#ifndef RPI
 #include "fake_led.h"
 
 #include <windows.h>
@@ -173,3 +174,4 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	out.write((char*)&bits, sizeof(bits));
 	out.close();
 }
+#endif // !RPI
