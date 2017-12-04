@@ -221,8 +221,10 @@ float getPosition(uint64_t time, long duration) {
 
 void LevelObserver::notified() {
     if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
-        game_load_level(game, menuModel->getLevels()->back());
+        Level *level = menuModel->getLevels()->back();
+        game_load_level(game, level);
         menuModel->getLevels()->pop_back();
+        game->engine.context.current_level = level;
 
         while (!game->engine.context.is_exit_game) {
             engine_update(&game->engine);
