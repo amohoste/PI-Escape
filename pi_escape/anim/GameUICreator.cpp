@@ -27,7 +27,6 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 void start_game(MenuModel *m) {
     vector<Level*> level_names;
     level_names.clear();
-    level_names.push_back(load_level(3));
     for (int i = 9; i >= 7; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
