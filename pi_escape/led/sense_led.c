@@ -67,7 +67,7 @@ void build_one_color_sense(SPGM_RGBTRIPLE color) {
 	{
 		ledgrid[i] = (SPGM_RGBTRIPLE) { .rgbRed = color.rgbRed, .rgbGreen = color.rgbGreen, .rgbBlue = color.rgbBlue};
 	}
-	display_ledgrid(ledgrid, FRAMEBUFFER);
+	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
 }
 
 void build_rainbow_sense() {
@@ -76,7 +76,7 @@ void build_rainbow_sense() {
 	{
 		ledgrid[i] = (SPGM_RGBTRIPLE) { .rgbRed = rainbow[i][0], .rgbGreen = rainbow[i][1], .rgbBlue = rainbow[i][2] };
 	}
-	display_ledgrid(ledgrid, FRAMEBUFFER);
+	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
 }
 
 void build_array_sense(square) {
