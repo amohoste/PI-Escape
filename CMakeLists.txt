@@ -126,6 +126,10 @@ file(GLOB glmc_lib_SRC
 
 if (RPI)
     #nothing to do, it is added by wildcard already
+	
+	#remove fake led as it shouldn't be added
+	string (REPLACE "pi_escape/led/fake_led.cpp" "" led_SRC "${led_SRC}")
+    string (REPLACE "pi_escape/led/fake_led.h" "" led_SRC "${led_SRC}")
 else()
     #remove systems that should not be added
 
@@ -135,8 +139,10 @@ else()
     string (REPLACE "pi_escape/es/system/orientation_system.h" "" es_system_SRC "${es_system_SRC}")
     string (REPLACE "pi_escape/es/system/sensor_system.c" "" es_system_SRC "${es_system_SRC}")
     string (REPLACE "pi_escape/es/system/sensor_system.h" "" es_system_SRC "${es_system_SRC}")
-    # string (REPLACE "pi_escape/es/system/led_system.c" "" es_system_SRC "${es_system_SRC}")
-    # string (REPLACE "pi_escape/es/system/led_system.h" "" es_system_SRC "${es_system_SRC}")
+
+	#remove sense led as it shouldn't be added
+	string (REPLACE "pi_escape/led/sense_led.c" "" led_SRC "${led_SRC}")
+    string (REPLACE "pi_escape/led/sense_led.h" "" led_SRC "${led_SRC}")
 endif()
 
 
