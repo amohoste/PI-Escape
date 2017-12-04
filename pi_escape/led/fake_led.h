@@ -1,3 +1,4 @@
+#ifndef RPI
 #ifndef _FAKE_LED_H
 #define _FAKE_LED_H
 
@@ -10,8 +11,8 @@
 
 #include "../../util/rgb_triple.h"
 
-// Write bitmap to bmp file
-void display_fake_ledgrid(SPGM_RGBTRIPLE*, const char*);
+// Functions used by led.c functions:
+/////////////////////////////////////
 
 // Create an empty square
 EXTERNC void clear_fake_ledgrid();
@@ -24,4 +25,5 @@ EXTERNC void build_rainbow_fake();
 
 // Create square corresponding to the given array of colours
 EXTERNC void build_array_fake(SPGM_RGBTRIPLE**);
-#endif
+#endif // _FAKE_LED_H
+#endif // !RPI

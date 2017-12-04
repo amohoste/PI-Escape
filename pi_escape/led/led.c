@@ -10,7 +10,6 @@ void clear_ledgrid() {
 }
 
 void build_one_color(SPGM_RGBTRIPLE colour) {
-	printf("build_one_color");
 #ifdef RPI
 	build_one_color_sense(colour);
 #endif // RPI
