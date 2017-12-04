@@ -92,6 +92,7 @@ private:
     Graphics *graphics;
     MenuController *controller;
     bool animationsFinished;
+    Uint32 last_update = SDL_GetTicks();
 public:
     MenuView();
 
@@ -108,8 +109,6 @@ public:
     void setModel(MenuModel *model);
 
     void setController(MenuController *pController);
-
-    void playActivationAnimations();
 
 };
 

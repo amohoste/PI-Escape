@@ -127,6 +127,7 @@ void MenuModel::setActivatedMenu(bool i) {
 
 
 void MenuView::draw() {
+    last_update = SDL_GetTicks();
     if (!model->isDone()) {
         Uint32 start_time_ms = SDL_GetTicks();
 
@@ -169,7 +170,9 @@ void MenuView::draw() {
 
         Uint32 cur_time_ms = SDL_GetTicks();
 
-        model->setTime(model->getTime() + (cur_time_ms - start_time_ms));
+        model->setTime(model->getTime() + (cur_time_ms - start_time_ms) + (start_time_ms - last_update));
+
+        last_update = SDL_GetTicks();
     }
 }
 
