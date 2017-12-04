@@ -166,6 +166,7 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
         for (EntryAnimation *ea : entry->animations_default) {
             command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
         }
+
     }
 
     return command;

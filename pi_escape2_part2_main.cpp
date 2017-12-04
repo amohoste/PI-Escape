@@ -54,6 +54,7 @@ int main() {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("PiEscape2", 0, 0);
 
+
     //this is a demo of gl_glyph_draw
     Uint32 start_time_ms = SDL_GetTicks();
     Uint32 diff_time_ms = 0;
