@@ -44,14 +44,9 @@ private:
 
     void updateSelected();
 
-    bool visible;
-
     bool activated_menu;
 public:
 
-    void setVisible(bool v);
-
-    bool isVisible();
 
     MenuModel();
 

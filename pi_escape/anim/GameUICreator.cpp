@@ -47,13 +47,12 @@ void load_levels(int start, int stop, MenuModel *m) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
-    m->setLevels(&level_names);
     m->playAnimations();
-
+    m->setLevels(&level_names);
 }
 
 void endMenu(MenuModel *m) {
-    m->setDone(0);
+    m->setDone(1);
 }
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
