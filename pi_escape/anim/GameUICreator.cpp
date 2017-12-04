@@ -38,7 +38,7 @@ void start_game(MenuModel *m) {
 void tutorial(MenuModel *m) {
     vector<Level *> level_names;
     level_names.clear();
-    for (int i = 6; i >= 1; i--) {
+    for (int i = 2; i >= 1; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }

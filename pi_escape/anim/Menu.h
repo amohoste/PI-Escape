@@ -79,6 +79,8 @@ public:
     vector<Level *> *getLevels();
 
     void setLevels(vector<Level *> *levels);
+
+    void resetPositions();
 };
 
 class MenuView : UIView {

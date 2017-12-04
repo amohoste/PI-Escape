@@ -90,11 +90,31 @@ void MenuModel::setLevels(vector<Level *> *levels) {
 
 void MenuModel::setVisible(bool v) {
     visible = v;
+    resetPositions();
+    this->time = 0;
     fireInvalidationEvent();
 }
 
 bool MenuModel::isVisible() {
     return visible;
+}
+
+void MenuModel::resetPositions() {
+    for (Entry *entry : this->menuDefinition.get()->entries) {
+        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
+            ea->setPosition(0);
+        }
+        for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
+            ea->setPosition(0);
+        }
+        for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
+            ea->setPosition(0);
+        }
+        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
+            ea->setPosition(0);
+        }
+
+    }
 }
 
 
@@ -166,13 +186,9 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-
     if (entry == this->model->getSelectedEntry()) {
         //de hover animaties oproepen
         for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-            if (ea->getPosition() >= 1) {
-                cout << "dfs" << endl;
-            }
             command = ea->getAnimation()->applyTransform(command, ea->getPosition());
             ea->setPosition(getPosition(time, ea));
         }
@@ -182,7 +198,6 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
             command = ea->getAnimation()->applyTransform(command, ea->getPosition());
             ea->setPosition(getPosition(time, ea));
         }
-
     }
 
 
@@ -240,7 +255,7 @@ float getPosition(uint64_t time, EntryAnimation *ea) {
     if (ea->isRepeat()) {
         return fmod(position, 1.0f);
     } else {
-        return position > 1 ? 1 : position;
+        return ea->getPosition() >= 1 ? 1 : position;
     }
 }
 
