@@ -33,7 +33,7 @@ int MenuModel::isDone() const {
 MenuModel::MenuModel() {
     time = 0;
     done = 1;
-    activated = false;
+    visible = true;
 }
 
 void MenuModel::addListener(MenuView *view) {
@@ -67,9 +67,6 @@ void MenuModel::down() {
 }
 
 void MenuModel::select() {
-//    activated = true;
-//    fireInvalidationEvent();
-    //todo
     selected->function(this);
 }
 
@@ -91,51 +88,56 @@ void MenuModel::setLevels(vector<Level *> *levels) {
     notify(LEVEL);
 }
 
-bool MenuModel::isActivated() {
-//    return activated;
-    //todo eerst zorgen dat animaties kunnen stoppen
-    return false;
+void MenuModel::setVisible(bool v) {
+    visible = v;
+    fireInvalidationEvent();
+}
+
+bool MenuModel::isVisible() {
+    return visible;
 }
 
 
 void MenuView::draw() {
-    const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
-    vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
-    int i = -1;
-    if (!entries.empty()) {
-        for (Entry *entry: entries) {
-            commands.push_back(drawEntry(entry, 0, i * 300, model->getTime()));
-            i++;
-        }
-    }
-
-    while (this->model->isDone()) {
-        Uint32 start_time_ms = SDL_GetTicks();
-
-        //events registreren
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            switch (event.type) {
-                case SDL_KEYDOWN:
-                    this->controller->onKey(event.key.keysym.sym);
-
-            }
-        }
-
-        //tekenen
-        graphics_begin_draw(graphics);
-        for (vector<GlyphDrawCommand> vec : commands) {
-            vector<GlyphDrawCommand>::iterator i = vec.begin();
-            while (i != vec.end()) {
-                this->fontManager->draw(*i);
+    if(model->isVisible()) {
+        const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
+        vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
+        int i = -1;
+        if (!entries.empty()) {
+            for (Entry *entry: entries) {
+                commands.push_back(drawEntry(entry, 0, i * 300, model->getTime()));
                 i++;
             }
         }
-        graphics_end_draw(graphics);
 
-        Uint32 cur_time_ms = SDL_GetTicks();
+        while (this->model->isDone()) {
+            Uint32 start_time_ms = SDL_GetTicks();
 
-        model->setTime(model->getTime() + (cur_time_ms - start_time_ms));
+            //events registreren
+            SDL_Event event;
+            while (SDL_PollEvent(&event)) {
+                switch (event.type) {
+                    case SDL_KEYDOWN:
+                        this->controller->onKey(event.key.keysym.sym);
+
+                }
+            }
+
+            //tekenen
+            graphics_begin_draw(graphics);
+            for (vector<GlyphDrawCommand> vec : commands) {
+                vector<GlyphDrawCommand>::iterator i = vec.begin();
+                while (i != vec.end()) {
+                    this->fontManager->draw(*i);
+                    i++;
+                }
+            }
+            graphics_end_draw(graphics);
+
+            Uint32 cur_time_ms = SDL_GetTicks();
+
+            model->setTime(model->getTime() + (cur_time_ms - start_time_ms));
+        }
     }
 }
 
@@ -164,33 +166,20 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-    if (model->isActivated()) {
-        if (entry == this->model->getSelectedEntry()) {
-            for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
-                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-            }
-        } else {
-            for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
-                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-            }
+
+    if (entry == this->model->getSelectedEntry()) {
+        //de hover animaties oproepen
+        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
         }
-
     } else {
-
-        if (entry == this->model->getSelectedEntry()) {
-            //de hover animaties oproepen
-            for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-            }
-        } else {
-            //de default
-            for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-            }
-
+        //de default
+        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
         }
 
     }
+
 
     return command;
 
@@ -243,6 +232,9 @@ float getPosition(uint64_t time, long duration) {
 }
 
 
+/**
+ * Starten van de game met de levels die aanwezig zijn
+ */
 void LevelObserver::notified() {
     if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
         Level *level = menuModel->getLevels()->back();
@@ -262,6 +254,7 @@ void LevelObserver::notified() {
                 game->engine.context.level_ended = 0;
                 if (menuModel->getLevels()->empty()) {
                     game->engine.context.is_exit_game = 1;
+                    menuModel->setVisible(true);
                 }
             }
         }
