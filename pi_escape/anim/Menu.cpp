@@ -156,21 +156,14 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
 
     if (entry == this->model->getSelectedEntry()) {
         //de hover animaties oproepen
-        RainbowColorAnimation *fd = new RainbowColorAnimation();
-        command = fd->applyTransform(command, getPosition(time, 1000));
-        const map<MenuState, vector<EntryAnimation *>> *map = entry->animations;
-        const map<MenuState, std::vector<EntryAnimation *>>::const_iterator &iterator = map->find(ACTIVATE);
-
-}
-//        for (EntryAnimation *ea : entry->animations->find(ACTIVATE)) {
-//            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-//        }
+        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+        }
     } else {
         //de default
-//        for (EntryAnimation *ea : entry->animations_default) {
-//            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-//        }
-
+        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+        }
 
     }
 
