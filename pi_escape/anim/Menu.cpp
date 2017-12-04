@@ -266,10 +266,14 @@ float getPosition(uint64_t time, EntryAnimation *ea) {
  */
 void LevelObserver::notified() {
     if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
+        Game *game = game_alloc(graphics);
+        this->game = game;
+
         Level *level = menuModel->getLevels()->back();
         game_load_level(game, level);
         menuModel->getLevels()->pop_back();
         game->engine.context.current_level = level;
+        game->engine.context.is_exit_game = 0;
 
         while (!game->engine.context.is_exit_game) {
             engine_update(&game->engine);
@@ -287,6 +291,9 @@ void LevelObserver::notified() {
                 }
             }
         }
+
+        game_free(game);
+        free(game);
     }
 }
 
@@ -294,15 +301,10 @@ LevelObserver::LevelObserver() {
     //init the graphics system
     Graphics *graphics = graphics_alloc(0, 0);
     this->graphics = graphics;
-//initialise context, engine and assemblage, and add systems
-    Game *game = game_alloc(graphics);
-    this->game = game;
-
 }
 
 LevelObserver::~LevelObserver() {
-    game_free(game);
-    free(game);
+
 
     graphics_free(graphics);
     free(graphics);
