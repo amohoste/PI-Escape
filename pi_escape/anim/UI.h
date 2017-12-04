@@ -69,7 +69,7 @@ protected:
 public:
     virtual void notified();
 
-    void setSubject(Subject *subject);
+    virtual void setSubject(Subject *subject);
 };
 
 #endif //PIESCAPE2_UI_H
