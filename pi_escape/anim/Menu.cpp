@@ -236,6 +236,9 @@ void LevelObserver::notified() {
                 game_load_level(game, next);
                 game->engine.context.current_level = next;
                 game->engine.context.level_ended = 0;
+                if(menuModel->getLevels()->empty()){
+                    game->engine.context.is_exit_game = 1;
+                }
             }
         }
     }

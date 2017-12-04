@@ -25,19 +25,25 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
-    vector<Level*> level_names;
+    vector<Level *> level_names;
     level_names.clear();
     for (int i = 9; i >= 7; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
     m->setLevels(&level_names);
-    cout << "game should start" << endl;
     m->setDone(0);
 }
 
 void tutorial(MenuModel *m) {
-    cout << "tutorial should start" << endl;
+    vector<Level *> level_names;
+    level_names.clear();
+    for (int i = 6; i >= 1; i--) {
+        Level *x = load_level(i);
+        level_names.push_back(x);
+    }
+    m->setLevels(&level_names);
+    m->setDone(0);
 }
 
 void endMenu(MenuModel *m) {
