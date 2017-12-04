@@ -388,7 +388,7 @@ void FontManager::setFont(const string & fontName) {
 	// Als font bestaat, font aanpassen
 	if (fontIt != fonts.end()) {
 		// Charmap en kernings aanpassen naar huidig font
-		Font font = (fonts.find(fontName)->second);
+		Font font = (fontIt->second);
 		curFont = font;
 	}
 }
