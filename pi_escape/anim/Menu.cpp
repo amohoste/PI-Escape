@@ -236,9 +236,9 @@ void MenuController::onExitKey() {
  * berekenen wat de positie moet zijn
  */
 float getPosition(uint64_t time, EntryAnimation *ea) {
-    float position = (time % ea->getDuration()) ;
+    float position = time / (float) ea->getDuration();
     if (ea->isRepeat()) {
-        return position/ (float) ea->getDuration();
+        return fmod(position, 1.0f);
     } else {
         return position > 1 ? 1 : position;
     }

@@ -66,7 +66,7 @@ private:
     const long duration;
     const bool repeat;
 
-    float position;
+    float position = 0;
 public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
 
