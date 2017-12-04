@@ -49,7 +49,7 @@ public:
 /** Cycle through all colors */
 class RainbowColorAnimation : public Animation {
 private:
-	const t_vec3* hsv_to_rgb(float hue) const;
+	const float* hsv_to_rgb(float hue) const;
 public:
     RainbowColorAnimation();
     virtual ~RainbowColorAnimation();
