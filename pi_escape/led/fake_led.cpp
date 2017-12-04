@@ -4,11 +4,22 @@
 // TODO #include <BiDiSpl.h> same as windows.h ?
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <ctime>
 using namespace std;
 
-const int grid_size = 256;
+// Timer
+typedef std::chrono::milliseconds ms;
+const ms write_every_ms = (ms) 1000;
+auto last_write = chrono::system_clock::now();
 
-int rainbow[8][8][3] = {
+// Constants
+const int grid_size = 256;	// width and heigth of the grid in pixels (should always be at least the amount of leds, 8)
+
+const string bmp_file = "./led.bmp";	// location of bmp file
+
+// 8 by 8 resolution of rainbow pattern
+const int rainbow[8][8][3] = {
 	{ { 255,   0,   0 },{ 255, 128,   0 },{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{ 0, 255,   0 },{ 0, 255, 128 },{ 0, 255, 255 } },
 	{ { 255, 128,   0 },{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{ 0, 255,   0 },{ 0, 255, 128 },{ 0, 255, 255 },{ 0, 191, 255 }},
 	{ { 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{ 0, 255,   0 },{ 0, 255, 128 },{ 0, 255, 255 },{ 0, 191, 255 },{ 0, 104, 255 }},
@@ -20,12 +31,20 @@ int rainbow[8][8][3] = {
 };
 
 // Write bitmap to bmp file
-void display_fake_ledgrid(char bits[]) {
+void display_fake_ledgrid(char* bits) {
 	
 }
 
 // Create an empty square
 void clear_fake_ledgrid() {
+	auto now = chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last_write;
+	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
+	if (d < write_every_ms) {
+		return;
+	}
+
+	// Construct black array
 	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[grid_size];
 	SPGM_RGBTRIPLE colour;
 	colour.rgbBlue = 0;
@@ -39,15 +58,26 @@ void clear_fake_ledgrid() {
 		}
 	}
 
+	// Write array to file
 	build_array_fake(colours);
 	
 	for (int i = 0; i < grid_size; i++)
 		delete[] colours[i];
 	delete[] colours;
+
+	// Register write
+	last_write = std::chrono::system_clock::now();
 }
 
 // Create one color square
 void build_one_color_fake(SPGM_RGBTRIPLE colour) {
+	auto now = chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last_write;
+	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
+	if (d < write_every_ms)
+		return;
+
+	// Construct monochroom array
 	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[grid_size];
 
 	for (int i = 0; i < grid_size; i ++) {
@@ -57,19 +87,30 @@ void build_one_color_fake(SPGM_RGBTRIPLE colour) {
 		}
 	}
 
+	// write array to file
 	build_array_fake(colours);
 
+	// clean up
 	for (int i = 0; i < grid_size; i++)
 		delete[] colours[i];
 	delete[] colours;
+
+	// Register write
+	last_write = std::chrono::system_clock::now();
 }
 
 // Create rainbow square
 void build_rainbow_fake() {
+	auto now = chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last_write;
+	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
+	if (d < write_every_ms) {
+		return;
+	}
+
+	// Construct rainbow array
 	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[grid_size];
-
 	int enlarge_factor = grid_size/8;
-
 	for (int i = 0; i < grid_size; i++) {
 		colours[i] = new SPGM_RGBTRIPLE[grid_size];
 		for (int j = 0; j < grid_size; j++) {
@@ -82,11 +123,16 @@ void build_rainbow_fake() {
 		}
 	}
 
+	// write array to file
 	build_array_fake(colours);
 
+	// clean up
 	for (int i = 0; i < grid_size; i++)
 		delete[] colours[i];
 	delete[] colours;
+
+	// Register write
+	last_write = std::chrono::system_clock::now();
 }
 
 // Create square corresponding to the given colourmatrix
@@ -112,23 +158,23 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	info_header.biClrImportant = 0;
 
 	// Actual bits
-	char a[grid_size * grid_size * 3];
+	char bits[grid_size * grid_size * 3];
 	int k = 0;
 	for (int i = 0; i < grid_size; i++) {
 		for (int j = 0; j < grid_size; j++) {
 			SPGM_RGBTRIPLE colour = colours[i][j];
-			a[k] = colour.rgbBlue;
-			a[k + 1] = colour.rgbGreen;
-			a[k + 2] = colour.rgbRed;
+			bits[k] = colour.rgbBlue;
+			bits[k + 1] = colour.rgbGreen;
+			bits[k + 2] = colour.rgbRed;
 			k += 3;
 		}
 	}
 
 	// Write to bmp file
 	ofstream out;
-	out.open("led.bmp", ios::binary);
+	out.open(bmp_file, ios::binary);
 	out.write((char*)&file_header, sizeof(BITMAPFILEHEADER));
 	out.write((char*)&info_header, sizeof(BITMAPINFOHEADER));
-	out.write((char*)&a, sizeof(a));
+	out.write((char*)&bits, sizeof(bits));
 	out.close();
 }

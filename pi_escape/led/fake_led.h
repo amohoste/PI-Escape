@@ -14,7 +14,7 @@
 /////////////////
 
 // Write bitmap to bmp file
-void display_fake_ledgrid(SPGM_RGBTRIPLE*, const char*);
+void display_fake_ledgrid(char*);
 
 // Function used by led.c functions
 ///////////////////////////////////
