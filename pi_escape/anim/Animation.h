@@ -6,6 +6,7 @@
 #include <glmc.h>
 #include <math.h>
 #include <stdio.h>
+#define PI 3.14159265
 
 class Animation {
 public:
@@ -49,7 +50,7 @@ public:
 /** Cycle through all colors */
 class RainbowColorAnimation : public Animation {
 private:
-	const float* hsv_to_rgb(float hue) const;
+	const t_vec3* hsv_to_rgb(float hue) const;
 public:
     RainbowColorAnimation();
     virtual ~RainbowColorAnimation();

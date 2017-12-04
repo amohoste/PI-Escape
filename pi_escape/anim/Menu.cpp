@@ -189,6 +189,7 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
             }
 
         }
+
     }
 
     return command;
