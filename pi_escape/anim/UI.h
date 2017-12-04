@@ -10,7 +10,7 @@
 #include <map>
 
 enum Event {
-    LEVEL
+    LEVEL, SELECTION
 };
 
 class Observer;
