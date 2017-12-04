@@ -94,6 +94,18 @@ const long EntryAnimation::getDuration() {
     return duration;
 }
 
+bool EntryAnimation::isRepeat() {
+    return repeat;
+}
+
+float EntryAnimation::getPosition() {
+    return position;
+}
+
+void EntryAnimation::setPosition(float x) {
+    this->position = x;
+}
+
 Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text, const char *short_text, char mnemonic,
              const char *action, const char *font,
              map<MenuState, vector<EntryAnimation *>> *animations,

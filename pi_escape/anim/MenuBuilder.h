@@ -65,12 +65,20 @@ private:
     const MenuState menuState;
     const long duration;
     const bool repeat;
+
+    float position = 0;
 public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
+
+    bool isRepeat();
 
     const Animation *getAnimation();
 
     const long getDuration();
+
+    float getPosition();
+
+    void setPosition(float x);
 };
 
 class Entry {
@@ -102,6 +110,5 @@ public:
     friend void addEntry(MenuBuilder *mb, Entry *entry);
 };
 
-float getPosition(uint64_t time, long duration);
 
 #endif //PIESCAPE2_MENUBUILDER_H

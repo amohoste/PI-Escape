@@ -5,6 +5,7 @@
 #include <deque>
 #include "UI.h"
 #include "FontManager.h"
+#include "MenuBuilder.h"
 
 extern "C" {
 #include "../es/game.h"
@@ -16,6 +17,9 @@ class MenuView;
 
 class MenuController;
 
+class EntryAnimation;
+
+float getPosition(uint64_t time, EntryAnimation *ea);
 
 class MenuDefinition {
 public:
@@ -40,7 +44,14 @@ private:
 
     void updateSelected();
 
+    bool visible;
+
 public:
+
+    void setVisible(bool v);
+
+    bool isVisible();
+
     MenuModel();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
