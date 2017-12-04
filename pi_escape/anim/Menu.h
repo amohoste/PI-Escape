@@ -1,19 +1,15 @@
 #ifndef PIESCAPE2_MENU_H
 #define PIESCAPE2_MENU_H
 
-#include "UI.h"
-#include "Animation.h"
-#include "MenuBuilder.h"
-#include "GameUICreator.h"
-#include <memory>
-#include <iostream>
+
 #include <deque>
+#include "UI.h"
+#include "FontManager.h"
 
 extern "C" {
 #include "../es/game.h"
 };
 
-//TODO
 class Entry;
 
 class MenuView;
@@ -30,6 +26,7 @@ public:
     ~MenuDefinition();
 };
 
+
 class MenuModel : public UIModel, public Subject {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
@@ -37,7 +34,7 @@ private:
     int done;
     unsigned int selectedInt;
     Entry *selected;
-    deque<Level *> *levels;
+    vector<Level *> *levels;
 
     map<Event, vector<Observer *>> observers;
 
@@ -68,9 +65,9 @@ public:
 
     Entry *getSelectedEntry();
 
-    deque<Level *> *getLevels();
+    vector<Level *> *getLevels();
 
-    void setLevels(deque<Level *> *levels);
+    void setLevels(vector<Level *> *levels);
 };
 
 class MenuView : UIView {
@@ -112,7 +109,15 @@ public:
 };
 
 class LevelObserver : public Observer {
+private:
+    Graphics *graphics;
+    Game *game;
+    MenuModel *subject;
 public:
+    LevelObserver();
+
+    ~LevelObserver();
+
     void notified() override;
 };
 

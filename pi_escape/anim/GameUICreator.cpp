@@ -25,9 +25,12 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
-    deque<Level*> level_names;
-    for (int i = 7; i < 10; ++i) {
-        level_names.push_back(load_level(i));
+    vector<Level*> level_names;
+    level_names.clear();
+    level_names.push_back(load_level(3));
+    for (int i = 9; i >= 7; i--) {
+        Level *x = load_level(i);
+        level_names.push_back(x);
     }
     m->setLevels(&level_names);
     cout << "game should start" << endl;
