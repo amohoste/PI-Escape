@@ -33,6 +33,7 @@ int MenuModel::isDone() const {
 MenuModel::MenuModel() {
     time = 0;
     done = 1;
+    activated = false;
 }
 
 void MenuModel::addListener(MenuView *view) {
@@ -66,6 +67,9 @@ void MenuModel::down() {
 }
 
 void MenuModel::select() {
+//    activated = true;
+//    fireInvalidationEvent();
+    //todo
     selected->function(this);
 }
 
@@ -85,6 +89,12 @@ vector<Level *> *MenuModel::getLevels() {
 void MenuModel::setLevels(vector<Level *> *levels) {
     this->levels = levels;
     notify(LEVEL);
+}
+
+bool MenuModel::isActivated() {
+//    return activated;
+    //todo eerst zorgen dat animaties kunnen stoppen
+    return false;
 }
 
 
@@ -154,17 +164,31 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-    if (entry == this->model->getSelectedEntry()) {
-        //de hover animaties oproepen
-        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-        }
-    } else {
-        //de default
-        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+    if (model->isActivated()) {
+        if (entry == this->model->getSelectedEntry()) {
+            for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
+                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+            }
+        } else {
+            for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
+                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+            }
         }
 
+    } else {
+
+        if (entry == this->model->getSelectedEntry()) {
+            //de hover animaties oproepen
+            for (EntryAnimation *ea : entry->animations->at(HOVER)) {
+                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+            }
+        } else {
+            //de default
+            for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
+                command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+            }
+
+        }
     }
 
     return command;
@@ -235,7 +259,7 @@ void LevelObserver::notified() {
                 game_load_level(game, next);
                 game->engine.context.current_level = next;
                 game->engine.context.level_ended = 0;
-                if(menuModel->getLevels()->empty()){
+                if (menuModel->getLevels()->empty()) {
                     game->engine.context.is_exit_game = 1;
                 }
             }

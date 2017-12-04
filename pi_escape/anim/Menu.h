@@ -29,6 +29,7 @@ public:
 
 class MenuModel : public UIModel, public Subject {
 private:
+    bool activated;
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView *> listeners;
     int done;
@@ -41,6 +42,8 @@ private:
     void updateSelected();
 
 public:
+    bool isActivated();
+
     MenuModel();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
