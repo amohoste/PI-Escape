@@ -1,6 +1,11 @@
 #include "GameUICreator.h"
 
 
+/**
+ * laad de levels in start inclusied, stop exclusief
+ */
+void load_levels(int start, int stop, MenuModel *m) ;
+
 GameUICreator::GameUICreator() {}
 
 
@@ -25,25 +30,26 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
-    vector<Level *> level_names;
-    level_names.clear();
-    for (int i = 9; i >= 7; i--) {
-        Level *x = load_level(i);
-        level_names.push_back(x);
-    }
-    m->setLevels(&level_names);
-    m->setDone(0);
+    load_levels(7,9,m);
 }
 
 void tutorial(MenuModel *m) {
+    load_levels(1, 2, m);
+}
+
+/**
+ * laad de levels in start inclusied, stop exclusief
+ */
+void load_levels(int start, int stop, MenuModel *m) {
     vector<Level *> level_names;
     level_names.clear();
-    for (int i = 2; i >= 1; i--) {
+    for (int i = stop; i >= start; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
     m->setLevels(&level_names);
-    m->setDone(0);
+    m->playAnimations();
+
 }
 
 void endMenu(MenuModel *m) {

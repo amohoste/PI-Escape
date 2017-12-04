@@ -46,6 +46,7 @@ private:
 
     bool visible;
 
+    bool activated_menu;
 public:
 
     void setVisible(bool v);
@@ -81,6 +82,12 @@ public:
     void setLevels(vector<Level *> *levels);
 
     void resetPositions();
+
+    void playAnimations();
+
+    bool isActivatedMenu();
+
+    void setActivatedMenu(bool i);
 };
 
 class MenuView : UIView {
@@ -105,6 +112,8 @@ public:
     void setModel(MenuModel *model);
 
     void setController(MenuController *pController);
+
+    void playActivationAnimations();
 };
 
 class MenuController : public UIController {

@@ -34,6 +34,7 @@ MenuModel::MenuModel() {
     time = 0;
     done = 1;
     visible = true;
+    activated_menu = false;
 }
 
 void MenuModel::addListener(MenuView *view) {
@@ -118,6 +119,19 @@ void MenuModel::resetPositions() {
     }
 }
 
+void MenuModel::playAnimations() {
+    activated_menu = true;
+    fireInvalidationEvent();
+}
+
+bool MenuModel::isActivatedMenu() {
+    return activated_menu;
+}
+
+void MenuModel::setActivatedMenu(bool i) {
+    activated_menu = i;
+}
+
 
 void MenuView::draw() {
     if (model->isVisible()) {
@@ -187,20 +201,38 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-    if (entry == this->model->getSelectedEntry()) {
-        //de hover animaties oproepen
-        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-            command = ea->getAnimation()->applyTransform(command, ea->getPosition());
-            ea->setPosition(getPosition(time, ea));
+    if (model->isActivatedMenu()) {
+        bool done = true;
+        if (entry == this->model->getSelectedEntry()) {
+            for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                ea->setPosition(getPosition(time, ea));
+                done &= ea->getPosition() == 1;
+            }
+        } else {
+            for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                ea->setPosition(getPosition(time, ea));
+                done &= ea->getPosition() == 1;
+            }
         }
+        model->setDone(done);
     } else {
-        //de default
-        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-            command = ea->getAnimation()->applyTransform(command, ea->getPosition());
-            ea->setPosition(getPosition(time, ea));
+        if (entry == this->model->getSelectedEntry()) {
+            //de hover animaties oproepen
+            for (EntryAnimation *ea : entry->animations->at(HOVER)) {
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                ea->setPosition(getPosition(time, ea));
+            }
+        } else {
+            //de default
+            for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                ea->setPosition(getPosition(time, ea));
+            }
         }
-    }
 
+    }
 
     return command;
 
@@ -215,6 +247,7 @@ void MenuView::setGraphics(Graphics *graphics) {
 void MenuView::setController(MenuController *pController) {
     this->controller = pController;
 }
+
 
 /**
  * juiste reactie bij de juiste ingedrukte toets
