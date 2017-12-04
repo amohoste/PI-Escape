@@ -131,11 +131,16 @@ void MenuView::draw() {
         const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = -1;
+        this->animationsFinished = true;
         if (!entries.empty()) {
             for (Entry *entry: entries) {
                 commands.push_back(drawEntry(entry, 0, i * 300, model->getTime()));
                 i++;
             }
+        }
+
+        if(this->animationsFinished){
+            model->setDone(true);
         }
 
         Uint32 start_time_ms = SDL_GetTicks();
@@ -196,18 +201,18 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
         bool done = true;
         if (entry == this->model->getSelectedEntry()) {
             for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
-//                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
-//                ea->setPosition(getPosition(time, ea));
-//                done &= ea->getPosition() == 1;
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                ea->setPosition(getPosition(time, ea));
+                done &= ea->getPosition() == 1;
             }
         } else {
             for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
-//                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
-//                ea->setPosition(getPosition(time, ea));
-//                done &= ea->getPosition() == 1;
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                ea->setPosition(getPosition(time, ea));
+                done &= ea->getPosition() == 1;
             }
         }
-        model->setDone(true);
+        this->animationsFinished &= done;
     } else {
         if (entry == this->model->getSelectedEntry()) {
             //de hover animaties oproepen
@@ -224,6 +229,8 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
 
             }
         }
+
+        animationsFinished = false;
 
     }
 

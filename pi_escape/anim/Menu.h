@@ -91,6 +91,7 @@ private:
     MenuModel *model;
     Graphics *graphics;
     MenuController *controller;
+    bool animationsFinished;
 public:
     MenuView();
 
@@ -109,6 +110,7 @@ public:
     void setController(MenuController *pController);
 
     void playActivationAnimations();
+
 };
 
 class MenuController : public UIController {
