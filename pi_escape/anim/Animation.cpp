@@ -251,7 +251,64 @@ RepeatAnimation::~RepeatAnimation() {
 
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
 	
-	std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, position);
+	std::vector<GlyphDrawCommand> res;
+
+	// Berekenen hoeveel animaties er moeten gebeuren
+	int i = 2 * repeats;
+	if (cycleInOut && startIn != endIn) {
+		i += 1;
+	}
+	else if (!cycleInOut && startIn == endIn) {
+		i += 2;
+	}
+
+	// Block (aantal positie) per animatie berekenen
+	float block = 1.0 / i;
+	int cycle = floor(position / (2 * block));
+
+	Animation* a;
+	if (startIn) {
+		a = animation;
+	}
+	else {
+		a = new ReverseAnimation(animation);
+	}
+
+	if (cycleInOut) {
+		if (startIn != endIn && position >= 1 - block) {
+			if (endIn) {
+				res = animation->applyTransform(draws, (position - (cycle * (2 * block))) / (block));
+			}
+			else {
+				ReverseAnimation anim = ReverseAnimation(animation);
+				res = anim.applyTransform(draws, (position - (cycle * (2 * block))) / (block));
+			}
+		}
+		else {
+			InOutAnimation anim = InOutAnimation(a);
+
+			res = anim.applyTransform(draws, (position - (cycle * (2 * block))) / (2 * block));
+		}
+	}
+	else {
+		if (startIn == endIn && position >= 1 - (2 * block)) {
+			if (endIn) {
+				res = animation->applyTransform(draws, (position - (cycle * (2 * block))) / (2 * block));
+			}
+			else {
+				ReverseAnimation anim = ReverseAnimation(animation);
+				res = anim.applyTransform(draws, (position - (cycle * (2 * block))) / (2 * block));
+			}
+		}
+		else {
+			res = a->applyTransform(draws, (position - (cycle * (2 * block))) / (2 * block));
+		}
+
+	}
+
+	if (!startIn) {
+		delete a;
+	}
 
 	return res;
 }

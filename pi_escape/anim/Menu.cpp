@@ -151,7 +151,7 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
         //FadeInAnimation *animation = new FadeInAnimation();
 		//GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new RainbowColorAnimation(), 2.0);
 		// GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new InOutAnimation(new MoveAnimation(0, 5)), 1.5f);
-		GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))), 1.5f);
+		RepeatAnimation *animation = new RepeatAnimation(new GlyphIteratingAnimation(new RainbowColorAnimation(), 1.5f), 3, true, false, true);
 		//InOutAnimation *animation = new InOutAnimation(new MoveAnimation(20, 20));
 		//RainbowColorAnimation *animation = new RainbowColorAnimation();
         command = animation->applyTransform(command, getPosition(time, 1000));
