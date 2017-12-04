@@ -1,38 +1,45 @@
 #ifndef PIESCAPE2_MENU_H
 #define PIESCAPE2_MENU_H
 
-#include "UI.h"
-#include "Animation.h"
-#include "MenuBuilder.h"
-#include "GameUICreator.h"
-#include <memory>
-#include <iostream>
 
-//TODO
+#include <deque>
+#include "UI.h"
+#include "FontManager.h"
+
+extern "C" {
+#include "../es/game.h"
+};
+
 class Entry;
 
 class MenuView;
 
 class MenuController;
 
+
 class MenuDefinition {
 public:
-    const vector<Entry *> entries;
+    const deque<Entry *> entries;
 
-    explicit MenuDefinition(vector<Entry *> entries);
+    explicit MenuDefinition(deque<Entry *> entries);
 
     ~MenuDefinition();
 };
 
-class MenuModel : public UIModel {
+
+class MenuModel : public UIModel, public Subject {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView *> listeners;
     int done;
-    int selectedInt;
+    unsigned int selectedInt;
     Entry *selected;
+    vector<Level *> *levels;
+
+    map<Event, vector<Observer *>> observers;
 
     void updateSelected();
+
 public:
     MenuModel();
 
@@ -56,7 +63,11 @@ public:
 
     void select();
 
-    Entry* getSelectedEntry();
+    Entry *getSelectedEntry();
+
+    vector<Level *> *getLevels();
+
+    void setLevels(vector<Level *> *levels);
 };
 
 class MenuView : UIView {
@@ -83,7 +94,7 @@ public:
     void setController(MenuController *pController);
 };
 
-class MenuController : UIController {
+class MenuController : public UIController {
 private:
     MenuModel *model;
 public:
@@ -95,6 +106,21 @@ public:
 
     void setMenuModel(MenuModel *model);
 
+};
+
+class LevelObserver : public Observer {
+private:
+    Graphics *graphics;
+    Game *game;
+    MenuModel *menuModel;
+public:
+    LevelObserver();
+
+    ~LevelObserver();
+
+    void notified() override;
+
+    void setMenuModel(MenuModel *menuModel);
 };
 
 #endif //PIESCAPE2_MENU_H

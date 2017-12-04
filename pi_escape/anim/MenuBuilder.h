@@ -1,6 +1,8 @@
 #ifndef PIESCAPE2_MENUBUILDER_H
 #define PIESCAPE2_MENUBUILDER_H
 
+#include <deque>
+#include <list>
 #include "Animation.h"
 #include "Menu.h"
 
@@ -16,6 +18,10 @@ class MenuBuilder;
 
 class EntryAnimation;
 
+class MenuModel;
+
+using func_t = std::add_pointer<void(MenuModel *)>::type;
+
 class EntryBuilder {
 private:
     MenuBuilder *menuBuilder;
@@ -26,8 +32,11 @@ private:
     const char *font;
     char mnemonic;
     const char *action;
-    vector<EntryAnimation *> animations;
+    func_t function;
+    std::map<MenuState, std::vector<EntryAnimation *>> animations;
 public:
+    EntryBuilder();
+
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
     EntryBuilder &setEnabledOnPc(bool b);
@@ -44,6 +53,8 @@ public:
 
     EntryBuilder &buildEntryWithAction(const char *action);
 
+    EntryBuilder &setFunction(func_t function);
+
     void setMenuBuilder(MenuBuilder *menuBuilder);
 
 };
@@ -57,7 +68,8 @@ private:
 public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
 
-    const Animation* getAnimation();
+    const Animation *getAnimation();
+
     const long getDuration();
 };
 
@@ -70,16 +82,18 @@ public:
     const char mnemonic;
     const char *action;
     const char *font;
-    const vector<EntryAnimation *> animations;
+    const map <MenuState, vector<EntryAnimation*>> *animations;
+    const func_t function;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
           const char *short_text, char mnemonic, const char *action, const char *font,
-          const vector<EntryAnimation *> &animations);
+          map<MenuState, vector<EntryAnimation *>> *animations,
+          func_t function);
 };
 
 class MenuBuilder {
 private:
-    vector<Entry *> entries;
+    std::deque<Entry *> entries;
 public:
     EntryBuilder &getEntryBuilder();
 

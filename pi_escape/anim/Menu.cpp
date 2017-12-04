@@ -1,11 +1,11 @@
 #include "Menu.h"
+#include "MenuBuilder.h"
 
 #include <utility>
 
 using namespace std;
 
-//TODO
-MenuDefinition::MenuDefinition(vector<Entry *> entries) : entries(std::move(entries)) {
+MenuDefinition::MenuDefinition(deque<Entry *> entries) : entries(std::move(entries)) {
 
 }
 
@@ -40,7 +40,7 @@ void MenuModel::addListener(MenuView *view) {
 }
 
 void MenuModel::fireInvalidationEvent() {
-    for (int i = 0; i < this->listeners.size(); i++) {
+    for (unsigned int i = 0; i < this->listeners.size(); i++) {
         this->listeners[i]->invalidated();
     }
 }
@@ -66,7 +66,7 @@ void MenuModel::down() {
 }
 
 void MenuModel::select() {
-    done = 0;
+    selected->function(this);
 }
 
 Entry *MenuModel::getSelectedEntry() {
@@ -74,14 +74,22 @@ Entry *MenuModel::getSelectedEntry() {
 }
 
 void MenuModel::updateSelected() {
-    //omgekeerd tellen beetje onlogisch maarja
     this->selected = this->menuDefinition.get()->entries[this->menuDefinition.get()->entries.size() - 1 -
                                                          this->selectedInt];
 }
 
+vector<Level *> *MenuModel::getLevels() {
+    return levels;
+}
+
+void MenuModel::setLevels(vector<Level *> *levels) {
+    this->levels = levels;
+    notify(LEVEL);
+}
+
 
 void MenuView::draw() {
-    const vector<Entry *> &entries = this->model->getMenuDefinition()->entries;
+    const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
     vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
     int i = -1;
     if (!entries.empty()) {
@@ -146,17 +154,16 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-//    for (EntryAnimation *ea : entry->animations) {
     if (entry == this->model->getSelectedEntry()) {
-        //FadeInAnimation *animation = new FadeInAnimation();
-		//GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new RainbowColorAnimation(), 2.0);
-		// GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new InOutAnimation(new MoveAnimation(0, 5)), 1.5f);
-		GlyphIteratingAnimation *animation = new GlyphIteratingAnimation(new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))), 1.5f);
-		//InOutAnimation *animation = new InOutAnimation(new MoveAnimation(20, 20));
-		//RainbowColorAnimation *animation = new RainbowColorAnimation();
-        command = animation->applyTransform(command, getPosition(time, 1000));
-//        command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-//    }
+        //de hover animaties oproepen
+        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+        }
+    } else {
+        //de default
+        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
+            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+        }
     }
 
     return command;
@@ -209,3 +216,51 @@ float getPosition(uint64_t time, long duration) {
     return (time % duration) / (float) duration;
 }
 
+
+void LevelObserver::notified() {
+    if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
+        Level *level = menuModel->getLevels()->back();
+        game_load_level(game, level);
+        menuModel->getLevels()->pop_back();
+        game->engine.context.current_level = level;
+
+        while (!game->engine.context.is_exit_game) {
+            engine_update(&game->engine);
+            //kijken of er een nieuw level geladen moet worden
+            if (game->engine.context.level_ended) {
+                Level *next = menuModel->getLevels()->back();
+                menuModel->getLevels()->pop_back();
+                clear_level(game);
+                game_load_level(game, next);
+                game->engine.context.current_level = next;
+                game->engine.context.level_ended = 0;
+                if(menuModel->getLevels()->empty()){
+                    game->engine.context.is_exit_game = 1;
+                }
+            }
+        }
+    }
+}
+
+LevelObserver::LevelObserver() {
+    //init the graphics system
+    Graphics *graphics = graphics_alloc(0, 0);
+    this->graphics = graphics;
+//initialise context, engine and assemblage, and add systems
+    Game *game = game_alloc(graphics);
+    this->game = game;
+
+}
+
+LevelObserver::~LevelObserver() {
+    game_free(game);
+    free(game);
+
+    graphics_free(graphics);
+    free(graphics);
+}
+
+void LevelObserver::setMenuModel(MenuModel *menuModel) {
+    this->menuModel = menuModel;
+    setSubject(menuModel);
+}
