@@ -128,6 +128,8 @@ void MenuModel::setActivatedMenu(bool i) {
 
 void MenuView::draw() {
     if (!model->isDone()) {
+        Uint32 start_time_ms = SDL_GetTicks();
+
         const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = -1;
@@ -143,7 +145,6 @@ void MenuView::draw() {
             model->setDone(true);
         }
 
-        Uint32 start_time_ms = SDL_GetTicks();
 
         //events registreren
         SDL_Event event;
