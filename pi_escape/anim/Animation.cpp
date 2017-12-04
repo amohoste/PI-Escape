@@ -251,8 +251,9 @@ RepeatAnimation::~RepeatAnimation() {
 
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
 	
-	
-	return draws;
+	std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, position);
+
+	return res;
 }
 
 /***************************************************************
