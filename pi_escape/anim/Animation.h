@@ -4,6 +4,8 @@
 #include "FontManager.h"
 
 #include <glmc.h>
+#include <math.h>
+#include <stdio.h>
 
 class Animation {
 public:
