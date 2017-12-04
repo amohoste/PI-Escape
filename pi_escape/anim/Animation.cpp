@@ -85,10 +85,10 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 
 		// Hue berekenen en omzetten naar rgb
 		float hue = 360.0f * position;
-		const float* rgb = hsv_to_rgb(hue);
+		const t_vec3* rgb = hsv_to_rgb(hue);
 
 		t_vec4 newcolor;
-		glmc_vec4_set(newcolor, rgb[0], rgb[1], rgb[2], cur.getColor()[3]);
+		glmc_vec4_set(newcolor, (*rgb)[0], (*rgb)[1], (*rgb)[2], cur.getColor()[3]);
 		
 		delete []rgb;
 
@@ -99,8 +99,8 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 	return res;
 }
 
-const float* RainbowColorAnimation::hsv_to_rgb(float hue) const {
-	float* result = new float[3];
+const t_vec3* RainbowColorAnimation::hsv_to_rgb(float hue) const {
+	t_vec3* result = new t_vec3[3];
 
 	// Voor onze noden moeten we enkel de hue kunnen laten veranderen
 	float s = 1.0f;
@@ -121,39 +121,39 @@ const float* RainbowColorAnimation::hsv_to_rgb(float hue) const {
 	t = v * (1.0f - (s * (1.0f - fract)));
 
 	if (0.0f <= h && h < 1.0f) {
-		result[0] = v;
-		result[1] = t;
-		result[2] = p;
+		(*result)[0] = v;
+		(*result)[1] = t;
+		(*result)[2] = p;
 	}
 	else if (1.0f <= h && h < 2) {
-		result[0] = q;
-		result[1] = v;
-		result[2] = p;
+		(*result)[0] = q;
+		(*result)[1] = v;
+		(*result)[2] = p;
 	}
 	else if (2.0f <= h && h < 3) {
-		result[0] = p;
-		result[1] = v;
-		result[2] = t;
+		(*result)[0] = p;
+		(*result)[1] = v;
+		(*result)[2] = t;
 	}
 	else if (3.0f <= h && h < 4) {
-		result[0] = p;
-		result[1] = q;
-		result[2] = v;
+		(*result)[0] = p;
+		(*result)[1] = q;
+		(*result)[2] = v;
 	}
 	else if (4.0f <= h && h < 5) {
-		result[0] = t;
-		result[1] = p;
-		result[2] = v;
+		(*result)[0] = t;
+		(*result)[1] = p;
+		(*result)[2] = v;
 	}
 	else if (5.0f <= h && h < 6) {
-		result[0] = v;
-		result[1] = p;
-		result[2] = q;
+		(*result)[0] = v;
+		(*result)[1] = p;
+		(*result)[2] = q;
 	}
 	else {
-		result[0] = 0.0f;
-		result[1] = 0.0f;
-		result[2] = 0.0f;
+		(*result)[0] = 0.0f;
+		(*result)[1] = 0.0f;
+		(*result)[2] = 0.0f;
 	}
 
 	return result;
