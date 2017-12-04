@@ -112,13 +112,15 @@ class LevelObserver : public Observer {
 private:
     Graphics *graphics;
     Game *game;
-    MenuModel *subject;
+    MenuModel *menuModel;
 public:
     LevelObserver();
 
     ~LevelObserver();
 
     void notified() override;
+
+    void setMenuModel(MenuModel *menuModel);
 };
 
 #endif //PIESCAPE2_MENU_H

@@ -81,7 +81,7 @@ int main() {
     MenuController *controller = new MenuController;
     MenuView *view = new MenuView;
     LevelObserver *levelObserver = new LevelObserver;
-    levelObserver->setSubject(model);
+    levelObserver->setMenuModel(model);
     model->registerObserver(LEVEL,levelObserver);
     model->addListener(view);
     view->setModel(model);

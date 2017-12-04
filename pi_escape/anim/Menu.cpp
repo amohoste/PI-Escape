@@ -220,27 +220,23 @@ float getPosition(uint64_t time, long duration) {
 
 
 void LevelObserver::notified() {
-    if (subject != nullptr && !subject->getLevels()->empty()) {
-        cout << "goedzo";
-        game_load_level(game, subject->getLevels()->back());
-        subject->getLevels()->pop_back();
+    if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
+        game_load_level(game, menuModel->getLevels()->back());
+        menuModel->getLevels()->pop_back();
 
         while (!game->engine.context.is_exit_game) {
             engine_update(&game->engine);
             //kijken of er een nieuw level geladen moet worden
             if (game->engine.context.level_ended) {
-                Level *next = subject->getLevels()->back();
-                subject->getLevels()->pop_back();
+                Level *next = menuModel->getLevels()->back();
+                menuModel->getLevels()->pop_back();
                 clear_level(game);
                 game_load_level(game, next);
                 game->engine.context.current_level = next;
                 game->engine.context.level_ended = 0;
             }
         }
-    } else{
-        cout << "hallo";
     }
-
 }
 
 LevelObserver::LevelObserver() {
@@ -259,4 +255,9 @@ LevelObserver::~LevelObserver() {
 
     graphics_free(graphics);
     free(graphics);
+}
+
+void LevelObserver::setMenuModel(MenuModel *menuModel) {
+    this->menuModel = menuModel;
+    setSubject(menuModel);
 }
