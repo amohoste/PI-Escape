@@ -85,11 +85,13 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 
 		// Hue berekenen en omzetten naar rgb
 		float hue = 360.0f * position;
-		const t_vec3* rgb = hsv_to_rgb(hue);
+		const float* rgb = hsv_to_rgb(hue);
 
 		t_vec4 newcolor;
-		glmc_vec4_set(newcolor, (*rgb)[0], (*rgb)[1], (*rgb)[2], cur.getColor()[3]);
+		glmc_vec4_set(newcolor, rgb[0], rgb[1], rgb[2], cur.getColor()[3]);
 		
+		delete []rgb;
+
 		GlyphDrawCommand replacement = cur.changeColor(newcolor[0], newcolor[1], newcolor[2]);
 		res.push_back(replacement);
 	}
@@ -97,8 +99,8 @@ std::vector<GlyphDrawCommand> RainbowColorAnimation::applyTransform(const std::v
 	return res;
 }
 
-const t_vec3* RainbowColorAnimation::hsv_to_rgb(float hue) const {
-	t_vec3 result;
+const float* RainbowColorAnimation::hsv_to_rgb(float hue) const {
+	float* result = new float[3];
 
 	// Voor onze noden moeten we enkel de hue kunnen laten veranderen
 	float s = 1.0f;
@@ -122,7 +124,6 @@ const t_vec3* RainbowColorAnimation::hsv_to_rgb(float hue) const {
 		result[0] = v;
 		result[1] = t;
 		result[2] = p;
-		//glmc_vec3_set(result, )
 	}
 	else if (1.0f <= h && h < 2) {
 		result[0] = q;
@@ -155,7 +156,7 @@ const t_vec3* RainbowColorAnimation::hsv_to_rgb(float hue) const {
 		result[2] = 0.0f;
 	}
 
-	return &result;
+	return result;
 }
 
 /***************************************************************
@@ -251,20 +252,21 @@ RepeatAnimation::~RepeatAnimation() {
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
 	
 	
-	return std::vector<GlyphDrawCommand>();
+	return draws;
 }
 
 /***************************************************************
  SineAnimation
 ****************************************************************/
-SineAnimation::SineAnimation(Animation * animation) {
+SineAnimation::SineAnimation(Animation * animation) : animation(animation) {
+
 }
 
 SineAnimation::~SineAnimation() {
 }
 
 std::vector<GlyphDrawCommand> SineAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
-	return std::vector<GlyphDrawCommand>();
+	return draws;
 }
 
 /***************************************************************
