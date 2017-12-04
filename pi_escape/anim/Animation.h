@@ -6,6 +6,7 @@
 #include <glmc.h>
 #include <math.h>
 #include <stdio.h>
+#define PI 3.14159265
 
 class Animation {
 public:

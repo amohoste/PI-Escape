@@ -179,8 +179,8 @@ std::vector<GlyphDrawCommand> MoveAnimation::applyTransform(const std::vector<Gl
 		const GlyphDrawCommand& cur = *it;
 		
 		t_ivec2 curPos;
-		curPos[0] = cur.getPos_ltop_x() + ((newPos[0] - cur.getPos_ltop_x()) * position);
-		curPos[1] = cur.getPos_ltop_y() + ((newPos[1] - cur.getPos_ltop_y()) * position);
+		curPos[0] = (newPos[0] * position);
+		curPos[1] = (newPos[1] * position);
 
 		GlyphDrawCommand replacement = cur.move(curPos[0], curPos[1]);
 		res.push_back(replacement);
@@ -266,7 +266,10 @@ SineAnimation::~SineAnimation() {
 }
 
 std::vector<GlyphDrawCommand> SineAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
-	return draws;
+	
+	std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, sin(position * (PI/2)));
+
+	return res;
 }
 
 /***************************************************************
