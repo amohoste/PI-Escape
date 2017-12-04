@@ -10,12 +10,6 @@
 
 #include "../../util/rgb_triple.h"
 
-// Help functions
-/////////////////
-
-// Write bitmap to bmp file
-void display_fake_ledgrid(char*);
-
 // Function used by led.c functions
 ///////////////////////////////////
 

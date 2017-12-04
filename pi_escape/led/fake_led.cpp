@@ -16,7 +16,7 @@ auto last_write = chrono::system_clock::now();
 // Constants
 const int grid_size = 256;	// width and heigth of the grid in pixels (should always be at least the amount of leds, 8)
 
-const string bmp_file = "./led.bmp";	// location of bmp file
+const string bmp_file = "pi_escape/led/led.bmp";	// location of bmp file
 
 // 8 by 8 resolution of rainbow pattern
 const int rainbow[8][8][3] = {
@@ -29,11 +29,6 @@ const int rainbow[8][8][3] = {
 	{ { 0, 255, 128 },{ 0, 255, 255 },{ 0, 191, 255 },{ 0, 104, 255 },{ 64,   0, 255 },{ 128,   0, 255 },{ 255,   0, 191 },{ 255,   0,  64 }},
 	{ { 0, 255, 255 },{ 0, 191, 255 },{ 0, 104, 255 },{ 64,   0, 255 },{ 128,   0, 255 },{ 255,   0, 191 },{ 255,   0,  64 },{ 255,   0,   0 }}
 };
-
-// Write bitmap to bmp file
-void display_fake_ledgrid(char* bits) {
-	
-}
 
 // Create an empty square
 void clear_fake_ledgrid() {
