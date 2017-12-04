@@ -99,7 +99,7 @@ bool MenuModel::isVisible() {
 
 
 void MenuView::draw() {
-    if(model->isVisible()) {
+    if (model->isVisible()) {
         const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = -1;
@@ -170,12 +170,17 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
     if (entry == this->model->getSelectedEntry()) {
         //de hover animaties oproepen
         for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+            if (ea->getPosition() >= 1) {
+                cout << "dfs" << endl;
+            }
+            command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+            ea->setPosition(getPosition(time, ea));
         }
     } else {
         //de default
         for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+            command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+            ea->setPosition(getPosition(time, ea));
         }
 
     }
@@ -227,8 +232,16 @@ void MenuController::onExitKey() {
 
 }
 
-float getPosition(uint64_t time, long duration) {
-    return (time % duration) / (float) duration;
+/*
+ * berekenen wat de positie moet zijn
+ */
+float getPosition(uint64_t time, EntryAnimation *ea) {
+    float position = (time % ea->getDuration()) ;
+    if (ea->isRepeat()) {
+        return position/ (float) ea->getDuration();
+    } else {
+        return position > 1 ? 1 : position;
+    }
 }
 
 
