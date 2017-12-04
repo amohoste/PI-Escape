@@ -156,16 +156,16 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
 
     if (entry == this->model->getSelectedEntry()) {
         //de hover animaties oproepen
-        FadeInAnimation *fd = new FadeInAnimation();
-        command = fd->applyTransform(command, getPosition(time, 1000));
-//        for (EntryAnimation *ea : entry->animations_hover) {
+//        FadeInAnimation *fd = new FadeInAnimation();
+//        command = fd->applyTransform(command, getPosition(time, 1000));
+//        for (EntryAnimation *ea : entry->animations->find(ACTIVATE)) {
 //            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
 //        }
     } else {
         //de default
-        for (EntryAnimation *ea : entry->animations_default) {
-            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-        }
+//        for (EntryAnimation *ea : entry->animations_default) {
+//            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+//        }
 
     }
 

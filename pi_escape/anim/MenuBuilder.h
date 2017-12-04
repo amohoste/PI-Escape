@@ -33,11 +33,9 @@ private:
     char mnemonic;
     const char *action;
     func_t function;
-    vector<EntryAnimation *> animations_active;
-    vector<EntryAnimation *> animations_other;
-    vector<EntryAnimation *> animations_hover;
-    vector<EntryAnimation *> animations_default;
+    std::map<MenuState, std::vector<EntryAnimation *>> animations;
 public:
+    EntryBuilder();
 
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
@@ -84,16 +82,12 @@ public:
     const char mnemonic;
     const char *action;
     const char *font;
-    const vector<EntryAnimation *> animations_active;
-    const vector<EntryAnimation *> animations_other;
-    const vector<EntryAnimation *> animations_hover;
-    const vector<EntryAnimation *> animations_default;
+    const map <MenuState, vector<EntryAnimation*>> *animations;
     const func_t function;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
           const char *short_text, char mnemonic, const char *action, const char *font,
-          const vector<EntryAnimation *> &animations_active, const vector<EntryAnimation *> &animations_other,
-          const vector<EntryAnimation *> &animations_hover, const vector<EntryAnimation *> &animations_default,
+          map<MenuState, vector<EntryAnimation *>> *animations,
           func_t function);
 };
 

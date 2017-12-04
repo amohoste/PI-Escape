@@ -21,16 +21,7 @@ void addEntry(MenuBuilder *mb, Entry *entry) {
 
 EntryBuilder &EntryBuilder::addAnimation(Animation *animation, MenuState activate, bool repeat, long duration) {
     EntryAnimation *ea = new EntryAnimation(animation, activate, repeat, duration);
-    switch (activate) {
-        case ACTIVATE:
-            animations_active.push_back(ea);
-        case HOVER:
-            animations_hover.push_back(ea);
-        case OTHER_ACTIVATED:
-            animations_other.push_back(ea);
-        case DEFAULT:
-            animations_default.push_back(ea);
-    }
+    animations[activate].push_back(ea);
     return *this;
 }
 
@@ -68,8 +59,7 @@ EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
     this->action = action;
     addEntry(this->menuBuilder,
              new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
-                       this->action, this->font, this->animations_active, animations_other, animations_hover,
-                       animations_default, function));
+                       this->action, this->font, &animations, function));
     return *this;
 }
 
@@ -80,6 +70,14 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
 EntryBuilder &EntryBuilder::setFunction(func_t function) {
     this->function = function;
     return *this;
+}
+
+EntryBuilder::EntryBuilder() {
+    animations[ACTIVATE].clear();
+    animations[OTHER_ACTIVATED].clear();
+    animations[HOVER].clear();
+    animations[DEFAULT].clear();
+
 }
 
 
@@ -97,23 +95,18 @@ const long EntryAnimation::getDuration() {
 }
 
 Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text, const char *short_text, char mnemonic,
-             const char *action, const char *font, const vector<EntryAnimation *> &animations_active,
-             const vector<EntryAnimation *> &animations_other, const vector<EntryAnimation *> &animations_hover,
-             const vector<EntryAnimation *> &animations_default, func_t function) : enabled_on_pi(
+             const char *action, const char *font,
+             map<MenuState, vector<EntryAnimation *>> *animations,
+             func_t function) : enabled_on_pi(
         enabled_on_pi),
-                                                                                    enabled_on_pc(
-                                                                                            enabled_on_pc),
-                                                                                    long_text(long_text),
-                                                                                    short_text(short_text),
-                                                                                    mnemonic(mnemonic),
-                                                                                    action(action),
-                                                                                    font(font),
-                                                                                    animations_active(
-                                                                                            animations_active),
-                                                                                    animations_other(animations_other),
-                                                                                    animations_hover(animations_hover),
-                                                                                    animations_default(
-                                                                                            animations_default),
-                                                                                    function(function) {
+                                enabled_on_pc(
+                                        enabled_on_pc),
+                                long_text(long_text),
+                                short_text(short_text),
+                                mnemonic(mnemonic),
+                                action(action),
+                                font(font),
+                                animations(animations),
+                                function(function) {
 
 }
