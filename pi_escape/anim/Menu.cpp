@@ -156,9 +156,11 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
 
     if (entry == this->model->getSelectedEntry()) {
         //de hover animaties oproepen
-        for (EntryAnimation *ea : entry->animations_hover) {
-            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
-        }
+        FadeInAnimation *fd = new FadeInAnimation();
+        command = fd->applyTransform(command, getPosition(time, 1000));
+//        for (EntryAnimation *ea : entry->animations_hover) {
+//            command = ea->getAnimation()->applyTransform(command, getPosition(time, ea->getDuration()));
+//        }
     } else {
         //de default
         for (EntryAnimation *ea : entry->animations_default) {
@@ -218,7 +220,7 @@ float getPosition(uint64_t time, long duration) {
 
 
 void LevelObserver::notified() {
-   cout << "hallo door deze functie moet de game starten" << endl;
+    cout << "hallo door deze functie moet de game starten" << endl;
 
 //
 //    //init the graphics system
