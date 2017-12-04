@@ -9,12 +9,17 @@
 #include <iostream>
 #include <deque>
 
+extern "C" {
+#include "../es/game.h"
+};
+
 //TODO
 class Entry;
 
 class MenuView;
 
 class MenuController;
+
 
 class MenuDefinition {
 public:
@@ -25,15 +30,19 @@ public:
     ~MenuDefinition();
 };
 
-class MenuModel : public UIModel {
+class MenuModel : public UIModel, public Subject {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
     vector<MenuView *> listeners;
     int done;
     unsigned int selectedInt;
     Entry *selected;
+    deque<Level *> *levels;
+
+    map<Event, vector<Observer *>> observers;
 
     void updateSelected();
+
 public:
     MenuModel();
 
@@ -57,7 +66,11 @@ public:
 
     void select();
 
-    Entry* getSelectedEntry();
+    Entry *getSelectedEntry();
+
+    deque<Level *> *getLevels();
+
+    void setLevels(deque<Level *> *levels);
 };
 
 class MenuView : UIView {
@@ -96,6 +109,11 @@ public:
 
     void setMenuModel(MenuModel *model);
 
+};
+
+class LevelObserver : public Observer {
+public:
+    void notified() override;
 };
 
 #endif //PIESCAPE2_MENU_H

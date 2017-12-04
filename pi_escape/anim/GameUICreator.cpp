@@ -29,7 +29,7 @@ void start_game(MenuModel *m) {
     for (int i = 7; i < 10; ++i) {
         level_names.push_back(load_level(i));
     }
-//    game(&level_names);
+    m->setLevels(&level_names);
     cout << "game should start" << endl;
     m->setDone(0);
 }

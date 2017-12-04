@@ -78,6 +78,15 @@ void MenuModel::updateSelected() {
                                                          this->selectedInt];
 }
 
+deque<Level *> *MenuModel::getLevels() {
+    return levels;
+}
+
+void MenuModel::setLevels(deque<Level *> *levels) {
+    this->levels = levels;
+    notify(LEVEL);
+}
+
 
 void MenuView::draw() {
     const deque<Entry *> &entries = this->model->getMenuDefinition()->entries;
@@ -207,3 +216,51 @@ float getPosition(uint64_t time, long duration) {
     return (time % duration) / (float) duration;
 }
 
+
+void LevelObserver::notified() {
+   cout << "hallo door deze functie moet de game starten" << endl;
+
+//
+//    //init the graphics system
+//    Graphics *graphics = graphics_alloc(0, 0);
+//
+//    //initialise context, engine and assemblage, and add systems
+//    Game *pi_escape_2 = game_alloc(graphics);
+//
+//    //een level inladen kan je doen door gewoon op te  geven het hoeveelste level het is -> beginnend vanaf 1
+//    //vanaf level 7 worden de echte games geladen en niet de tutorials
+//    Level *level = load_level(1);
+//    game_load_level(pi_escape_2, level);
+//
+//
+//
+//
+//    while (!pi_escape_2->engine.context.is_exit_game) {
+//        engine_update(&pi_escape_2->engine);
+//
+//        //kijken of er een nieuw level geladen moet worden
+//        if (pi_escape_2->engine.context.level_ended) {
+//
+//
+//            int new_level_nr = pi_escape_2->engine.context.current_level->nr + 1;
+//            if (new_level_nr > 10) {
+//                pi_escape_2->engine.context.is_exit_game = 1;
+//            } else {
+//                Level *next = load_level(new_level_nr);
+//                clear_level(pi_escape_2);
+//                game_load_level(pi_escape_2, next);
+//                pi_escape_2->engine.context.current_level = next;
+//                pi_escape_2->engine.context.level_ended = 0;
+//            }
+//        }
+//
+//
+//    }
+//
+//    game_free(pi_escape_2);
+//    free(pi_escape_2);
+//
+//    graphics_free(graphics);
+//    free(graphics);
+
+}
