@@ -30,11 +30,11 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
-    load_levels(7,9,m);
+    load_levels(8,11,m);
 }
 
 void tutorial(MenuModel *m) {
-    load_levels(1, 2, m);
+    load_levels(1, 8, m);
 }
 
 /**
@@ -43,7 +43,7 @@ void tutorial(MenuModel *m) {
 void load_levels(int start, int stop, MenuModel *m) {
     vector<Level *> level_names;
     level_names.clear();
-    for (int i = stop; i >= start; i--) {
+    for (int i = stop -1 ; i >= start; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
