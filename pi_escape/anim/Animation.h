@@ -116,6 +116,7 @@ public:
 /** Apply a sine function to an animation. This smooths animations. */
 class SineAnimation : public Animation {
 private:
+	Animation* animation;
 public:
     SineAnimation(Animation* animation);
     virtual ~SineAnimation();

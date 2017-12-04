@@ -257,7 +257,8 @@ std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<
 /***************************************************************
  SineAnimation
 ****************************************************************/
-SineAnimation::SineAnimation(Animation * animation) {
+SineAnimation::SineAnimation(Animation * animation) : animation(animation) {
+
 }
 
 SineAnimation::~SineAnimation() {
