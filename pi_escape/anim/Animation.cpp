@@ -251,7 +251,7 @@ RepeatAnimation::~RepeatAnimation() {
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
 	
 	
-	return std::vector<GlyphDrawCommand>();
+	return draws;
 }
 
 /***************************************************************
@@ -264,7 +264,7 @@ SineAnimation::~SineAnimation() {
 }
 
 std::vector<GlyphDrawCommand> SineAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
-	return std::vector<GlyphDrawCommand>();
+	return draws;
 }
 
 /***************************************************************
