@@ -33,10 +33,16 @@ int main() {
 
     GameUICreator *gc = new GameUICreator;
 
+
     gc->createIntro();
 
     // Fontmanager aanmaken
     FontManager m(graphics);
+
+    // Fonts inladen
+    m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
+    m.loadFont("base", "base72.png", "base72.fnt");
+    m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
     const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
     MenuModel *model = new MenuModel;
@@ -44,7 +50,7 @@ int main() {
     MenuView *view = new MenuView;
     LevelObserver *levelObserver = new LevelObserver;
     levelObserver->setMenuModel(model);
-    model->registerObserver(LEVEL,levelObserver);
+    model->registerObserver(LEVEL, levelObserver);
     model->addListener(view);
     view->setModel(model);
     controller->setMenuModel(model);
