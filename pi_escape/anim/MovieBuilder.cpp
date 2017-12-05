@@ -1,10 +1,10 @@
 #include "MovieBuilder.h"
 
-MovieBuilder::MovieBuilder(): color(*new t_vec4[4]){
+MovieBuilder::MovieBuilder() : color(*new t_vec4[4]) {
 }
 
-MovieBuilder::~MovieBuilder(){
-    delete []& this->color;
+MovieBuilder::~MovieBuilder() {
+    delete[]&this->color;
 }
 
 MovieBuilder &MovieBuilder::addText(const char *text) {
@@ -23,8 +23,8 @@ MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
 }
 
 MovieBuilder &MovieBuilder::setPos_percent(float x, float y) {
-    this->x =x;
-    this->y =y;
+    this->x = 1920 * ((x - 50) / 100);
+    this->y = 1080 * ((y - 50) / 100);
     return *this;
 }
 
@@ -38,13 +38,14 @@ MovieBuilder &MovieBuilder::setEndTime(long l) {
     return *this;
 }
 
-MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long l, long p) {
-    this->animations.push_back(animation);
+MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long start, long duur) {
+    this->animations.push_back(new AnimationDuration(start, duur, animation));
     return *this;
 }
 
 MovieBuilder &MovieBuilder::endText() {
-    //todo
+    this->movie_animations.push_back(new MovieAnimation(text, start, end, font, color, x, y, end - start, animations));
+    animations.clear();
     return *this;
 }
 
@@ -54,5 +55,24 @@ MovieBuilder &MovieBuilder::setDuration(long d) {
 }
 
 MovieDefinition *MovieBuilder::build() {
-    return new MovieDefinition(this->duration, this->start, this->end,this->x, this->y, this->color, this->font, this->text, this->animations);
+    return new MovieDefinition(movie_animations, duration);
+}
+
+MovieAnimation::MovieAnimation(const char *text, const long start, const long end, const char *font,
+                               const t_vec4 &color, const float x,
+                               const float y, const long duration, const vector<AnimationDuration *> animations) : text(text),
+                                                                                                           start(start),
+                                                                                                           end(end),
+                                                                                                           font(font),
+                                                                                                           color(color),
+                                                                                                           x(x), y(y),
+                                                                                                           duration(
+                                                                                                                   duration),
+                                                                                                           animations(
+                                                                                                                   animations) {
+
+}
+
+AnimationDuration::AnimationDuration(long start, long duration, Animation *a) : start(start), duration(duration), a(a) {
+
 }

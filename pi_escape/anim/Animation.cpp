@@ -225,7 +225,15 @@ std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std:
 			res.push_back(*it1);
 		}
 		else {
-			res.push_back(cur);
+			const GlyphDrawCommand& cur = *it;
+
+			std::vector<GlyphDrawCommand> tmp;
+			tmp.push_back(cur);
+
+			std::vector<GlyphDrawCommand> newGlyph = animation->applyTransform(tmp, 1);
+
+			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
+			res.push_back(*it1);
 		}
 		
 		i++;

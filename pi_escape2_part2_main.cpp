@@ -31,11 +31,8 @@ int main() {
 
     Graphics *graphics = graphics_alloc(0, 0);
 
-    t_vec4 col = {1.0f, 0.0f, 0.0f, 1.0f};
-
     GameUICreator *gc = new GameUICreator;
 
-    gc->createIntro();
 
     // Fontmanager aanmaken
     FontManager m(graphics);
@@ -45,52 +42,22 @@ int main() {
     m.loadFont("base", "base72.png", "base72.fnt");
     m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
-    // Font, kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
-    m.setFont("zorque"); // indien niet gebruikt laatst ingelezen font als font
-    m.setColor(0.4f, 0.4f, 0.4f, 1.0f); // Default { 1.0f, 0.0f, 0.0f, 1.0f }
-    m.setHpos(TEXT_CENTER); // Default TEXT_LEFT
-    m.setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
-
-    // Vector met glyphdrawcommands aanmaken
-    vector<GlyphDrawCommand> result = m.makeGlyphDrawCommands("PiEscape2", 0, 0);
-
-
-    //this is a demo of gl_glyph_draw
-    Uint32 start_time_ms = SDL_GetTicks();
-    Uint32 diff_time_ms = 0;
-
-    while (diff_time_ms < 500) {
-        graphics_begin_draw(graphics);
-
-        glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
-
-        // Glyphdrawcommands tekenen en als kleur col nemen
-        vector<GlyphDrawCommand>::iterator i = result.begin();
-        while (i != result.end()) {
-            m.draw((*i).changeColor(col));
-            i++;
-        }
-
-        graphics_end_draw(graphics);
-
-        Uint32 cur_time_ms = SDL_GetTicks();
-        diff_time_ms = cur_time_ms - start_time_ms;
-    }
-
-    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
-    MenuModel *model = new MenuModel;
-    MenuController *controller = new MenuController;
-    MenuView *view = new MenuView;
-    LevelObserver *levelObserver = new LevelObserver;
-    levelObserver->setMenuModel(model);
-    model->registerObserver(LEVEL,levelObserver);
-    model->addListener(view);
-    view->setModel(model);
-    controller->setMenuModel(model);
-    view->setFontManager(&m);
-    view->setGraphics(graphics);
-    view->setController(controller);
-    model->setMenuDefinition(ptr);
+    MoviePlayer *mp = new MoviePlayer(&m);
+    mp->play(gc->createIntro());
+//
+//    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
+//    MenuModel *model = new MenuModel;
+//    MenuController *controller = new MenuController;
+//    MenuView *view = new MenuView;
+//    LevelObserver *levelObserver = new LevelObserver;
+//    levelObserver->setMenuModel(model);
+//    model->registerObserver(LEVEL, levelObserver);
+//    model->addListener(view);
+//    view->setModel(model);
+//    controller->setMenuModel(model);
+//    view->setFontManager(&m);
+//    view->setController(controller);
+//    model->setMenuDefinition(ptr);
 
     delete gc;
 
