@@ -142,7 +142,7 @@ void MenuView::draw() {
             }
         }
 
-        if(this->animationsFinished){
+        if (this->animationsFinished) {
             model->setDone(true);
         }
 
@@ -312,22 +312,46 @@ void LevelObserver::notified() {
         game->engine.context.current_level = level;
         game->engine.context.is_exit_game = 0;
 
+        Uint32 start_time_ms = SDL_GetTicks();
+        Uint32 last_print_time_ms = start_time_ms;
+        long update_count = 0;
+
         while (!game->engine.context.is_exit_game) {
+            Uint32 cur_time_ms = SDL_GetTicks();
+            Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
+
+            engine_update(&game->engine);
+            update_count++;
+
+
             engine_update(&game->engine);
             //kijken of er een nieuw level geladen moet worden
             if (game->engine.context.level_ended) {
+                if (menuModel->getLevels()->empty()) {
+                    game->engine.context.is_exit_game = 1;
+                    menuModel->setDone(false);
+                }
                 Level *next = menuModel->getLevels()->back();
                 menuModel->getLevels()->pop_back();
                 clear_level(game);
                 game_load_level(game, next);
                 game->engine.context.current_level = next;
                 game->engine.context.level_ended = 0;
-                if (menuModel->getLevels()->empty()) {
-                    game->engine.context.is_exit_game = 1;
-                    menuModel->setDone(false);
-                }
+
+            }
+            //print performance statistics each second
+            if (diff_time_ms > 1000) {
+                float time_ms_per_update = (float) diff_time_ms / (float) update_count;
+                float fps = 1.0f / time_ms_per_update * 1000.0f;
+                game->engine.context.fps = fps;
+                last_print_time_ms = cur_time_ms;
+                update_count = 0;
             }
         }
+
+#ifdef RPI
+        clear_ledgrid();
+#endif // RPI
 
         game_free(game);
         free(game);
@@ -341,8 +365,6 @@ LevelObserver::LevelObserver() {
 }
 
 LevelObserver::~LevelObserver() {
-
-
     graphics_free(graphics);
     free(graphics);
 }
