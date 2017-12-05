@@ -192,15 +192,15 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
         bool done = true;
         if (entry == this->model->getSelectedEntry()) {
             for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
-                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition(nullptr));
                 ea->setPosition(getPosition(time, ea));
-                done &= ea->getPosition() == 1;
+                done &= ea->getPosition(nullptr) == 1;
             }
         } else {
             for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
-                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition(nullptr));
                 ea->setPosition(getPosition(time, ea));
-                done &= ea->getPosition() == 1;
+                done &= ea->getPosition(nullptr) == 1;
             }
         }
         this->animationsFinished &= done;
@@ -208,13 +208,13 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
         if (entry == this->model->getSelectedEntry()) {
             //de hover animaties oproepen
             for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition(nullptr));
                 ea->setPosition(getPosition(time, ea));
             }
         } else {
             //de default
             for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-                command = ea->getAnimation()->applyTransform(command, ea->getPosition());
+                command = ea->getAnimation()->applyTransform(command, ea->getPosition(nullptr));
                 ea->setPosition(getPosition(time, ea));
 
 

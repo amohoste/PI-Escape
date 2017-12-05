@@ -23,8 +23,8 @@ MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
 }
 
 MovieBuilder &MovieBuilder::setPos_percent(float x, float y) {
-    this->x = x;
-    this->y = y;
+    this->x = 1920 * ((x - 50) / 100);
+    this->y = 1080 * ((y - 50) / 100);
     return *this;
 }
 
@@ -44,7 +44,7 @@ MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long l, long p) {
 }
 
 MovieBuilder &MovieBuilder::endText() {
-    this->movie_animations.push_back(new MovieAnimation(text, start, end, font, color, x, y, duration, animations));
+    this->movie_animations.push_back(new MovieAnimation(text, start, end, font, color, x, y, end - start, animations));
     return *this;
 }
 
@@ -54,7 +54,7 @@ MovieBuilder &MovieBuilder::setDuration(long d) {
 }
 
 MovieDefinition *MovieBuilder::build() {
-    return new MovieDefinition(movie_animations);
+    return new MovieDefinition(movie_animations, duration);
 }
 
 MovieAnimation::MovieAnimation(const char *text, const long start, const long end, const char *font,
@@ -70,16 +70,4 @@ MovieAnimation::MovieAnimation(const char *text, const long start, const long en
                                                                                                            animations(
                                                                                                                    animations) {
 
-}
-
-const char *MovieAnimation::getText() {
-    return text;
-}
-
-const long MovieAnimation::getStart() {
-    return start;
-}
-
-const long MovieAnimation::getEnd() {
-    return end;
 }

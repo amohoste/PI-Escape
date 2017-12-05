@@ -12,18 +12,21 @@ class MovieAnimation;
  */
 class MovieDefinition {
 public:
-    explicit MovieDefinition(deque<MovieAnimation *> movie_animations);
+    explicit MovieDefinition(deque<MovieAnimation *> movie_animations, long duration);
 
     const deque<MovieAnimation *> movie_animations;
+    const long duration;
 };
 
 
 class MovieModel : public UIModel {
 private:
     shared_ptr<MovieDefinition> movieDefinition;
+    bool done;
 public:
     MovieModel();
     int isDone() const override;
+    void setDone(bool done);
 
 public:
     void setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition);
@@ -34,6 +37,7 @@ public:
 class MovieGLView : public UIView {
 private:
     MovieModel *model;
+    vector<GlyphDrawCommand> getCommands(MovieAnimation *mv);
 public:
 
     void setMovieModel(MovieModel *movieModel);
@@ -41,6 +45,7 @@ public:
     void invalidated() override;
 
     void draw() override;
+
 };
 
 class MovieController : public UIController {

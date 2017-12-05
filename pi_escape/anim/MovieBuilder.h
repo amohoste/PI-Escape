@@ -46,7 +46,7 @@ public:
 };
 
 class MovieAnimation {
-private:
+public:
     const char *text;
     const long start;
     const long end;
@@ -56,14 +56,9 @@ private:
     const float y;
     const long duration;
     const std::vector<Animation *> animations;
-public:
     MovieAnimation(const char *text, const long start, const long end, const char *font, const t_vec4 &color,
                    const float x, const float y, const long duration, const std::vector<Animation *> animations);
 
-    const char * getText();
-
-    const long getStart();
-    const long getEnd();
 };
 
 

@@ -76,7 +76,7 @@ public:
 
     const long getDuration();
 
-    float getPosition();
+    float getPosition(Animation *pAnimation);
 
     void setPosition(float x);
 };

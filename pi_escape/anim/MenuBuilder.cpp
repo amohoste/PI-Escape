@@ -98,7 +98,7 @@ bool EntryAnimation::isRepeat() {
     return repeat;
 }
 
-float EntryAnimation::getPosition() {
+float EntryAnimation::getPosition(Animation *pAnimation) {
     return position;
 }
 
