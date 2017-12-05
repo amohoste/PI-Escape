@@ -18,10 +18,21 @@ LedView::~LedView() {
  * React to change in selected menu item
  */
 void LedView::notified() {
-	printf("selction changed\n");
+	// Get text of selected item
+	const char* str = this->model->getSelectedEntry()->long_text;
+
+	// Convert to tinyFont
+	// TODO
+}
+
+/**
+ * Draw function of view
+ */
+void LedView::draw() {
+	// Draw next frame of the tinyfont text
+	// TODO
 }
 
 void LedView::setModel(MenuModel *model) {
 	this->model = model;
-	setSubject(model);
 }

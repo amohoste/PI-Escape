@@ -4,8 +4,11 @@
 #include "UI.h"
 #include "Menu.h"
 
-class LedView : public Observer {
+class LedView : public Observer, public UIView {
 private:
+	int frame;
+	int* tinyFont;
+	int** pattern;
 	MenuModel *model;
 public:
 	LedView();
@@ -13,6 +16,8 @@ public:
 	~LedView();
 
 	void notified() override;
+
+	virtual void draw() override;
 
 	void setModel(MenuModel *model);
 };
