@@ -96,3 +96,27 @@ float getPosition(AnimationDuration *ad, uint64_t time) {
     return d > 1 ? 1 : d;
 }
 
+void MoviePlayer::play(MovieDefinition *movieDefinition) {
+    clear(); //oude componeten leegmaken
+    mm = new MovieModel;
+    mv = new MovieGLView;
+    mc = new MovieController;
+
+    mm->addListener(mv);
+    mv->setMovieModel(mm);
+    mv->setFontManager(fontManager);
+
+    mm->setMovieDefinition(movieDefinition);
+}
+
+void MoviePlayer::clear() {
+        delete mm;
+        delete mv;
+        delete mc;
+}
+
+MoviePlayer::~MoviePlayer() {
+    clear();
+}
+
+

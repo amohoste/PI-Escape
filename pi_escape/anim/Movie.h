@@ -51,4 +51,21 @@ public:
 class MovieController : public UIController {
 };
 
+
+class MoviePlayer{
+private:
+    MovieGLView *mv;
+    MovieModel *mm;
+    MovieController *mc;
+
+    FontManager *fontManager;
+
+    void clear();
+
+public:
+    MoviePlayer(FontManager *fontManager) : fontManager(fontManager){};
+    ~MoviePlayer();
+    void play(MovieDefinition *movieDefinition);
+};
+
 #endif //PIESCAPE2_ANIMATIONSEQUENCE_H
