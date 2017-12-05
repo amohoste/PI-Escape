@@ -8,6 +8,7 @@
 #include "MovieBuilder.h"
 
 class MovieAnimation;
+class AnimationDuration;
 
 /**
  * A sequence of text animations, such as an intro, credits, ...

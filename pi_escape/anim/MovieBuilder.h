@@ -7,6 +7,8 @@
 
 class EntryBuilder;
 class AnimationDuration;
+class MovieAnimation;
+class MovieDefinition;
 
 class MovieBuilder {
 private:
@@ -19,7 +21,7 @@ private:
     float y;
     long duration;
     std::vector<AnimationDuration *> animations;
-    std::deque<MovieAnimation *> movie_animations;
+    std::vector<MovieAnimation *> movie_animations;
 public:
     MovieBuilder();
 
