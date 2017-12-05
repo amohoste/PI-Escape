@@ -33,7 +33,7 @@ void MovieGLView::invalidated() {
 //    Uint32 start = SDL_GetTicks();
     draw();
 //    Uint32 end = SDL_GetTicks();
-    model->setTime(model->getTime() + 1);
+//    model->setTime(model->getTime() + 1);
 }
 
 void MovieGLView::draw() {

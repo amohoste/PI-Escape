@@ -67,9 +67,9 @@ Entry *MenuModel::getSelectedEntry() {
 }
 
 void MenuModel::updateSelected() {
-    notify(SELECTION);
     this->selected = this->menuDefinition.get()->entries[this->menuDefinition.get()->entries.size() - 1 -
                                                          this->selectedInt];
+    notify(SELECTION);
 }
 
 vector<Level *> *MenuModel::getLevels() {
