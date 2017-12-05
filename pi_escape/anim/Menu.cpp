@@ -22,10 +22,6 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->fireInvalidationEvent();
 }
 
-void MenuModel::setTime(uint64_t time) {
-    this->time = time;
-    fireInvalidationEvent();
-}
 
 int MenuModel::isDone() const {
     return done;
@@ -36,15 +32,6 @@ MenuModel::MenuModel() {
     done = 0;
     activated_menu = false;
 }
-
-
-
-
-
-
-
-
-
 
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {

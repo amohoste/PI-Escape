@@ -71,3 +71,7 @@ MovieAnimation::MovieAnimation(const char *text, const long start, const long en
                                                                                                                    animations) {
 
 }
+
+const char *MovieAnimation::getText() {
+    return text;
+}

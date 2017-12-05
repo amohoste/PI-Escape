@@ -34,9 +34,11 @@ int main() {
     GameUICreator *gc = new GameUICreator;
 
     const shared_ptr<MovieDefinition> &intro = gc->createIntro();
-//    MovieModel *mm = new MovieModel();
-//    MovieGLView *mv = new MovieGLView();
-//    mm->setMovieDefinition(intro);
+    MovieModel *mm = new MovieModel();
+    MovieGLView *mv = new MovieGLView();
+    mm->addListener(mv);
+    mv->setMovieModel(mm);
+    mm->setMovieDefinition(intro);
 
     // Fontmanager aanmaken
     FontManager m(graphics);

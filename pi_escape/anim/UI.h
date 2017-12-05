@@ -26,7 +26,7 @@ public:
 
     virtual ~UIModel();
 
-    virtual void setTime(uint64_t time);
+    void setTime(uint64_t time);
 
     uint64_t getTime() const;
 
