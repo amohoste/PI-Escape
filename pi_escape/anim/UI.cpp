@@ -52,7 +52,6 @@ int UIModel::isDone() const {
 
 int UIModel::setDone(bool done) {
     this->done = done;
-    fireInvalidationEvent();
 }
 
 void Observer::setSubject(Subject *subject) {

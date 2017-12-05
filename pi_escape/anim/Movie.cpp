@@ -9,6 +9,7 @@ void MovieModel::setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition)
     time = 0;
     this->movieDefinition = std::move(movieDefinition);
     setDone(false);
+    fireInvalidationEvent();
 }
 
 shared_ptr<MovieDefinition> MovieModel::getMovieDefinition() {
@@ -32,7 +33,8 @@ void MovieGLView::invalidated() {
         Uint32 start = SDL_GetTicks();
         draw();
         Uint32 end = SDL_GetTicks();
-        model->setTime(model->getTime() + end - start);
+        cout << model->getTime() << endl;
+        model->setTime(model->getTime() + end - start + 1);
     }
 }
 
@@ -79,8 +81,8 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(mv->text, (int) mv->x, (int) mv->y);
 
     for (AnimationDuration *a : mv->animations) {
-        command = a->a->applyTransform(command, model->getPosition(a));
-
+        command = a->a->applyTransform(command, 0.5f);
+//        cout << model->getPosition(a) << endl;
     }
     return command;
 }
@@ -96,7 +98,7 @@ void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     mv->setMovieModel(mm);
     mv->setFontManager(fontManager);
 
-    mm->setMovieDefinition(movieDefinition);
+    mm->setMovieDefinition(std::move(movieDefinition));
 }
 
 void MoviePlayer::clear() {
