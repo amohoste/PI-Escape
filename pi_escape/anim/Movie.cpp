@@ -28,6 +28,9 @@ MovieModel::~MovieModel() {
  * @return de positie waarin de animatie zich bevind
  */
 float MovieModel::getPosition(AnimationDuration *ad, int offset) {
+    if(ad->start > time -offset){
+        return 0;
+    }
     float k = time - offset - ad->start;
     float d = k / ad->duration;
     return d > 1 ? 1 : d;
@@ -86,7 +89,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
 
     for (AnimationDuration *a : mv->animations) {
         command = a->a->applyTransform(command, model->getPosition(a,(int) mv->start));
-//        cout << model->getPosition(a) << endl;
+        cout << model->getPosition(a, (int) mv->start) << endl;
     }
     return command;
 }
