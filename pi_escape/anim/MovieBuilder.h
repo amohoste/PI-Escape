@@ -61,6 +61,9 @@ public:
                    const float x, const float y, const long duration, const std::vector<Animation *> animations);
 
     const char * getText();
+
+    const long getStart();
+    const long getEnd();
 };
 
 

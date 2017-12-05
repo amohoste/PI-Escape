@@ -75,3 +75,11 @@ MovieAnimation::MovieAnimation(const char *text, const long start, const long en
 const char *MovieAnimation::getText() {
     return text;
 }
+
+const long MovieAnimation::getStart() {
+    return start;
+}
+
+const long MovieAnimation::getEnd() {
+    return end;
+}

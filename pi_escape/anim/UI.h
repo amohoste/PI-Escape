@@ -34,7 +34,7 @@ public:
 
     void addListener(UIView *view);
 
-    void fireInvalidationEvent();
+    virtual void fireInvalidationEvent();
 
 
 };

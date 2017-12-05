@@ -22,6 +22,7 @@ class MovieModel : public UIModel {
 private:
     shared_ptr<MovieDefinition> movieDefinition;
 public:
+    MovieModel();
     int isDone() const override;
 
 public:
