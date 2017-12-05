@@ -23,8 +23,8 @@ MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
 }
 
 MovieBuilder &MovieBuilder::setPos_percent(float x, float y) {
-    this->x = 1920 * ((x - 50) / 100);
-    this->y = 1080 * ((y - 50) / 100);
+    this->x_perc = x;
+    this->y_perc = y;
     return *this;
 }
 
@@ -44,7 +44,7 @@ MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long start, long 
 }
 
 MovieBuilder &MovieBuilder::endText() {
-    this->movie_animations.push_back(new MovieAnimation(text, start, end, font, color, x, y, end - start, animations));
+    this->movie_animations.push_back(new MovieAnimation(text, start, end, font, color, x_perc, y_perc, end - start, animations));
     animations.clear();
     return *this;
 }

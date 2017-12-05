@@ -117,7 +117,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
     builder.addText("PiEscape 2")
             .setFont("zorque")
             .setColor(col2)
-            .setPos_percent(50.0f, 25.0f)
+            .setPos_percent(50.0f, 0.0f)
             .setStartTime(1000l).setEndTime(10000l)
 
             .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)

@@ -17,8 +17,8 @@ private:
     long end;
     const char *font;
     t_vec4 &color;
-    float x;
-    float y;
+    float x_perc;
+    float y_perc;
     long duration;
     std::vector<AnimationDuration *> animations;
     std::vector<MovieAnimation *> movie_animations;

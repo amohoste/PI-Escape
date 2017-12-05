@@ -28,7 +28,7 @@ MovieModel::~MovieModel() {
  * @return de positie waarin de animatie zich bevind
  */
 float MovieModel::getPosition(AnimationDuration *ad, int offset) {
-    if(ad->start > time -offset){
+    if (ad->start > time - offset) {
         return 0;
     }
     float k = time - offset - ad->start;
@@ -85,10 +85,12 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
     // Vector met glyphdrawcommands aanmaken
-    vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(mv->text, (int) mv->x, (int) mv->y);
+    float x_offset = fontManager->graphics->height * ((mv->x - 50.0f) / 100);
+    float y_offset = fontManager->graphics->height * ((mv->y - 50.0f) / 100);
+    vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(mv->text, (int) x_offset, (int) y_offset);
 
     for (AnimationDuration *a : mv->animations) {
-        command = a->a->applyTransform(command, model->getPosition(a,(int) mv->start));
+        command = a->a->applyTransform(command, model->getPosition(a, (int) mv->start));
     }
     return command;
 }
@@ -108,9 +110,9 @@ void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
 }
 
 void MoviePlayer::clear() {
-        delete mm;
-        delete mv;
-        delete mc;
+    delete mm;
+    delete mv;
+    delete mc;
 }
 
 MoviePlayer::~MoviePlayer() {
