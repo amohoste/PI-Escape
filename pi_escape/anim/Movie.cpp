@@ -54,6 +54,7 @@ void MovieGLView::draw() {
                 commands.push_back(glyphFromMovieAnimation(mv));
             }
         }
+         cout << "hallo" << commands.size() << endl;
 
         //tekenen
         //todo fontmanager methode
@@ -86,6 +87,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
 
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(mv->text, (int) mv->x, (int) mv->y);
+    cout << "x: " << mv->y << endl;
 
     for (AnimationDuration *a : mv->animations) {
         command = a->a->applyTransform(command, model->getPosition(a,(int) mv->start));
