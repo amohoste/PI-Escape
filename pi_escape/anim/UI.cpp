@@ -50,7 +50,7 @@ int UIModel::isDone() const {
     return done;
 }
 
-int UIModel::setDone(bool done) {
+void UIModel::setDone(bool done) {
     this->done = done;
 }
 

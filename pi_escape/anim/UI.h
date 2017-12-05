@@ -81,7 +81,7 @@ public:
 
     int isDone() const;
 
-    int setDone(bool done); //is alles klaar?
+    void setDone(bool done); //is alles klaar?
 };
 
 class UIController {
