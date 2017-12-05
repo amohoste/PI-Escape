@@ -178,11 +178,11 @@ std::vector<GlyphDrawCommand> MoveAnimation::applyTransform(const std::vector<Gl
 	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
 		const GlyphDrawCommand& cur = *it;
 		
-		t_ivec2 curPos;
-		curPos[0] = (newPos[0] * position);
-		curPos[1] = (newPos[1] * position);
+		t_ivec2 move;
+		move[0] = (newPos[0] * (1 - position));
+		move[1] = (newPos[1] * (1 - position));
 
-		GlyphDrawCommand replacement = cur.move(curPos[0], curPos[1]);
+		GlyphDrawCommand replacement = cur.move(move[0], -move[1]);
 		res.push_back(replacement);
 	}
 
