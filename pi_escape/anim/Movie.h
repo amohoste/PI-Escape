@@ -25,7 +25,6 @@ public:
 
 
 class MovieModel : public UIModel {
-    //TODO
 };
 
 class MovieGLView : public UIView {

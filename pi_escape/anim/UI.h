@@ -8,6 +8,7 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include "FontManager.h"
 
 enum Event {
     LEVEL, SELECTION
@@ -44,7 +45,10 @@ public:
 
 class UIView {
 protected:
+    FontManager *fontManager;
 public:
+    void setFontManager(FontManager *fm);
+
     UIView();
 
     virtual ~UIView();

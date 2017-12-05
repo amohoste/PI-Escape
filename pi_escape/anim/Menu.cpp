@@ -158,7 +158,7 @@ void MenuView::draw() {
         }
 
         //tekenen
-        graphics_begin_draw(graphics);
+        graphics_begin_draw(fontManager->graphics);
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
@@ -166,7 +166,7 @@ void MenuView::draw() {
                 i++;
             }
         }
-        graphics_end_draw(graphics);
+        graphics_end_draw(fontManager->graphics);
 
         Uint32 cur_time_ms = SDL_GetTicks();
 
@@ -242,11 +242,6 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time) {
 
 }
 
-void MenuView::setFontManager(FontManager *fm) { this->fontManager = fm; }
-
-void MenuView::setGraphics(Graphics *graphics) {
-    this->graphics = graphics;
-}
 
 void MenuView::setController(MenuController *pController) {
     this->controller = pController;

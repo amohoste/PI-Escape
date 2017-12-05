@@ -16,6 +16,10 @@ UIView::~UIView() {
 
 }
 
+void UIView::setFontManager(FontManager *fm) {
+    this->fontManager = fm;
+}
+
 UIController::UIController() {
 
 }

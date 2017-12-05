@@ -55,7 +55,6 @@ int main() {
     view->setModel(model);
     controller->setMenuModel(model);
     view->setFontManager(&m);
-    view->setGraphics(graphics);
     view->setController(controller);
     model->setMenuDefinition(ptr);
 

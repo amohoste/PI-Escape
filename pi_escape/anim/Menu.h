@@ -85,11 +85,9 @@ public:
     void setActivatedMenu(bool i);
 };
 
-class MenuView : UIView {
+class MenuView : public UIView {
 private:
-    FontManager *fontManager;
     MenuModel *model;
-    Graphics *graphics;
     MenuController *controller;
     bool animationsFinished;
     Uint32 last_update = SDL_GetTicks();
@@ -99,10 +97,6 @@ public:
     void draw() override;
 
     vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time);
-
-    void setFontManager(FontManager *fm);
-
-    void setGraphics(Graphics *graphics);
 
     void invalidated();
 
