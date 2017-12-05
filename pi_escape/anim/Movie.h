@@ -14,15 +14,14 @@ class MovieDefinition {
 public:
     explicit MovieDefinition(deque<MovieAnimation *> movie_animations, long duration);
 
-    const deque<MovieAnimation *> movie_animations;
-    const long duration;
+    const vector<MovieAnimation *> movie_animations;
+    const long duration; //hoelang duurt de movie
 };
 
 
 class MovieModel : public UIModel {
 private:
     shared_ptr<MovieDefinition> movieDefinition;
-    bool done;
 public:
     MovieModel();
 

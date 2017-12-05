@@ -20,12 +20,12 @@ void UIView::setFontManager(FontManager *fm) {
     this->fontManager = fm;
 }
 
-void UIModel::addListener(UIView *view) {
+void Observable::addListener(UIView *view) {
     this->listeners.push_back(view);
 }
-void UIModel::fireInvalidationEvent() {
-    for (unsigned int i = 0; i < this->listeners.size(); i++) {
-        this->listeners[i]->invalidated();
+void Observable::fireInvalidationEvent() {
+    for (auto &listener : this->listeners) {
+        listener->invalidated();
     }
 }
 
@@ -44,6 +44,15 @@ void UIModel::setTime(uint64_t time) {
 
 uint64_t UIModel::getTime() const {
     return time;
+}
+
+int UIModel::isDone() const {
+    return done;
+}
+
+int UIModel::setDone(bool done) {
+    this->done = done;
+    fireInvalidationEvent();
 }
 
 void Observer::setSubject(Subject *subject) {

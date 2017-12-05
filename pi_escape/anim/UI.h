@@ -15,12 +15,16 @@ enum Event {
 };
 
 class Observer;
+
 class UIView;
 
-class UIModel {
+class Listener;
+
+class UIModel : public Observable{
 protected:
     uint64_t time;
-    vector<UIView *> listeners;
+
+    bool done;
 public:
     UIModel();
 
@@ -30,13 +34,9 @@ public:
 
     uint64_t getTime() const;
 
-    virtual int isDone() const = 0;
+    int isDone() const;
 
-    void addListener(UIView *view);
-
-    virtual void fireInvalidationEvent();
-
-
+    int setDone(bool done); //is alles klaar?
 };
 
 class UIController {
@@ -51,16 +51,13 @@ public:
     virtual void onExitKey() = 0;
 };
 
-class UIView {
+class UIView  : public Listener{
 protected:
     FontManager *fontManager;
-
 public:
     void setFontManager(FontManager *fm);
 
     UIView();
-
-    virtual void invalidated() = 0;
 
     virtual ~UIView();
 
@@ -80,11 +77,27 @@ public:
 
 class Observer {
 protected:
-    Subject *subject;
+    Subject *subject{};
 public:
     virtual void notified();
 
     virtual void setSubject(Subject *subject);
+};
+
+class Observable {
+protected:
+    vector<Listener *> listeners;
+public:
+    void addListener(UIView *view);
+
+    void fireInvalidationEvent();
+};
+
+class Listener {
+private:
+    Observable *model{};
+public:
+    virtual void invalidated() = 0;
 };
 
 #endif //PIESCAPE2_UI_H
