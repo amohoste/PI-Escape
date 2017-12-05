@@ -4,6 +4,9 @@
 #include "FontManager.h"
 
 #include <glmc.h>
+#include <math.h>
+#include <stdio.h>
+#define PI 3.14159265
 
 class Animation {
 public:
@@ -47,6 +50,7 @@ public:
 /** Cycle through all colors */
 class RainbowColorAnimation : public Animation {
 private:
+	const t_vec3* hsv_to_rgb(float hue) const;
 public:
     RainbowColorAnimation();
     virtual ~RainbowColorAnimation();
@@ -60,6 +64,7 @@ public:
 /** Move text position relatively */
 class MoveAnimation : public Animation {
 private:
+	t_ivec2 newPos;
 public:
     MoveAnimation(t_ivec2 relPos);
     MoveAnimation(int x, int y);
@@ -74,6 +79,8 @@ public:
 /** Apply an animation to each glyph in turn */
 class GlyphIteratingAnimation : public Animation {
 private:
+	Animation* animation;
+	float overlap;
 public:
     /**
      * @param animation
@@ -91,6 +98,11 @@ public:
 /** Apply an animation multiple times */
 class RepeatAnimation : public Animation {
 private:
+	Animation* animation;
+	int repeats;
+	bool startIn;
+	bool endIn;
+	bool cycleInOut;
 public:
     RepeatAnimation(Animation* animation, int repeats, bool startIn, bool endIn, bool cycleInOut);
     RepeatAnimation(Animation* animation, int repeats);
@@ -105,6 +117,7 @@ public:
 /** Apply a sine function to an animation. This smooths animations. */
 class SineAnimation : public Animation {
 private:
+	Animation* animation;
 public:
     SineAnimation(Animation* animation);
     virtual ~SineAnimation();
@@ -118,6 +131,7 @@ public:
 /** Reverse an animation. */
 class ReverseAnimation : public Animation {
 private:
+	Animation* animation;
 public:
     ReverseAnimation(Animation* animation);
     virtual ~ReverseAnimation();
@@ -131,6 +145,7 @@ public:
 /** First run the animation, then run it in reverse. */
 class InOutAnimation : public Animation {
 private:
+	Animation* animation;
 public:
     InOutAnimation(Animation* animation);
     virtual ~InOutAnimation();

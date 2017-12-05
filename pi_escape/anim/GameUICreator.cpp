@@ -1,6 +1,10 @@
 #include "GameUICreator.h"
 
 
+/**
+ * laad de levels in start inclusied, stop exclusief
+ */
+void load_levels(int start, int stop, MenuModel *m) ;
 
 GameUICreator::GameUICreator() {}
 
@@ -9,55 +13,77 @@ GameUICreator::~GameUICreator() {
 
 }
 
-//TODO: uncomment the code below, and make it work
-
 EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
-    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0))
-                    , ACTIVATE,  false, 1000l)
-            .addAnimation(new ReverseAnimation(new FadeInAnimation())
-                    , OTHER_ACTIVATED,  false, 1000l)
-            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0))
-                    , OTHER_ACTIVATED,  false, 1000l)
+    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0)), ACTIVATE, false, 1000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), OTHER_ACTIVATED, false, 1000l)
+            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0)), OTHER_ACTIVATED, false, 1000l)
             .addAnimation(
                     new ReverseAnimation(
-                    new GlyphIteratingAnimation(
-                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
-                            1.5f))
-                    , DEFAULT,  false, 500l)
+                            new GlyphIteratingAnimation(
+                                    new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
+                                    1.5f)), DEFAULT, false, 500l)
             .addAnimation(
                     new GlyphIteratingAnimation(
                             new InOutAnimation(new SineAnimation(new MoveAnimation(0, 10))),
-                            1.5f)
-                    , HOVER,  true, 2000l)
+                            1.5f), HOVER, true, 2000l)
             .addAnimation(new RainbowColorAnimation(), HOVER, true, 1000l);
+}
+
+void start_game(MenuModel *m) {
+    load_levels(8,11,m);
+}
+
+void tutorial(MenuModel *m) {
+    load_levels(1, 8, m);
+}
+
+/**
+ * laad de levels in start inclusied, stop exclusief
+ */
+void load_levels(int start, int stop, MenuModel *m) {
+    vector<Level *> level_names;
+    level_names.clear();
+    for (int i = stop -1 ; i >= start; i--) {
+        Level *x = load_level(i);
+        level_names.push_back(x);
+    }
+    m->playAnimations();
+    m->setLevels(&level_names);
+}
+
+void endMenu(MenuModel *m) {
+    m->setDone(1);
 }
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
 
-    addMainMenuAnimation(builder.addEntry())
+    addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Start Tutorial")
             .setShortText("Tut")
             .setMnemonic('T')
             .setFontName("arcade")
+            .setFunction(tutorial)
             .buildEntryWithAction("start tutorial");
 
 
-    addMainMenuAnimation(builder.addEntry())
+    addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Start Game")
             .setShortText("Go")
             .setMnemonic('G')
             .setFontName("arcade")
+            .setFunction(start_game)
             .buildEntryWithAction("start game");
 
-    addMainMenuAnimation(builder.addEntry())
+    addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Exit")
             .setShortText("Exit")
             .setMnemonic('E')
             .setFontName("arcade")
+            .setFunction(endMenu)
             .buildEntryWithAction("quit");
 
     return std::shared_ptr<MenuDefinition>(builder.build());
@@ -166,3 +192,4 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
+

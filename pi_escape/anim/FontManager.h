@@ -99,8 +99,7 @@ public:
 
 class FontManager {
 private:
-	Graphics* graphics;
-	Font curFont;
+    Font curFont;
 	map<string, Font> fonts;
 	map<string, GLGlyph*> glyphMap;
 	t_vec4& color;
@@ -126,6 +125,8 @@ public:
     vector<GlyphDrawCommand> makeGlyphDrawCommands(string text, int x, int y) const;
     
     void draw(const GlyphDrawCommand& glyphDraw);
+
+    Graphics* graphics;
 };
 
 

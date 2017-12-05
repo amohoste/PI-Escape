@@ -1,38 +1,45 @@
 #include "MovieBuilder.h"
 
-//TODO
+MovieBuilder::MovieBuilder(): color(*new t_vec4[4]){
+}
+
+MovieBuilder::~MovieBuilder(){
+    delete []& this->color;
+}
+
 MovieBuilder &MovieBuilder::addText(const char *text) {
-    //todo
+    this->text = text;
     return *this;
 }
 
-MovieBuilder &MovieBuilder::setFont(const char *text) {
-    //todo
+MovieBuilder &MovieBuilder::setFont(const char *font) {
+    this->font = font;
     return *this;
 }
 
-MovieBuilder &MovieBuilder::setColor(float *color) {
-    //todo
+MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
+    glmc_assign_vec4(this->color, color);
     return *this;
 }
 
 MovieBuilder &MovieBuilder::setPos_percent(float x, float y) {
-    //todo
+    this->x =x;
+    this->y =y;
     return *this;
 }
 
 MovieBuilder &MovieBuilder::setStartTime(long l) {
-    //todo
+    this->start = l;
     return *this;
 }
 
 MovieBuilder &MovieBuilder::setEndTime(long l) {
-    //todo
+    this->end = l;
     return *this;
 }
 
 MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long l, long p) {
-    //todo
+    this->animations.push_back(animation);
     return *this;
 }
 
@@ -42,11 +49,10 @@ MovieBuilder &MovieBuilder::endText() {
 }
 
 MovieBuilder &MovieBuilder::setDuration(long d) {
-    //todo
+    this->duration = d;
     return *this;
 }
 
 MovieDefinition *MovieBuilder::build() {
-    //todo
-    return nullptr;
+    return new MovieDefinition(this->duration, this->start, this->end,this->x, this->y, this->color, this->font, this->text, this->animations);
 }

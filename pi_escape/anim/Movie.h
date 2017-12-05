@@ -8,7 +8,19 @@
  * A sequence of text animations, such as an intro, credits, ...
  */
 class MovieDefinition {
-    //TODO
+public:
+    MovieDefinition(long duration, long start, long end, float x, float y, t_vec4 &color, const char *font,
+                    const char *text, std::vector<Animation *> animations);
+
+    const long duration;
+    const long start;
+    const long end;
+    const float x;
+    const float y;
+    const t_vec4 &color;
+    const char *font;
+    const char *text;
+    const std::vector<Animation *> animations;
 };
 
 
@@ -22,7 +34,7 @@ class MovieGLView : public UIView {
 
 class MovieController : public UIController {
     //TODO
-    
+
 };
 
 #endif //PIESCAPE2_ANIMATIONSEQUENCE_H
