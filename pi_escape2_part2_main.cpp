@@ -44,20 +44,20 @@ int main() {
 
     MoviePlayer *mp = new MoviePlayer(&m);
     mp->play(gc->createIntro());
-
-    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
-    MenuModel *model = new MenuModel;
-    MenuController *controller = new MenuController;
-    MenuView *view = new MenuView;
-    LevelObserver *levelObserver = new LevelObserver;
-    levelObserver->setMenuModel(model);
-    model->registerObserver(LEVEL, levelObserver);
-    model->addListener(view);
-    view->setModel(model);
-    controller->setMenuModel(model);
-    view->setFontManager(&m);
-    view->setController(controller);
-    model->setMenuDefinition(ptr);
+//
+//    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
+//    MenuModel *model = new MenuModel;
+//    MenuController *controller = new MenuController;
+//    MenuView *view = new MenuView;
+//    LevelObserver *levelObserver = new LevelObserver;
+//    levelObserver->setMenuModel(model);
+//    model->registerObserver(LEVEL, levelObserver);
+//    model->addListener(view);
+//    view->setModel(model);
+//    controller->setMenuModel(model);
+//    view->setFontManager(&m);
+//    view->setController(controller);
+//    model->setMenuDefinition(ptr);
 
     delete gc;
 

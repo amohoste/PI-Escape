@@ -2,8 +2,10 @@
 #define PIESCAPE2_ANIMATIONSEQUENCE_H
 
 #include <deque>
+#include <utility>
 #include "UI.h"
 #include "Animation.h"
+#include "MovieBuilder.h"
 
 class MovieAnimation;
 
@@ -12,7 +14,8 @@ class MovieAnimation;
  */
 class MovieDefinition {
 public:
-    explicit MovieDefinition(deque<MovieAnimation *> movie_animations, long duration);
+    explicit MovieDefinition(vector<MovieAnimation *> movie_animations, long duration) : movie_animations(
+            std::move(movie_animations)), duration(duration) {};
 
     const vector<MovieAnimation *> movie_animations;
     const long duration; //hoelang duurt de movie
@@ -21,34 +24,32 @@ public:
 
 class MovieModel : public UIModel {
 private:
-    shared_ptr<MovieDefinition> movieDefinition;
-public:
-    MovieModel();
+    shared_ptr<MovieDefinition> movieDefinition{};
 
-    int isDone() const override;
-
-    void setDone(bool done);
 
 public:
+    ~MovieModel() override;
+
     void setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition);
 
     shared_ptr<MovieDefinition> getMovieDefinition();
+
+    float getPosition(AnimationDuration *ad);
+
 };
 
 class MovieGLView : public UIView {
 private:
     MovieModel *model;
 
-    vector<GlyphDrawCommand> getCommands(MovieAnimation *mv);
+    vector<GlyphDrawCommand> glyphFromMovieAnimation(MovieAnimation *mv);
 
 public:
-
     void setMovieModel(MovieModel *movieModel);
 
     void invalidated() override;
 
     void draw() override;
-
 };
 
 class MovieController : public UIController {

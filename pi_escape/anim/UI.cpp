@@ -20,8 +20,8 @@ void UIView::setFontManager(FontManager *fm) {
     this->fontManager = fm;
 }
 
-void Observable::addListener(UIView *view) {
-    this->listeners.push_back(view);
+void Observable::addListener(Listener *listener) {
+    this->listeners.push_back(listener);
 }
 void Observable::fireInvalidationEvent() {
     for (auto &listener : this->listeners) {

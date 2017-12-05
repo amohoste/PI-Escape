@@ -14,21 +14,66 @@ enum Event {
     LEVEL, SELECTION
 };
 
-class Observer;
-
 class UIView;
+
+class Observer;
 
 class Listener;
 
-class UIModel : public Observable{
+class Subject;
+
+class Subject {
+private:
+    std::map<Event, std::vector<Observer *>> observers;
+
+protected:
+
+    void notify(Event e);
+
+public:
+
+    void registerObserver(Event e, Observer *o);
+
+};
+
+
+class Observer {
+protected:
+    Subject *subject{};
+public:
+    virtual void notified();
+
+    virtual void setSubject(Subject *subject);
+};
+
+
+class Observable {
+protected:
+    vector<Listener *> listeners;
+public:
+    void addListener(Listener *listener);
+
+    void fireInvalidationEvent();
+};
+
+class Listener {
+private:
+    Observable *model{};
+public:
+    virtual void invalidated() = 0;
+};
+
+class UIModel : public Observable {
 protected:
     uint64_t time;
 
     bool done;
+
 public:
     UIModel();
 
     virtual ~UIModel();
+
 
     void setTime(uint64_t time);
 
@@ -51,7 +96,7 @@ public:
     virtual void onExitKey() = 0;
 };
 
-class UIView  : public Listener{
+class UIView : public Listener {
 protected:
     FontManager *fontManager;
 public:
@@ -64,40 +109,5 @@ public:
     virtual void draw() = 0;
 };
 
-class Subject {
-private:
-    std::map<Event, std::vector<Observer *>> observers;
-
-protected:
-    void notify(Event e);
-
-public:
-    void registerObserver(Event e, Observer *o);
-};
-
-class Observer {
-protected:
-    Subject *subject{};
-public:
-    virtual void notified();
-
-    virtual void setSubject(Subject *subject);
-};
-
-class Observable {
-protected:
-    vector<Listener *> listeners;
-public:
-    void addListener(UIView *view);
-
-    void fireInvalidationEvent();
-};
-
-class Listener {
-private:
-    Observable *model{};
-public:
-    virtual void invalidated() = 0;
-};
 
 #endif //PIESCAPE2_UI_H
