@@ -27,6 +27,7 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 //                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 10))),
 //                            1.5f), HOVER, true, 2000l)
 //            .addAnimation(new RainbowColorAnimation(), HOVER, true, 1000l);
+    return entryBuilder;
 }
 
 void start_game(MenuModel *m) {
