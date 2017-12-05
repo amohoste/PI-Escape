@@ -393,6 +393,16 @@ void FontManager::setFont(const string & fontName) {
 	}
 }
 
+void FontManager::begin_draw() const {
+	graphics_begin_draw(graphics);
+}
+
+void FontManager::end_draw() const {
+	graphics_end_draw(graphics);
+}
+
+
+
 /***************************************************************
  Font code
 ****************************************************************/
