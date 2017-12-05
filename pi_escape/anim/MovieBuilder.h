@@ -13,11 +13,12 @@ private:
     long start;
     long end;
     const char *font;
-    t_vec4& color;
+    t_vec4 &color;
     float x;
     float y;
     long duration;
-    std::vector<Animation*> animations;
+    std::vector<Animation *> animations;
+    std::deque<MovieAnimation *> movie_animations;
 public:
     MovieBuilder();
 
@@ -42,6 +43,22 @@ public:
     MovieBuilder &setDuration(long d);
 
     MovieDefinition *build();
+};
+
+class MovieAnimation {
+private:
+    const char *text;
+    const long start;
+    const long end;
+    const char *font;
+    const t_vec4 &color;
+    const float x;
+    const float y;
+    const long duration;
+    const std::vector<Animation *> animations;
+public:
+    MovieAnimation(const char *text, const long start, const long end, const char *font, const t_vec4 &color,
+                   const float x, const float y, const long duration, const std::vector<Animation *> animations);
 };
 
 

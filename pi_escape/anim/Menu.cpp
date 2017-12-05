@@ -37,15 +37,15 @@ MenuModel::MenuModel() {
     activated_menu = false;
 }
 
-void MenuModel::addListener(MenuView *view) {
-    this->listeners.push_back(view);
-}
 
-void MenuModel::fireInvalidationEvent() {
-    for (unsigned int i = 0; i < this->listeners.size(); i++) {
-        this->listeners[i]->invalidated();
-    }
-}
+
+
+
+
+
+
+
+
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
     return this->menuDefinition;

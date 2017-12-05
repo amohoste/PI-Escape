@@ -20,6 +20,15 @@ void UIView::setFontManager(FontManager *fm) {
     this->fontManager = fm;
 }
 
+void UIModel::addListener(UIView *view) {
+    this->listeners.push_back(view);
+}
+void UIModel::fireInvalidationEvent() {
+    for (unsigned int i = 0; i < this->listeners.size(); i++) {
+        this->listeners[i]->invalidated();
+    }
+}
+
 UIController::UIController() {
 
 }

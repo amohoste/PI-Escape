@@ -1,39 +1,34 @@
 #ifndef PIESCAPE2_ANIMATIONSEQUENCE_H
 #define PIESCAPE2_ANIMATIONSEQUENCE_H
 
+#include <deque>
 #include "UI.h"
 #include "Animation.h"
+
+class MovieAnimation;
 
 /**
  * A sequence of text animations, such as an intro, credits, ...
  */
 class MovieDefinition {
 public:
-    MovieDefinition(long duration, long start, long end, float x, float y, t_vec4 &color, const char *font,
-                    const char *text, std::vector<Animation *> animations);
-
-    const long duration;
-    const long start;
-    const long end;
-    const float x;
-    const float y;
-    const t_vec4 &color;
-    const char *font;
-    const char *text;
-    const std::vector<Animation *> animations;
+    explicit MovieDefinition(deque<MovieAnimation*> movie_animations);
+    const deque<MovieAnimation*> movie_animations;
 };
 
 
 class MovieModel : public UIModel {
+private:
+    shared_ptr<MovieDefinition> movieDefinition;
+
+public:
+    void setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition);
 };
 
 class MovieGLView : public UIView {
-    //TODO
 };
 
 class MovieController : public UIController {
-    //TODO
-
 };
 
 #endif //PIESCAPE2_ANIMATIONSEQUENCE_H

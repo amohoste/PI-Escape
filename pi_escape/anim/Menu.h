@@ -34,7 +34,6 @@ public:
 class MenuModel : public UIModel, public Subject {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
-    vector<MenuView *> listeners;
     int done;
     unsigned int selectedInt;
     Entry *selected;
@@ -46,8 +45,6 @@ private:
 
     bool activated_menu;
 public:
-
-
     MenuModel();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
@@ -60,9 +57,6 @@ public:
 
     void setDone(int i);
 
-    void addListener(MenuView *view);
-
-    void fireInvalidationEvent();
 
     void up();
 
@@ -98,7 +92,7 @@ public:
 
     vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time);
 
-    void invalidated();
+    void invalidated() override;
 
     void setModel(MenuModel *model);
 

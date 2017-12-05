@@ -15,10 +15,12 @@ enum Event {
 };
 
 class Observer;
+class UIView;
 
 class UIModel {
 protected:
     uint64_t time;
+    vector<UIView *> listeners;
 public:
     UIModel();
 
@@ -29,6 +31,12 @@ public:
     uint64_t getTime() const;
 
     virtual int isDone() const = 0;
+
+    void addListener(UIView *view);
+
+    void fireInvalidationEvent();
+
+
 };
 
 class UIController {
@@ -46,10 +54,13 @@ public:
 class UIView {
 protected:
     FontManager *fontManager;
+
 public:
     void setFontManager(FontManager *fm);
 
     UIView();
+
+    virtual void invalidated() = 0;
 
     virtual ~UIView();
 
