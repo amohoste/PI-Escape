@@ -42,13 +42,8 @@ int main() {
     m.loadFont("base", "base72.png", "base72.fnt");
     m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
-    const shared_ptr<MovieDefinition> &intro = gc->createIntro();
-    MovieModel *mm = new MovieModel();
-    MovieGLView *mv = new MovieGLView();
-    mm->addListener(mv);
-    mv->setMovieModel(mm);
-    mv->setFontManager(&m);
-    mm->setMovieDefinition(intro);
+    MoviePlayer *mp = new MoviePlayer(&m);
+    mp->play(gc->createIntro());
 
     const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
     MenuModel *model = new MenuModel;

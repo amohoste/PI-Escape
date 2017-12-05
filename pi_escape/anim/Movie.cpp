@@ -96,11 +96,11 @@ float getPosition(AnimationDuration *ad, uint64_t time) {
     return d > 1 ? 1 : d;
 }
 
-void MoviePlayer::play(MovieDefinition *movieDefinition) {
+void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     clear(); //oude componeten leegmaken
     mm = new MovieModel;
     mv = new MovieGLView;
-    mc = new MovieController;
+//    mc = new MovieController;
 
     mm->addListener(mv);
     mv->setMovieModel(mm);

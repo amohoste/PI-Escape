@@ -25,7 +25,9 @@ private:
     bool done;
 public:
     MovieModel();
+
     int isDone() const override;
+
     void setDone(bool done);
 
 public:
@@ -37,7 +39,9 @@ public:
 class MovieGLView : public UIView {
 private:
     MovieModel *model;
+
     vector<GlyphDrawCommand> getCommands(MovieAnimation *mv);
+
 public:
 
     void setMovieModel(MovieModel *movieModel);
@@ -52,20 +56,22 @@ class MovieController : public UIController {
 };
 
 
-class MoviePlayer{
+class MoviePlayer {
 private:
-    MovieGLView *mv;
-    MovieModel *mm;
-    MovieController *mc;
+    MovieGLView *mv{};
+    MovieModel *mm{};
+    MovieController *mc{};
 
     FontManager *fontManager;
 
     void clear();
 
 public:
-    MoviePlayer(FontManager *fontManager) : fontManager(fontManager){};
+    explicit MoviePlayer(FontManager *fontManager) : fontManager(fontManager) {};
+
     ~MoviePlayer();
-    void play(MovieDefinition *movieDefinition);
+
+    void play(shared_ptr<MovieDefinition> movieDefinition);
 };
 
 #endif //PIESCAPE2_ANIMATIONSEQUENCE_H
