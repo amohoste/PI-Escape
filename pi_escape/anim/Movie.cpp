@@ -21,6 +21,7 @@ MovieModel::~MovieModel() {
 }
 
 float MovieModel::getPosition(AnimationDuration *ad) {
+    //todo
     float k = time - ad->start;
     float d = k / ad->duration;
     return d > 1 ? 1 : d;
