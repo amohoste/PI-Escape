@@ -12,6 +12,7 @@ extern "C"
 }
 #endif
 
+#include "pi_escape/anim/ledView.h"
 #include "pi_escape/anim/FontManager.h"
 #include "pi_escape/anim/GameUICreator.h"
 #include <SDL.h>
@@ -85,6 +86,11 @@ int main() {
     levelObserver->setMenuModel(model);
     model->registerObserver(LEVEL,levelObserver);
     model->addListener(view);
+
+	LedView* ledView = new LedView;
+	ledView->setModel(model);
+	model->registerObserver(SELECTION, ledView);
+
     view->setModel(model);
     controller->setMenuModel(model);
     view->setFontManager(&m);
