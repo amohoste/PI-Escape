@@ -223,6 +223,8 @@ std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std:
 
 			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
 			res.push_back(*it1);
+		} else if (position <= begin) {
+			res.push_back(cur);
 		}
 		else {
 			const GlyphDrawCommand& cur = *it;
