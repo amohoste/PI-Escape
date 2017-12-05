@@ -45,6 +45,7 @@ MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long start, long 
 
 MovieBuilder &MovieBuilder::endText() {
     this->movie_animations.push_back(new MovieAnimation(text, start, end, font, color, x, y, end - start, animations));
+    animations.clear();
     return *this;
 }
 
