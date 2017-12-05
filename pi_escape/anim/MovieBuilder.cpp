@@ -38,8 +38,8 @@ MovieBuilder &MovieBuilder::setEndTime(long l) {
     return *this;
 }
 
-MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long l, long p) {
-    this->animations.push_back(animation);
+MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long start, long duur) {
+    this->animations.push_back(new AnimationDuration(start, duur, animation));
     return *this;
 }
 
@@ -59,7 +59,7 @@ MovieDefinition *MovieBuilder::build() {
 
 MovieAnimation::MovieAnimation(const char *text, const long start, const long end, const char *font,
                                const t_vec4 &color, const float x,
-                               const float y, const long duration, const vector<Animation *> animations) : text(text),
+                               const float y, const long duration, const vector<AnimationDuration *> animations) : text(text),
                                                                                                            start(start),
                                                                                                            end(end),
                                                                                                            font(font),
@@ -69,5 +69,9 @@ MovieAnimation::MovieAnimation(const char *text, const long start, const long en
                                                                                                                    duration),
                                                                                                            animations(
                                                                                                                    animations) {
+
+}
+
+AnimationDuration::AnimationDuration(long start, long duration, Animation *a) : start(start), duration(duration), a(a) {
 
 }

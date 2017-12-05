@@ -3,7 +3,7 @@
 
 #include <utility>
 
-float getPosition(MovieAnimation *pAnimation, uint64_t time);
+float getPosition(AnimationDuration *pAnimation, uint64_t time);
 
 using namespace std;
 
@@ -84,14 +84,15 @@ vector<GlyphDrawCommand> MovieGLView::getCommands(MovieAnimation *mv) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(mv->text, (int) mv->x, (int) mv->y);
 
-    for (Animation *a : mv->animations) {
-        command = a->applyTransform(command, getPosition(mv, model->getTime()));
+    for (AnimationDuration *a : mv->animations) {
+        command = a->a->applyTransform(command, getPosition(a, model->getTime() - mv->start));
     }
     return command;
 }
 
-float getPosition(MovieAnimation *mv, uint64_t time) {
-    float a = time - mv->start;
-    return a/mv->duration;
+float getPosition(AnimationDuration *ad, uint64_t time) {
+    float k = time - ad->start;
+    float d = k / ad->duration;
+    return d > 1 ? 1 : d;
 }
 
