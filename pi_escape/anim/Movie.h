@@ -35,7 +35,7 @@ public:
 
     shared_ptr<MovieDefinition> getMovieDefinition();
 
-    float getPosition(AnimationDuration *ad);
+    float getPosition(AnimationDuration *ad, int offset);
 
 };
 

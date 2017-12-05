@@ -21,9 +21,14 @@ MovieModel::~MovieModel() {
 
 }
 
-float MovieModel::getPosition(AnimationDuration *ad) {
-    //todo
-    float k = time - ad->start;
+/**
+ *
+ * @param ad  de animation
+ * @param offset hoe lang is de movie al bezig voordat de animation komt?
+ * @return de positie waarin de animatie zich bevind
+ */
+float MovieModel::getPosition(AnimationDuration *ad, int offset) {
+    float k = time - offset - ad->start;
     float d = k / ad->duration;
     return d > 1 ? 1 : d;
 }
@@ -33,7 +38,6 @@ void MovieGLView::invalidated() {
         Uint32 start = SDL_GetTicks();
         draw();
         Uint32 end = SDL_GetTicks();
-        cout << model->getTime() << endl;
         model->setTime(model->getTime() + end - start + 1);
     }
 }
@@ -81,7 +85,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(mv->text, (int) mv->x, (int) mv->y);
 
     for (AnimationDuration *a : mv->animations) {
-        command = a->a->applyTransform(command, 0.5f);
+        command = a->a->applyTransform(command, model->getPosition(a,(int) mv->start));
 //        cout << model->getPosition(a) << endl;
     }
     return command;
