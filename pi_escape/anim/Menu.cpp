@@ -290,23 +290,6 @@ void LevelObserver::notified() {
     }
 }
 
-//LevelObserver::LevelObserver() {
-//    //init the graphics system
-//    Graphics *graphics = graphics_alloc(0, 0);
-//    this->graphics = graphics;
-//}
-//
-//LevelObserver::~LevelObserver() {
-//    graphics_free(graphics);
-//    free(graphics);
-//}
-//
-//void LevelObserver::setMenuModel(MenuModel *menuModel) {
-//    this->menuModel = menuModel;
-//    setSubject(menuModel);
-//}
-
-
 void MenuShower::clear() {
     delete mm;
     delete mv;
