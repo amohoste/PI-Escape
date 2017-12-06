@@ -148,13 +148,77 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
     MovieBuilder builder;
 
 
-    builder.addText("Hallo dit zijn de credits")
-            .setPos_percent(50.0f, 50.0f)
-            .setFont("zorque")
+	builder.addText("$  @ #")
+            .setPos_percent(50.0f, 75.0f)
+            .setFont("starwars")
             .setColor(col1)
             .setStartTime(0l)
-            .setEndTime(3000l)
+            .setEndTime(4000l)
             .endText();
+
+	builder.addText("$  @ #")
+		.setPos_percent(50.0f, 75.0f)
+		.setFont("crossedwars")
+		.setColor(col1)
+		.setStartTime(4000l)
+		.setEndTime(6000l)
+		.endText();
+
+	builder.addText("oops...")
+		.setPos_percent(50.0f, 50.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(3000l)
+		.setEndTime(5000l)
+		.endText();
+
+	builder.addText("Pi Escape 2")
+		.setPos_percent(50.0f, 80.0f)
+		.setFont("atari")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("by")
+		.setPos_percent(50.0f, 65.0f)
+		.setFont("arcade")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Amory Hoste")
+		.setPos_percent(50.0f, 55.0f)
+		.setFont("arcade")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Arne Goeteyn")
+		.setPos_percent(50.0f, 50.0f)
+		.setFont("arcade")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Tom Lauwaerts")
+		.setPos_percent(50.0f, 45.0f)
+		.setFont("arcade")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Jorg Wieme")
+		.setPos_percent(50.0f, 40.0f)
+		.setFont("arcade")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
