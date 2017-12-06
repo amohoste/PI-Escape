@@ -44,11 +44,11 @@ int main() {
 
     MoviePlayer *mp = new MoviePlayer(&m);
 //    mp->play(gc->createIntro());
-    mp->play(gc->createOutro());
-//    mp->play(gc->createCredits());
 
     MenuShower *ms = new MenuShower(&m);
     ms->show(gc->createGameMenu());
+//    mp->play(gc->createOutro());
+//    mp->play(gc->createCredits());
 
     delete gc;
 

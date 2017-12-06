@@ -61,20 +61,17 @@ public:
 
 class EntryAnimation {
 private:
+    float position = 0;
+public:
     const Animation *animation;
     const MenuState menuState;
     const long duration;
     const bool repeat;
 
-    float position = 0;
-public:
-    EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration);
-
-    bool isRepeat();
-
-    const Animation *getAnimation();
-
-    const long getDuration();
+    EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : animation(animation),
+                                                                                            menuState(menuState),
+                                                                                            repeat(repeat),
+                                                                                            duration(duration){};
 
     float getPosition(Animation *pAnimation);
 
@@ -90,7 +87,7 @@ public:
     const char mnemonic;
     const char *action;
     const char *font;
-    const map <MenuState, vector<EntryAnimation*>> *animations;
+    const map<MenuState, vector<EntryAnimation *>> *animations;
     const func_t function;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
