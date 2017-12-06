@@ -1,6 +1,10 @@
 #include "GameUICreator.h"
 
 
+/**
+ * laad de levels in start inclusied, stop exclusief
+ */
+void load_levels(int start, int stop, MenuModel *m);
 
 GameUICreator::GameUICreator() {}
 
@@ -9,27 +13,45 @@ GameUICreator::~GameUICreator() {
 
 }
 
-//TODO: uncomment the code below, and make it work
-
 EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
-    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0))
-                    , ACTIVATE,  false, 1000l)
-            .addAnimation(new ReverseAnimation(new FadeInAnimation())
-                    , OTHER_ACTIVATED,  false, 1000l)
-            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0))
-                    , OTHER_ACTIVATED,  false, 1000l)
+    return entryBuilder.addAnimation(new SineAnimation(new MoveAnimation(150, 0)), ACTIVATE, false, 1000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), OTHER_ACTIVATED, false, 1000l)
+            .addAnimation(new SineAnimation(new MoveAnimation(-400, 0)), OTHER_ACTIVATED, false, 1000l)
             .addAnimation(
                     new ReverseAnimation(
-                    new GlyphIteratingAnimation(
-                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
-                            1.5f))
-                    , DEFAULT,  false, 500l)
+                            new GlyphIteratingAnimation(
+                                    new InOutAnimation(new SineAnimation(new MoveAnimation(0, 5))),
+                                    1.5f)), DEFAULT, false, 500l)
             .addAnimation(
                     new GlyphIteratingAnimation(
                             new InOutAnimation(new SineAnimation(new MoveAnimation(0, 10))),
-                            1.5f)
-                    , HOVER,  true, 2000l)
+                            1.5f), HOVER, true, 2000l)
             .addAnimation(new RainbowColorAnimation(), HOVER, true, 1000l);
+}
+
+void start_game(MenuModel *m) {
+    load_levels(8, 11, m);
+}
+
+void tutorial(MenuModel *m) {
+    load_levels(1, 7, m);
+}
+
+/**
+ * laad de levels in start inclusied, stop exclusief
+ */
+void load_levels(int start, int stop, MenuModel *m) {
+    vector<Level *> level_names;
+    for (int i = stop -1 ; i >= start; i--) {
+        Level *x = load_level(i);
+        level_names.push_back(x);
+    }
+//    m->playAnimations();
+    m->setLevels(&level_names);
+}
+
+void endMenu(MenuModel *m) {
+    m->setDone(1);
 }
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
@@ -41,6 +63,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setShortText("Tut")
             .setMnemonic('T')
             .setFontName("arcade")
+            .setFunction(tutorial)
             .buildEntryWithAction("start tutorial");
 
 
@@ -50,6 +73,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setShortText("Go")
             .setMnemonic('G')
             .setFontName("arcade")
+            .setFunction(start_game)
             .buildEntryWithAction("start game");
 
     addMainMenuAnimation(builder.getEntryBuilder())
@@ -58,6 +82,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setShortText("Exit")
             .setMnemonic('E')
             .setFontName("arcade")
+            .setFunction(endMenu)
             .buildEntryWithAction("quit");
 
     return std::shared_ptr<MenuDefinition>(builder.build());
@@ -105,7 +130,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
                             new RainbowColorAnimation(), 3.0f), 9),
                           0000l, 9000l)
             .addAnimation(new GlyphIteratingAnimation(
-                    new SineAnimation(new MoveAnimation(0, 400)), 1.0f),
+                    new SineAnimation(new FloatInAnimation(0, 400)), 1.0f),
                           0000l, 3000l)
             .addAnimation(
                     new GlyphIteratingAnimation(new FadeInAnimation(), 1.0f), 0000l, 3000l)
@@ -115,8 +140,83 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
+    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+
     MovieBuilder builder;
-    builder.addText("Hallo dit zijn decredits");
+    builder.setDuration(10000);
+
+
+	builder.addText("$  @ #")
+            .setPos_percent(50.0f, 75.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(0l)
+            .setEndTime(4000l)
+            .endText();
+
+	builder.addText("$  @ #")
+		.setPos_percent(50.0f, 75.0f)
+		.setFont("crossedwars")
+		.setColor(col1)
+		.setStartTime(4000l)
+		.setEndTime(6000l)
+		.endText();
+
+	builder.addText("oops...")
+		.setPos_percent(50.0f, 50.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(3000l)
+		.setEndTime(5000l)
+		.endText();
+
+	builder.addText("Pi Escape 2")
+		.setPos_percent(50.0f, 80.0f)
+		.setFont("atari")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("by")
+		.setPos_percent(50.0f, 65.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Amory Hoste")
+		.setPos_percent(50.0f, 55.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Arne Goeteyn")
+		.setPos_percent(50.0f, 45.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Tom Lauwaerts")
+		.setPos_percent(50.0f, 35.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
+
+	builder.addText("Jorg Wieme")
+		.setPos_percent(50.0f, 25.0f)
+		.setFont("starwars")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(10000l)
+		.endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
@@ -156,7 +256,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
                                     new RainbowColorAnimation(), 10.5f),
                             9, true, false, true), 0l, 9000l)
             .addAnimation(new GlyphIteratingAnimation(
-                    new SineAnimation(new MoveAnimation(0, 400)), 1.0f),
+                    new SineAnimation(new FloatInAnimation(0, 400)), 1.0f),
                           0l, 3000l)
             .addAnimation(new GlyphIteratingAnimation(
                     new FadeInAnimation(), 1.0f),
@@ -166,3 +266,4 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
+

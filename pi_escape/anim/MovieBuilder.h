@@ -6,6 +6,9 @@
 #include "glmc.h"
 
 class EntryBuilder;
+class AnimationDuration;
+class MovieAnimation;
+class MovieDefinition;
 
 class MovieBuilder {
 private:
@@ -13,11 +16,12 @@ private:
     long start;
     long end;
     const char *font;
-    t_vec4& color;
-    float x;
-    float y;
+    t_vec4 &color;
+    float x_perc;
+    float y_perc;
     long duration;
-    std::vector<Animation*> animations;
+    std::vector<AnimationDuration *> animations;
+    std::vector<MovieAnimation *> movie_animations;
 public:
     MovieBuilder();
 
@@ -42,6 +46,31 @@ public:
     MovieBuilder &setDuration(long d);
 
     MovieDefinition *build();
+};
+
+class AnimationDuration{
+public:
+    const long start;
+    const long duration;
+    const Animation *a;
+
+    AnimationDuration(long start, long duration, Animation *a);
+};
+
+class MovieAnimation {
+public:
+    const char *text;
+    const long start;
+    const long end;
+    const char *font;
+    const t_vec4 &color;
+    const float x;
+    const float y;
+    const long duration;
+    const std::vector<AnimationDuration *> animations;
+    MovieAnimation(const char *text, const long start, const long end, const char *font, const t_vec4 &color,
+                   const float x, const float y, const long duration, const std::vector<AnimationDuration *> animations);
+
 };
 
 

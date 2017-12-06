@@ -1,54 +1,54 @@
 #ifndef PIESCAPE2_MENU_H
 #define PIESCAPE2_MENU_H
 
-#include "UI.h"
-#include "Animation.h"
-#include "MenuBuilder.h"
-#include "GameUICreator.h"
-#include <memory>
-#include <iostream>
 
-//TODO
+#include <deque>
+#include "UI.h"
+#include "FontManager.h"
+#include "MenuBuilder.h"
+
+extern "C" {
+#include "../es/game.h"
+};
+
 class Entry;
 
 class MenuView;
 
 class MenuController;
 
+class EntryAnimation;
+
 class MenuDefinition {
 public:
     const vector<Entry *> entries;
 
-    explicit MenuDefinition(vector<Entry *> entries);
+    explicit MenuDefinition(vector<Entry *> entries) : entries(entries) {};
 
-    ~MenuDefinition();
+    ~MenuDefinition() {
+
+    }
 };
 
-class MenuModel : public UIModel {
+
+class MenuModel : public UIModel, public Subject {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
-    vector<MenuView *> listeners;
-    int done;
-    int selectedInt;
-    Entry *selected;
+    unsigned int selectedInt;
 
-    void updateSelected();
+//    Entry *selected;
+
+    vector<Level *> *levels_to_play;
+
+//    bool activated_menu;
 public:
-    MenuModel();
+    MenuModel() {
+
+    }
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 
     shared_ptr<MenuDefinition> getMenuDefinition();
-
-    void setTime(uint64_t time) override;
-
-    int isDone() const override;
-
-    void setDone(int i);
-
-    void addListener(MenuView *view);
-
-    void fireInvalidationEvent();
 
     void up();
 
@@ -56,45 +56,102 @@ public:
 
     void select();
 
-    Entry* getSelectedEntry();
+    Entry *getSelectedEntry();
+
+    vector<Level *> *getLevels();
+
+    void setLevels(vector<Level *> *levels);
+
+//    void resetPositions();
+//
+//    void playAnimations();
+//
+//    bool isActivatedMenu();
+//
+//    void setActivatedMenu(bool i);
 };
 
-class MenuView : UIView {
+/**
+ * De menuview is ook een subject, namelijk welke input in het scherm komt
+ */
+class MenuView : public UIView, public Subject {
 private:
-    FontManager *fontManager;
-    MenuModel *model;
-    Graphics *graphics;
-    MenuController *controller;
+    MenuModel *menuModel;
+    SDLKey key_press;
+//    bool animationsFinished;
 public:
-    MenuView();
+    ~MenuView() override {
+
+    }
+
+    void setFontManager(FontManager *fontManager);
 
     void draw() override;
 
-    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time);
+    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
 
-    void setFontManager(FontManager *fm);
+    void invalidated() override;
 
-    void setGraphics(Graphics *graphics);
+    void setMenuModel(MenuModel *menuModel);
 
-    void invalidated();
+    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
 
-    void setModel(MenuModel *model);
-
-    void setController(MenuController *pController);
+    SDLKey getKey_press();
 };
 
-class MenuController : UIController {
+
+class MenuController : public UIController {
 private:
-    MenuModel *model;
+    MenuModel *menuModel;
+    MenuView *menuView;
 public:
-    ~MenuController() override;
+    ~MenuController() override {
+
+    }
 
     void onKey(SDLKey key) override;
 
-    void onExitKey() override;
+    void onExitKey() override {
 
-    void setMenuModel(MenuModel *model);
+    }
 
+    void notified() override;
+
+    void setMenuModel(MenuModel *menuModel);
+
+    void setMenuView(MenuView *menuView);
+
+};
+
+class LevelObserver : public Observer {
+private:
+    Graphics *graphics;
+    MenuModel *menuModel;
+public:
+    LevelObserver(Graphics *graphics, MenuModel *menuModel) : graphics(graphics), menuModel(menuModel) {};
+
+//    ~LevelObserver();
+//
+    void notified() override;
+
+};
+
+class MenuShower {
+private:
+    MenuView *mv{};
+    MenuModel *mm{};
+    MenuController *mc{};
+
+    FontManager *fontManager;
+
+    void clear();
+
+public:
+    explicit MenuShower(FontManager *fontManager) : fontManager(fontManager) {};
+
+    ~MenuShower();
+
+    void show(shared_ptr<MenuDefinition> menuDefinition);
 };
 
 #endif //PIESCAPE2_MENU_H

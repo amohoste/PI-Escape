@@ -118,7 +118,9 @@ public:
     void setColor(const t_vec4& color);
     void setColor(float colorR, float colorG, float colorB, float colorA);
     void setFont(const string& fontName);
-	
+	void begin_draw() const;
+	void end_draw() const;
+
 	virtual ~FontManager();
 	void free();
 
