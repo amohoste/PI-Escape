@@ -91,7 +91,7 @@ void MenuView::draw() {
 //        animationsFinished = true;
         if (!entries.empty()) {
             for (Entry *entry: entries) {
-                commands.push_back(drawEntry(entry, 0, i * 300));
+                commands.push_back(drawEntry(entry, 0, i * 200));
                 i--;
             }
         }
