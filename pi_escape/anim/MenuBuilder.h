@@ -98,7 +98,7 @@ public:
 
 class MenuBuilder {
 private:
-    std::deque<Entry *> entries;
+    std::vector<Entry *> entries;
 public:
     EntryBuilder &getEntryBuilder();
 

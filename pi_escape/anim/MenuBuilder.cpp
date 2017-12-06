@@ -3,20 +3,19 @@
 using namespace std;
 
 
-//EntryBuilder &MenuBuilder::getEntryBuilder() {
-//    EntryBuilder *eb = new EntryBuilder();
-//    eb->setMenuBuilder(this); //zodat we later een referentie hebben voor de entries
-//    EntryBuilder &ref = *eb;
-//    return ref;
-//}
-//
-//MenuDefinition *MenuBuilder::build() {
-//    return new MenuDefinition(this->entries);
-//}
-//
-//void addEntry(MenuBuilder *mb, Entry *entry) {
-//    mb->entries.push_front(entry);
-//}
+EntryBuilder &MenuBuilder::getEntryBuilder() {
+    EntryBuilder *eb = new EntryBuilder();
+    eb->setMenuBuilder(this); //zodat we later een referentie hebben voor de entries
+    return *eb;
+}
+
+MenuDefinition *MenuBuilder::build() {
+    return new MenuDefinition(this->entries);
+}
+
+void addEntry(MenuBuilder *mb, Entry *entry) {
+    mb->entries.push_back(entry);
+}
 
 
 EntryBuilder &EntryBuilder::addAnimation(Animation *animation, MenuState activate, bool repeat, long duration) {
@@ -60,6 +59,10 @@ EntryBuilder &EntryBuilder::setFunction(func_t function) {
     return *this;
 }
 
+void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
+    this->menuBuilder = menuBuilder;
+}
+
 //EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
 //    this->action = action;
 //    addEntry(this->menuBuilder,
@@ -68,9 +71,7 @@ EntryBuilder &EntryBuilder::setFunction(func_t function) {
 //    return *this;
 //}
 //
-//void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
-//    this->menuBuilder = menuBuilder;
-//}
+
 //EntryBuilder::EntryBuilder() {
 //    animations[ACTIVATE].clear();
 //    animations[OTHER_ACTIVATED].clear();

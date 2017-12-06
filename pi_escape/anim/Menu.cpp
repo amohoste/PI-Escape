@@ -6,16 +6,12 @@
 
 using namespace std;
 
-//
-//MenuDefinition::MenuDefinition(deque<Entry *> entries) : entries(std::move(entries)) {
-//
-//}
-//
-//MenuDefinition::~MenuDefinition() {
-//    //entries
-//    //listeners
-//}
-//
+
+MenuDefinition::~MenuDefinition() {
+    //entries
+    //listeners
+}
+
 //void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
 //    this->menuDefinition = std::move(menuDefinition);
 //    this->selectedInt = 0;

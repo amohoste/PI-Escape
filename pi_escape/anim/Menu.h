@@ -22,12 +22,12 @@ class EntryAnimation;
 float getPosition(uint64_t time, EntryAnimation *ea);
 
 class MenuDefinition {
-//public:
-//    const deque<Entry *> entries;
-//
-//    explicit MenuDefinition(deque<Entry *> entries);
-//
-//    ~MenuDefinition();
+public:
+    const vector<Entry *> entries;
+
+    explicit MenuDefinition(vector<Entry *> entries) : entries(entries){};
+
+    ~MenuDefinition();
 };
 
 
