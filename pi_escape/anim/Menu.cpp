@@ -191,7 +191,6 @@ MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawC
  * @param key de toest die is ingedrukt
  */
 void MenuController::onKey(SDLKey key) {
-    //todo geen methoden in model
     switch (key) {
         case SDLK_DOWN:
             this->menuModel->down();
@@ -232,66 +231,66 @@ void MenuController::onKey(SDLKey key) {
 //}
 //
 //
-///**
-// * Starten van de game met de levels die aanwezig zijn
-// */
-//void LevelObserver::notified() {
-//    if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
-//        Game *game = game_alloc(graphics);
-//        this->game = game;
-//
-//        Level *level = menuModel->getLevels()->back();
-//        game_load_level(game, level);
-//        menuModel->getLevels()->pop_back();
-//        game->engine.context.current_level = level;
-//        game->engine.context.is_exit_game = 0;
-//
-//        Uint32 start_time_ms = SDL_GetTicks();
-//        Uint32 last_print_time_ms = start_time_ms;
-//        long update_count = 0;
-//
-//        while (!game->engine.context.is_exit_game) {
-//            Uint32 cur_time_ms = SDL_GetTicks();
-//            Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
-//
-//            engine_update(&game->engine);
-//            update_count++;
-//
-//
-//            engine_update(&game->engine);
-//            //kijken of er een nieuw level geladen moet worden
-//            if (game->engine.context.level_ended) {
-//                if (menuModel->getLevels()->empty()) {
-//                    game->engine.context.is_exit_game = 1;
-//                    menuModel->setDone(false);
-//                }
-//                Level *next = menuModel->getLevels()->back();
-//                menuModel->getLevels()->pop_back();
-//                clear_level(game);
-//                game_load_level(game, next);
-//                game->engine.context.current_level = next;
-//                game->engine.context.level_ended = 0;
-//
-//            }
-//            //print performance statistics each second
-//            if (diff_time_ms > 1000) {
-//                float time_ms_per_update = (float) diff_time_ms / (float) update_count;
-//                float fps = 1.0f / time_ms_per_update * 1000.0f;
-//                game->engine.context.fps = fps;
-//                last_print_time_ms = cur_time_ms;
-//                update_count = 0;
-//            }
-//        }
-//
-//#ifdef RPI
-//        clear_ledgrid();
-//#endif // RPI
-//
-//        game_free(game);
-//        free(game);
-//    }
-//}
-//
+/**
+ * Starten van de game met de levels die aanwezig zijn
+ */
+void LevelObserver::notified() {
+    if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
+        Game *game = game_alloc(graphics);
+
+        Level *level = menuModel->getLevels()->back();
+        game_load_level(game, level);
+        menuModel->getLevels()->pop_back();
+        game->engine.context.current_level = level;
+        game->engine.context.is_exit_game = 0;
+
+        Uint32 start_time_ms = SDL_GetTicks();
+        Uint32 last_print_time_ms = start_time_ms;
+        long update_count = 0;
+
+        while (!game->engine.context.is_exit_game) {
+            Uint32 cur_time_ms = SDL_GetTicks();
+            Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
+
+            engine_update(&game->engine);
+            update_count++;
+
+
+            engine_update(&game->engine);
+            //kijken of er een nieuw level geladen moet worden
+            if (game->engine.context.level_ended) {
+                if (menuModel->getLevels()->empty()) {
+                    game->engine.context.is_exit_game = 1;
+                    menuModel->setDone(false);
+                }
+                Level *next = menuModel->getLevels()->back();
+                menuModel->getLevels()->pop_back();
+                clear_level(game);
+                game_load_level(game, next);
+                game->engine.context.current_level = next;
+                game->engine.context.level_ended = 0;
+
+            }
+            //print performance statistics each second
+            if (diff_time_ms > 1000) {
+                float time_ms_per_update = (float) diff_time_ms / (float) update_count;
+                float fps = 1.0f / time_ms_per_update * 1000.0f;
+                cout << fps << endl;
+                game->engine.context.fps = fps;
+                last_print_time_ms = cur_time_ms;
+                update_count = 0;
+            }
+        }
+
+#ifdef RPI
+        clear_ledgrid();
+#endif // RPI
+
+        game_free(game);
+        free(game);
+    }
+}
+
 //LevelObserver::LevelObserver() {
 //    //init the graphics system
 //    Graphics *graphics = graphics_alloc(0, 0);
@@ -317,13 +316,11 @@ void MenuShower::clear() {
 
 
 void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
-    LevelObserver *levelObserver = new LevelObserver;
+
     mm = new MenuModel;
     mv = new MenuView;
     mc = new MenuController;
 
-    levelObserver->setMenuModel(mm);
-    mm->registerObserver(LEVEL, levelObserver);
 
     mm->addListener(mv);
     mv->setMenuModel(mm);
@@ -352,20 +349,21 @@ SDLKey MenuView::getKey_press() {
     return key_press;
 }
 
+void MenuView::setFontManager(FontManager *fontManager) {
+    UIView::setFontManager(fontManager);
+    LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
+    menuModel->registerObserver(LEVEL, levelObserver);
+}
+
 void MenuController::setMenuModel(MenuModel *menuModel) {
     this->menuModel = menuModel;
 }
 
 void MenuController::setMenuView(MenuView *menuView) {
     this->menuView = menuView;
-
 }
-
 
 void MenuController::notified() {
     onKey(menuView->getKey_press());
 }
 
-void LevelObserver::setMenuModel(MenuModel *menuModel) {
-    this->menuModel = menuModel;
-}

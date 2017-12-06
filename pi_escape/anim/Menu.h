@@ -84,6 +84,8 @@ public:
 
     }
 
+    void setFontManager(FontManager *fontManager);
+
     void draw() override;
 
     vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
@@ -92,7 +94,7 @@ public:
 
     void setMenuModel(MenuModel *menuModel);
 
-    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation*> animations, vector<GlyphDrawCommand> command);
+    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
 
     SDLKey getKey_press();
 };
@@ -123,17 +125,15 @@ public:
 
 class LevelObserver : public Observer {
 private:
-//    Graphics *graphics;
-//    Game *game;
+    Graphics *graphics;
     MenuModel *menuModel;
 public:
-//    LevelObserver();
-//
+    LevelObserver(Graphics *graphics, MenuModel *menuModel) : graphics(graphics), menuModel(menuModel) {};
+
 //    ~LevelObserver();
 //
-//    void notified() override;
-//
-    void setMenuModel(MenuModel *menuModel);
+    void notified() override;
+
 };
 
 class MenuShower {

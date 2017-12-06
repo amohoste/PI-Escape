@@ -34,21 +34,20 @@ void start_game(MenuModel *m) {
 }
 
 void tutorial(MenuModel *m) {
-    load_levels(1, 8, m);
+    load_levels(1, 7, m);
 }
 
 /**
  * laad de levels in start inclusied, stop exclusief
  */
 void load_levels(int start, int stop, MenuModel *m) {
-//    vector<Level *> level_names;
-//    level_names.clear();
-//    for (int i = stop -1 ; i >= start; i--) {
-//        Level *x = load_level(i);
-//        level_names.push_back(x);
-//    }
+    vector<Level *> level_names;
+    for (int i = stop -1 ; i >= start; i--) {
+        Level *x = load_level(i);
+        level_names.push_back(x);
+    }
 //    m->playAnimations();
-//    m->setLevels(&level_names);
+    m->setLevels(&level_names);
 }
 
 void endMenu(MenuModel *m) {
