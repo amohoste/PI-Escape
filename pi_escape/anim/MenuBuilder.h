@@ -22,6 +22,9 @@ class MenuModel;
 
 using func_t = std::add_pointer<void(MenuModel *)>::type;
 
+/**
+ * maakt een entry
+ */
 class EntryBuilder {
 private:
     MenuBuilder *menuBuilder;
@@ -59,6 +62,9 @@ public:
 
 };
 
+/**
+ * Een animatie die over een entry moet lopen
+ */
 class EntryAnimation {
 private:
     float position = 0;
@@ -71,13 +77,16 @@ public:
     EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : animation(animation),
                                                                                             menuState(menuState),
                                                                                             repeat(repeat),
-                                                                                            duration(duration){};
+                                                                                            duration(duration) {};
 
     float getPosition(Animation *pAnimation);
 
     void setPosition(float x);
 };
 
+/**
+ * Iets in het menu, start game enzo
+ */
 class Entry {
 public:
     const bool enabled_on_pi;
@@ -93,9 +102,14 @@ public:
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
           const char *short_text, char mnemonic, const char *action, const char *font,
           map<MenuState, vector<EntryAnimation *>> *animations,
-          func_t function);
+          func_t function) : enabled_on_pi(enabled_on_pi), enabled_on_pc(enabled_on_pc), long_text(long_text),
+                             short_text(short_text), mnemonic(mnemonic), action(action), font(font),
+                             animations(animations), function(function) {};
 };
 
+/**
+ * Maakt het menu
+ */
 class MenuBuilder {
 private:
     std::vector<Entry *> entries;
