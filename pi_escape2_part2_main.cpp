@@ -43,9 +43,9 @@ int main() {
     m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
     MoviePlayer *mp = new MoviePlayer(&m);
-    mp->play(gc->createIntro());
+//    mp->play(gc->createIntro());
     mp->play(gc->createOutro());
-    mp->play(gc->createCredits());
+//    mp->play(gc->createCredits());
 //
 //    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
 //    MenuModel *model = new MenuModel;

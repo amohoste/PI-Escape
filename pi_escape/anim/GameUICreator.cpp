@@ -133,7 +133,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
                             new RainbowColorAnimation(), 3.0f), 9),
                           0000l, 9000l)
             .addAnimation(new GlyphIteratingAnimation(
-                    new SineAnimation(new MoveAnimation(0, 400)), 1.0f),
+                    new SineAnimation(new FloatInAnimation(0, 400)), 1.0f),
                           0000l, 3000l)
             .addAnimation(
                     new GlyphIteratingAnimation(new FadeInAnimation(), 1.0f), 0000l, 3000l)
@@ -143,15 +143,17 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
-    MovieBuilder builder;
-    builder.setDuration(3000l);
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
 
-    builder.addText("Hallo dit zijn decredits")
+    MovieBuilder builder;
+
+
+    builder.addText("Hallo dit zijn de credits")
+            .setPos_percent(50.0f, 50.0f)
             .setFont("zorque")
+            .setColor(col1)
             .setStartTime(0l)
             .setEndTime(3000l)
-            .setPos_percent(50.0f, 50.0f)
             .endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
@@ -192,7 +194,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
                                     new RainbowColorAnimation(), 10.5f),
                             9, true, false, true), 0l, 9000l)
             .addAnimation(new GlyphIteratingAnimation(
-                    new SineAnimation(new MoveAnimation(0, 400)), 1.0f),
+                    new SineAnimation(new FloatInAnimation(0, 400)), 1.0f),
                           0l, 3000l)
             .addAnimation(new GlyphIteratingAnimation(
                     new FadeInAnimation(), 1.0f),
