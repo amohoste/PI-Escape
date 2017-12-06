@@ -46,20 +46,9 @@ int main() {
 //    mp->play(gc->createIntro());
     mp->play(gc->createOutro());
 //    mp->play(gc->createCredits());
-//
-//    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
-//    MenuModel *model = new MenuModel;
-//    MenuController *controller = new MenuController;
-//    MenuView *view = new MenuView;
-//    LevelObserver *levelObserver = new LevelObserver;
-//    levelObserver->setMenuModel(model);
-//    model->registerObserver(LEVEL, levelObserver);
-//    model->addListener(view);
-//    view->setModel(model);
-//    controller->setMenuModel(model);
-//    view->setFontManager(&m);
-//    view->setController(controller);
-//    model->setMenuDefinition(ptr);
+
+    MenuShower *ms = new MenuShower(&m);
+    ms->show(gc->createGameMenu());
 
     delete gc;
 

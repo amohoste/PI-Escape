@@ -368,7 +368,20 @@ MenuShower::~MoviePlayer() {
     clear();
 }
 
-void MenuShower::play(shared_ptr<MenuDefinition> menuDefinition) {
+void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
+    LevelObserver *levelObserver = new LevelObserver;
 
+    levelObserver->setSubject(mm);
+    mm->registerObserver(LEVEL, levelObserver);
 
+    mm->addListener(mv);
+    mv->setMenuModel(mm);
+
+    mc->setMenuModel(mm);
+
+    mv->setFontManager(fontManager);
+
+    mc->setController();
+
+    mm->setMenuDefinition(menuDefinition);
 }

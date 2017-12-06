@@ -141,7 +141,7 @@ public:
 
     ~MoviePlayer();
 
-    void play(shared_ptr<MenuDefinition> menuDefinition);
+    void show(shared_ptr<MenuDefinition> menuDefinition);
 };
 
 #endif //PIESCAPE2_MENU_H
