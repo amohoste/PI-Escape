@@ -37,7 +37,7 @@ float MovieModel::getPosition(AnimationDuration *ad, int offset) {
 }
 
 void MovieGLView::invalidated() {
-    if (!model->isDone()) {
+    while (!model->isDone()) {
         Uint32 start = SDL_GetTicks();
         draw();
         Uint32 end = SDL_GetTicks();
