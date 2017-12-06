@@ -85,6 +85,7 @@ float EntryAnimation::getPosition() {
 }
 
 void EntryAnimation::setPosition(float x) {
+    cout << x << endl;
     if (repeat) {
         position = static_cast<float>(fmod(x, 1));
     } else{

@@ -10,7 +10,7 @@ using namespace std;
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->menuDefinition = std::move(menuDefinition);
     this->selectedInt = 0;
-    this->time = 0;
+    this->time = SDL_GetTicks();
     this->done = false;
     this->fireInvalidationEvent();
 }
@@ -82,7 +82,6 @@ void MenuModel::setLevels(vector<Level *> *levels) {
 //
 void MenuView::draw() {
     if (!menuModel->isDone()) {
-        Uint32 start_time_ms = SDL_GetTicks();
 
         const vector<Entry *> &entries = menuModel->getMenuDefinition()->entries;
 
@@ -122,11 +121,9 @@ void MenuView::draw() {
         }
         graphics_end_draw(fontManager->graphics);
 
-        Uint32 cur_time_ms = SDL_GetTicks();
-
-        menuModel->setTime(menuModel->getTime() + (cur_time_ms - start_time_ms));
-
+        menuModel->setTime(SDL_GetTicks());
     }
+
 }
 
 void MenuView::invalidated() {
@@ -162,25 +159,29 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset) {
 //        }
 //        this->animationsFinished &= done;
 //    } else {
-        if (entry == menuModel->getSelectedEntry()) {
-            //de hover animaties oproepen
-            for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-                command = ea->animation->applyTransform(command, ea->getPosition());
-                ea->setPosition(ea->getPosition() + 0.01f);
-            }
-        } else {
-            //de default
-            for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-                command = ea->animation->applyTransform(command, ea->getPosition());
-                ea->setPosition(ea->getPosition() + 0.01f);
-            }
-        }
+    if (entry == menuModel->getSelectedEntry()) {
+        //de hover animaties oproepen
+        return applyAnimations(entry->animations->at(HOVER), command);
+    } else {
+        //de default
+        return applyAnimations(entry->animations->at(DEFAULT), command);
+    }
 
 //        animationsFinished = false;
 //    }
-    return command;
 }
 
+vector<GlyphDrawCommand>
+MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command) {
+    for (EntryAnimation *ea : animations) {
+        command = ea->animation->applyTransform(command, ea->getPosition());
+        float d = (float) SDL_GetTicks();
+        float i = d - (float) menuModel->getTime();
+        cout << i <<  " fjkds"<< endl;
+        ea->setPosition(ea->getPosition() + (i / (float) ea->duration));
+    }
+    return command;
+}
 
 //void MenuView::setController(MenuController *pController) {
 //    this->controller = pController;

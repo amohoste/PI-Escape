@@ -98,6 +98,8 @@ public:
 //
 //    void setController(MenuController *pController);
 
+
+    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation*> animations, vector<GlyphDrawCommand> command);
 };
 
 
