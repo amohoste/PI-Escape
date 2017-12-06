@@ -87,7 +87,6 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .buildEntryWithAction("quit");
 
     return std::shared_ptr<MenuDefinition>(builder.build());
-    return nullptr;
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {

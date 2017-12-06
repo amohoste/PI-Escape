@@ -19,54 +19,49 @@ class MenuController;
 
 class EntryAnimation;
 
-float getPosition(uint64_t time, EntryAnimation *ea);
-
 class MenuDefinition {
 public:
     const vector<Entry *> entries;
 
-    explicit MenuDefinition(vector<Entry *> entries) : entries(entries){};
+    explicit MenuDefinition(vector<Entry *> entries) : entries(entries) {};
 
-    ~MenuDefinition();
+    ~MenuDefinition() {
+
+    }
 };
 
 
 class MenuModel : public UIModel, public Subject {
 private:
     shared_ptr<MenuDefinition> menuDefinition;
-//    int done;
-//    unsigned int selectedInt;
+    unsigned int selectedInt;
+
 //    Entry *selected;
-//    vector<Level *> *levels;
-//
-//    map<Event, vector<Observer *>> observers;
-//
-//    void updateSelected();
-//
+
+    vector<Level *> *levels_to_play;
+
 //    bool activated_menu;
 public:
-//    MenuModel();
-//
+    MenuModel() {
+
+    }
+
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
-//
-//    shared_ptr<MenuDefinition> getMenuDefinition();
-//
-//    int isDone() const override;
-//
-//    void setDone(int i);
-//
-//    void up();
-//
-//    void down();
-//
-//    void select();
-//
-//    Entry *getSelectedEntry();
-//
-//    vector<Level *> *getLevels();
-//
-//    void setLevels(vector<Level *> *levels);
-//
+
+    shared_ptr<MenuDefinition> getMenuDefinition();
+
+    void up();
+
+    void down();
+
+    void select();
+
+    Entry *getSelectedEntry();
+
+    vector<Level *> *getLevels();
+
+    void setLevels(vector<Level *> *levels);
+
 //    void resetPositions();
 //
 //    void playAnimations();
@@ -82,17 +77,22 @@ public:
 class MenuView : public UIView, public Subject {
 private:
     MenuModel *menuModel;
-//    MenuController *controller;
 //    bool animationsFinished;
 //    Uint32 last_update = SDL_GetTicks();
 public:
 //    MenuView();
+    ~MenuView() override {
+
+    }
+
+    void draw() override;
+
 //
-//    void draw() override;
+    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
+
 //
-//    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time);
-//
-//    void invalidated() override;
+    void invalidated() override;
+
 //
     void setMenuModel(MenuModel *menuModel);
 //
@@ -100,18 +100,25 @@ public:
 
 };
 
+
 class MenuController : public UIController {
 private:
     MenuModel *menuModel;
     MenuView *menuView;
 public:
-//    ~MenuController() override;
-//
-//    void onKey(SDLKey key) override;
-//
-//    void onExitKey() override;
+    ~MenuController() override {
+
+    }
+
+    void onKey(SDLKey key) override;
+
+    void onExitKey() override {
+
+    }
+
 //
     void setMenuModel(MenuModel *menuModel);
+
     void setMenuView(MenuView *menuView);
 
 };

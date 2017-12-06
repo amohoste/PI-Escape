@@ -54,8 +54,6 @@ public:
 };
 
 class Listener {
-private:
-    Observable *model{};
 public:
     virtual void invalidated() = 0;
 };

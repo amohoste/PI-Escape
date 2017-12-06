@@ -65,10 +65,9 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
     this->action = action;
-    //todo
-//    addEntry(this->menuBuilder,
-//             new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
-//                       this->action, this->font, &animations, function));
+    addEntry(this->menuBuilder,
+             new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
+                       this->action, this->font, &animations, function));
     return *this;
 }
 
@@ -89,19 +88,3 @@ void EntryAnimation::setPosition(float x) {
     this->position = x;
 }
 
-Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text, const char *short_text, char mnemonic,
-             const char *action, const char *font,
-             map<MenuState, vector<EntryAnimation *>> *animations,
-             func_t function) : enabled_on_pi(
-        enabled_on_pi),
-                                enabled_on_pc(
-                                        enabled_on_pc),
-                                long_text(long_text),
-                                short_text(short_text),
-                                mnemonic(mnemonic),
-                                action(action),
-                                font(font),
-                                animations(animations),
-                                function(function) {
-
-}
