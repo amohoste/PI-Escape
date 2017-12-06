@@ -39,7 +39,7 @@ UIController::~UIController() {
 
 void UIModel::setTime(uint64_t time) {
     this->time = time;
-    fireInvalidationEvent();
+//    fireInvalidationEvent();
 }
 
 uint64_t UIModel::getTime() const {

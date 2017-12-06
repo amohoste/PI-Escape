@@ -127,7 +127,9 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-    this->draw();
+    while (!menuModel->isDone()) {
+        this->draw();
+    }
 }
 
 vector<GlyphDrawCommand>
