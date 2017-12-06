@@ -255,8 +255,6 @@ void LevelObserver::notified() {
             engine_update(&game->engine);
             update_count++;
 
-
-            engine_update(&game->engine);
             //kijken of er een nieuw level geladen moet worden
             if (game->engine.context.level_ended) {
                 if (menuModel->getLevels()->empty()) {
