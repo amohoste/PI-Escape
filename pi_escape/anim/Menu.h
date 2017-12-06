@@ -32,8 +32,8 @@ class MenuDefinition {
 
 
 class MenuModel : public UIModel, public Subject {
-//private:
-//    shared_ptr<MenuDefinition> menuDefinition;
+private:
+    shared_ptr<MenuDefinition> menuDefinition;
 //    int done;
 //    unsigned int selectedInt;
 //    Entry *selected;
@@ -44,10 +44,10 @@ class MenuModel : public UIModel, public Subject {
 //    void updateSelected();
 //
 //    bool activated_menu;
-//public:
+public:
 //    MenuModel();
 //
-//    void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
+    void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 //
 //    shared_ptr<MenuDefinition> getMenuDefinition();
 //
@@ -76,13 +76,16 @@ class MenuModel : public UIModel, public Subject {
 //    void setActivatedMenu(bool i);
 };
 
-class MenuView : public UIView {
-//private:
-//    MenuModel *model;
+/**
+ * De menuview is ook een subject, namelijk welke input in het scherm komt
+ */
+class MenuView : public UIView, public Subject {
+private:
+    MenuModel *menuModel;
 //    MenuController *controller;
 //    bool animationsFinished;
 //    Uint32 last_update = SDL_GetTicks();
-//public:
+public:
 //    MenuView();
 //
 //    void draw() override;
@@ -91,39 +94,41 @@ class MenuView : public UIView {
 //
 //    void invalidated() override;
 //
-//    void setModel(MenuModel *model);
+    void setMenuModel(MenuModel *menuModel);
 //
 //    void setController(MenuController *pController);
 
 };
 
 class MenuController : public UIController {
-//private:
-//    MenuModel *model;
-//public:
+private:
+    MenuModel *menuModel;
+    MenuView *menuView;
+public:
 //    ~MenuController() override;
 //
 //    void onKey(SDLKey key) override;
 //
 //    void onExitKey() override;
 //
-//    void setMenuModel(MenuModel *model);
+    void setMenuModel(MenuModel *menuModel);
+    void setMenuView(MenuView *menuView);
 
 };
 
 class LevelObserver : public Observer {
-//private:
+private:
 //    Graphics *graphics;
 //    Game *game;
-//    MenuModel *menuModel;
-//public:
+    MenuModel *menuModel;
+public:
 //    LevelObserver();
 //
 //    ~LevelObserver();
 //
 //    void notified() override;
 //
-//    void setMenuModel(MenuModel *menuModel);
+    void setMenuModel(MenuModel *menuModel);
 };
 
 class MenuShower {
@@ -139,7 +144,7 @@ private:
 public:
     explicit MenuShower(FontManager *fontManager) : fontManager(fontManager) {};
 
-    ~MoviePlayer();
+    ~MenuShower();
 
     void show(shared_ptr<MenuDefinition> menuDefinition);
 };

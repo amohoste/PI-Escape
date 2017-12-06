@@ -11,7 +11,7 @@
 #include "FontManager.h"
 
 enum Event {
-    LEVEL, SELECTION
+    LEVEL, SELECTION, INPUT
 };
 
 class UIView;
@@ -39,11 +39,8 @@ public:
 
 class Observer {
 protected:
-    Subject *subject{};
 public:
     virtual void notified();
-
-    virtual void setSubject(Subject *subject);
 };
 
 
@@ -84,7 +81,7 @@ public:
     void setDone(bool done); //is alles klaar?
 };
 
-class UIController {
+class UIController : public Observer{
 protected:
 public:
     UIController();

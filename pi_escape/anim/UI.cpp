@@ -54,9 +54,6 @@ void UIModel::setDone(bool done) {
     this->done = done;
 }
 
-void Observer::setSubject(Subject *subject) {
-    this->subject = subject;
-}
 
 void Observer::notified() {
 

@@ -168,10 +168,6 @@ using namespace std;
 //    this->draw();
 //}
 //
-//void MenuView::setModel(MenuModel *model) {
-//    this->model = model;
-//}
-//
 //MenuView::MenuView() {
 //
 //}
@@ -364,24 +360,49 @@ void MenuShower::clear() {
     delete mc;
 }
 
-MenuShower::~MoviePlayer() {
-    clear();
-}
 
 void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
     LevelObserver *levelObserver = new LevelObserver;
 
-    levelObserver->setSubject(mm);
+    levelObserver->setMenuModel(mm);
     mm->registerObserver(LEVEL, levelObserver);
 
     mm->addListener(mv);
     mv->setMenuModel(mm);
 
     mc->setMenuModel(mm);
+    mc->setMenuView(mv);
 
     mv->setFontManager(fontManager);
 
-    mc->setController();
+    mc->setMenuView(mv);
+    mv->registerObserver(INPUT, mc);
 
     mm->setMenuDefinition(menuDefinition);
+}
+
+MenuShower::~MenuShower() {
+    clear();
+}
+
+
+void MenuView::setMenuModel(MenuModel *menuModel) {
+    this->menuModel = menuModel;
+}
+
+void MenuController::setMenuModel(MenuModel *menuModel) {
+    this->menuModel = menuModel;
+}
+
+void MenuController::setMenuView(MenuView *menuView) {
+    this->menuView = menuView;
+
+}
+
+void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
+    this->menuDefinition = menuDefinition;
+}
+
+void LevelObserver::setMenuModel(MenuModel *menuModel) {
+    this->menuModel = menuModel;
 }
