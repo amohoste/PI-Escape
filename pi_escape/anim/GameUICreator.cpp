@@ -182,7 +182,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 
 	builder.addText("by")
 		.setPos_percent(50.0f, 65.0f)
-		.setFont("arcade")
+		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
 		.setEndTime(10000l)
@@ -190,31 +190,31 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 
 	builder.addText("Amory Hoste")
 		.setPos_percent(50.0f, 55.0f)
-		.setFont("arcade")
+		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
 		.setEndTime(10000l)
 		.endText();
 
 	builder.addText("Arne Goeteyn")
-		.setPos_percent(50.0f, 50.0f)
-		.setFont("arcade")
+		.setPos_percent(50.0f, 45.0f)
+		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
 		.setEndTime(10000l)
 		.endText();
 
 	builder.addText("Tom Lauwaerts")
-		.setPos_percent(50.0f, 45.0f)
-		.setFont("arcade")
+		.setPos_percent(50.0f, 35.0f)
+		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
 		.setEndTime(10000l)
 		.endText();
 
 	builder.addText("Jorg Wieme")
-		.setPos_percent(50.0f, 40.0f)
-		.setFont("arcade")
+		.setPos_percent(50.0f, 25.0f)
+		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
 		.setEndTime(10000l)
