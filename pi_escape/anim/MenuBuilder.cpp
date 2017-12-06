@@ -63,24 +63,25 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
     this->menuBuilder = menuBuilder;
 }
 
-//EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
-//    this->action = action;
+EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
+    this->action = action;
+    //todo
 //    addEntry(this->menuBuilder,
 //             new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
 //                       this->action, this->font, &animations, function));
-//    return *this;
-//}
-//
+    return *this;
+}
 
-//EntryBuilder::EntryBuilder() {
-//    animations[ACTIVATE].clear();
-//    animations[OTHER_ACTIVATED].clear();
-//    animations[HOVER].clear();
-//    animations[DEFAULT].clear();
-//
-//}
-//
-//
+
+EntryBuilder::EntryBuilder() {
+    animations[ACTIVATE].clear();
+    animations[OTHER_ACTIVATED].clear();
+    animations[HOVER].clear();
+    animations[DEFAULT].clear();
+
+}
+
+
 //EntryAnimation::EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : animation(
 //        animation), menuState(menuState), duration(duration), repeat(repeat) {
 //
