@@ -126,4 +126,22 @@ class LevelObserver : public Observer {
 //    void setMenuModel(MenuModel *menuModel);
 };
 
+class MenuShower {
+private:
+    MenuView *mv{};
+    MenuModel *mm{};
+    MenuController *mc{};
+
+    FontManager *fontManager;
+
+    void clear();
+
+public:
+    explicit MenuShower(FontManager *fontManager) : fontManager(fontManager) {};
+
+    ~MoviePlayer();
+
+    void play(shared_ptr<MenuDefinition> menuDefinition);
+};
+
 #endif //PIESCAPE2_MENU_H

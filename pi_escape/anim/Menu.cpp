@@ -358,3 +358,17 @@ using namespace std;
 //}
 
 
+void MenuShower::clear() {
+    delete mm;
+    delete mv;
+    delete mc;
+}
+
+MenuShower::~MoviePlayer() {
+    clear();
+}
+
+void MenuShower::play(shared_ptr<MenuDefinition> menuDefinition) {
+
+
+}
