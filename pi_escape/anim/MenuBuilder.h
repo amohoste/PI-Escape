@@ -68,6 +68,7 @@ public:
 class EntryAnimation {
 private:
     float position = 0;
+    uint32_t start_time = 0;
 public:
     const Animation *animation;
     const MenuState menuState;
@@ -82,6 +83,9 @@ public:
     float getPosition();
 
     void setPosition(float x);
+
+    uint32_t getStartTime(){return start_time;}
+    void setStartTime(uint32_t start_time){this->start_time = start_time;}
 };
 
 /**

@@ -9,10 +9,11 @@ using namespace std;
 
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->menuDefinition = std::move(menuDefinition);
-    this->selectedInt = 0;
-    this->time = 0;
-    this->done = false;
-    this->fireInvalidationEvent();
+    selectedInt = 0;
+    time = 0;
+    done = false;
+    activated_menu = false;
+    fireInvalidationEvent();
 }
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
@@ -32,6 +33,11 @@ void MenuModel::down() {
 }
 
 void MenuModel::select() {
+    //todo deze shit moet in controller
+    activated_menu = true;
+    done = true;
+    this->reset_start_times();
+    fireInvalidationEvent();
     getSelectedEntry()->function(this);
 }
 
@@ -48,58 +54,45 @@ void MenuModel::setLevels(vector<Level *> *levels) {
     notify(LEVEL);
 }
 
-//void MenuModel::resetPositions() {
-//    for (Entry *entry : this->menuDefinition.get()->entries) {
-//        for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-//            ea->setPosition(0);
-//        }
-//        for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
-//            ea->setPosition(0);
-//        }
-//        for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
-//            ea->setPosition(0);
-//        }
-//        for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-//            ea->setPosition(0);
-//        }
-//
-//    }
-//}
-//
-//void MenuModel::playAnimations() {
-//    activated_menu = true;
-//    fireInvalidationEvent();
-//}
-//
-//bool MenuModel::isActivatedMenu() {
-//    return activated_menu;
-//}
-//
-//void MenuModel::setActivatedMenu(bool i) {
-//    activated_menu = i;
-//}
-//
-//
+bool MenuModel::isActivated() {
+    return activated_menu;
+}
+
+void MenuModel::setActivated(bool i) {
+    activated_menu = i;
+}
+
+void MenuModel::reset_start_times() {
+
+    auto f = [this](MenuState ms) {
+        for (Entry *entry: this->menuDefinition.get()->entries) {
+            for (EntryAnimation *ea : entry->animations->at(ms)) {
+                ea->setStartTime(getTime());
+            }
+        }
+    };
+
+    f(HOVER);
+    f(ACTIVATE);
+    f(OTHER_ACTIVATED);
+    f(DEFAULT);
+}
+
+
 void MenuView::draw() {
     uint32_t start = SDL_GetTicks();
-    if (!menuModel->isDone()) {
+    if (!menuModel->isDone() || menuModel->isActivated()) {
 
-        const vector<Entry *> &entries = menuModel->getMenuDefinition()->entries;
+        const vector<Entry *> &entries = menuModel->getMenuDefinition().get()->entries;
 
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = 1;
-//        animationsFinished = true;
         if (!entries.empty()) {
             for (Entry *entry: entries) {
                 commands.push_back(drawEntry(entry, 0, i * 200));
                 i--;
             }
         }
-
-//        if (this->animationsFinished) {
-//            model->setDone(true);
-//        }
-
 
         //events registreren
         SDL_Event event;
@@ -130,7 +123,7 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-    while (!menuModel->isDone()) {
+    while (!menuModel->isDone() || menuModel->isActivated()) {
         this->draw();
     }
 }
@@ -147,40 +140,37 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset) {
     // Vector met glyphdrawcommands aanmaken
     vector<GlyphDrawCommand> command = m->makeGlyphDrawCommands(entry->long_text, x_offset, y_offset);
 
-//    if (model->isActivatedMenu()) {
-//        bool done = true;
-//        if (entry == this->model->getSelectedEntry()) {
-//            for (EntryAnimation *ea : entry->animations->at(ACTIVATE)) {
-//                command = ea->getAnimation()->applyTransform(command, ea->getPosition(nullptr));
-//                ea->setPosition(getPosition(time, ea));
-//                done &= ea->getPosition(nullptr) == 1;
-//            }
-//        } else {
-//            for (EntryAnimation *ea : entry->animations->at(OTHER_ACTIVATED)) {
-//                command = ea->getAnimation()->applyTransform(command, ea->getPosition(nullptr));
-//                ea->setPosition(getPosition(time, ea));
-//                done &= ea->getPosition(nullptr) == 1;
-//            }
-//        }
-//        this->animationsFinished &= done;
-//    } else {
-    if (entry == menuModel->getSelectedEntry()) {
-        //de hover animaties oproepen
-        return applyAnimations(entry->animations->at(HOVER), command);
-    } else {
-        //de default
-        return applyAnimations(entry->animations->at(DEFAULT), command);
-    }
+    if (menuModel->isActivated()) {
+        menuModel->setActivated(false); //in de applyAnimations wordt gekeken of hij activated moet blijven
+        if (entry == menuModel->getSelectedEntry()) {
+            return applyAnimations(entry->animations->at(ACTIVATE), command);
+        } else {
+            return applyAnimations(entry->animations->at(OTHER_ACTIVATED), command);
+        }
 
-//        animationsFinished = false;
-//    }
+    } else {
+        //hier telkens de activated zeker op false zetten
+        //niet zo mooi, beetje een hack maarja het werkt
+        if (entry == menuModel->getSelectedEntry()) {
+            //de hover animaties oproepen
+            const vector<GlyphDrawCommand> &vector = applyAnimations(entry->animations->at(HOVER), command);
+            menuModel->setActivated(false);
+            return vector;
+        } else {
+            //de default
+            const vector<GlyphDrawCommand> &vector = applyAnimations(entry->animations->at(DEFAULT), command);
+            menuModel->setActivated(false);
+            return vector;
+        }
+    }
 }
 
 vector<GlyphDrawCommand>
 MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command) {
     for (EntryAnimation *ea : animations) {
         command = ea->animation->applyTransform(command, ea->getPosition());
-        ea->setPosition((float) menuModel->getTime() / (float) ea->duration);
+        ea->setPosition(((float) menuModel->getTime() - (float) ea->getStartTime()) / (float) ea->duration);
+        menuModel->setActivated(menuModel->isActivated() || ea->getPosition() < 1);
     }
     return command;
 }
@@ -288,6 +278,8 @@ void LevelObserver::notified() {
         game_free(game);
         free(game);
     }
+
+    menuModel->setDone(false);
 }
 
 void MenuShower::clear() {
@@ -315,7 +307,7 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
     mc->setMenuView(mv);
     mv->registerObserver(INPUT, mc);
 
-    mm->setMenuDefinition(menuDefinition);
+    mm->setMenuDefinition(std::move(menuDefinition));
 }
 
 MenuShower::~MenuShower() {

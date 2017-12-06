@@ -36,11 +36,9 @@ private:
     shared_ptr<MenuDefinition> menuDefinition;
     unsigned int selectedInt;
 
-//    Entry *selected;
-
     vector<Level *> *levels_to_play;
 
-//    bool activated_menu;
+    bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
     MenuModel() {
 
@@ -62,13 +60,16 @@ public:
 
     void setLevels(vector<Level *> *levels);
 
-//    void resetPositions();
-//
 //    void playAnimations();
 //
 //    bool isActivatedMenu();
 //
 //    void setActivatedMenu(bool i);
+    bool isActivated();
+
+    void setActivated(bool i);
+
+    void reset_start_times();
 };
 
 /**
@@ -130,8 +131,6 @@ private:
 public:
     LevelObserver(Graphics *graphics, MenuModel *menuModel) : graphics(graphics), menuModel(menuModel) {};
 
-//    ~LevelObserver();
-//
     void notified() override;
 
 };
