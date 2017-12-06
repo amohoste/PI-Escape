@@ -79,7 +79,7 @@ public:
                                                                                             repeat(repeat),
                                                                                             duration(duration) {};
 
-    float getPosition(Animation *pAnimation);
+    float getPosition();
 
     void setPosition(float x);
 };

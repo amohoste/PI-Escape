@@ -165,14 +165,14 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset) {
         if (entry == menuModel->getSelectedEntry()) {
             //de hover animaties oproepen
             for (EntryAnimation *ea : entry->animations->at(HOVER)) {
-                command = ea->animation->applyTransform(command, 0.5);
-//                ea->setPosition(getPosition(time, ea));
+                command = ea->animation->applyTransform(command, ea->getPosition());
+                ea->setPosition(ea->getPosition() + 0.01f);
             }
         } else {
             //de default
             for (EntryAnimation *ea : entry->animations->at(DEFAULT)) {
-                command = ea->animation->applyTransform(command, 0.5);
-//                ea->setPosition(getPosition(time, ea));
+                command = ea->animation->applyTransform(command, ea->getPosition());
+                ea->setPosition(ea->getPosition() + 0.01f);
             }
         }
 

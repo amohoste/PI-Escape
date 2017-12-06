@@ -80,11 +80,15 @@ EntryBuilder::EntryBuilder() {
 
 }
 
-float EntryAnimation::getPosition(Animation *pAnimation) {
+float EntryAnimation::getPosition() {
     return position;
 }
 
 void EntryAnimation::setPosition(float x) {
-    this->position = x;
+    if (repeat) {
+        position = static_cast<float>(fmod(x, 1));
+    } else{
+        position = x > 1 ? 1 : x;
+    }
 }
 
