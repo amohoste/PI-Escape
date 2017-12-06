@@ -87,12 +87,12 @@ void MenuView::draw() {
         const vector<Entry *> &entries = menuModel->getMenuDefinition()->entries;
 
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
-        int i = -1;
+        int i = 1;
 //        animationsFinished = true;
         if (!entries.empty()) {
             for (Entry *entry: entries) {
                 commands.push_back(drawEntry(entry, 0, i * 300));
-                i++;
+                i--;
             }
         }
 
@@ -106,8 +106,8 @@ void MenuView::draw() {
         while (SDL_PollEvent(&event)) {
             switch (event.type) {
                 case SDL_KEYDOWN:
-//                    this->controller->onKey(event.key.keysym.sym);
-                    1 + 1;
+                    key_press = event.key.keysym.sym;
+                    notify(INPUT);
             }
         }
 
@@ -185,30 +185,27 @@ MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawC
     return command;
 }
 
-//void MenuView::setController(MenuController *pController) {
-//    this->controller = pController;
-//}
-//
-//
-///**
-// * juiste reactie bij de juiste ingedrukte toets
-// * @param key de toest die is ingedrukt
-// */
-//void MenuController::onKey(SDLKey key) {
-//    switch (key) {
-//        case SDLK_DOWN:
-//            this->model->down();
-//            break;
-//        case SDLK_UP:
-//            this->model->up();
-//            break;
-//        case SDLK_RETURN:
-//            this->model->select();
-//            break;
-//        default:
-//            break;
-//    }
-//}
+
+/**
+ * juiste reactie bij de juiste ingedrukte toets
+ * @param key de toest die is ingedrukt
+ */
+void MenuController::onKey(SDLKey key) {
+    //todo geen methoden in model
+    switch (key) {
+        case SDLK_DOWN:
+            this->menuModel->down();
+            break;
+        case SDLK_UP:
+            this->menuModel->up();
+            break;
+        case SDLK_RETURN:
+            this->menuModel->select();
+            break;
+        default:
+            break;
+    }
+}
 //
 //void MenuController::setMenuModel(MenuModel *model) {
 //    this->model = model;
@@ -351,6 +348,10 @@ void MenuView::setMenuModel(MenuModel *menuModel) {
     this->menuModel = menuModel;
 }
 
+SDLKey MenuView::getKey_press() {
+    return key_press;
+}
+
 void MenuController::setMenuModel(MenuModel *menuModel) {
     this->menuModel = menuModel;
 }
@@ -360,10 +361,10 @@ void MenuController::setMenuView(MenuView *menuView) {
 
 }
 
-void MenuController::onKey(SDLKey key) {
 
+void MenuController::notified() {
+    onKey(menuView->getKey_press());
 }
-
 
 void LevelObserver::setMenuModel(MenuModel *menuModel) {
     this->menuModel = menuModel;

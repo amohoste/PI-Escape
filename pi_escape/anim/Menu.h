@@ -77,29 +77,24 @@ public:
 class MenuView : public UIView, public Subject {
 private:
     MenuModel *menuModel;
+    SDLKey key_press;
 //    bool animationsFinished;
-//    Uint32 last_update = SDL_GetTicks();
 public:
-//    MenuView();
     ~MenuView() override {
 
     }
 
     void draw() override;
 
-//
     vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
 
-//
     void invalidated() override;
 
-//
     void setMenuModel(MenuModel *menuModel);
-//
-//    void setController(MenuController *pController);
-
 
     vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation*> animations, vector<GlyphDrawCommand> command);
+
+    SDLKey getKey_press();
 };
 
 
@@ -118,7 +113,8 @@ public:
 
     }
 
-//
+    void notified() override;
+
     void setMenuModel(MenuModel *menuModel);
 
     void setMenuView(MenuView *menuView);
