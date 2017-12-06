@@ -10,7 +10,7 @@ using namespace std;
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     this->menuDefinition = std::move(menuDefinition);
     this->selectedInt = 0;
-    this->time = SDL_GetTicks();
+    this->time = 0;
     this->done = false;
     this->fireInvalidationEvent();
 }
@@ -81,6 +81,7 @@ void MenuModel::setLevels(vector<Level *> *levels) {
 //
 //
 void MenuView::draw() {
+    uint32_t start = SDL_GetTicks();
     if (!menuModel->isDone()) {
 
         const vector<Entry *> &entries = menuModel->getMenuDefinition()->entries;
@@ -100,15 +101,15 @@ void MenuView::draw() {
 //        }
 
 
-//        //events registreren
-//        SDL_Event event;
-//        while (SDL_PollEvent(&event)) {
-//            switch (event.type) {
-//                case SDL_KEYDOWN:
+        //events registreren
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_KEYDOWN:
 //                    this->controller->onKey(event.key.keysym.sym);
-//
-//            }
-//        }
+                    1 + 1;
+            }
+        }
 
         //tekenen
         graphics_begin_draw(fontManager->graphics);
@@ -124,6 +125,8 @@ void MenuView::draw() {
         menuModel->setTime(SDL_GetTicks());
     }
 
+    uint32_t end = SDL_GetTicks();
+    menuModel->setTime(menuModel->getTime() + (end - start));
 }
 
 void MenuView::invalidated() {
@@ -177,10 +180,7 @@ vector<GlyphDrawCommand>
 MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command) {
     for (EntryAnimation *ea : animations) {
         command = ea->animation->applyTransform(command, ea->getPosition());
-        float d = (float) SDL_GetTicks();
-        float i = d - (float) menuModel->getTime();
-//        cout << i <<  " fjkds"<< endl;
-        ea->setPosition(ea->getPosition() + (i / (float) ea->duration));
+        ea->setPosition((float) menuModel->getTime() / (float) ea->duration);
     }
     return command;
 }
