@@ -177,7 +177,7 @@ MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawC
         command = ea->animation->applyTransform(command, ea->getPosition());
         float d = (float) SDL_GetTicks();
         float i = d - (float) menuModel->getTime();
-        cout << i <<  " fjkds"<< endl;
+//        cout << i <<  " fjkds"<< endl;
         ea->setPosition(ea->getPosition() + (i / (float) ea->duration));
     }
     return command;
