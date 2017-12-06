@@ -34,8 +34,6 @@ int main() {
     GameUICreator *gc = new GameUICreator;
 
 
-    gc->createIntro();
-
     // Fontmanager aanmaken
     FontManager m(graphics);
 
@@ -44,20 +42,24 @@ int main() {
     m.loadFont("base", "base72.png", "base72.fnt");
     m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
 
-    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
-    MenuModel *model = new MenuModel;
-    MenuController *controller = new MenuController;
-    MenuView *view = new MenuView;
-    LevelObserver *levelObserver = new LevelObserver;
-    levelObserver->setMenuModel(model);
-    model->registerObserver(LEVEL, levelObserver);
-    model->addListener(view);
-    view->setModel(model);
-    controller->setMenuModel(model);
-    view->setFontManager(&m);
-    view->setGraphics(graphics);
-    view->setController(controller);
-    model->setMenuDefinition(ptr);
+    MoviePlayer *mp = new MoviePlayer(&m);
+//    mp->play(gc->createIntro());
+    mp->play(gc->createOutro());
+//    mp->play(gc->createCredits());
+//
+//    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
+//    MenuModel *model = new MenuModel;
+//    MenuController *controller = new MenuController;
+//    MenuView *view = new MenuView;
+//    LevelObserver *levelObserver = new LevelObserver;
+//    levelObserver->setMenuModel(model);
+//    model->registerObserver(LEVEL, levelObserver);
+//    model->addListener(view);
+//    view->setModel(model);
+//    controller->setMenuModel(model);
+//    view->setFontManager(&m);
+//    view->setController(controller);
+//    model->setMenuDefinition(ptr);
 
     delete gc;
 

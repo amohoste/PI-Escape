@@ -178,11 +178,41 @@ std::vector<GlyphDrawCommand> MoveAnimation::applyTransform(const std::vector<Gl
 	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
 		const GlyphDrawCommand& cur = *it;
 		
-		t_ivec2 curPos;
-		curPos[0] = (newPos[0] * position);
-		curPos[1] = (newPos[1] * position);
+		t_ivec2 move;
+		move[0] = (newPos[0] * position);
+		move[1] = (newPos[1] * position);
 
-		GlyphDrawCommand replacement = cur.move(curPos[0], curPos[1]);
+		GlyphDrawCommand replacement = cur.move(move[0], move[1]);
+		res.push_back(replacement);
+	}
+
+	return res;
+}
+
+/***************************************************************
+ FloatInAnimation
+****************************************************************/
+FloatInAnimation::FloatInAnimation(t_ivec2 relPos)
+	: newPos{ relPos[0], relPos[1] } {}
+
+FloatInAnimation::FloatInAnimation(int x, int y)
+	: newPos{ x, y } {}
+
+FloatInAnimation::~FloatInAnimation() {
+
+}
+
+std::vector<GlyphDrawCommand> FloatInAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
+	std::vector<GlyphDrawCommand> res;
+
+	for (std::vector<GlyphDrawCommand>::const_iterator it = draws.begin(); it != draws.end(); it++) {
+		const GlyphDrawCommand& cur = *it;
+
+		t_ivec2 move;
+		move[0] = (newPos[0] * (1 - position));
+		move[1] = (newPos[1] * (1 - position));
+
+		GlyphDrawCommand replacement = cur.move(move[0], -move[1]);
 		res.push_back(replacement);
 	}
 
@@ -223,9 +253,27 @@ std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std:
 
 			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
 			res.push_back(*it1);
+		} else if (position <= begin) {
+			const GlyphDrawCommand& cur = *it;
+
+			std::vector<GlyphDrawCommand> tmp;
+			tmp.push_back(cur);
+
+			std::vector<GlyphDrawCommand> newGlyph = animation->applyTransform(tmp, 0);
+
+			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
+			res.push_back(*it1);
 		}
 		else {
-			res.push_back(cur);
+			const GlyphDrawCommand& cur = *it;
+
+			std::vector<GlyphDrawCommand> tmp;
+			tmp.push_back(cur);
+
+			std::vector<GlyphDrawCommand> newGlyph = animation->applyTransform(tmp, 1);
+
+			std::vector<GlyphDrawCommand>::const_iterator it1 = newGlyph.begin();
+			res.push_back(*it1);
 		}
 		
 		i++;

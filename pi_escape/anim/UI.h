@@ -8,26 +8,80 @@
 #include <vector>
 #include <iostream>
 #include <map>
+#include "FontManager.h"
 
 enum Event {
     LEVEL, SELECTION
 };
 
+class UIView;
+
 class Observer;
 
-class UIModel {
+class Listener;
+
+class Subject;
+
+class Subject {
+private:
+    std::map<Event, std::vector<Observer *>> observers;
+
+protected:
+
+    void notify(Event e);
+
+public:
+
+    void registerObserver(Event e, Observer *o);
+
+};
+
+
+class Observer {
+protected:
+    Subject *subject{};
+public:
+    virtual void notified();
+
+    virtual void setSubject(Subject *subject);
+};
+
+
+class Observable {
+protected:
+    vector<Listener *> listeners;
+public:
+    void addListener(Listener *listener);
+
+    void fireInvalidationEvent();
+};
+
+class Listener {
+private:
+    Observable *model{};
+public:
+    virtual void invalidated() = 0;
+};
+
+class UIModel : public Observable {
 protected:
     uint64_t time;
+
+    bool done;
+
 public:
     UIModel();
 
     virtual ~UIModel();
 
-    virtual void setTime(uint64_t time);
+
+    void setTime(uint64_t time);
 
     uint64_t getTime() const;
 
-    virtual int isDone() const = 0;
+    int isDone() const;
+
+    void setDone(bool done); //is alles klaar?
 };
 
 class UIController {
@@ -42,9 +96,12 @@ public:
     virtual void onExitKey() = 0;
 };
 
-class UIView {
+class UIView : public Listener {
 protected:
+    FontManager *fontManager;
 public:
+    void setFontManager(FontManager *fm);
+
     UIView();
 
     virtual ~UIView();
@@ -52,24 +109,5 @@ public:
     virtual void draw() = 0;
 };
 
-class Subject {
-private:
-    std::map<Event, std::vector<Observer *>> observers;
-
-protected:
-    void notify(Event e);
-
-public:
-    void registerObserver(Event e, Observer *o);
-};
-
-class Observer {
-protected:
-    Subject *subject;
-public:
-    virtual void notified();
-
-    virtual void setSubject(Subject *subject);
-};
 
 #endif //PIESCAPE2_UI_H
