@@ -76,6 +76,21 @@ public:
     const override;
 };
 
+/** Move text from given position */
+class FloatInAnimation : public Animation {
+private:
+	t_ivec2 newPos;
+public:
+	FloatInAnimation(t_ivec2 relPos);
+	FloatInAnimation(int x, int y);
+	virtual ~FloatInAnimation();
+
+	std::vector<GlyphDrawCommand> applyTransform(
+		const std::vector<GlyphDrawCommand>& draws,
+		float position)
+		const override;
+};
+
 /** Apply an animation to each glyph in turn */
 class GlyphIteratingAnimation : public Animation {
 private:

@@ -133,7 +133,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
                             new RainbowColorAnimation(), 3.0f), 9),
                           0000l, 9000l)
             .addAnimation(new GlyphIteratingAnimation(
-                    new SineAnimation(new MoveAnimation(0, 400)), 1.0f),
+                    new SineAnimation(new FloatInAnimation(0, 400)), 1.0f),
                           0000l, 3000l)
             .addAnimation(
                     new GlyphIteratingAnimation(new FadeInAnimation(), 1.0f), 0000l, 3000l)
