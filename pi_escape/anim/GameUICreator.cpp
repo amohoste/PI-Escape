@@ -34,7 +34,7 @@ void start_game(MenuModel *m) {
 }
 
 void tutorial(MenuModel *m) {
-    load_levels(1, 7, m);
+    load_levels(1, 2, m);
 }
 
 /**

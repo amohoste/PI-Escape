@@ -255,8 +255,10 @@ void LevelObserver::notified() {
             engine_update(&game->engine);
             update_count++;
 
+            game->engine.context.is_exit_game = game->engine.context.level_ended && menuModel->getLevels()->empty();
+
             //kijken of er een nieuw level geladen moet worden
-            if (game->engine.context.level_ended) {
+            if (!game->engine.context.is_exit_game && game->engine.context.level_ended) {
                 if (menuModel->getLevels()->empty()) {
                     game->engine.context.is_exit_game = 1;
                     menuModel->setDone(false);
@@ -273,7 +275,6 @@ void LevelObserver::notified() {
             if (diff_time_ms > 1000) {
                 float time_ms_per_update = (float) diff_time_ms / (float) update_count;
                 float fps = 1.0f / time_ms_per_update * 1000.0f;
-                cout << fps << endl;
                 game->engine.context.fps = fps;
                 last_print_time_ms = cur_time_ms;
                 update_count = 0;
