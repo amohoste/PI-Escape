@@ -4,7 +4,7 @@
 /**
  * laad de levels in start inclusied, stop exclusief
  */
-void load_levels(int start, int stop, MenuModel *m) ;
+void load_levels(int start, int stop, MenuModel *m);
 
 GameUICreator::GameUICreator() {}
 
@@ -31,7 +31,7 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
-    load_levels(8,11,m);
+    load_levels(8, 11, m);
 }
 
 void tutorial(MenuModel *m) {
@@ -144,7 +144,15 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
     MovieBuilder builder;
-    builder.addText("Hallo dit zijn decredits");
+    builder.setDuration(3000l);
+    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+
+    builder.addText("Hallo dit zijn decredits")
+            .setFont("zorque")
+            .setStartTime(0l)
+            .setEndTime(3000l)
+            .setPos_percent(50.0f, 50.0f)
+            .endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }

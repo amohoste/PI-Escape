@@ -44,6 +44,8 @@ int main() {
 
     MoviePlayer *mp = new MoviePlayer(&m);
     mp->play(gc->createIntro());
+    mp->play(gc->createOutro());
+    mp->play(gc->createCredits());
 //
 //    const shared_ptr<MenuDefinition> &ptr = gc->createGameMenu();
 //    MenuModel *model = new MenuModel;
