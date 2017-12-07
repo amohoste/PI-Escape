@@ -52,6 +52,7 @@ LedView::~LedView() {
  * React to change in selected menu item
  */
 void LedView::notified() {
+	// TODO fix i and if i or " " remove whitespace(optional)
 	// Get text of selected item
 	const string str = this->model->getSelectedEntry()->long_text;
 
@@ -104,36 +105,25 @@ void LedView::notified() {
 		int empty_line;	// location of empty line
 		// if bit 16 is 1 fill first lines with zeros
 		if (!!(byte1 & 0x80)) {
-			empty_line = 0;
+			empty_line = 1;
 		} else { // else fill the last lines with zeros
-			empty_line = HEIGHT_PATTERN - 1;
+			empty_line = 0;
 		}
-		for (int k = 0; k < 3; k++) {
-			this->pattern[empty_line][k + (3 * j)] = 0;
-		}
-
+		
 		int a = !!(byte1 & 0x80);
 		int b = !!(byte2 & 0x80);
-		this->pattern[rb][kb] = b;
+		this->pattern[rb + empty_line][kb + (j * 4)] = b;
 		kb++;
 		for (int i = 1; i < 8; i++) {
 			a = !!((byte1 << i) & 0x80);
 			b = !!((byte2 << i) & 0x80);
-			if (j == 0) {
-				this->pattern[ra][ka + (3 * j)] = a;
-				this->pattern[rb][kb + (3 * j)] = b;
-				
-			}
-			else {
-				this->pattern[ra][ka + (3 * j) + 1] = a;
-				this->pattern[rb][kb + (3 * j) + 1] = b;
-			}
+			this->pattern[ra + empty_line][ka + (3 * j) + j] = a;
+			this->pattern[rb + empty_line][kb + (3 * j) + j] = b;
 			ka = (ka + 1) % 3;
 			kb = (kb + 1) % 3;
 			if (ka == 0) ra++;
 			if (kb == 0) rb++;
 		}
-		printf("\n");
 	}
 
 	for (int i = 0; i < HEIGHT_PATTERN; ++i)
