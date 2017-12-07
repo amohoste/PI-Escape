@@ -18,10 +18,11 @@ void addEntry(MenuBuilder *mb, Entry *entry) {
 }
 
 void MenuBuilder::setBackGroundColor(t_vec3 color) {
-    glmc_assign_vec3(this->color, color);
+//    glmc_assign_vec3(this->color, color);
+    memcpy(this->color, color, sizeof(color));
 }
 
-MenuBuilder::MenuBuilder() {
+MenuBuilder::MenuBuilder() : color(*new t_vec3[3]){
     //standaardwaarde
     t_vec4 col = {1.0f, 0.0f, 0.0f};
     glmc_assign_vec4(this->color, col);
