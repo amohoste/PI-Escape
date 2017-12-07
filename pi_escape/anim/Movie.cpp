@@ -82,6 +82,8 @@ void MovieGLView::setMovieModel(MovieModel *movieModel) {
 vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv) {
     FontManager *m = this->fontManager;
 
+    mv->text = "test";
+
     // kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(mv->font);
 //    m->setColor(mv->color); //crasht todo

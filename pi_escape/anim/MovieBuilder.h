@@ -61,7 +61,8 @@ public:
 
 class MovieAnimation {
 public:
-    const char *text;
+    //todo alles echt const maken http://duramecho.com/ComputerInformation/WhyHowCppConst.html
+    const char * const text;
     const long start;
     const long end;
     const char *font;
