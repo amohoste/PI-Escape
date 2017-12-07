@@ -61,12 +61,16 @@ void LedView::notified() {
 	}
 	delete[] this->pattern;
 
-	this->length_pattern = str.length() * 3;
+	this->length_pattern = str.length() * 3 + (str.length() - 1);
 	this->pattern = new int*[HEIGHT_PATTERN];
 	for (int i = 0; i < HEIGHT_PATTERN; i++) {
 		this->pattern[i] = new int[length_pattern];
 	}
-
+	for (int i = 0; i < HEIGHT_PATTERN; i++) {
+		for (int j = 0; j < length_pattern; j++) {
+			this->pattern[i][j] = 0;
+		}
+	}
 	// Convert to TinyFont
 
 	//for (int i = 0; i < HEIGHT_PATTERN; i++) {
@@ -77,11 +81,9 @@ void LedView::notified() {
 
 	for (int j = 0; j < str.length(); j++) {	// go over each character
 		int ascii = str[j];
-		printf("%c heeft ascii waarde: %i\n", str[j], ascii);
-		
 		// Get bytes
-		char byte1;
-		char byte2;
+		unsigned char byte1;
+		unsigned char byte2;
 		if (47 < ascii && ascii < 127) {	// ascii value must be in range of TinyFont [48, 126]
 			byte1 = this->tiny_font[ascii - 48][1];
 			byte2 = this->tiny_font[ascii - 48][0];
@@ -112,23 +114,26 @@ void LedView::notified() {
 
 		int a = !!(byte1 & 0x80);
 		int b = !!(byte2 & 0x80);
-		//printf("(a: %i, b: %i)\n", a, b);
 		this->pattern[rb][kb] = b;
 		kb++;
 		for (int i = 1; i < 8; i++) {
-			//printf("a: (%i, %i), b: (%i, %i)\n", ra, ka, rb, kb);
 			a = !!((byte1 << i) & 0x80);
 			b = !!((byte2 << i) & 0x80);
-			printf("(%i, %i): %i, (%i, %i): %i)\n", ra, ka + (3 * j), a, rb, kb + (3 * j), b);
-			this->pattern[ra][ka + (3 * j)] = a;
-			this->pattern[rb][kb + (3 * j)] = b;
+			if (j == 0) {
+				this->pattern[ra][ka + (3 * j)] = a;
+				this->pattern[rb][kb + (3 * j)] = b;
+				
+			}
+			else {
+				this->pattern[ra][ka + (3 * j) + 1] = a;
+				this->pattern[rb][kb + (3 * j) + 1] = b;
+			}
 			ka = (ka + 1) % 3;
 			kb = (kb + 1) % 3;
 			if (ka == 0) ra++;
 			if (kb == 0) rb++;
 		}
 		printf("\n");
-		//printf("a: (%i, %i), b: (%i, %i)\n\n", ra, ka, rb, kb);
 	}
 
 	for (int i = 0; i < HEIGHT_PATTERN; ++i)
@@ -139,6 +144,7 @@ void LedView::notified() {
 		}
 		std::cout << std::endl;
 	}
+	printf("\n");
 }
 
 /**
