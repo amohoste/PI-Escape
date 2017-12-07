@@ -145,9 +145,11 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
     t_vec4 col1 = {1.0f, 0.0f, 0.0f, 1.0f};
+    t_vec3 background = {1.0f, 0.0f, 0.0f};
 
     MovieBuilder builder;
-    builder.setDuration(10000);
+    builder.setDuration(10000)
+            .setColor(background);
 
 
     builder.addText("$  @ #")

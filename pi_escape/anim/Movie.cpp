@@ -49,7 +49,8 @@ void MovieGLView::draw() {
     if (model->getMovieDefinition() != nullptr && !model->getMovieDefinition().get()->movie_animations.empty()) {
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
 
-        glmc_assign_vec3(fontManager->graphics->background_color, model->getMovieDefinition().get()->background_color);
+        MovieDefinition *pDefinition = model->getMovieDefinition().get();
+        glmc_assign_vec3(fontManager->graphics->background_color, pDefinition->background_color);
 
         for (MovieAnimation *mv : model->getMovieDefinition().get()->movie_animations) {
             if (model->getTime() >= mv->start && mv->end > model->getTime()) {
