@@ -46,9 +46,7 @@ int main() {
     m.loadFont("starwars", "starwars72.png", "starwars72.fnt");
 
     MoviePlayer *mp = new MoviePlayer(&m);
-    const shared_ptr<MovieDefinition> &definition = gc->createIntro();
-    auto a = definition.get();
-    mp->play(definition);
+    mp->play(gc->createIntro());
 
     MenuShower *ms = new MenuShower(&m);
 //    ms->show(gc->createGameMenu());

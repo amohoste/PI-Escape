@@ -91,13 +91,11 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-    t_vec3 background_ = {1.0f, 1.0f, 0.0f};
-    t_vec3 *background = new t_vec3[3];
-    memcpy(background, background_, sizeof(t_vec3));
+    t_vec3 background_ = {1.0f, 0.0f, 1.0f};
 
     MovieBuilder builder;
     builder.setDuration(10000l)
-            .setBackgroundColor(background);
+            .setBackgroundColor(background_);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
