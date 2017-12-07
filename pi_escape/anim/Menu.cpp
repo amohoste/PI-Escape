@@ -195,32 +195,7 @@ void MenuController::onKey(SDLKey key) {
             break;
     }
 }
-//
-//void MenuController::setMenuModel(MenuModel *model) {
-//    this->model = model;
-//}
-//
-//MenuController::~MenuController() {
-//
-//}
-//
-//void MenuController::onExitKey() {
-//
-//}
-//
-///*
-// * berekenen wat de positie moet zijn
-// */
-//float getPosition(uint64_t time, EntryAnimation *ea) {
-//    float position = time / (float) ea->getDuration();
-//    if (ea->isRepeat()) {
-//        return fmod(position, 1.0f);
-//    } else {
-//        return position >= 1.0f ? 1.0f : position;
-//    }
-//}
-//
-//
+
 /**
  * Starten van de game met de levels die aanwezig zijn
  */

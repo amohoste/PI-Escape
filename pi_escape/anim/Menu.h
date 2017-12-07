@@ -112,10 +112,6 @@ public:
 
     void onKey(SDLKey key) override;
 
-    void onExitKey() override {
-
-    }
-
     void notified() override;
 
     void setMenuModel(MenuModel *menuModel);
