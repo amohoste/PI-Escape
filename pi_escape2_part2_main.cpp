@@ -41,13 +41,14 @@ int main() {
     m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
     m.loadFont("base", "base72.png", "base72.fnt");
     m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
-	m.loadFont("atari", "atari72.png", "atari72.fnt");
-	m.loadFont("crossedwars", "starwars_crossed72.png", "starwars_crossed72.fnt");
-	m.loadFont("starwars", "starwars72.png", "starwars72.fnt");
+    m.loadFont("atari", "atari72.png", "atari72.fnt");
+    m.loadFont("crossedwars", "starwars_crossed72.png", "starwars_crossed72.fnt");
+    m.loadFont("starwars", "starwars72.png", "starwars72.fnt");
 
     MoviePlayer *mp = new MoviePlayer(&m);
-	auto g = gc->createIntro();
-    mp->play(g);
+    const shared_ptr<MovieDefinition> &definition = gc->createIntro();
+    auto a = definition.get();
+    mp->play(definition);
 
     MenuShower *ms = new MenuShower(&m);
 //    ms->show(gc->createGameMenu());

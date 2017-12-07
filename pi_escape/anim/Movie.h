@@ -15,12 +15,12 @@ class AnimationDuration;
  */
 class MovieDefinition {
 public:
-    MovieDefinition(vector<MovieAnimation *> movie_animations, long duration, t_vec3 &color) : movie_animations(
+    MovieDefinition(vector<MovieAnimation *> movie_animations, long duration, t_vec3 *color) : movie_animations(
             std::move(movie_animations)), duration(duration), background_color(color) {};
 
     const vector<MovieAnimation *> movie_animations;
     const long duration; //hoelang duurt de movie
-    const t_vec3 &background_color;
+    t_vec3 * const background_color; //een constante poointer naar een constant object
 };
 
 

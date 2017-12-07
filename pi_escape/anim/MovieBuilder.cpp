@@ -1,9 +1,7 @@
 #include "MovieBuilder.h"
 
 MovieBuilder::MovieBuilder(){
-    t_vec3 col1 = {0.0f, 1.0f, 0.0f};
     t_vec4 col2 = {1.0f, 0.0f, 0.0f, 1.0f};
-    glmc_assign_vec3(this->background_color, col1);
     glmc_assign_vec4(this->color, col2);
 }
 
@@ -61,8 +59,8 @@ MovieDefinition *MovieBuilder::build() {
     return new MovieDefinition(movie_animations, duration, background_color);
 }
 
-MovieBuilder &MovieBuilder::setBackgroundColor(t_vec3 color) {
-    glmc_assign_vec3(this->background_color, color);
+MovieBuilder &MovieBuilder::setBackgroundColor(t_vec3 *color) {
+    this->background_color = color;
 	return *this;
 }
 

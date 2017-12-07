@@ -91,9 +91,9 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-    t_vec3 background1 = {1.0f, 0.2f, 0.0f};
-	t_vec3& background = *new t_vec3[3];
-	memcpy(background, background1, sizeof(background));
+    t_vec3 background_ = {1.0f, 1.0f, 0.0f};
+    t_vec3 *background = new t_vec3[3];
+    memcpy(background, background_, sizeof(t_vec3));
 
     MovieBuilder builder;
     builder.setDuration(10000l)
