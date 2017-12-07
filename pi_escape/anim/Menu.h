@@ -3,6 +3,7 @@
 
 
 #include <deque>
+#include <utility>
 #include "UI.h"
 #include "FontManager.h"
 #include "MenuBuilder.h"
@@ -22,8 +23,10 @@ class EntryAnimation;
 class MenuDefinition {
 public:
     const vector<Entry *> entries;
+    const t_vec3 &color;
 
-    explicit MenuDefinition(vector<Entry *> entries) : entries(entries) {};
+    MenuDefinition(vector<Entry *> entries, const t_vec3 &color) : entries(std::move(entries)), color(color){
+    };
 
     ~MenuDefinition() {
 

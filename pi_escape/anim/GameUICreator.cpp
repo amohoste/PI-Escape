@@ -56,6 +56,8 @@ void endMenu(MenuModel *m) {
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
+	t_vec4 col1 = {1.0f, 1.0f, 0.0f};
+	builder.setBackGroundColor(col1);
 
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)

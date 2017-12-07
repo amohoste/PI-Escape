@@ -10,11 +10,21 @@ EntryBuilder &MenuBuilder::getEntryBuilder() {
 }
 
 MenuDefinition *MenuBuilder::build() {
-    return new MenuDefinition(this->entries);
+    return new MenuDefinition(this->entries, color);
 }
 
 void addEntry(MenuBuilder *mb, Entry *entry) {
     mb->entries.push_back(entry);
+}
+
+void MenuBuilder::setBackGroundColor(t_vec3 color) {
+    glmc_assign_vec3(this->color, color);
+}
+
+MenuBuilder::MenuBuilder() {
+    //standaardwaarde
+    t_vec4 col = {1.0f, 0.0f, 0.0f};
+    glmc_assign_vec4(this->color, col);
 }
 
 

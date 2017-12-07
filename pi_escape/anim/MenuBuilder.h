@@ -117,12 +117,17 @@ public:
 class MenuBuilder {
 private:
     std::vector<Entry *> entries;
+    t_vec3 color;
 public:
+    MenuBuilder();
+
     EntryBuilder &getEntryBuilder();
 
     MenuDefinition *build();
 
     friend void addEntry(MenuBuilder *mb, Entry *entry);
+
+    void setBackGroundColor(t_vec4 color);
 };
 
 
