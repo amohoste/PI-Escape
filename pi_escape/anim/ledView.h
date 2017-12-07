@@ -6,8 +6,9 @@
 
 class LedView : public Observer, public UIView {
 private:
+	int length_pattern;
 	int frame;
-	char* tiny_font;
+	char** tiny_font;
 	int** pattern;
 	MenuModel *model;
 public:
