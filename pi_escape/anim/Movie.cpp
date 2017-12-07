@@ -57,7 +57,7 @@ void MovieGLView::draw() {
 
         //tekenen
         //todo fontmanager methode
-        graphics_begin_draw(fontManager->graphics);
+        fontManager->begin_draw();
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
@@ -65,7 +65,7 @@ void MovieGLView::draw() {
                 i++;
             }
         }
-        graphics_end_draw(fontManager->graphics);
+        fontManager->end_draw();
 
         //moet er nog verder getekend worden?
         model->setDone(model->getTime() >= model->getMovieDefinition().get()->duration);

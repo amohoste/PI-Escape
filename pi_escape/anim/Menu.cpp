@@ -108,7 +108,7 @@ void MenuView::draw() {
         }
 
         //tekenen
-        graphics_begin_draw(fontManager->graphics);
+        fontManager->begin_draw();
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
@@ -116,7 +116,7 @@ void MenuView::draw() {
                 i++;
             }
         }
-        graphics_end_draw(fontManager->graphics);
+        fontManager->end_draw();
 
         menuModel->setTime(SDL_GetTicks());
     }
