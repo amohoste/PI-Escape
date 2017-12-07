@@ -20,8 +20,8 @@ MovieBuilder &MovieBuilder::setFont(const char *font) {
     return *this;
 }
 
-MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
-    glmc_assign_vec4(this->color, color);
+MovieBuilder &MovieBuilder::setColor(t_vec3 color) {
+    glmc_assign_vec3(this->color, color);
     return *this;
 }
 
@@ -61,8 +61,9 @@ MovieDefinition *MovieBuilder::build() {
     return new MovieDefinition(movie_animations, duration, background_color);
 }
 
-MovieBuilder &MovieBuilder::setBackgroundColor(float *color) {
+MovieBuilder &MovieBuilder::setBackgroundColor(t_vec3 color) {
     glmc_assign_vec3(this->background_color, color);
+	return *this;
 }
 
 MovieAnimation::MovieAnimation(const char *text, const long start, const long end, const char *font,

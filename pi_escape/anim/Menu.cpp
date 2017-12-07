@@ -87,6 +87,8 @@ void MenuView::draw() {
 
         //kleur instellen voor alles
         glmc_assign_vec3(fontManager->graphics->background_color, menuModel->getMenuDefinition().get()->color);
+		
+
 
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = 1;

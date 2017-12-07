@@ -35,7 +35,7 @@ GlyphDrawCommand  GlyphDrawCommand::changeColor(float r, float g, float b, float
 }
 
 GlyphDrawCommand::GlyphDrawCommand(const int pos_ltop_x, const int pos_ltop_y, const int glyph_x, const int glyph_y,
-                                   const int glyph_w, const int glyph_h, const t_vec4 &colors, const int xoffset, const int yoffset, const int xadvance,string font) :pos_ltop_x(pos_ltop_x),
+                                   const int glyph_w, const int glyph_h, const t_vec4 &colors, const int xoffset, const int yoffset, const int xadvance,string font) : pos_ltop_x(pos_ltop_x),
 								   pos_ltop_y(pos_ltop_y), glyph_x(glyph_x), glyph_y(glyph_y), glyph_w(glyph_w), glyph_h(glyph_h), xoffset(xoffset), yoffset(yoffset), xadvance(xadvance), font(font), color(*new t_vec4[4]) {
 	
 	// Kleuren kopiëren naar de color van onze klasse

@@ -50,6 +50,7 @@ void MovieGLView::draw() {
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
 
         MovieDefinition *pDefinition = model->getMovieDefinition().get();
+
         glmc_assign_vec3(fontManager->graphics->background_color, pDefinition->background_color);
 
         for (MovieAnimation *mv : model->getMovieDefinition().get()->movie_animations) {

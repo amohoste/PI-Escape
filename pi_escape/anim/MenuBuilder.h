@@ -127,7 +127,7 @@ public:
 
     friend void addEntry(MenuBuilder *mb, Entry *entry);
 
-    void setBackGroundColor(t_vec4 color);
+    void setBackGroundColor(t_vec3 color);
 };
 
 

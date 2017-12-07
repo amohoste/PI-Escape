@@ -56,7 +56,7 @@ void endMenu(MenuModel *m) {
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
-    t_vec4 col1 = {1.0f, 1.0f, 0.0f};
+    t_vec3 col1 = {1.0f, 1.0f, 0.0f};
     builder.setBackGroundColor(col1);
 
     addMainMenuAnimation(builder.getEntryBuilder())
@@ -91,10 +91,13 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-    t_vec3 background = {1.0f, 1.0f, 0.0f};
+    t_vec3 background1 = {1.0f, 0.2f, 0.0f};
+	t_vec3& background = *new t_vec3[3];
+	memcpy(background, background1, sizeof(background));
+
     MovieBuilder builder;
     builder.setDuration(10000l)
-            .setColor(background);
+            .setBackgroundColor(background);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};

@@ -46,7 +46,8 @@ int main() {
 	m.loadFont("starwars", "starwars72.png", "starwars72.fnt");
 
     MoviePlayer *mp = new MoviePlayer(&m);
-    mp->play(gc->createIntro());
+	auto g = gc->createIntro();
+    mp->play(g);
 
     MenuShower *ms = new MenuShower(&m);
 //    ms->show(gc->createGameMenu());
