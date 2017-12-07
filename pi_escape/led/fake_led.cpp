@@ -12,7 +12,7 @@ using namespace std;
 // Timer
 typedef std::chrono::milliseconds ms;
 const ms write_every_ms = (ms) 1000;
-auto last_write = chrono::system_clock::now();
+chrono::system_clock::time_point last_write = chrono::system_clock::now();
 
 // Constants
 const int grid_size = 256;	// width and heigth of the grid in pixels (should always be at least the amount of leds, 8)
@@ -33,7 +33,7 @@ const int rainbow[8][8][3] = {
 
 // Create an empty square
 void clear_fake_ledgrid() {
-	auto now = chrono::system_clock::now();
+	chrono::system_clock::time_point now = chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = now - last_write;
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
 	if (d < write_every_ms) {
@@ -67,7 +67,7 @@ void clear_fake_ledgrid() {
 
 // Create one color square
 void build_one_color_fake(SPGM_RGBTRIPLE colour) {
-	auto now = chrono::system_clock::now();
+	chrono::system_clock::time_point now = chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = now - last_write;
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
 	if (d < write_every_ms)
@@ -97,7 +97,7 @@ void build_one_color_fake(SPGM_RGBTRIPLE colour) {
 
 // Create rainbow square
 void build_rainbow_fake() {
-	auto now = chrono::system_clock::now();
+	chrono::system_clock::time_point now = chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = now - last_write;
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
 	if (d < write_every_ms) {
