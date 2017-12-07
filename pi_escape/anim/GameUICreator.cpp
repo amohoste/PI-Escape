@@ -140,10 +140,10 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
-    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+    t_vec4 col1 = {1.0f, 0.0f, 0.0f, 1.0f};
 
     MovieBuilder builder;
-    builder.setDuration(10000);
+    builder.setDuration(15000l);
 
 
 	builder.addText("$  @ #")
@@ -175,7 +175,22 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("atari")
 		.setColor(col1)
 		.setStartTime(6000l)
-		.setEndTime(10000l)
+		.setEndTime(25000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+
+		.addAnimation(new RepeatAnimation(
+			new GlyphIteratingAnimation(
+				new InOutAnimation(new SineAnimation(new MoveAnimation(0, 40))),
+				1.5f),
+			1, true, true, false
+		), 3000l, 4000l)
+		.addAnimation(new RepeatAnimation(
+			new GlyphIteratingAnimation(
+				new RainbowColorAnimation(), 3.0f), 9),
+			0000l, 9000l)
+		.addAnimation(new GlyphIteratingAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)), 1.0f),
+			0000l, 3000l)
 		.endText();
 
 	builder.addText("by")
@@ -183,7 +198,13 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
-		.setEndTime(10000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(1000, 0)),
+			0000l, 3000l)
+		.addAnimation(new RepeatAnimation(
+				new RainbowColorAnimation(), 3.0f),
+			0000l, 9000l)
 		.endText();
 
 	builder.addText("Amory Hoste")
@@ -191,7 +212,10 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
-		.setEndTime(10000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
 		.endText();
 
 	builder.addText("Arne Goeteyn")
@@ -199,7 +223,10 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
-		.setEndTime(10000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
 		.endText();
 
 	builder.addText("Tom Lauwaerts")
@@ -207,7 +234,10 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
-		.setEndTime(10000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
 		.endText();
 
 	builder.addText("Jorg Wieme")
@@ -215,7 +245,10 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("starwars")
 		.setColor(col1)
 		.setStartTime(6000l)
-		.setEndTime(10000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
 		.endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
