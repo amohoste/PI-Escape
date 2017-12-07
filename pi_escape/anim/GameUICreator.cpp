@@ -42,7 +42,7 @@ void tutorial(MenuModel *m) {
  */
 void load_levels(int start, int stop, MenuModel *m) {
     vector<Level *> level_names;
-    for (int i = stop -1 ; i >= start; i--) {
+    for (int i = stop - 1; i >= start; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
@@ -56,8 +56,8 @@ void endMenu(MenuModel *m) {
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
-	t_vec4 col1 = {1.0f, 1.0f, 0.0f};
-	builder.setBackGroundColor(col1);
+    t_vec4 col1 = {1.0f, 1.0f, 0.0f};
+    builder.setBackGroundColor(col1);
 
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
@@ -91,13 +91,13 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
-    t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
-
+    t_vec3 background = {1.0f, 1.0f, 0.0f};
     MovieBuilder builder;
     builder.setDuration(10000l)
-            .setBackgroundColor(col1);
+            .setColor(background);
 
+    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+    t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
 
     builder.addText("Sysprog 2017 presents:")
             .setFont("arcade")
@@ -144,13 +144,13 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
-    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+    t_vec4 col1 = {1.0f, 0.0f, 0.0f, 1.0f};
 
     MovieBuilder builder;
     builder.setDuration(10000);
 
 
-	builder.addText("$  @ #")
+    builder.addText("$  @ #")
             .setPos_percent(50.0f, 75.0f)
             .setFont("starwars")
             .setColor(col1)
@@ -158,69 +158,69 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
             .setEndTime(4000l)
             .endText();
 
-	builder.addText("$  @ #")
-		.setPos_percent(50.0f, 75.0f)
-		.setFont("crossedwars")
-		.setColor(col1)
-		.setStartTime(4000l)
-		.setEndTime(6000l)
-		.endText();
+    builder.addText("$  @ #")
+            .setPos_percent(50.0f, 75.0f)
+            .setFont("crossedwars")
+            .setColor(col1)
+            .setStartTime(4000l)
+            .setEndTime(6000l)
+            .endText();
 
-	builder.addText("oops...")
-		.setPos_percent(50.0f, 50.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(3000l)
-		.setEndTime(5000l)
-		.endText();
+    builder.addText("oops...")
+            .setPos_percent(50.0f, 50.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(3000l)
+            .setEndTime(5000l)
+            .endText();
 
-	builder.addText("Pi Escape 2")
-		.setPos_percent(50.0f, 80.0f)
-		.setFont("atari")
-		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(10000l)
-		.endText();
+    builder.addText("Pi Escape 2")
+            .setPos_percent(50.0f, 80.0f)
+            .setFont("atari")
+            .setColor(col1)
+            .setStartTime(6000l)
+            .setEndTime(10000l)
+            .endText();
 
-	builder.addText("by")
-		.setPos_percent(50.0f, 65.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(10000l)
-		.endText();
+    builder.addText("by")
+            .setPos_percent(50.0f, 65.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(6000l)
+            .setEndTime(10000l)
+            .endText();
 
-	builder.addText("Amory Hoste")
-		.setPos_percent(50.0f, 55.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(10000l)
-		.endText();
+    builder.addText("Amory Hoste")
+            .setPos_percent(50.0f, 55.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(6000l)
+            .setEndTime(10000l)
+            .endText();
 
-	builder.addText("Arne Goeteyn")
-		.setPos_percent(50.0f, 45.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(10000l)
-		.endText();
+    builder.addText("Arne Goeteyn")
+            .setPos_percent(50.0f, 45.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(6000l)
+            .setEndTime(10000l)
+            .endText();
 
-	builder.addText("Tom Lauwaerts")
-		.setPos_percent(50.0f, 35.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(10000l)
-		.endText();
+    builder.addText("Tom Lauwaerts")
+            .setPos_percent(50.0f, 35.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(6000l)
+            .setEndTime(10000l)
+            .endText();
 
-	builder.addText("Jorg Wieme")
-		.setPos_percent(50.0f, 25.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(10000l)
-		.endText();
+    builder.addText("Jorg Wieme")
+            .setPos_percent(50.0f, 25.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(6000l)
+            .setEndTime(10000l)
+            .endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
