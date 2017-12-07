@@ -79,7 +79,17 @@ void build_rainbow_sense() {
 	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
 }
 
-void build_array_sense(square) {
-	// TODO
+void build_array_sense(SPGM_RGBTRIPLE** square) {
+	SPGM_RGBTRIPLE ledgrid[LENGTH_BUFFER];
+	int c = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			ledgrid[c] = square[i][j];
+			c++;
+		}
+	}
+	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
 }
 #endif // RPI
