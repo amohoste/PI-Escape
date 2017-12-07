@@ -3,6 +3,7 @@
 
 #include <utility>
 #include <assert.h>
+#include <functional>
 
 using namespace std;
 
@@ -64,7 +65,7 @@ void MenuModel::setActivated(bool i) {
 
 void MenuModel::reset_start_times() {
 
-    auto f = [this](MenuState ms) {
+    std::function<void (MenuState ms)> f = [this](MenuState ms) {
         for (Entry *entry: this->menuDefinition.get()->entries) {
             for (EntryAnimation *ea : entry->animations->at(ms)) {
                 ea->setStartTime(getTime());
