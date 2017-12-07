@@ -1,10 +1,13 @@
 #include "MovieBuilder.h"
 
-MovieBuilder::MovieBuilder() : color(*new t_vec4[4]) {
+MovieBuilder::MovieBuilder(){
+    t_vec3 col1 = {1.0f, 0.0f, 0.0f};
+    t_vec4 col2 = {1.0f, 0.0f, 0.0f, 1.0f};
+    glmc_assign_vec3(this->background_color, col1);
+    glmc_assign_vec4(this->color, col2);
 }
 
 MovieBuilder::~MovieBuilder() {
-    delete[]&this->color;
 }
 
 MovieBuilder &MovieBuilder::addText(const char *text) {
@@ -55,7 +58,11 @@ MovieBuilder &MovieBuilder::setDuration(long d) {
 }
 
 MovieDefinition *MovieBuilder::build() {
-    return new MovieDefinition(movie_animations, duration);
+    return new MovieDefinition(movie_animations, duration, background_color);
+}
+
+MovieBuilder &MovieBuilder::setBackgroundColor(float *color) {
+    glmc_assign_vec3(this->background_color, color);
 }
 
 MovieAnimation::MovieAnimation(const char *text, const long start, const long end, const char *font,

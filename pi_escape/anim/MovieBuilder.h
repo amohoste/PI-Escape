@@ -16,7 +16,8 @@ private:
     long start;
     long end;
     const char *font;
-    t_vec4 &color;
+    t_vec4 color;
+    t_vec3 background_color;
     float x_perc;
     float y_perc;
     long duration;
@@ -32,6 +33,7 @@ public:
     MovieBuilder &setFont(const char *font);
 
     MovieBuilder &setColor(t_vec4 color);
+    MovieBuilder &setBackgroundColor(t_vec3 color);
 
     MovieBuilder &setPos_percent(float x, float y);
 

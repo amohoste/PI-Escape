@@ -91,11 +91,13 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-    MovieBuilder builder;
-    builder.setDuration(10000l);
-
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
+
+    MovieBuilder builder;
+    builder.setDuration(10000l)
+            .setBackgroundColor(col1);
+
 
     builder.addText("Sysprog 2017 presents:")
             .setFont("arcade")

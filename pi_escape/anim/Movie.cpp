@@ -49,6 +49,8 @@ void MovieGLView::draw() {
     if (model->getMovieDefinition() != nullptr && !model->getMovieDefinition().get()->movie_animations.empty()) {
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
 
+        glmc_assign_vec3(fontManager->graphics->background_color, model->getMovieDefinition().get()->background_color);
+
         for (MovieAnimation *mv : model->getMovieDefinition().get()->movie_animations) {
             if (model->getTime() >= mv->start && mv->end > model->getTime()) {
                 commands.push_back(glyphFromMovieAnimation(mv));
@@ -56,7 +58,6 @@ void MovieGLView::draw() {
         }
 
         //tekenen
-        //todo fontmanager methode
         fontManager->begin_draw();
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
@@ -81,6 +82,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
 
     // kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(mv->font);
+//    m->setColor(mv->color); //crasht todo
     m->setHpos(TEXT_CENTER); // Default TEXT_LEFT
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
