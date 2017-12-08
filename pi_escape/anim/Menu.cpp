@@ -9,12 +9,19 @@ using namespace std;
 
 
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
+    this->menuDefinition.reset(); //niet deleten maar resetten
     this->menuDefinition = std::move(menuDefinition);
+
     selectedInt = 0;
     time = 0;
     done = false;
     activated_menu = false;
-    fireInvalidationEvent();
+
+    levels_to_play->clear();
+
+    while (!done || activated_menu) {
+        fireInvalidationEvent();
+    }
 }
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
@@ -83,6 +90,20 @@ vector<shared_ptr<MovieDefinition>> *MenuModel::getMovieDefinitions() {
     return movieDefinitions;
 }
 
+MenuModel::MenuModel() {
+
+}
+
+MenuModel::~MenuModel() {
+    delete levels_to_play;
+    menuDefinition.reset();
+
+    for (std::vector<shared_ptr<MovieDefinition>>::iterator it = movieDefinitions->begin(); it != movieDefinitions->end(); ++it) {
+        it->reset();
+    }
+    delete movieDefinitions;
+}
+
 
 void MenuView::draw() {
     uint32_t start = SDL_GetTicks();
@@ -131,12 +152,13 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-    while (!menuModel->isDone() || menuModel->isActivated()) {
-        while (!menuModel->getMovieDefinitions()->empty()) {
-            moviePlayer->play(menuModel->getMovieDefinitions()->back());
-            menuModel->getMovieDefinitions()->pop_back();
-        }
-        this->draw();
+    while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
+        moviePlayer->play(menuModel->getMovieDefinitions()->back());
+        menuModel->getMovieDefinitions()->pop_back();
+    }
+    this->draw();
+    if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
+        notify(LEVEL);
     }
 }
 

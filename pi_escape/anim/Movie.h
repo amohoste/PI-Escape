@@ -8,6 +8,7 @@
 #include "MovieBuilder.h"
 
 class MovieAnimation;
+
 class AnimationDuration;
 
 /**
@@ -20,7 +21,7 @@ public:
 
     const vector<MovieAnimation *> movie_animations;
     const long duration; //hoelang duurt de movie
-    t_vec3 * const background_color; //een constante poointer naar een constant object
+    t_vec3 *const background_color; //een constante poointer naar een constant object
 };
 
 
@@ -40,7 +41,7 @@ public:
 
 };
 
-class MovieGLView : public UIView , public Subject{
+class MovieGLView : public UIView, public Subject {
 private:
     MovieModel *model;
 
@@ -49,6 +50,8 @@ private:
     vector<GlyphDrawCommand> glyphFromMovieAnimation(MovieAnimation *mv);
 
 public:
+    ~MovieGLView();
+
     void setMovieModel(MovieModel *movieModel);
 
     void invalidated() override;

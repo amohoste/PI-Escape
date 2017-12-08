@@ -46,10 +46,12 @@ private:
 
     bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
-    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
-    MenuModel() {
 
-    }
+    MenuModel();
+
+    ~MenuModel();
+
+    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 

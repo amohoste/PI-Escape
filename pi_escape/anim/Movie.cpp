@@ -114,6 +114,10 @@ SDLKey MovieGLView::getKeyPress() {
     return this->key_press;
 }
 
+MovieGLView::~MovieGLView() {
+
+}
+
 
 void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     clear(); //oude componeten leegmaken
