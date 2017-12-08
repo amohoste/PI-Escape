@@ -117,7 +117,7 @@ public:
 class MenuBuilder {
 private:
     std::vector<Entry *> entries;
-    t_vec3 &color;
+    t_vec3 background_color;
 public:
     MenuBuilder();
 

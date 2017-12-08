@@ -60,6 +60,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 
 	builder.setBackGroundColor(background_color);
 
+
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Start Tutorial")
