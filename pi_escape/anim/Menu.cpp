@@ -88,8 +88,6 @@ void MenuView::draw() {
         //kleur instellen voor alles
         glmc_assign_vec3(fontManager->graphics->background_color, *menuModel->getMenuDefinition().get()->color);
 		
-
-
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = 1;
         if (!entries.empty()) {
@@ -139,6 +137,7 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset) {
 
     // Font, kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(entry->font); // indien niet gebruikt laatst ingelezen font als font
+    m->setColor(*entry->color);
     m->setHpos(TEXT_CENTER); // Default TEXT_LEFT
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 

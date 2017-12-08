@@ -59,6 +59,9 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     t_vec3 col1 = {0.0f, 0.0f, 0.4f};
     builder.setBackGroundColor(col1);
 
+
+    t_vec4 menuEntryColor = {0.0f, 1.0f, 0.0f, 1.0f};
+
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
             .setLongText("Start Tutorial")
@@ -66,6 +69,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setMnemonic('T')
             .setFontName("arcade")
             .setFunction(tutorial)
+            .setColor(menuEntryColor)
             .buildEntryWithAction("start tutorial");
 
 
@@ -76,6 +80,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setMnemonic('G')
             .setFontName("arcade")
             .setFunction(start_game)
+            .setColor(menuEntryColor)
             .buildEntryWithAction("start game");
 
     addMainMenuAnimation(builder.getEntryBuilder())
@@ -85,6 +90,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setMnemonic('E')
             .setFontName("arcade")
             .setFunction(endMenu)
+            .setColor(menuEntryColor)
             .buildEntryWithAction("quit");
 
     return std::shared_ptr<MenuDefinition>(builder.build());
