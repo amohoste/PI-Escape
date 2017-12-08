@@ -316,7 +316,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
 
 
-    builder.addText("You have reached the end!")
+    builder.addText("We hope to see you again!")
             .setFont("arcade")
             .setColor(col1)
             .setPos_percent(50.0f, 75.0f)
