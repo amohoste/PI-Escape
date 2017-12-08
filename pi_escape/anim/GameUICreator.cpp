@@ -194,7 +194,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 	t_vec3 background = { 0.0f, 0.0f, 0.3f };
 
 	MovieBuilder builder;
-	builder.setDuration(20000l)
+	builder.setDuration(12000l)
 		.setBackgroundColor(background);
 
 	builder.addText("Pi Escape 2")
@@ -202,7 +202,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("atari")
 		.setColor(col1)
 		.setStartTime(0000l)
-		.setEndTime(19000l)
+		.setEndTime(10000l)
 		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 
 		.addAnimation(new RepeatAnimation(
@@ -225,7 +225,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("arcade")
 		.setColor(col1)
 		.setStartTime(0000l)
-		.setEndTime(19000l)
+		.setEndTime(10000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(1000, 0)),
 			0000l, 3000l)
@@ -241,7 +241,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("arcade")
 		.setColor(col1)
 		.setStartTime(0000l)
-		.setEndTime(19000l)
+		.setEndTime(10000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
@@ -253,7 +253,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("arcade")
 		.setColor(col1)
 		.setStartTime(0000l)
-		.setEndTime(19000l)
+		.setEndTime(10000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
@@ -265,7 +265,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("arcade")
 		.setColor(col1)
 		.setStartTime(0000l)
-		.setEndTime(19000l)
+		.setEndTime(10000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
@@ -277,7 +277,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		.setFont("arcade")
 		.setColor(col1)
 		.setStartTime(0000l)
-		.setEndTime(19000l)
+		.setEndTime(10000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
