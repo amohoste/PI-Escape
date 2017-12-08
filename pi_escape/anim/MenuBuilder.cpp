@@ -10,7 +10,9 @@ EntryBuilder &MenuBuilder::getEntryBuilder() {
 }
 
 MenuDefinition *MenuBuilder::build() {
-    return new MenuDefinition(this->entries, color);
+    t_vec3 *background = new t_vec3[3];
+    memcpy(background, this->background_color, sizeof(t_vec3));
+    return new MenuDefinition(this->entries, background);
 }
 
 void addEntry(MenuBuilder *mb, Entry *entry) {
@@ -18,13 +20,13 @@ void addEntry(MenuBuilder *mb, Entry *entry) {
 }
 
 void MenuBuilder::setBackGroundColor(t_vec3 color) {
-    glmc_assign_vec3(this->color, color);
+    glmc_assign_vec3(this->background_color, color);
 }
 
-MenuBuilder::MenuBuilder() : color(*new t_vec3[3]){
-    //standaardwaarde
-    t_vec4 col = {1.0f, 0.0f, 0.0f};
-    glmc_assign_vec4(this->color, col);
+MenuBuilder::MenuBuilder() {
+//    t_vec4 col2 = {1.0f, 0.0f, 0.0f, 1.0f};
+//    glmc_assign_vec4(this->background_color, col2);
+
 }
 
 
@@ -97,7 +99,7 @@ float EntryAnimation::getPosition() {
 void EntryAnimation::setPosition(float x) {
     if (repeat) {
         position = (fmod(x, 1.0f));
-    } else{
+    } else {
         position = x > 1 ? 1 : x;
     }
 }

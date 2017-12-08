@@ -86,7 +86,7 @@ void MenuView::draw() {
         const vector<Entry *> &entries = menuModel->getMenuDefinition().get()->entries;
 
         //kleur instellen voor alles
-        glmc_assign_vec3(fontManager->graphics->background_color, menuModel->getMenuDefinition().get()->color);
+        glmc_assign_vec3(fontManager->graphics->background_color, *menuModel->getMenuDefinition().get()->color);
 		
 
 

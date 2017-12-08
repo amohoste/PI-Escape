@@ -23,9 +23,9 @@ class EntryAnimation;
 class MenuDefinition {
 public:
     const vector<Entry *> entries;
-    const t_vec3 &color;
+    t_vec3 * const color;
 
-    MenuDefinition(vector<Entry *> entries, const t_vec3 &color) : entries(std::move(entries)), color(color){
+    MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color){
     };
 
     ~MenuDefinition() {
