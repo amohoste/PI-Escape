@@ -7,7 +7,7 @@ using namespace std;
 
 void MovieModel::setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition) {
     time = 0;
-    this->movieDefinition = std::move(movieDefinition);
+    this->movieDefinition = movieDefinition;
     setDone(false);
     fireInvalidationEvent();
 }
@@ -129,7 +129,7 @@ void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     mc->setMenuModel(mm);
     mv->registerObserver(INPUT, mc);
 
-    mm->setMovieDefinition(std::move(movieDefinition));
+    mm->setMovieDefinition(movieDefinition);
 }
 
 void MoviePlayer::clear() {

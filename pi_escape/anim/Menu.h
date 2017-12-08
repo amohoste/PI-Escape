@@ -7,6 +7,7 @@
 #include "UI.h"
 #include "FontManager.h"
 #include "MenuBuilder.h"
+#include "Movie.h"
 
 extern "C" {
 #include "../es/game.h"
@@ -25,6 +26,7 @@ public:
     const vector<Entry *> entries;
     t_vec3 * const color;
 
+
     MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color){
     };
 
@@ -36,6 +38,7 @@ public:
 
 class MenuModel : public UIModel, public Subject {
 private:
+    vector<shared_ptr<MovieDefinition>> *movieDefinitions = new vector<shared_ptr<MovieDefinition>>;
     shared_ptr<MenuDefinition> menuDefinition;
     unsigned int selectedInt;
 
@@ -43,6 +46,7 @@ private:
 
     bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
+    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
     MenuModel() {
 
     }
@@ -75,12 +79,14 @@ public:
  */
 class MenuView : public UIView, public Subject {
 private:
+    MoviePlayer *moviePlayer;
     MenuModel *menuModel;
     SDLKey key_press;
 public:
     ~MenuView() override {
 
     }
+
 
     void setFontManager(FontManager *fontManager);
 

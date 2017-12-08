@@ -93,7 +93,7 @@ class UIView : public Listener {
 protected:
     FontManager *fontManager;
 public:
-    void setFontManager(FontManager *fm);
+    virtual void setFontManager(FontManager *fm);
 
     UIView();
 

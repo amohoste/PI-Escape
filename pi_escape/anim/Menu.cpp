@@ -65,7 +65,7 @@ void MenuModel::setActivated(bool i) {
 
 void MenuModel::reset_start_times() {
 
-    std::function<void (MenuState ms)> f = [this](MenuState ms) {
+    std::function<void(MenuState ms)> f = [this](MenuState ms) {
         for (Entry *entry: this->menuDefinition.get()->entries) {
             for (EntryAnimation *ea : entry->animations->at(ms)) {
                 ea->setStartTime(getTime());
@@ -79,6 +79,10 @@ void MenuModel::reset_start_times() {
     f(DEFAULT);
 }
 
+vector<shared_ptr<MovieDefinition>> *MenuModel::getMovieDefinitions() {
+    return movieDefinitions;
+}
+
 
 void MenuView::draw() {
     uint32_t start = SDL_GetTicks();
@@ -88,7 +92,7 @@ void MenuView::draw() {
 
         //kleur instellen voor alles
         glmc_assign_vec3(fontManager->graphics->background_color, *menuModel->getMenuDefinition().get()->color);
-		
+
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = 1;
         if (!entries.empty()) {
@@ -128,6 +132,10 @@ void MenuView::draw() {
 
 void MenuView::invalidated() {
     while (!menuModel->isDone() || menuModel->isActivated()) {
+        while (!menuModel->getMovieDefinitions()->empty()) {
+            moviePlayer->play(menuModel->getMovieDefinitions()->back());
+            menuModel->getMovieDefinitions()->pop_back();
+        }
         this->draw();
     }
 }
@@ -246,6 +254,7 @@ void LevelObserver::notified() {
                 float time_ms_per_update = (float) diff_time_ms / (float) update_count;
                 float fps = 1.0f / time_ms_per_update * 1000.0f;
                 game->engine.context.fps = fps;
+                cout << fps << endl;
                 last_print_time_ms = cur_time_ms;
                 update_count = 0;
             }
@@ -258,7 +267,6 @@ void LevelObserver::notified() {
         game_free(game);
         free(game);
     }
-
     menuModel->setDone(false);
 }
 
@@ -305,8 +313,11 @@ SDLKey MenuView::getKey_press() {
 
 void MenuView::setFontManager(FontManager *fontManager) {
     UIView::setFontManager(fontManager);
+
     LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
     menuModel->registerObserver(LEVEL, levelObserver);
+
+    moviePlayer = new MoviePlayer(fontManager);
 }
 
 void MenuController::setMenuModel(MenuModel *menuModel) {

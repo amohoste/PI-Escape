@@ -30,7 +30,14 @@ EntryBuilder &addMainMenuAnimation(EntryBuilder &entryBuilder) {
 }
 
 void start_game(MenuModel *m) {
-    load_levels(8, 11, m);
+
+    //filmpjes inladen die gespeeld moeten worden na actie
+    GameUICreator *gc = new GameUICreator;
+    m->getMovieDefinitions()->push_back(gc->createCredits());
+    m->getMovieDefinitions()->push_back(gc->createStarWarsCredits());
+
+    load_levels(1, 2, m);
+    delete gc;
 }
 
 void tutorial(MenuModel *m) {
@@ -46,20 +53,18 @@ void load_levels(int start, int stop, MenuModel *m) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
-//    m->playAnimations();
     m->setLevels(&level_names);
 }
 
 void endMenu(MenuModel *m) {
-    m->setDone(1);
+    m->setDone(true);
 }
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
     t_vec3 background_color = {0.0f, 0.0f, 0.3f};
 
-	builder.setBackGroundColor(background_color);
-
+    builder.setBackGroundColor(background_color);
 
 
     t_vec4 menuEntryColor = {0.0f, 1.0f, 0.0f, 1.0f};
@@ -99,7 +104,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-	t_vec3 background_color = { 0.0f, 0.0f, 0.3f };
+    t_vec3 background_color = {0.0f, 0.0f, 0.3f};
 
     MovieBuilder builder;
     builder.setDuration(10000l)
@@ -158,7 +163,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
 
     MovieBuilder builder;
     builder.setDuration(8000l)
-			.setBackgroundColor(background);
+            .setBackgroundColor(background);
 
     builder.addText("$  @ #")
             .setPos_percent(50.0f, 75.0f)
@@ -174,7 +179,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
             .setColor(col1)
             .setStartTime(4000l)
             .setEndTime(7000l)
-		    .addAnimation(new SineAnimation(new MoveAnimation(500, 500)), 2000l, 3000l)
+            .addAnimation(new SineAnimation(new MoveAnimation(500, 500)), 2000l, 3000l)
             .endText();
 
     builder.addText("oops...")
@@ -183,131 +188,130 @@ std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
             .setColor(col1)
             .setStartTime(3000l)
             .setEndTime(7000l)
-		    .addAnimation(new ReverseAnimation(new FadeInAnimation()), 2500l, 3000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 2500l, 3000l)
             .endText();
 
-	t_vec4 col2 = { 0.6f, 0.6f, 0.6f, 1.0f };
-	builder.addText("_")
-		.setPos_percent(150.0f, 50.0f)
-		.setFont("falcon")
-		.setColor(col2)
-		.setStartTime(0000l)
-		.setEndTime(4000l)
-		.addAnimation(new SineAnimation(new MoveAnimation(-3000, 100)), 0000l, 3000l)
-		.endText();
+    t_vec4 col2 = {0.6f, 0.6f, 0.6f, 1.0f};
+    builder.addText("_")
+            .setPos_percent(150.0f, 50.0f)
+            .setFont("falcon")
+            .setColor(col2)
+            .setStartTime(0000l)
+            .setEndTime(4000l)
+            .addAnimation(new SineAnimation(new MoveAnimation(-3000, 100)), 0000l, 3000l)
+            .endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
-	t_vec4 col1 = { 1.0f, 0.0f, 0.0f, 1.0f };
-	t_vec3 background = { 0.0f, 0.0f, 0.3f };
+    t_vec4 col1 = {1.0f, 0.0f, 0.0f, 1.0f};
+    t_vec3 background = {0.0f, 0.0f, 0.3f};
 
-	MovieBuilder builder;
-	builder.setDuration(12000l)
-		.setBackgroundColor(background);
+    MovieBuilder builder;
+    builder.setDuration(12000l)
+            .setBackgroundColor(background);
 
-	builder.addText("Pi Escape 2")
-		.setPos_percent(50.0f, 80.0f)
-		.setFont("atari")
-		.setColor(col1)
-		.setStartTime(0000l)
-		.setEndTime(10000l)
-		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+    builder.addText("Pi Escape 2")
+            .setPos_percent(50.0f, 80.0f)
+            .setFont("atari")
+            .setColor(col1)
+            .setStartTime(0000l)
+            .setEndTime(10000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 
-		.addAnimation(new RepeatAnimation(
-			new GlyphIteratingAnimation(
-				new InOutAnimation(new SineAnimation(new MoveAnimation(0, 40))),
-				1.5f),
-			1, true, true, false
-		), 3000l, 4000l)
-		.addAnimation(new RepeatAnimation(
-			new GlyphIteratingAnimation(
-				new RainbowColorAnimation(), 3.0f), 9),
-			0000l, 9000l)
-		.addAnimation(new GlyphIteratingAnimation(
-			new SineAnimation(new FloatInAnimation(0, 1000)), 1.0f),
-			0000l, 3000l)
-		.endText();
+            .addAnimation(new RepeatAnimation(
+                    new GlyphIteratingAnimation(
+                            new InOutAnimation(new SineAnimation(new MoveAnimation(0, 40))),
+                            1.5f),
+                    1, true, true, false
+            ), 3000l, 4000l)
+            .addAnimation(new RepeatAnimation(
+                    new GlyphIteratingAnimation(
+                            new RainbowColorAnimation(), 3.0f), 9),
+                          0000l, 9000l)
+            .addAnimation(new GlyphIteratingAnimation(
+                    new SineAnimation(new FloatInAnimation(0, 1000)), 1.0f),
+                          0000l, 3000l)
+            .endText();
 
-	builder.addText("by")
-		.setPos_percent(50.0f, 65.0f)
-		.setFont("arcade")
-		.setColor(col1)
-		.setStartTime(0000l)
-		.setEndTime(10000l)
-		.addAnimation(
-			new SineAnimation(new FloatInAnimation(1000, 0)),
-			0000l, 3000l)
-		.addAnimation(new RepeatAnimation(
-				new RainbowColorAnimation(), 3),
-			0000l, 9000l)
+    builder.addText("by")
+            .setPos_percent(50.0f, 65.0f)
+            .setFont("arcade")
+            .setColor(col1)
+            .setStartTime(0000l)
+            .setEndTime(10000l)
+            .addAnimation(
+                    new SineAnimation(new FloatInAnimation(1000, 0)),
+                    0000l, 3000l)
+            .addAnimation(new RepeatAnimation(
+                    new RainbowColorAnimation(), 3),
+                          0000l, 9000l)
 
-		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
-		.endText();
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+            .endText();
 
-	builder.addText("Amory Hoste")
-		.setPos_percent(50.0f, 55.0f)
-		.setFont("arcade")
-		.setColor(col1)
-		.setStartTime(0000l)
-		.setEndTime(10000l)
-		.addAnimation(
-			new SineAnimation(new FloatInAnimation(0, 1000)),
-			0000l, 3000l)
-		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
-		.endText();
+    builder.addText("Amory Hoste")
+            .setPos_percent(50.0f, 55.0f)
+            .setFont("arcade")
+            .setColor(col1)
+            .setStartTime(0000l)
+            .setEndTime(10000l)
+            .addAnimation(
+                    new SineAnimation(new FloatInAnimation(0, 1000)),
+                    0000l, 3000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+            .endText();
 
-	builder.addText("Arne Goeteyn")
-		.setPos_percent(50.0f, 45.0f)
-		.setFont("arcade")
-		.setColor(col1)
-		.setStartTime(0000l)
-		.setEndTime(10000l)
-		.addAnimation(
-			new SineAnimation(new FloatInAnimation(0, 1000)),
-			0000l, 3000l)
-		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
-		.endText();
+    builder.addText("Arne Goeteyn")
+            .setPos_percent(50.0f, 45.0f)
+            .setFont("arcade")
+            .setColor(col1)
+            .setStartTime(0000l)
+            .setEndTime(10000l)
+            .addAnimation(
+                    new SineAnimation(new FloatInAnimation(0, 1000)),
+                    0000l, 3000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+            .endText();
 
-	builder.addText("Tom Lauwaerts")
-		.setPos_percent(50.0f, 35.0f)
-		.setFont("arcade")
-		.setColor(col1)
-		.setStartTime(0000l)
-		.setEndTime(10000l)
-		.addAnimation(
-			new SineAnimation(new FloatInAnimation(0, 1000)),
-			0000l, 3000l)
-		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
-		.endText();
+    builder.addText("Tom Lauwaerts")
+            .setPos_percent(50.0f, 35.0f)
+            .setFont("arcade")
+            .setColor(col1)
+            .setStartTime(0000l)
+            .setEndTime(10000l)
+            .addAnimation(
+                    new SineAnimation(new FloatInAnimation(0, 1000)),
+                    0000l, 3000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+            .endText();
 
-	builder.addText("Jorg Wieme")
-		.setPos_percent(50.0f, 25.0f)
-		.setFont("arcade")
-		.setColor(col1)
-		.setStartTime(0000l)
-		.setEndTime(10000l)
-		.addAnimation(
-			new SineAnimation(new FloatInAnimation(0, 1000)),
-			0000l, 3000l)
-		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
-		.endText();
+    builder.addText("Jorg Wieme")
+            .setPos_percent(50.0f, 25.0f)
+            .setFont("arcade")
+            .setColor(col1)
+            .setStartTime(0000l)
+            .setEndTime(10000l)
+            .addAnimation(
+                    new SineAnimation(new FloatInAnimation(0, 1000)),
+                    0000l, 3000l)
+            .addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+            .endText();
 
-	return shared_ptr<MovieDefinition>(builder.build());
+    return shared_ptr<MovieDefinition>(builder.build());
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
     MovieBuilder builder;
 
-	t_vec3 background = { 0.0f, 0.0f, 0.3f };
+    t_vec3 background = {0.0f, 0.0f, 0.3f};
 
     builder.setDuration(10000l)
-		   .setBackgroundColor(background);
+            .setBackgroundColor(background);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
-	
 
 
     builder.addText("You have reached the end!")
