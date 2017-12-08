@@ -57,6 +57,8 @@ void MovieGLView::draw() {
             }
         }
 
+
+
         //tekenen
         fontManager->begin_draw();
         for (vector<GlyphDrawCommand> vec : commands) {
@@ -70,6 +72,17 @@ void MovieGLView::draw() {
 
         //moet er nog verder getekend worden?
         model->setDone(model->getTime() >= model->getMovieDefinition().get()->duration);
+
+         //events registreren
+        //input als laatste anders kan de setDone overschreven worden
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_KEYDOWN:
+                    key_press = event.key.keysym.sym;
+                    notify(INPUT);
+            }
+        }
     }
 }
 
@@ -97,16 +110,24 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
     return command;
 }
 
+SDLKey MovieGLView::getKeyPress() {
+    return this->key_press;
+}
+
 
 void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     clear(); //oude componeten leegmaken
     mm = new MovieModel;
     mv = new MovieGLView;
-//    mc = new MovieController;
+    mc = new MovieController;
 
     mm->addListener(mv);
     mv->setMovieModel(mm);
     mv->setFontManager(fontManager);
+
+    mc->setMenuView(mv);
+    mc->setMenuModel(mm);
+    mv->registerObserver(INPUT, mc);
 
     mm->setMovieDefinition(std::move(movieDefinition));
 }
@@ -122,3 +143,27 @@ MoviePlayer::~MoviePlayer() {
 }
 
 
+void MovieController::onKey(SDLKey key) {
+    switch (key) {
+        case SDLK_ESCAPE:
+            this->movieModel->setDone(true);
+            break;
+        case SDLK_RETURN:
+            this->movieModel->setDone(true);
+            break;
+        default:
+            break;
+    }
+}
+
+void MovieController::notified() {
+    onKey(movieView->getKeyPress());
+}
+
+void MovieController::setMenuModel(MovieModel *movieModel) {
+    this->movieModel = movieModel;
+}
+
+void MovieController::setMenuView(MovieGLView *movieView) {
+    this->movieView = movieView;
+}
