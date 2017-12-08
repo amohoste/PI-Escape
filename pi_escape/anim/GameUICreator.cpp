@@ -42,7 +42,7 @@ void tutorial(MenuModel *m) {
  */
 void load_levels(int start, int stop, MenuModel *m) {
     vector<Level *> level_names;
-    for (int i = stop -1 ; i >= start; i--) {
+    for (int i = stop - 1; i >= start; i--) {
         Level *x = load_level(i);
         level_names.push_back(x);
     }
@@ -56,6 +56,13 @@ void endMenu(MenuModel *m) {
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
+    t_vec3 background_color = {0.0f, 0.0f, 0.3f};
+
+	builder.setBackGroundColor(background_color);
+
+
+
+    t_vec4 menuEntryColor = {0.0f, 1.0f, 0.0f, 1.0f};
 
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
@@ -64,6 +71,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setMnemonic('T')
             .setFontName("arcade")
             .setFunction(tutorial)
+            .setColor(menuEntryColor)
             .buildEntryWithAction("start tutorial");
 
 
@@ -74,6 +82,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setMnemonic('G')
             .setFontName("arcade")
             .setFunction(start_game)
+            .setColor(menuEntryColor)
             .buildEntryWithAction("start game");
 
     addMainMenuAnimation(builder.getEntryBuilder())
@@ -83,14 +92,18 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
             .setMnemonic('E')
             .setFontName("arcade")
             .setFunction(endMenu)
+            .setColor(menuEntryColor)
             .buildEntryWithAction("quit");
 
     return std::shared_ptr<MenuDefinition>(builder.build());
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
+	t_vec3 background_color = { 0.0f, 0.0f, 0.3f };
+
     MovieBuilder builder;
-    builder.setDuration(10000l);
+    builder.setDuration(10000l)
+            .setBackgroundColor(background_color);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
@@ -140,13 +153,16 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
-    t_vec4 col1 = {1.0f, 0.0f, 0.0f, 1.0f};
+    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+	t_vec4 col2 = { 1.0f, 0.0f, 0.0f, 1.0f };
+    t_vec3 background = {0.0f, 0.0f, 0.0f};
 
     MovieBuilder builder;
-    builder.setDuration(15000l);
+    builder.setDuration(15000l)
+			.setBackgroundColor(background);
 
 
-	builder.addText("$  @ #")
+    builder.addText("$  @ #")
             .setPos_percent(50.0f, 75.0f)
             .setFont("starwars")
             .setColor(col1)
@@ -154,21 +170,23 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
             .setEndTime(4000l)
             .endText();
 
-	builder.addText("$  @ #")
-		.setPos_percent(50.0f, 75.0f)
-		.setFont("crossedwars")
-		.setColor(col1)
-		.setStartTime(4000l)
-		.setEndTime(6000l)
-		.endText();
+    builder.addText("$  @ #")
+            .setPos_percent(50.0f, 75.0f)
+            .setFont("crossedwars")
+            .setColor(col1)
+            .setStartTime(4000l)
+            .setEndTime(6000l)
+		    .addAnimation(new SineAnimation(new MoveAnimation(500, 500)), 1000l, 2000l)
+            .endText();
 
-	builder.addText("oops...")
-		.setPos_percent(50.0f, 50.0f)
-		.setFont("starwars")
-		.setColor(col1)
-		.setStartTime(3000l)
-		.setEndTime(5000l)
-		.endText();
+    builder.addText("oops...")
+            .setPos_percent(50.0f, 50.0f)
+            .setFont("starwars")
+            .setColor(col1)
+            .setStartTime(3000l)
+            .setEndTime(5000l)
+		    .addAnimation(new ReverseAnimation(new FadeInAnimation()), 1500l, 2000l)
+            .endText();
 
 	builder.addText("Pi Escape 2")
 		.setPos_percent(50.0f, 80.0f)
@@ -195,60 +213,66 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 
 	builder.addText("by")
 		.setPos_percent(50.0f, 65.0f)
-		.setFont("starwars")
-		.setColor(col1)
+		.setFont("arcade")
+		.setColor(col2)
 		.setStartTime(6000l)
 		.setEndTime(25000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(1000, 0)),
 			0000l, 3000l)
 		.addAnimation(new RepeatAnimation(
-				new RainbowColorAnimation(), 3.0f),
+				new RainbowColorAnimation(), 3),
 			0000l, 9000l)
+
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 		.endText();
 
 	builder.addText("Amory Hoste")
 		.setPos_percent(50.0f, 55.0f)
-		.setFont("starwars")
-		.setColor(col1)
+		.setFont("arcade")
+		.setColor(col2)
 		.setStartTime(6000l)
 		.setEndTime(25000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 		.endText();
 
 	builder.addText("Arne Goeteyn")
 		.setPos_percent(50.0f, 45.0f)
-		.setFont("starwars")
-		.setColor(col1)
+		.setFont("arcade")
+		.setColor(col2)
 		.setStartTime(6000l)
 		.setEndTime(25000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 		.endText();
 
 	builder.addText("Tom Lauwaerts")
 		.setPos_percent(50.0f, 35.0f)
-		.setFont("starwars")
-		.setColor(col1)
+		.setFont("arcade")
+		.setColor(col2)
 		.setStartTime(6000l)
 		.setEndTime(25000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 		.endText();
 
 	builder.addText("Jorg Wieme")
 		.setPos_percent(50.0f, 25.0f)
-		.setFont("starwars")
-		.setColor(col1)
+		.setFont("arcade")
+		.setColor(col2)
 		.setStartTime(6000l)
 		.setEndTime(25000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 		.endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
@@ -257,10 +281,15 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
     MovieBuilder builder;
 
-    builder.setDuration(10000l);
+	t_vec3 background = { 0.0f, 0.0f, 0.3f };
+
+    builder.setDuration(10000l)
+		   .setBackgroundColor(background);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
+	
+
 
     builder.addText("You have reached the end!")
             .setFont("arcade")

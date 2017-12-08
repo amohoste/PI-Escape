@@ -87,8 +87,6 @@ public:
     virtual ~UIController();
 
     virtual void onKey(SDLKey key) = 0;
-
-    virtual void onExitKey() = 0;
 };
 
 class UIView : public Listener {

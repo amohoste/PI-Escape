@@ -86,6 +86,9 @@ void MenuView::draw() {
 
         const vector<Entry *> &entries = menuModel->getMenuDefinition().get()->entries;
 
+        //kleur instellen voor alles
+        glmc_assign_vec3(fontManager->graphics->background_color, *menuModel->getMenuDefinition().get()->color);
+		
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         int i = 1;
         if (!entries.empty()) {
@@ -106,7 +109,7 @@ void MenuView::draw() {
         }
 
         //tekenen
-        graphics_begin_draw(fontManager->graphics);
+        fontManager->begin_draw();
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
@@ -114,7 +117,7 @@ void MenuView::draw() {
                 i++;
             }
         }
-        graphics_end_draw(fontManager->graphics);
+        fontManager->end_draw();
 
         menuModel->setTime(SDL_GetTicks());
     }
@@ -135,6 +138,7 @@ MenuView::drawEntry(Entry *entry, int x_offset, int y_offset) {
 
     // Font, kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(entry->font); // indien niet gebruikt laatst ingelezen font als font
+    m->setColor(*entry->color);
     m->setHpos(TEXT_CENTER); // Default TEXT_LEFT
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
@@ -196,32 +200,7 @@ void MenuController::onKey(SDLKey key) {
             break;
     }
 }
-//
-//void MenuController::setMenuModel(MenuModel *model) {
-//    this->model = model;
-//}
-//
-//MenuController::~MenuController() {
-//
-//}
-//
-//void MenuController::onExitKey() {
-//
-//}
-//
-///*
-// * berekenen wat de positie moet zijn
-// */
-//float getPosition(uint64_t time, EntryAnimation *ea) {
-//    float position = time / (float) ea->getDuration();
-//    if (ea->isRepeat()) {
-//        return fmod(position, 1.0f);
-//    } else {
-//        return position >= 1.0f ? 1.0f : position;
-//    }
-//}
-//
-//
+
 /**
  * Starten van de game met de levels die aanwezig zijn
  */
