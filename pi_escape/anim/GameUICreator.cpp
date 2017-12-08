@@ -152,15 +152,13 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
     return std::shared_ptr<MovieDefinition>(builder.build());
 }
 
-std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
+std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
-	t_vec4 col2 = { 1.0f, 0.0f, 0.0f, 1.0f };
     t_vec3 background = {0.0f, 0.0f, 0.0f};
 
     MovieBuilder builder;
-    builder.setDuration(15000l)
+    builder.setDuration(7000l)
 			.setBackgroundColor(background);
-
 
     builder.addText("$  @ #")
             .setPos_percent(50.0f, 75.0f)
@@ -188,12 +186,23 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 		    .addAnimation(new ReverseAnimation(new FadeInAnimation()), 1500l, 2000l)
             .endText();
 
+    return shared_ptr<MovieDefinition>(builder.build());
+}
+
+std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
+	t_vec4 col1 = { 1.0f, 0.0f, 0.0f, 1.0f };
+	t_vec3 background = { 0.0f, 0.0f, 0.3f };
+
+	MovieBuilder builder;
+	builder.setDuration(20000l)
+		.setBackgroundColor(background);
+
 	builder.addText("Pi Escape 2")
 		.setPos_percent(50.0f, 80.0f)
 		.setFont("atari")
 		.setColor(col1)
-		.setStartTime(6000l)
-		.setEndTime(25000l)
+		.setStartTime(0000l)
+		.setEndTime(19000l)
 		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 
 		.addAnimation(new RepeatAnimation(
@@ -214,9 +223,9 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 	builder.addText("by")
 		.setPos_percent(50.0f, 65.0f)
 		.setFont("arcade")
-		.setColor(col2)
-		.setStartTime(6000l)
-		.setEndTime(25000l)
+		.setColor(col1)
+		.setStartTime(0000l)
+		.setEndTime(19000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(1000, 0)),
 			0000l, 3000l)
@@ -230,9 +239,9 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 	builder.addText("Amory Hoste")
 		.setPos_percent(50.0f, 55.0f)
 		.setFont("arcade")
-		.setColor(col2)
-		.setStartTime(6000l)
-		.setEndTime(25000l)
+		.setColor(col1)
+		.setStartTime(0000l)
+		.setEndTime(19000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
@@ -242,9 +251,9 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 	builder.addText("Arne Goeteyn")
 		.setPos_percent(50.0f, 45.0f)
 		.setFont("arcade")
-		.setColor(col2)
-		.setStartTime(6000l)
-		.setEndTime(25000l)
+		.setColor(col1)
+		.setStartTime(0000l)
+		.setEndTime(19000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
@@ -254,9 +263,9 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 	builder.addText("Tom Lauwaerts")
 		.setPos_percent(50.0f, 35.0f)
 		.setFont("arcade")
-		.setColor(col2)
-		.setStartTime(6000l)
-		.setEndTime(25000l)
+		.setColor(col1)
+		.setStartTime(0000l)
+		.setEndTime(19000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
@@ -266,16 +275,16 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 	builder.addText("Jorg Wieme")
 		.setPos_percent(50.0f, 25.0f)
 		.setFont("arcade")
-		.setColor(col2)
-		.setStartTime(6000l)
-		.setEndTime(25000l)
+		.setColor(col1)
+		.setStartTime(0000l)
+		.setEndTime(19000l)
 		.addAnimation(
 			new SineAnimation(new FloatInAnimation(0, 1000)),
 			0000l, 3000l)
 		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 		.endText();
 
-    return shared_ptr<MovieDefinition>(builder.build());
+	return shared_ptr<MovieDefinition>(builder.build());
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
