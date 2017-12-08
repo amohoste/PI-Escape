@@ -45,6 +45,8 @@ MovieBuilder &MovieBuilder::addAnimation(Animation *animation, long start, long 
 }
 
 MovieBuilder &MovieBuilder::endText() {
+    t_vec4 *color = new t_vec4[4];
+    memcpy(color, this->color, sizeof(t_vec4));
     this->movie_animations.push_back(
             new MovieAnimation(text, start, end, font, color, x_perc, y_perc, end - start, animations));
     animations.clear();
@@ -68,7 +70,7 @@ MovieBuilder &MovieBuilder::setBackgroundColor(t_vec3 color) {
 }
 
 MovieAnimation::MovieAnimation(const char *text, const long start, const long end, const char *font,
-                               const t_vec4 &color, const float x,
+                               t_vec4 *color, const float x,
                                const float y, const long duration, const vector<AnimationDuration *> animations) : text(
         text),
                                                                                                                    start(start),

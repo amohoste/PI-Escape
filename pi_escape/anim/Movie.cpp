@@ -8,7 +8,6 @@ using namespace std;
 void MovieModel::setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition) {
     time = 0;
     this->movieDefinition = std::move(movieDefinition);
-    auto a = this->movieDefinition.get();
     setDone(false);
     fireInvalidationEvent();
 }
@@ -50,9 +49,7 @@ void MovieGLView::draw() {
     if (model->getMovieDefinition() != nullptr && !model->getMovieDefinition().get()->movie_animations.empty()) {
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
 
-        MovieDefinition *pDefinition = model->getMovieDefinition().get();
-
-        glmc_assign_vec3(fontManager->graphics->background_color, *pDefinition->background_color);
+        glmc_assign_vec3(fontManager->graphics->background_color, *model->getMovieDefinition().get()->background_color);
 
         for (MovieAnimation *mv : model->getMovieDefinition().get()->movie_animations) {
             if (model->getTime() >= mv->start && mv->end > model->getTime()) {
@@ -85,7 +82,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
 
     // kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(mv->font);
-//    m->setColor(mv->color); //crasht todo
+    m->setColor(*mv->color); //crasht todo
     m->setHpos(TEXT_CENTER); // Default TEXT_LEFT
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 

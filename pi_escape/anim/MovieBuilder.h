@@ -66,12 +66,12 @@ public:
     const long start;
     const long end;
     const char *font;
-    const t_vec4 &color;
+    t_vec4 * const color;
     const float x;
     const float y;
     const long duration;
     const std::vector<AnimationDuration *> animations;
-    MovieAnimation(const char *text, const long start, const long end, const char *font, const t_vec4 &color,
+    MovieAnimation(const char *text, const long start, const long end, const char *font, t_vec4 *color,
                    const float x, const float y, const long duration, const std::vector<AnimationDuration *> animations);
 
 };
