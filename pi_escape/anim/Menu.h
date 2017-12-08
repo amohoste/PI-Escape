@@ -63,11 +63,6 @@ public:
 
     void setLevels(vector<Level *> *levels);
 
-//    void playAnimations();
-//
-//    bool isActivatedMenu();
-//
-//    void setActivatedMenu(bool i);
     bool isActivated();
 
     void setActivated(bool i);
@@ -82,7 +77,6 @@ class MenuView : public UIView, public Subject {
 private:
     MenuModel *menuModel;
     SDLKey key_press;
-//    bool animationsFinished;
 public:
     ~MenuView() override {
 
@@ -92,6 +86,7 @@ public:
 
     void draw() override;
 
+    //todo private methoden
     vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
 
     void invalidated() override;

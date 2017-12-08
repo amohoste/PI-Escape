@@ -40,9 +40,11 @@ public:
 
 };
 
-class MovieGLView : public UIView {
+class MovieGLView : public UIView , public Subject{
 private:
     MovieModel *model;
+
+    SDLKey key_press;
 
     vector<GlyphDrawCommand> glyphFromMovieAnimation(MovieAnimation *mv);
 
@@ -52,9 +54,22 @@ public:
     void invalidated() override;
 
     void draw() override;
+
+    SDLKey getKeyPress();
 };
 
 class MovieController : public UIController {
+private:
+    MovieModel *movieModel;
+    MovieGLView *movieView;
+public:
+    void onKey(SDLKey key) override;
+
+    void notified() override;
+
+    void setMenuModel(MovieModel *movieModel);
+
+    void setMenuView(MovieGLView *movieView);
 };
 
 
