@@ -147,11 +147,11 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
-    t_vec3 background = {0.3f, 0.2f, 0.0f};
+	t_vec4 col2 = { 1.0f, 0.0f, 0.0f, 1.0f };
+    t_vec3 background = {0.0f, 0.0f, 0.0f};
 
     MovieBuilder builder;
-    builder.setDuration(10000)
-            .setColor(col1)
+    builder.setDuration(15000l)
 			.setBackgroundColor(background);
 
 
@@ -169,6 +169,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
             .setColor(col1)
             .setStartTime(4000l)
             .setEndTime(6000l)
+		    .addAnimation(new SineAnimation(new MoveAnimation(500, 500)), 1000l, 2000l)
             .endText();
 
     builder.addText("oops...")
@@ -177,55 +178,94 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
             .setColor(col1)
             .setStartTime(3000l)
             .setEndTime(5000l)
+		    .addAnimation(new ReverseAnimation(new FadeInAnimation()), 1500l, 2000l)
             .endText();
 
-    builder.addText("Pi Escape 2")
-            .setPos_percent(50.0f, 80.0f)
-            .setFont("atari")
-            .setColor(col1)
-            .setStartTime(6000l)
-            .setEndTime(10000l)
-            .endText();
+	builder.addText("Pi Escape 2")
+		.setPos_percent(50.0f, 80.0f)
+		.setFont("atari")
+		.setColor(col1)
+		.setStartTime(6000l)
+		.setEndTime(25000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
 
-    builder.addText("by")
-            .setPos_percent(50.0f, 65.0f)
-            .setFont("starwars")
-            .setColor(col1)
-            .setStartTime(6000l)
-            .setEndTime(10000l)
-            .endText();
+		.addAnimation(new RepeatAnimation(
+			new GlyphIteratingAnimation(
+				new InOutAnimation(new SineAnimation(new MoveAnimation(0, 40))),
+				1.5f),
+			1, true, true, false
+		), 3000l, 4000l)
+		.addAnimation(new RepeatAnimation(
+			new GlyphIteratingAnimation(
+				new RainbowColorAnimation(), 3.0f), 9),
+			0000l, 9000l)
+		.addAnimation(new GlyphIteratingAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)), 1.0f),
+			0000l, 3000l)
+		.endText();
 
-    builder.addText("Amory Hoste")
-            .setPos_percent(50.0f, 55.0f)
-            .setFont("starwars")
-            .setColor(col1)
-            .setStartTime(6000l)
-            .setEndTime(10000l)
-            .endText();
+	builder.addText("by")
+		.setPos_percent(50.0f, 65.0f)
+		.setFont("arcade")
+		.setColor(col2)
+		.setStartTime(6000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(1000, 0)),
+			0000l, 3000l)
+		.addAnimation(new RepeatAnimation(
+			new RainbowColorAnimation(), 3.0f),
+			0000l, 9000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+		.endText();
 
-    builder.addText("Arne Goeteyn")
-            .setPos_percent(50.0f, 45.0f)
-            .setFont("starwars")
-            .setColor(col1)
-            .setStartTime(6000l)
-            .setEndTime(10000l)
-            .endText();
+	builder.addText("Amory Hoste")
+		.setPos_percent(50.0f, 55.0f)
+		.setFont("arcade")
+		.setColor(col2)
+		.setStartTime(6000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+		.endText();
 
-    builder.addText("Tom Lauwaerts")
-            .setPos_percent(50.0f, 35.0f)
-            .setFont("starwars")
-            .setColor(col1)
-            .setStartTime(6000l)
-            .setEndTime(10000l)
-            .endText();
+	builder.addText("Arne Goeteyn")
+		.setPos_percent(50.0f, 45.0f)
+		.setFont("arcade")
+		.setColor(col2)
+		.setStartTime(6000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+		.endText();
 
-    builder.addText("Jorg Wieme")
-            .setPos_percent(50.0f, 25.0f)
-            .setFont("starwars")
-            .setColor(col1)
-            .setStartTime(6000l)
-            .setEndTime(10000l)
-            .endText();
+	builder.addText("Tom Lauwaerts")
+		.setPos_percent(50.0f, 35.0f)
+		.setFont("arcade")
+		.setColor(col2)
+		.setStartTime(6000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+		.endText();
+
+	builder.addText("Jorg Wieme")
+		.setPos_percent(50.0f, 25.0f)
+		.setFont("arcade")
+		.setColor(col2)
+		.setStartTime(6000l)
+		.setEndTime(25000l)
+		.addAnimation(
+			new SineAnimation(new FloatInAnimation(0, 1000)),
+			0000l, 3000l)
+		.addAnimation(new ReverseAnimation(new FadeInAnimation()), 9000l, 1000l)
+		.endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
@@ -233,10 +273,15 @@ std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
 std::shared_ptr<MovieDefinition> GameUICreator::createOutro() {
     MovieBuilder builder;
 
-    builder.setDuration(10000l);
+	t_vec3 background = { 0.0f, 0.0f, 0.3f };
+
+    builder.setDuration(10000l)
+		   .setBackgroundColor(background);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
+	
+
 
     builder.addText("You have reached the end!")
             .setFont("arcade")
