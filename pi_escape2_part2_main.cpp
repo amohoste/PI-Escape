@@ -44,6 +44,7 @@ int main() {
     m.loadFont("atari", "atari72.png", "atari72.fnt");
     m.loadFont("crossedwars", "starwars_crossed72.png", "starwars_crossed72.fnt");
     m.loadFont("starwars", "starwars72.png", "starwars72.fnt");
+	m.loadFont("falcon", "falcon.png", "falcon.fnt");
 
     MoviePlayer *mp = new MoviePlayer(&m);
     mp->play(gc->createIntro());

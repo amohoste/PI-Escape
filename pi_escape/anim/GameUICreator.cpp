@@ -157,7 +157,7 @@ std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
     t_vec3 background = {0.0f, 0.0f, 0.0f};
 
     MovieBuilder builder;
-    builder.setDuration(7000l)
+    builder.setDuration(8000l)
 			.setBackgroundColor(background);
 
     builder.addText("$  @ #")
@@ -173,8 +173,8 @@ std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
             .setFont("crossedwars")
             .setColor(col1)
             .setStartTime(4000l)
-            .setEndTime(6000l)
-		    .addAnimation(new SineAnimation(new MoveAnimation(500, 500)), 1000l, 2000l)
+            .setEndTime(7000l)
+		    .addAnimation(new SineAnimation(new MoveAnimation(500, 500)), 2000l, 3000l)
             .endText();
 
     builder.addText("oops...")
@@ -182,9 +182,19 @@ std::shared_ptr<MovieDefinition> GameUICreator::createStarWarsCredits() {
             .setFont("starwars")
             .setColor(col1)
             .setStartTime(3000l)
-            .setEndTime(5000l)
-		    .addAnimation(new ReverseAnimation(new FadeInAnimation()), 1500l, 2000l)
+            .setEndTime(7000l)
+		    .addAnimation(new ReverseAnimation(new FadeInAnimation()), 2500l, 3000l)
             .endText();
+
+	t_vec4 col2 = { 0.6f, 0.6f, 0.6f, 1.0f };
+	builder.addText("_")
+		.setPos_percent(150.0f, 50.0f)
+		.setFont("falcon")
+		.setColor(col2)
+		.setStartTime(0000l)
+		.setEndTime(4000l)
+		.addAnimation(new SineAnimation(new MoveAnimation(-3000, 100)), 0000l, 3000l)
+		.endText();
 
     return shared_ptr<MovieDefinition>(builder.build());
 }
