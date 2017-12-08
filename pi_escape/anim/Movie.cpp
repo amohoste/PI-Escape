@@ -17,8 +17,7 @@ shared_ptr<MovieDefinition> MovieModel::getMovieDefinition() {
 }
 
 MovieModel::~MovieModel() {
-    //todo
-
+    this->movieDefinition.reset();
 }
 
 /**
@@ -170,4 +169,12 @@ void MovieController::setMenuModel(MovieModel *movieModel) {
 
 void MovieController::setMenuView(MovieGLView *movieView) {
     this->movieView = movieView;
+}
+
+MovieDefinition::~MovieDefinition() {
+    delete[] background_color;
+
+    for(MovieAnimation* ma : movie_animations){
+        delete ma;
+    }
 }

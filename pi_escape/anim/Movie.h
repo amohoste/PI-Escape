@@ -19,9 +19,11 @@ public:
     MovieDefinition(vector<MovieAnimation *> movie_animations, long duration, t_vec3 *color) : movie_animations(
             std::move(movie_animations)), duration(duration), background_color(color) {};
 
+    ~MovieDefinition();
+
     const vector<MovieAnimation *> movie_animations;
     const long duration; //hoelang duurt de movie
-    t_vec3 *const background_color; //een constante poointer naar een constant object
+    t_vec3 *const background_color;
 };
 
 
@@ -50,7 +52,7 @@ private:
     vector<GlyphDrawCommand> glyphFromMovieAnimation(MovieAnimation *mv);
 
 public:
-    ~MovieGLView();
+    ~MovieGLView() override;
 
     void setMovieModel(MovieModel *movieModel);
 
