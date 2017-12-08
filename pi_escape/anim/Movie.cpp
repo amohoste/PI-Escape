@@ -82,7 +82,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
 
     // kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(mv->font);
-    m->setColor(*mv->color); //crasht todo
+    m->setColor(*mv->color); //crasht
     m->setHpos(TEXT_CENTER); // Default TEXT_LEFT
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 

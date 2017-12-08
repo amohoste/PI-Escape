@@ -24,9 +24,6 @@ void MenuBuilder::setBackGroundColor(t_vec3 color) {
 }
 
 MenuBuilder::MenuBuilder() {
-//    t_vec4 col2 = {1.0f, 0.0f, 0.0f, 1.0f};
-//    glmc_assign_vec4(this->background_color, col2);
-
 }
 
 
@@ -66,6 +63,11 @@ EntryBuilder &EntryBuilder::setMnemonic(char c) {
     return *this;
 }
 
+EntryBuilder &EntryBuilder::setColor(t_vec3 color) {
+    glmc_assign_vec4(this->color, color);
+    return *this;
+}
+
 EntryBuilder &EntryBuilder::setFunction(func_t function) {
     this->function = function;
     return *this;
@@ -76,10 +78,12 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
 }
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
+    t_vec4 *color = new t_vec4[4];
+    memcpy(color, this->color, sizeof(t_vec4));
     this->action = action;
     addEntry(this->menuBuilder,
              new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
-                       this->action, this->font, &animations, function));
+                       this->action, this->font, &animations, function, color));
     return *this;
 }
 

@@ -18,8 +18,8 @@ MovieBuilder &MovieBuilder::setFont(const char *font) {
     return *this;
 }
 
-MovieBuilder &MovieBuilder::setColor(t_vec3 color) {
-    glmc_assign_vec3(this->color, color);
+MovieBuilder &MovieBuilder::setColor(t_vec4 color) {
+    glmc_assign_vec4(this->color, color);
     return *this;
 }
 
