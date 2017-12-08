@@ -14,7 +14,10 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     time = 0;
     done = false;
     activated_menu = false;
-    fireInvalidationEvent();
+    levels_to_play = new vector<Level*>;
+    while(!done || activated_menu) {
+        fireInvalidationEvent();
+    }
 }
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
@@ -52,7 +55,6 @@ vector<Level *> *MenuModel::getLevels() {
 
 void MenuModel::setLevels(vector<Level *> *levels) {
     this->levels_to_play = levels;
-    notify(LEVEL);
 }
 
 bool MenuModel::isActivated() {
@@ -131,12 +133,13 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-    while (!menuModel->isDone() || menuModel->isActivated()) {
         while (!menuModel->getMovieDefinitions()->empty()) {
             moviePlayer->play(menuModel->getMovieDefinitions()->back());
             menuModel->getMovieDefinitions()->pop_back();
         }
         this->draw();
+    if(!menuModel->getLevels()->empty() && !menuModel->isActivated()){
+        notify(LEVEL);
     }
 }
 
@@ -278,7 +281,6 @@ void MenuShower::clear() {
 
 
 void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
-
     mm = new MenuModel;
     mv = new MenuView;
     mc = new MenuController;
@@ -315,7 +317,7 @@ void MenuView::setFontManager(FontManager *fontManager) {
     UIView::setFontManager(fontManager);
 
     LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
-    menuModel->registerObserver(LEVEL, levelObserver);
+    registerObserver(LEVEL, levelObserver);
 
     moviePlayer = new MoviePlayer(fontManager);
 }

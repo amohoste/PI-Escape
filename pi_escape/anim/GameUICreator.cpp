@@ -41,19 +41,21 @@ void start_game(MenuModel *m) {
 }
 
 void tutorial(MenuModel *m) {
+    m->setActivated(true);
     load_levels(1, 7, m);
+    m->fireInvalidationEvent();
 }
 
 /**
  * laad de levels in start inclusied, stop exclusief
  */
 void load_levels(int start, int stop, MenuModel *m) {
-    vector<Level *> level_names;
+    vector<Level *> *level_names = new vector<Level*>;
     for (int i = stop - 1; i >= start; i--) {
         Level *x = load_level(i);
-        level_names.push_back(x);
+        level_names->push_back(x);
     }
-    m->setLevels(&level_names);
+    m->setLevels(level_names);
 }
 
 void endMenu(MenuModel *m) {
