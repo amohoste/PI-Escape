@@ -54,6 +54,8 @@ int main() {
 
     mp->play(gc->createOutro());
 
+    delete mp;
+    delete ms;
     delete gc;
 
     m.free(); // Fontmanager moet vrijgemaakt worden voor de graphics vrijgemaakt worden!

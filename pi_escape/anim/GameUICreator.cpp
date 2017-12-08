@@ -36,12 +36,12 @@ void start_game(MenuModel *m) {
     m->getMovieDefinitions()->push_back(gc->createCredits());
     m->getMovieDefinitions()->push_back(gc->createStarWarsCredits());
 
-    load_levels(1, 2, m);
+    load_levels(8, 11, m);
     delete gc;
 }
 
 void tutorial(MenuModel *m) {
-    load_levels(1, 2, m);
+    load_levels(1, 7, m);
 }
 
 /**
