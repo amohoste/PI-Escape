@@ -56,8 +56,9 @@ void endMenu(MenuModel *m) {
 
 std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     MenuBuilder builder;
-    t_vec3 col1 = {1.0f, 1.0f, 0.0f};
-    builder.setBackGroundColor(col1);
+    t_vec3 background_color = {0.0f, 0.0f, 0.3f};
+
+	builder.setBackGroundColor(background_color);
 
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
@@ -91,11 +92,11 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
-    t_vec3 background_ = {1.0f, 0.0f, 1.0f};
+	t_vec3 background_color = { 0.0f, 0.0f, 0.3f };
 
     MovieBuilder builder;
     builder.setDuration(10000l)
-            .setBackgroundColor(background_);
+            .setBackgroundColor(background_color);
 
     t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
     t_vec4 col2 = {0.0f, 1.0f, 1.0f, 1.0f};
@@ -145,12 +146,13 @@ std::shared_ptr<MovieDefinition> GameUICreator::createIntro() {
 }
 
 std::shared_ptr<MovieDefinition> GameUICreator::createCredits() {
-    t_vec4 col1 = {1.0f, 0.0f, 0.0f, 1.0f};
-    t_vec3 background = {1.0f, 0.0f, 0.0f};
+    t_vec4 col1 = {1.0f, 1.0f, 0.0f, 1.0f};
+    t_vec3 background = {0.3f, 0.2f, 0.0f};
 
     MovieBuilder builder;
     builder.setDuration(10000)
-            .setColor(background);
+            .setColor(col1)
+			.setBackgroundColor(background);
 
 
     builder.addText("$  @ #")

@@ -49,9 +49,9 @@ int main() {
     mp->play(gc->createIntro());
 
     MenuShower *ms = new MenuShower(&m);
-//    ms->show(gc->createGameMenu());
-//    mp->play(gc->createOutro());
-//    mp->play(gc->createCredits());
+    ms->show(gc->createGameMenu());
+    mp->play(gc->createOutro());
+    mp->play(gc->createCredits());
 
     delete gc;
 
