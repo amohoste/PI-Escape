@@ -137,6 +137,9 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	file_header.bfOffBits = sizeof(BITMAPFILEHEADER); // size of the file header
 	file_header.bfType = 0x4D42; // type of file = BM = 0x4D42
 	file_header.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + grid_size * grid_size * 3;	 // the size of the file in bytes
+	file_header.bfReserved1 = 0;
+	file_header.bfReserved2 = 0;
+
 
 	// Bitmap info header
 	BITMAPINFOHEADER info_header;

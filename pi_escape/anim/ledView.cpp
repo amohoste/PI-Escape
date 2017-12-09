@@ -134,31 +134,12 @@ void LedView::notified() {
 
 	// Add indicators
 	// TODO
-
-	for (int i = 0; i < HEIGHT_PATTERN; ++i)
-	{
-		for (int j = 0; j < this->length_pattern; ++j)
-		{
-			std::cout << this->pattern[i][j] << ' ';
-		}
-		std::cout << std::endl;
-	}
-	printf("\n");
 }
 
 /**
 * Draw function of view
 */
 void LedView::draw() {
-	// draw next frame of the tinyfont text
-	// granted enough time as passed
-	chrono::system_clock::time_point now = chrono::system_clock::now();
-	std::chrono::duration<double> elapsed_seconds = now - last_draw;
-	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
-	if (d < draw_every_ms) {
-		return;
-	}
-
 	// construct frame
 	SPGM_RGBTRIPLE** frame;
 	frame = new SPGM_RGBTRIPLE*[8];
@@ -169,7 +150,7 @@ void LedView::draw() {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			SPGM_RGBTRIPLE colour;
-			if (i != 0 && i < HEIGHT_PATTERN && this->pattern[this->frame + i][j]) {
+			if (0 < i && i <= HEIGHT_PATTERN && this->pattern[i - 1][this->frame + j]) {
 				colour.rgbBlue = 0;
 				colour.rgbGreen = 0;
 				colour.rgbRed = 255;
@@ -179,6 +160,7 @@ void LedView::draw() {
 				colour.rgbGreen = 0;
 				colour.rgbRed = 0;
 			}
+
 			frame[i][j] = colour;
 		}
 	}
@@ -195,8 +177,12 @@ void LedView::draw() {
 * invalidated
 */
 void LedView::invalidated() {
-	//printf("invalidated, and length: %\n", this->length_pattern);
-	if (this->length_pattern > 0) {
+	// draw next frame of the tinyfont text
+	// granted enough time as passed
+	chrono::system_clock::time_point now = chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last_draw;
+	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
+	if (this->length_pattern > 0 && d > draw_every_ms) {
 		printf("draw\n");
 		draw();
 	}
