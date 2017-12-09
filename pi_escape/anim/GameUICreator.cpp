@@ -50,10 +50,10 @@ void tutorial(MenuModel *m) {
  * laad de levels in start inclusied, stop exclusief
  */
 void load_levels(int start, int stop, MenuModel *m) {
-    vector<Level *> *level_names = new vector<Level*>;
+    vector<Level *> level_names;
     for (int i = stop - 1; i >= start; i--) {
         Level *x = load_level(i);
-        level_names->push_back(x);
+        level_names.push_back(x);
     }
     m->setLevels(level_names);
 }

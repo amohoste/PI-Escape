@@ -17,10 +17,7 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     done = false;
     activated_menu = false;
 
-    vector<Level*> *t;
-    this->levels_to_play = t;
-//    levels_to_play->clear();
-//    levels_to_play->shrink_to_fit();
+    levels_to_play.clear();
 
     while (!done || activated_menu) {
         fireInvalidationEvent();
@@ -56,12 +53,12 @@ Entry *MenuModel::getSelectedEntry() {
     return getMenuDefinition().get()->entries[selectedInt];
 }
 
-vector<Level *> *MenuModel::getLevels() {
+vector<Level *> MenuModel::getLevels() {
     return levels_to_play;
 }
 
-void MenuModel::setLevels(vector<Level *> *levels) {
-    this->levels_to_play = levels;
+void MenuModel::setLevels(vector<Level *> levels) {
+    this->levels_to_play = std::move(levels);
 }
 
 bool MenuModel::isActivated() {
@@ -97,7 +94,6 @@ MenuModel::MenuModel() {
 }
 
 MenuModel::~MenuModel() {
-    delete levels_to_play;
     menuDefinition.reset();
 
     for (std::vector<shared_ptr<MovieDefinition>>::iterator it = movieDefinitions->begin(); it != movieDefinitions->end(); ++it) {
@@ -160,8 +156,8 @@ void MenuView::invalidated() {
     }
     this->draw();
     // hack, was een bug die ik echt niet weg kreeg waarbije levels_to_play niet leeg was na er clear() op te roepen
-    if ((!menuModel->getLevels()->empty() && menuModel->getLevels()->size() < 20) && !menuModel->isActivated()) {
-        cout << menuModel->getLevels()->size() << endl;
+    if ((!menuModel->getLevels().empty() && menuModel->getLevels().size() < 20) && !menuModel->isActivated()) {
+        cout << menuModel->getLevels().size() << endl;
         notify(LEVEL);
     }
 }
@@ -239,12 +235,12 @@ void MenuController::onKey(SDLKey key) {
  * Starten van de game met de levels die aanwezig zijn
  */
 void LevelObserver::notified() {
-    if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
+    if (menuModel != nullptr && !menuModel->getLevels().empty()) {
         Game *game = game_alloc(graphics);
 
-        Level *level = menuModel->getLevels()->back();
+        Level *level = menuModel->getLevels().back();
         game_load_level(game, level);
-        menuModel->getLevels()->pop_back();
+        menuModel->getLevels().pop_back();
         game->engine.context.current_level = level;
         game->engine.context.is_exit_game = 0;
 
@@ -259,16 +255,16 @@ void LevelObserver::notified() {
             engine_update(&game->engine);
             update_count++;
 
-            game->engine.context.is_exit_game = game->engine.context.level_ended && menuModel->getLevels()->empty();
+            game->engine.context.is_exit_game = game->engine.context.level_ended && menuModel->getLevels().empty();
 
             //kijken of er een nieuw level geladen moet worden
             if (!game->engine.context.is_exit_game && game->engine.context.level_ended) {
-                if (menuModel->getLevels()->empty()) {
+                if (menuModel->getLevels().empty()) {
                     game->engine.context.is_exit_game = 1;
                     menuModel->setDone(false);
                 }
-                Level *next = menuModel->getLevels()->back();
-                menuModel->getLevels()->pop_back();
+                Level *next = menuModel->getLevels().back();
+                menuModel->getLevels().pop_back();
                 clear_level(game);
                 game_load_level(game, next);
                 game->engine.context.current_level = next;

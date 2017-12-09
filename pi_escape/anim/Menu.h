@@ -38,7 +38,7 @@ private:
     shared_ptr<MenuDefinition> menuDefinition;
     unsigned int selectedInt;
 
-    vector<Level *> *levels_to_play;
+    vector<Level *> levels_to_play;
 
     bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
@@ -61,9 +61,9 @@ public:
 
     Entry *getSelectedEntry();
 
-    vector<Level *> *getLevels();
+    vector<Level *> getLevels();
 
-    void setLevels(vector<Level *> *levels);
+    void setLevels(vector<Level *> levels);
 
     bool isActivated();
 
