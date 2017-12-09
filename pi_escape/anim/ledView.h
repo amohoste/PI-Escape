@@ -3,9 +3,13 @@
 
 #include "UI.h"
 #include "Menu.h"
+
 extern "C" {
-#include "../led/led.h"
+	#include "../led/led.h"
 }
+
+class LedView;
+
 class LedView : public Observer, public UIView {
 private:
 	int length_pattern;

@@ -289,9 +289,7 @@ void LevelObserver::notified() {
             }
         }
 
-#ifdef RPI
         clear_ledgrid();
-#endif // RPI
 
         game_free(game);
         free(game);
@@ -309,6 +307,7 @@ void MenuShower::clear() {
     delete mm;
     delete mv;
     delete mc;
+	delete lv;
 }
 
 
@@ -316,7 +315,7 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
     mm = new MenuModel;
     mv = new MenuView;
     mc = new MenuController;
-	LedView* lv = new LedView;
+	lv = new LedView;
 
     mm->addListener(mv);
     mv->setMenuModel(mm);

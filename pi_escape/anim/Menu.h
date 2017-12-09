@@ -130,9 +130,10 @@ public:
 
 class MenuShower {
 private:
-    MenuView *mv{};
-    MenuModel *mm{};
-    MenuController *mc{};
+    MenuView *mv;
+    MenuModel *mm;
+    MenuController *mc;
+	LedView *lv;
 
     FontManager *fontManager;
 
