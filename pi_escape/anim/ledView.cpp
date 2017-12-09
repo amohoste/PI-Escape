@@ -1,5 +1,6 @@
 #include "ledView.h"
 
+#include <chrono>
 #include <iostream>
 #include <fstream>
 using namespace std;
@@ -8,9 +9,13 @@ using namespace std;
 const int HEIGHT_PATTERN = 6;
 const string TINYFONT = "pi_escape/led/TinyFont";
 
+typedef std::chrono::milliseconds ms;
+const ms draw_every_ms = (ms)3000;
+chrono::system_clock::time_point last_draw = chrono::system_clock::now();
+
 /**
- * Constructor
- */
+* Constructor
+*/
 LedView::LedView() {
 	// init fields
 	this->length_pattern = 1;
@@ -42,17 +47,21 @@ LedView::LedView() {
 }
 
 /**
- * Destructor
- */
+* Destructor
+*/
 LedView::~LedView() {
 	delete[] this->tiny_font;
+
+	for (int i = 0; i < HEIGHT_PATTERN; i++) {
+		delete[] this->pattern[i];
+	}
+	delete[] this->pattern;
 }
 
 /**
- * React to change in selected menu item
- */
+* React to change in selected menu item
+*/
 void LedView::notified() {
-	// TODO fix i and if i or " " remove whitespace(optional)
 	// Get text of selected item
 	const string str = this->model->getSelectedEntry()->long_text;
 
@@ -62,24 +71,19 @@ void LedView::notified() {
 	}
 	delete[] this->pattern;
 
-	this->length_pattern = str.length() * 3 + (str.length() - 1);
+	this->length_pattern = str.length() * 4 + 8;
 	this->pattern = new int*[HEIGHT_PATTERN];
 	for (int i = 0; i < HEIGHT_PATTERN; i++) {
 		this->pattern[i] = new int[length_pattern];
 	}
+
 	for (int i = 0; i < HEIGHT_PATTERN; i++) {
 		for (int j = 0; j < length_pattern; j++) {
 			this->pattern[i][j] = 0;
 		}
 	}
+
 	// Convert to TinyFont
-
-	//for (int i = 0; i < HEIGHT_PATTERN; i++) {
-	//	for (int j = 0; j < this->length_pattern; j++) {
-
-	//	}
-	//}
-
 	for (int j = 0; j < str.length(); j++) {	// go over each character
 		int ascii = str[j];
 		// Get bytes
@@ -103,13 +107,14 @@ void LedView::notified() {
 		int kb = 1;
 
 		int empty_line;	// location of empty line
-		// if bit 16 is 1 fill first lines with zeros
+						// if bit 16 is 1 fill first lines with zeros
 		if (!!(byte1 & 0x80)) {
 			empty_line = 1;
-		} else { // else fill the last lines with zeros
+		}
+		else { // else fill the last lines with zeros
 			empty_line = 0;
 		}
-		
+
 		int a = !!(byte1 & 0x80);
 		int b = !!(byte2 & 0x80);
 		this->pattern[rb + empty_line][kb + (j * 4)] = b;
@@ -126,23 +131,53 @@ void LedView::notified() {
 		}
 	}
 
-	for (int i = 0; i < HEIGHT_PATTERN; ++i)
-	{
-		for (int j = 0; j < this->length_pattern; ++j)
-		{
-			std::cout << this->pattern[i][j] << ' ';
-		}
-		std::cout << std::endl;
-	}
-	printf("\n");
+	// Add indicators
+	// TODO
 }
 
 /**
- * Draw function of view
- */
+* Draw function of view
+*/
 void LedView::draw() {
-	// Draw next frame of the tinyfont text
-	// TODO
+	// draw next frame of the tinyfont text
+	// granted enough time as passed
+	chrono::system_clock::time_point now = chrono::system_clock::now();
+	std::chrono::duration<double> elapsed_seconds = now - last_draw;
+	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
+	if (d < draw_every_ms) {
+		return;
+	}
+
+	// construct frame
+	SPGM_RGBTRIPLE** frame;
+	frame = new SPGM_RGBTRIPLE*[8];
+	for (int i = 0; i < 8; i++) {
+		frame[i] = new SPGM_RGBTRIPLE[8];
+	}
+
+	for (int i = 0; i < 8; i++) {
+		for (int j = 0; j < 8; j++) {
+			SPGM_RGBTRIPLE colour;
+			if (i != 0 && i != 7 && this->pattern[this->frame + i][j]) {
+				colour.rgbBlue = 0;
+				colour.rgbGreen = 0;
+				colour.rgbRed = 255;
+			}
+			else {
+				colour.rgbBlue = 0;
+				colour.rgbGreen = 0;
+				colour.rgbRed = 0;
+			}
+			frame[i][j] = colour;
+		}
+	}
+
+	// draw
+	build_array(frame);
+
+	// Register draw
+	last_draw = std::chrono::system_clock::now();
+	this->frame = (this->frame + 1) % this->length_pattern;
 }
 
 void LedView::setModel(MenuModel *model) {
