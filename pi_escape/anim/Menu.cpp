@@ -339,7 +339,12 @@ void MenuView::setFontManager(FontManager *fontManager) {
     LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
     menuModel->registerObserver(LEVEL, levelObserver);
 
+    delete moviePlayer;
     moviePlayer = new MoviePlayer(fontManager);
+}
+
+MenuView::~MenuView() {
+    delete moviePlayer;
 }
 
 void MenuController::setMenuModel(MenuModel *menuModel) {
@@ -354,3 +359,10 @@ void MenuController::notified() {
     onKey(menuView->getKey_press());
 }
 
+MenuDefinition::~MenuDefinition() {
+    delete[] color;
+
+    for(Entry* entry: entries){
+        delete(entry);
+    }
+}
