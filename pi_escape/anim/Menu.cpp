@@ -1,6 +1,6 @@
 #include "Menu.h"
 #include "MenuBuilder.h"
-#include "../led/sense_led.h"
+#include "ledView.h"
 
 #include <utility>
 #include <assert.h>
@@ -23,6 +23,10 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     while (!done || activated_menu) {
         fireInvalidationEvent();
     }
+}
+
+int MenuModel::getSelectedInt() {
+	return selectedInt;
 }
 
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
@@ -300,9 +304,7 @@ void LevelObserver::notified() {
             }
         }
 
-#ifdef RPI
         clear_ledgrid();
-#endif // RPI
 
         game_free(game);
         free(game);
@@ -320,6 +322,7 @@ void MenuShower::clear() {
     delete mm;
     delete mv;
     delete mc;
+	delete lv;
 }
 
 
@@ -327,7 +330,7 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
     mm = new MenuModel;
     mv = new MenuView;
     mc = new MenuController;
-
+	lv = new LedView;
 
     mm->addListener(mv);
     mv->setMenuModel(mm);
@@ -339,6 +342,10 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
 
     mc->setMenuView(mv);
     mv->registerObserver(INPUT, mc);
+
+	mm->addListener(lv);
+	lv->setModel(mm);
+	mm->registerObserver(SELECTION, lv);
 
     mm->setMenuDefinition(std::move(menuDefinition));
 }

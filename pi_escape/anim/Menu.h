@@ -68,6 +68,8 @@ public:
 
     void reset_start_times();
 
+	int getSelectedInt();
+
     void selectFunction();
 };
 
@@ -133,9 +135,10 @@ public:
 
 class MenuShower {
 private:
-    MenuView *mv{};
-    MenuModel *mm{};
-    MenuController *mc{};
+    MenuView *mv;
+    MenuModel *mm;
+    MenuController *mc;
+	LedView *lv;
 
     FontManager *fontManager;
 
