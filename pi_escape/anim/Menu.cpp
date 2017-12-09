@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "MenuBuilder.h"
+#include "ledView.h"
 
 #include <utility>
 #include <assert.h>
@@ -303,7 +304,7 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
     mm = new MenuModel;
     mv = new MenuView;
     mc = new MenuController;
-
+	LedView* lv = new LedView;
 
     mm->addListener(mv);
     mv->setMenuModel(mm);
@@ -315,6 +316,10 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
 
     mc->setMenuView(mv);
     mv->registerObserver(INPUT, mc);
+
+	mm->addListener(lv);
+	lv->setModel(mm);
+	mm->registerObserver(SELECTION, lv);
 
     mm->setMenuDefinition(std::move(menuDefinition));
 }

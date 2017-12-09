@@ -41,15 +41,15 @@ void clear_fake_ledgrid() {
 	}
 
 	// Construct black array
-	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[grid_size];
+	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[8];
 	SPGM_RGBTRIPLE colour;
 	colour.rgbBlue = 0;
 	colour.rgbGreen = 0;
 	colour.rgbRed = 0;
 
-	for (int i = 0; i < grid_size; i++) {
-		colours[i] = new SPGM_RGBTRIPLE[grid_size];
-		for (int j = 0; j < grid_size; j++) {
+	for (int i = 0; i < 8; i++) {
+		colours[i] = new SPGM_RGBTRIPLE[8];
+		for (int j = 0; j < 8; j++) {
 			colours[i][j] = colour;
 		}
 	}
@@ -57,7 +57,7 @@ void clear_fake_ledgrid() {
 	// Write array to file
 	build_array_fake(colours);
 	
-	for (int i = 0; i < grid_size; i++)
+	for (int i = 0; i < 8; i++)
 		delete[] colours[i];
 	delete[] colours;
 
@@ -74,11 +74,11 @@ void build_one_color_fake(SPGM_RGBTRIPLE colour) {
 		return;
 
 	// Construct monochroom array
-	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[grid_size];
+	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[8];
 
-	for (int i = 0; i < grid_size; i ++) {
-		colours[i] = new SPGM_RGBTRIPLE[grid_size];
-		for (int j = 0; j < grid_size; j ++) {
+	for (int i = 0; i < 8; i ++) {
+		colours[i] = new SPGM_RGBTRIPLE[8];
+		for (int j = 0; j < 8; j ++) {
 			colours[i][j] = colour;
 		}
 	}
@@ -87,7 +87,7 @@ void build_one_color_fake(SPGM_RGBTRIPLE colour) {
 	build_array_fake(colours);
 
 	// clean up
-	for (int i = 0; i < grid_size; i++)
+	for (int i = 0; i < 8; i++)
 		delete[] colours[i];
 	delete[] colours;
 
@@ -105,15 +105,14 @@ void build_rainbow_fake() {
 	}
 
 	// Construct rainbow array
-	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[grid_size];
-	int enlarge_factor = grid_size/8;
-	for (int i = 0; i < grid_size; i++) {
-		colours[i] = new SPGM_RGBTRIPLE[grid_size];
-		for (int j = 0; j < grid_size; j++) {
+	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[8];
+	for (int i = 0; i < 8; i++) {
+		colours[i] = new SPGM_RGBTRIPLE[8];
+		for (int j = 0; j < 8; j++) {
 			SPGM_RGBTRIPLE colour;
-			colour.rgbRed = rainbow[i / enlarge_factor][j / enlarge_factor][0];
-			colour.rgbGreen = rainbow[i / enlarge_factor][j / enlarge_factor][1];
-			colour.rgbBlue = rainbow[i / enlarge_factor][j / enlarge_factor][2];
+			colour.rgbRed = rainbow[i][j][0];
+			colour.rgbGreen = rainbow[i][j][1];
+			colour.rgbBlue = rainbow[i][j][2];
 
 			colours[i][j] = colour;
 		}
@@ -123,7 +122,7 @@ void build_rainbow_fake() {
 	build_array_fake(colours);
 
 	// clean up
-	for (int i = 0; i < grid_size; i++)
+	for (int i = 0; i < 8; i++)
 		delete[] colours[i];
 	delete[] colours;
 
@@ -155,10 +154,11 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 
 	// Actual bits
 	char bits[grid_size * grid_size * 3];
+	int enlarge_factor = grid_size / 8;
 	int k = 0;
 	for (int i = 0; i < grid_size; i++) {
 		for (int j = 0; j < grid_size; j++) {
-			SPGM_RGBTRIPLE colour = colours[i][j];
+			SPGM_RGBTRIPLE colour = colours[i / enlarge_factor][j / enlarge_factor];
 			bits[k] = colour.rgbBlue;
 			bits[k + 1] = colour.rgbGreen;
 			bits[k + 2] = colour.rgbRed;

@@ -22,6 +22,8 @@ public:
 
 	virtual void draw() override;
 
+	virtual void invalidated() override;
+
 	void setModel(MenuModel *model);
 };
 

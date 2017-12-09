@@ -18,7 +18,7 @@ chrono::system_clock::time_point last_draw = chrono::system_clock::now();
 */
 LedView::LedView() {
 	// init fields
-	this->length_pattern = 1;
+	this->length_pattern = 0;
 	this->frame = 0;
 	this->pattern = new int*[HEIGHT_PATTERN];
 	for (int i = 0; i < HEIGHT_PATTERN; i++) {
@@ -72,6 +72,7 @@ void LedView::notified() {
 	delete[] this->pattern;
 
 	this->length_pattern = str.length() * 4 + 8;
+	printf("length pattern: %i", length_pattern);
 	this->pattern = new int*[HEIGHT_PATTERN];
 	for (int i = 0; i < HEIGHT_PATTERN; i++) {
 		this->pattern[i] = new int[length_pattern];
@@ -133,6 +134,16 @@ void LedView::notified() {
 
 	// Add indicators
 	// TODO
+
+	for (int i = 0; i < HEIGHT_PATTERN; ++i)
+	{
+		for (int j = 0; j < this->length_pattern; ++j)
+		{
+			std::cout << this->pattern[i][j] << ' ';
+		}
+		std::cout << std::endl;
+	}
+	printf("\n");
 }
 
 /**
@@ -158,7 +169,7 @@ void LedView::draw() {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			SPGM_RGBTRIPLE colour;
-			if (i != 0 && i != 7 && this->pattern[this->frame + i][j]) {
+			if (i != 0 && i < HEIGHT_PATTERN && this->pattern[this->frame + i][j]) {
 				colour.rgbBlue = 0;
 				colour.rgbGreen = 0;
 				colour.rgbRed = 255;
@@ -178,6 +189,17 @@ void LedView::draw() {
 	// Register draw
 	last_draw = std::chrono::system_clock::now();
 	this->frame = (this->frame + 1) % this->length_pattern;
+}
+
+/**
+* invalidated
+*/
+void LedView::invalidated() {
+	//printf("invalidated, and length: %\n", this->length_pattern);
+	if (this->length_pattern > 0) {
+		printf("draw\n");
+		draw();
+	}
 }
 
 void LedView::setModel(MenuModel *model) {
