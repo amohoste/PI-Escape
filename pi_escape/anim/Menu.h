@@ -24,9 +24,9 @@ class EntryAnimation;
 class MenuDefinition {
 public:
     const vector<Entry *> entries;
-    t_vec3 * const color;
+    t_vec3 *const color;
 
-    MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color){
+    MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color) {
     };
 
     ~MenuDefinition();
@@ -36,7 +36,7 @@ class MenuModel : public UIModel, public Subject {
 private:
     vector<shared_ptr<MovieDefinition>> *movieDefinitions = new vector<shared_ptr<MovieDefinition>>;
     shared_ptr<MenuDefinition> menuDefinition;
-    unsigned int selectedInt;
+    int selectedInt;
 
     vector<Level *> levels_to_play;
 
@@ -47,17 +47,12 @@ public:
 
     ~MenuModel() override;
 
-    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
+    vector<shared_ptr<MovieDefinition>> *getMovieDefinitions();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 
     shared_ptr<MenuDefinition> getMenuDefinition();
 
-    void up();
-
-    void down();
-
-    void select();
 
     Entry *getSelectedEntry();
 
@@ -69,7 +64,11 @@ public:
 
     void setActivated(bool i);
 
+    void incrementSelectedInt(int i);
+
     void reset_start_times();
+
+    void selectFunction();
 };
 
 /**
@@ -112,6 +111,12 @@ public:
     void setMenuModel(MenuModel *menuModel);
 
     void setMenuView(MenuView *menuView);
+
+    void up();
+
+    void down();
+
+    void select();
 
 };
 

@@ -28,26 +28,6 @@ shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
     return this->menuDefinition;
 }
 
-void MenuModel::up() {
-    selectedInt = selectedInt == 0 ? 0 : selectedInt - 1;
-    fireInvalidationEvent();
-    notify(SELECTION);
-}
-
-void MenuModel::down() {
-    selectedInt = selectedInt == this->menuDefinition.get()->entries.size() - 1 ? selectedInt : selectedInt + 1;
-    fireInvalidationEvent();
-    notify(SELECTION);
-}
-
-void MenuModel::select() {
-    //todo deze shit moet in controller
-    activated_menu = true;
-    done = true;
-    this->reset_start_times();
-    fireInvalidationEvent();
-    getSelectedEntry()->function(this);
-}
 
 Entry *MenuModel::getSelectedEntry() {
     return getMenuDefinition().get()->entries[selectedInt];
@@ -67,6 +47,11 @@ bool MenuModel::isActivated() {
 
 void MenuModel::setActivated(bool i) {
     activated_menu = i;
+}
+
+void MenuModel::selectFunction() {
+    fireInvalidationEvent();
+    getSelectedEntry()->function(this);
 }
 
 void MenuModel::reset_start_times() {
@@ -96,10 +81,23 @@ MenuModel::MenuModel() {
 MenuModel::~MenuModel() {
     menuDefinition.reset();
 
-    for (std::vector<shared_ptr<MovieDefinition>>::iterator it = movieDefinitions->begin(); it != movieDefinitions->end(); ++it) {
+    for (std::vector<shared_ptr<MovieDefinition>>::iterator it = movieDefinitions->begin();
+         it != movieDefinitions->end(); ++it) {
         it->reset();
     }
     delete movieDefinitions;
+}
+
+void MenuModel::incrementSelectedInt(int i) {
+    selectedInt += i;
+    int size = (int) this->menuDefinition.get()->entries.size();
+    selectedInt =
+            selectedInt >= size ? size - 1
+                                      : selectedInt;
+    selectedInt = selectedInt < 0 ? 0 : selectedInt;
+    fireInvalidationEvent();
+    notify(SELECTION);
+
 }
 
 
@@ -219,17 +217,34 @@ MenuView::applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawC
 void MenuController::onKey(SDLKey key) {
     switch (key) {
         case SDLK_DOWN:
-            this->menuModel->down();
+            down();
             break;
         case SDLK_UP:
-            this->menuModel->up();
+            up();
             break;
         case SDLK_RETURN:
-            this->menuModel->select();
+            select();
             break;
         default:
             break;
     }
+}
+
+void MenuController::up() {
+    menuModel->incrementSelectedInt(-1);
+}
+
+void MenuController::down() {
+    menuModel->incrementSelectedInt(1);
+}
+
+void MenuController::select() {
+    menuModel->setActivated(true);
+    menuModel->setDone(true);
+    menuModel->reset_start_times();
+    menuModel->selectFunction();
+
+
 }
 
 /**
@@ -292,7 +307,7 @@ void LevelObserver::notified() {
         free(game);
     }
 //    eventueel animaties verwijderen als je stout bent geweest en op escape hebt gedrukt...
-    if(!menuModel->getLevels()->empty()){
+    if (!menuModel->getLevels()->empty()) {
         menuModel->getMovieDefinitions()->clear();
     }
 
@@ -365,10 +380,11 @@ void MenuController::notified() {
     onKey(menuView->getKey_press());
 }
 
+
 MenuDefinition::~MenuDefinition() {
     delete[] color;
 
-    for(Entry* entry: entries){
-        delete(entry);
+    for (Entry *entry: entries) {
+        delete (entry);
     }
 }
