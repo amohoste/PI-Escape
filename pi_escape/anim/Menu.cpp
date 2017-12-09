@@ -17,8 +17,10 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     done = false;
     activated_menu = false;
 
-    levels_to_play->clear();
-    levels_to_play->shrink_to_fit();
+    vector<Level*> *t;
+    this->levels_to_play = t;
+//    levels_to_play->clear();
+//    levels_to_play->shrink_to_fit();
 
     while (!done || activated_menu) {
         fireInvalidationEvent();
