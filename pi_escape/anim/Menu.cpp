@@ -9,13 +9,17 @@ using namespace std;
 
 
 void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
+    this->menuDefinition.reset(); //niet deleten maar resetten
     this->menuDefinition = std::move(menuDefinition);
+
     selectedInt = 0;
     time = 0;
     done = false;
     activated_menu = false;
-    levels_to_play = new vector<Level*>;
-    while(!done || activated_menu) {
+
+    levels_to_play->clear();
+
+    while (!done || activated_menu) {
         fireInvalidationEvent();
     }
 }
@@ -85,6 +89,20 @@ vector<shared_ptr<MovieDefinition>> *MenuModel::getMovieDefinitions() {
     return movieDefinitions;
 }
 
+MenuModel::MenuModel() {
+
+}
+
+MenuModel::~MenuModel() {
+    delete levels_to_play;
+    menuDefinition.reset();
+
+    for (std::vector<shared_ptr<MovieDefinition>>::iterator it = movieDefinitions->begin(); it != movieDefinitions->end(); ++it) {
+        it->reset();
+    }
+    delete movieDefinitions;
+}
+
 
 void MenuView::draw() {
     uint32_t start = SDL_GetTicks();
@@ -133,12 +151,12 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-        while (!menuModel->getMovieDefinitions()->empty()) {
-            moviePlayer->play(menuModel->getMovieDefinitions()->back());
-            menuModel->getMovieDefinitions()->pop_back();
-        }
-        this->draw();
-    if(!menuModel->getLevels()->empty() && !menuModel->isActivated()){
+    while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
+        moviePlayer->play(menuModel->getMovieDefinitions()->back());
+        menuModel->getMovieDefinitions()->pop_back();
+    }
+    this->draw();
+    if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
         notify(LEVEL);
     }
 }
@@ -322,6 +340,10 @@ void MenuView::setFontManager(FontManager *fontManager) {
     moviePlayer = new MoviePlayer(fontManager);
 }
 
+MenuView::~MenuView() {
+    delete moviePlayer;
+}
+
 void MenuController::setMenuModel(MenuModel *menuModel) {
     this->menuModel = menuModel;
 }
@@ -334,3 +356,10 @@ void MenuController::notified() {
     onKey(menuView->getKey_press());
 }
 
+MenuDefinition::~MenuDefinition() {
+    delete[] color;
+
+    for(Entry* entry: entries){
+        delete(entry);
+    }
+}

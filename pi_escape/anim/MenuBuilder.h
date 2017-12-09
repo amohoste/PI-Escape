@@ -41,6 +41,8 @@ private:
 public:
     EntryBuilder();
 
+    ~EntryBuilder();
+
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
     EntryBuilder &setEnabledOnPc(bool b);
@@ -82,6 +84,7 @@ public:
                                                                                             menuState(menuState),
                                                                                             repeat(repeat),
                                                                                             duration(duration) {};
+    ~EntryAnimation();
 
     float getPosition();
 

@@ -96,6 +96,16 @@ EntryBuilder::EntryBuilder() {
 
 }
 
+EntryBuilder::~EntryBuilder() {
+    map<MenuState, std::vector<EntryAnimation *>>::const_iterator iterator = animations.begin();
+    for(iterator; iterator != animations.end(); iterator++){
+        for(EntryAnimation* ea : iterator->second){
+            delete(ea);
+        }
+    }
+
+}
+
 float EntryAnimation::getPosition() {
     return position;
 }
@@ -106,5 +116,9 @@ void EntryAnimation::setPosition(float x) {
     } else {
         position = x > 1 ? 1 : x;
     }
+}
+
+EntryAnimation::~EntryAnimation() {
+    delete animation;
 }
 

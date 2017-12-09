@@ -26,15 +26,11 @@ public:
     const vector<Entry *> entries;
     t_vec3 * const color;
 
-
     MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color){
     };
 
-    ~MenuDefinition() {
-
-    }
+    ~MenuDefinition();
 };
-
 
 class MenuModel : public UIModel, public Subject {
 private:
@@ -46,10 +42,12 @@ private:
 
     bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
-    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
-    MenuModel() {
 
-    }
+    MenuModel();
+
+    ~MenuModel() override;
+
+    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 
@@ -82,24 +80,21 @@ private:
     MoviePlayer *moviePlayer;
     MenuModel *menuModel;
     SDLKey key_press;
+
+    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
+
+    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
+
 public:
-    ~MenuView() override {
+    ~MenuView() override;
 
-    }
-
-
-    void setFontManager(FontManager *fontManager);
+    void setFontManager(FontManager *fontManager) override;
 
     void draw() override;
-
-    //todo private methoden
-    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
 
     void invalidated() override;
 
     void setMenuModel(MenuModel *menuModel);
-
-    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
 
     SDLKey getKey_press();
 };
@@ -110,10 +105,6 @@ private:
     MenuModel *menuModel;
     MenuView *menuView;
 public:
-    ~MenuController() override {
-
-    }
-
     void onKey(SDLKey key) override;
 
     void notified() override;

@@ -57,6 +57,7 @@ public:
     const Animation *a;
 
     AnimationDuration(long start, long duration, Animation *a);
+    ~AnimationDuration();
 };
 
 class MovieAnimation {
@@ -73,7 +74,7 @@ public:
     const std::vector<AnimationDuration *> animations;
     MovieAnimation(const char *text, const long start, const long end, const char *font, t_vec4 *color,
                    const float x, const float y, const long duration, const std::vector<AnimationDuration *> animations);
-
+    ~MovieAnimation();
 };
 
 

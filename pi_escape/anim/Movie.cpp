@@ -17,8 +17,7 @@ shared_ptr<MovieDefinition> MovieModel::getMovieDefinition() {
 }
 
 MovieModel::~MovieModel() {
-    //todo
-
+    this->movieDefinition.reset();
 }
 
 /**
@@ -114,6 +113,10 @@ SDLKey MovieGLView::getKeyPress() {
     return this->key_press;
 }
 
+MovieGLView::~MovieGLView() {
+
+}
+
 
 void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     clear(); //oude componeten leegmaken
@@ -166,4 +169,12 @@ void MovieController::setMenuModel(MovieModel *movieModel) {
 
 void MovieController::setMenuView(MovieGLView *movieView) {
     this->movieView = movieView;
+}
+
+MovieDefinition::~MovieDefinition() {
+    delete[] background_color;
+
+    for(MovieAnimation* ma : movie_animations){
+        delete ma;
+    }
 }
