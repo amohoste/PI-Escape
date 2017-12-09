@@ -61,7 +61,7 @@ public:
 
     Entry *getSelectedEntry();
 
-    vector<Level *> getLevels();
+    vector<Level *> *getLevels();
 
     void setLevels(vector<Level *> levels);
 

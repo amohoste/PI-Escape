@@ -54,8 +54,8 @@ Entry *MenuModel::getSelectedEntry() {
     return getMenuDefinition().get()->entries[selectedInt];
 }
 
-vector<Level *> MenuModel::getLevels() {
-    return levels_to_play;
+vector<Level *> *MenuModel::getLevels() {
+    return &levels_to_play;
 }
 
 void MenuModel::setLevels(vector<Level *> levels) {
@@ -152,14 +152,15 @@ void MenuView::draw() {
 
 void MenuView::invalidated() {
     while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
+        cout << menuModel->getLevels()->size() << endl;
         moviePlayer->play(menuModel->getMovieDefinitions()->back());
         menuModel->getMovieDefinitions()->pop_back();
     }
     this->draw();
-    // hack, was een bug die ik echt niet weg kreeg waarbije levels_to_play niet leeg was na er clear() op te roepen
-    if ((!menuModel->getLevels().empty() && menuModel->getLevels().size() < 20) && !menuModel->isActivated()) {
-        cout << menuModel->getLevels().size() << endl;
+    if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
+        cout << menuModel->getLevels()->size() << endl;
         notify(LEVEL);
+        notify(SELECTION); //zodat de pi zijn scherm veranderd
     }
 }
 
@@ -236,12 +237,11 @@ void MenuController::onKey(SDLKey key) {
  * Starten van de game met de levels die aanwezig zijn
  */
 void LevelObserver::notified() {
-    if (menuModel != nullptr && !menuModel->getLevels().empty()) {
+    if (menuModel != nullptr && !menuModel->getLevels()->empty()) {
         Game *game = game_alloc(graphics);
 
-        Level *level = menuModel->getLevels().back();
+        Level *level = menuModel->getLevels()->back();
         game_load_level(game, level);
-        menuModel->getLevels().pop_back();
         game->engine.context.current_level = level;
         game->engine.context.is_exit_game = 0;
 
@@ -253,23 +253,25 @@ void LevelObserver::notified() {
             Uint32 cur_time_ms = SDL_GetTicks();
             Uint32 diff_time_ms = cur_time_ms - last_print_time_ms;
 
+            game->engine.context.is_exit_game = game->engine.context.level_ended && menuModel->getLevels()->empty();
+
             engine_update(&game->engine);
             update_count++;
 
-            game->engine.context.is_exit_game = game->engine.context.level_ended && menuModel->getLevels().empty();
 
             //kijken of er een nieuw level geladen moet worden
             if (!game->engine.context.is_exit_game && game->engine.context.level_ended) {
-                if (menuModel->getLevels().empty()) {
+                menuModel->getLevels()->pop_back();
+                if (menuModel->getLevels()->empty()) {
                     game->engine.context.is_exit_game = 1;
                     menuModel->setDone(false);
+                } else {
+                    Level *next = menuModel->getLevels()->back();
+                    clear_level(game);
+                    game_load_level(game, next);
+                    game->engine.context.current_level = next;
+                    game->engine.context.level_ended = 0;
                 }
-                Level *next = menuModel->getLevels().back();
-                menuModel->getLevels().pop_back();
-                clear_level(game);
-                game_load_level(game, next);
-                game->engine.context.current_level = next;
-                game->engine.context.level_ended = 0;
 
             }
             //print performance statistics each second
@@ -290,6 +292,12 @@ void LevelObserver::notified() {
         game_free(game);
         free(game);
     }
+//    eventueel animaties verwijderen als je stout bent geweest en op escape hebt gedrukt...
+    if(!menuModel->getLevels()->empty()){
+        menuModel->getMovieDefinitions()->clear();
+    }
+
+    menuModel->getLevels()->clear();
     menuModel->setDone(false);
 }
 

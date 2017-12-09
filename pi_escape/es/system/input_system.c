@@ -115,6 +115,7 @@ static void handleKeyUp(InputSystem* system, Engine* engine, SDL_keysym *keysym,
 	switch (keysym->sym) {
 	case SDLK_ESCAPE: {
 		engine->context.is_exit_game = 1;
+        engine->context.level_ended = 1;
 		break;
 	}
 	case SDLK_KP_ENTER: //fall-through
