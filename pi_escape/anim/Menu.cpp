@@ -159,6 +159,7 @@ void MenuView::invalidated() {
     if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
         cout << menuModel->getLevels()->size() << endl;
         notify(LEVEL);
+        notify(SELECTION); //zodat de pi zijn scherm veranderd
     }
 }
 
