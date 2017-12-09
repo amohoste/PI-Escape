@@ -6,6 +6,7 @@
 using namespace std;
 
 // constants
+const int PADDING = 8;
 const int HEIGHT_PATTERN = 6;
 const string TINYFONT = "pi_escape/led/TinyFont";
 
@@ -71,8 +72,7 @@ void LedView::notified() {
 	}
 	delete[] this->pattern;
 
-	this->length_pattern = str.length() * 4 + 8;
-	printf("length pattern: %i", length_pattern);
+	this->length_pattern = str.length() * 4 + PADDING;
 	this->pattern = new int*[HEIGHT_PATTERN];
 	for (int i = 0; i < HEIGHT_PATTERN; i++) {
 		this->pattern[i] = new int[length_pattern];
@@ -118,22 +118,21 @@ void LedView::notified() {
 
 		int a = !!(byte1 & 0x80);
 		int b = !!(byte2 & 0x80);
-		this->pattern[rb + empty_line][kb + (j * 4)] = b;
+		this->pattern[rb + empty_line][kb + (j * 4) + PADDING] = b;
 		kb++;
 		for (int i = 1; i < 8; i++) {
 			a = !!((byte1 << i) & 0x80);
 			b = !!((byte2 << i) & 0x80);
-			this->pattern[ra + empty_line][ka + (3 * j) + j] = a;
-			this->pattern[rb + empty_line][kb + (3 * j) + j] = b;
+			this->pattern[ra + empty_line][ka + (3 * j) + j + PADDING] = a;
+			this->pattern[rb + empty_line][kb + (3 * j) + j + PADDING] = b;
 			ka = (ka + 1) % 3;
 			kb = (kb + 1) % 3;
 			if (ka == 0) ra++;
 			if (kb == 0) rb++;
 		}
 	}
-
-	// Add indicators
-	// TODO
+	
+	this->frame = 0;
 }
 
 /**
@@ -147,6 +146,7 @@ void LedView::draw() {
 		frame[i] = new SPGM_RGBTRIPLE[8];
 	}
 
+	// add text
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			SPGM_RGBTRIPLE colour;
@@ -164,6 +164,9 @@ void LedView::draw() {
 			frame[i][j] = colour;
 		}
 	}
+
+	// add indicators
+	// TODO
 
 	// draw
 	build_array(frame);
