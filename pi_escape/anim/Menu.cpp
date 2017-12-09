@@ -155,8 +155,7 @@ void MenuView::invalidated() {
         menuModel->getMovieDefinitions()->pop_back();
     }
     this->draw();
-    // hack, was een bug die ik echt niet weg kreeg waarbije levels_to_play niet leeg was na er clear() op te roepen
-    if ((!menuModel->getLevels().empty() && menuModel->getLevels().size() < 20) && !menuModel->isActivated()) {
+    if (!menuModel->getLevels().empty() && !menuModel->isActivated()) {
         cout << menuModel->getLevels().size() << endl;
         notify(LEVEL);
     }
