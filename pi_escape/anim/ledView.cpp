@@ -11,7 +11,7 @@ const int HEIGHT_PATTERN = 6;
 const string TINYFONT = "pi_escape/led/TinyFont";
 
 typedef std::chrono::milliseconds ms;
-const ms draw_every_ms = (ms)3000;
+const ms draw_every_ms = (ms)100;
 chrono::system_clock::time_point last_draw = chrono::system_clock::now();
 
 /**
