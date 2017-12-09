@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "MenuBuilder.h"
+#include "../led/sense_led.h"
 
 #include <utility>
 #include <assert.h>
