@@ -86,6 +86,17 @@ MovieAnimation::MovieAnimation(const char *text, const long start, const long en
 
 }
 
+MovieAnimation::~MovieAnimation() {
+    delete color;
+    for(AnimationDuration* a : animations){
+        delete(a);
+    }
+}
+
 AnimationDuration::AnimationDuration(long start, long duration, Animation *a) : start(start), duration(duration), a(a) {
 
+}
+
+AnimationDuration::~AnimationDuration() {
+    delete(a);
 }
