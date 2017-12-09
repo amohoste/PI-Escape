@@ -6,16 +6,24 @@ using namespace std;
 EntryBuilder &MenuBuilder::getEntryBuilder() {
     EntryBuilder *eb = new EntryBuilder();
     eb->setMenuBuilder(this); //zodat we later een referentie hebben voor de entries
-    EntryBuilder &ref = *eb;
-    return ref;
+    return *eb;
 }
 
 MenuDefinition *MenuBuilder::build() {
-    return new MenuDefinition(this->entries);
+    t_vec3 *background = new t_vec3[3];
+    memcpy(background, this->background_color, sizeof(t_vec3));
+    return new MenuDefinition(this->entries, background);
 }
 
 void addEntry(MenuBuilder *mb, Entry *entry) {
-    mb->entries.push_front(entry);
+    mb->entries.push_back(entry);
+}
+
+void MenuBuilder::setBackGroundColor(t_vec3 color) {
+    glmc_assign_vec3(this->background_color, color);
+}
+
+MenuBuilder::MenuBuilder() {
 }
 
 
@@ -55,11 +63,13 @@ EntryBuilder &EntryBuilder::setMnemonic(char c) {
     return *this;
 }
 
-EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
-    this->action = action;
-    addEntry(this->menuBuilder,
-             new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
-                       this->action, this->font, &animations, function));
+EntryBuilder &EntryBuilder::setColor(t_vec3 color) {
+    glmc_assign_vec4(this->color, color);
+    return *this;
+}
+
+EntryBuilder &EntryBuilder::setFunction(func_t function) {
+    this->function = function;
     return *this;
 }
 
@@ -67,10 +77,16 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
     this->menuBuilder = menuBuilder;
 }
 
-EntryBuilder &EntryBuilder::setFunction(func_t function) {
-    this->function = function;
+EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
+    t_vec4 *color = new t_vec4[4];
+    memcpy(color, this->color, sizeof(t_vec4));
+    this->action = action;
+    addEntry(this->menuBuilder,
+             new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
+                       this->action, this->font, &animations, function, color));
     return *this;
 }
+
 
 EntryBuilder::EntryBuilder() {
     animations[ACTIVATE].clear();
@@ -80,22 +96,14 @@ EntryBuilder::EntryBuilder() {
 
 }
 
+EntryBuilder::~EntryBuilder() {
+    map<MenuState, std::vector<EntryAnimation *>>::const_iterator iterator = animations.begin();
+    for(iterator; iterator != animations.end(); iterator++){
+        for(EntryAnimation* ea : iterator->second){
+            delete(ea);
+        }
+    }
 
-EntryAnimation::EntryAnimation(Animation *animation, MenuState menuState, bool repeat, long duration) : animation(
-        animation), menuState(menuState), duration(duration), repeat(repeat) {
-
-}
-
-Animation const *EntryAnimation::getAnimation() {
-    return animation;
-}
-
-const long EntryAnimation::getDuration() {
-    return duration;
-}
-
-bool EntryAnimation::isRepeat() {
-    return repeat;
 }
 
 float EntryAnimation::getPosition() {
@@ -103,22 +111,14 @@ float EntryAnimation::getPosition() {
 }
 
 void EntryAnimation::setPosition(float x) {
-    this->position = x;
+    if (repeat) {
+        position = (fmod(x, 1.0f));
+    } else {
+        position = x > 1 ? 1 : x;
+    }
 }
 
-Entry::Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text, const char *short_text, char mnemonic,
-             const char *action, const char *font,
-             map<MenuState, vector<EntryAnimation *>> *animations,
-             func_t function) : enabled_on_pi(
-        enabled_on_pi),
-                                enabled_on_pc(
-                                        enabled_on_pc),
-                                long_text(long_text),
-                                short_text(short_text),
-                                mnemonic(mnemonic),
-                                action(action),
-                                font(font),
-                                animations(animations),
-                                function(function) {
-
+EntryAnimation::~EntryAnimation() {
+    delete animation;
 }
+

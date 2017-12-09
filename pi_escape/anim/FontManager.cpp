@@ -35,7 +35,7 @@ GlyphDrawCommand  GlyphDrawCommand::changeColor(float r, float g, float b, float
 }
 
 GlyphDrawCommand::GlyphDrawCommand(const int pos_ltop_x, const int pos_ltop_y, const int glyph_x, const int glyph_y,
-                                   const int glyph_w, const int glyph_h, const t_vec4 &colors, const int xoffset, const int yoffset, const int xadvance,string font) :pos_ltop_x(pos_ltop_x),
+                                   const int glyph_w, const int glyph_h, const t_vec4 &colors, const int xoffset, const int yoffset, const int xadvance,string font) : pos_ltop_x(pos_ltop_x),
 								   pos_ltop_y(pos_ltop_y), glyph_x(glyph_x), glyph_y(glyph_y), glyph_w(glyph_w), glyph_h(glyph_h), xoffset(xoffset), yoffset(yoffset), xadvance(xadvance), font(font), color(*new t_vec4[4]) {
 	
 	// Kleuren kopiëren naar de color van onze klasse
@@ -287,10 +287,10 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 	// Y-positie aanpassen op basis van TextVerticalPosition
 	int y1 = y;
 	if (vpos == TEXT_MIDDLE) {
-		y1 = (y + graphics->height + 72) / 2;
+		y1 = (graphics->height + 72) / 2;
 	}
 	else if (vpos == TEXT_BOTTOM) {
-		y1 = y + 72;
+		y1 = 72;
 	}
 	else {
 		y1 = graphics->height;
@@ -318,22 +318,22 @@ vector<GlyphDrawCommand> FontManager::makeGlyphDrawCommands(string text, int x, 
 					}
 				}
 			}
-			result.push_back(found.move(x1 + found.getXoffset(), y1 - found.getYoffset()).changeColor(color));
+			result.push_back(found.move(x1 + found.getXoffset(), y1 - found.getYoffset() + y).changeColor(color));
 			prevChar = c;
 			x1 += found.getXadvance();
 		} 
 	}
 
 	// GlyphDrawcommands eventueel verplaatsen op basis van TextJustification
-	int movex = 0;
+	int movex = x;
 
 	if (hpos == TEXT_CENTER) {
-		int middle = (x + graphics->width) / 2;
+		int middle = (graphics->width) / 2;
 		int textmiddle = (x + x1) / 2;
-		movex = middle - textmiddle;
+		movex = middle - textmiddle + x;
 	}
 	else if (hpos == TEXT_RIGHT) {
-		movex = graphics->width - x1;
+		movex = graphics->width - x1 + x;
 	}
 	
 	if (movex != 0) {
@@ -392,6 +392,16 @@ void FontManager::setFont(const string & fontName) {
 		curFont = font;
 	}
 }
+
+void FontManager::begin_draw() const {
+	graphics_begin_draw(graphics);
+}
+
+void FontManager::end_draw() const {
+	graphics_end_draw(graphics);
+}
+
+
 
 /***************************************************************
  Font code

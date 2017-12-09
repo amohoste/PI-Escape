@@ -3,9 +3,11 @@
 
 
 #include <deque>
+#include <utility>
 #include "UI.h"
 #include "FontManager.h"
 #include "MenuBuilder.h"
+#include "Movie.h"
 
 extern "C" {
 #include "../es/game.h"
@@ -19,50 +21,37 @@ class MenuController;
 
 class EntryAnimation;
 
-float getPosition(uint64_t time, EntryAnimation *ea);
-
 class MenuDefinition {
 public:
-    const deque<Entry *> entries;
+    const vector<Entry *> entries;
+    t_vec3 * const color;
 
-    explicit MenuDefinition(deque<Entry *> entries);
+    MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color){
+    };
 
     ~MenuDefinition();
 };
 
-
 class MenuModel : public UIModel, public Subject {
 private:
+    vector<shared_ptr<MovieDefinition>> *movieDefinitions = new vector<shared_ptr<MovieDefinition>>;
     shared_ptr<MenuDefinition> menuDefinition;
-    vector<MenuView *> listeners;
-    int done;
     unsigned int selectedInt;
-    Entry *selected;
-    vector<Level *> *levels;
 
-    map<Event, vector<Observer *>> observers;
+    vector<Level *> levels_to_play;
 
-    void updateSelected();
-
-    bool activated_menu;
+    bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
 
-
     MenuModel();
+
+    ~MenuModel() override;
+
+    vector<shared_ptr<MovieDefinition>>* getMovieDefinitions();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 
     shared_ptr<MenuDefinition> getMenuDefinition();
-
-    void setTime(uint64_t time) override;
-
-    int isDone() const override;
-
-    void setDone(int i);
-
-    void addListener(MenuView *view);
-
-    void fireInvalidationEvent();
 
     void up();
 
@@ -72,73 +61,87 @@ public:
 
     Entry *getSelectedEntry();
 
-    vector<Level *> *getLevels();
+    vector<Level *> getLevels();
 
-    void setLevels(vector<Level *> *levels);
+    void setLevels(vector<Level *> levels);
 
-    void resetPositions();
+    bool isActivated();
 
-    void playAnimations();
+    void setActivated(bool i);
 
-    bool isActivatedMenu();
-
-    void setActivatedMenu(bool i);
+    void reset_start_times();
 };
 
-class MenuView : UIView {
+/**
+ * De menuview is ook een subject, namelijk welke input in het scherm komt
+ */
+class MenuView : public UIView, public Subject {
 private:
-    FontManager *fontManager;
-    MenuModel *model;
-    Graphics *graphics;
-    MenuController *controller;
-    bool animationsFinished;
-    Uint32 last_update = SDL_GetTicks();
+    MoviePlayer *moviePlayer;
+    MenuModel *menuModel;
+    SDLKey key_press;
+
+    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
+
+    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
+
 public:
-    MenuView();
+    ~MenuView() override;
+
+    void setFontManager(FontManager *fontManager) override;
 
     void draw() override;
 
-    vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset, uint64_t time);
+    void invalidated() override;
 
-    void setFontManager(FontManager *fm);
+    void setMenuModel(MenuModel *menuModel);
 
-    void setGraphics(Graphics *graphics);
-
-    void invalidated();
-
-    void setModel(MenuModel *model);
-
-    void setController(MenuController *pController);
-
+    SDLKey getKey_press();
 };
+
 
 class MenuController : public UIController {
 private:
-    MenuModel *model;
+    MenuModel *menuModel;
+    MenuView *menuView;
 public:
-    ~MenuController() override;
-
     void onKey(SDLKey key) override;
 
-    void onExitKey() override;
+    void notified() override;
 
-    void setMenuModel(MenuModel *model);
+    void setMenuModel(MenuModel *menuModel);
+
+    void setMenuView(MenuView *menuView);
 
 };
 
 class LevelObserver : public Observer {
 private:
     Graphics *graphics;
-    Game *game;
     MenuModel *menuModel;
 public:
-    LevelObserver();
-
-    ~LevelObserver();
+    LevelObserver(Graphics *graphics, MenuModel *menuModel) : graphics(graphics), menuModel(menuModel) {};
 
     void notified() override;
 
-    void setMenuModel(MenuModel *menuModel);
+};
+
+class MenuShower {
+private:
+    MenuView *mv{};
+    MenuModel *mm{};
+    MenuController *mc{};
+
+    FontManager *fontManager;
+
+    void clear();
+
+public:
+    explicit MenuShower(FontManager *fontManager) : fontManager(fontManager) {};
+
+    ~MenuShower();
+
+    void show(shared_ptr<MenuDefinition> menuDefinition);
 };
 
 #endif //PIESCAPE2_MENU_H

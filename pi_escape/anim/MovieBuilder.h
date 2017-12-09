@@ -6,6 +6,9 @@
 #include "glmc.h"
 
 class EntryBuilder;
+class AnimationDuration;
+class MovieAnimation;
+class MovieDefinition;
 
 class MovieBuilder {
 private:
@@ -13,11 +16,13 @@ private:
     long start;
     long end;
     const char *font;
-    t_vec4& color;
-    float x;
-    float y;
+    t_vec4 color;
+    t_vec3 background_color; //pointer naar een constante t_vec, geen constante pointer!!
+    float x_perc;
+    float y_perc;
     long duration;
-    std::vector<Animation*> animations;
+    std::vector<AnimationDuration *> animations;
+    std::vector<MovieAnimation *> movie_animations;
 public:
     MovieBuilder();
 
@@ -28,6 +33,7 @@ public:
     MovieBuilder &setFont(const char *font);
 
     MovieBuilder &setColor(t_vec4 color);
+    MovieBuilder &setBackgroundColor(t_vec3 color);
 
     MovieBuilder &setPos_percent(float x, float y);
 
@@ -42,6 +48,33 @@ public:
     MovieBuilder &setDuration(long d);
 
     MovieDefinition *build();
+};
+
+class AnimationDuration{
+public:
+    const long start;
+    const long duration;
+    const Animation *a;
+
+    AnimationDuration(long start, long duration, Animation *a);
+    ~AnimationDuration();
+};
+
+class MovieAnimation {
+public:
+    //todo alles echt const maken http://duramecho.com/ComputerInformation/WhyHowCppConst.html
+    const char * const text;
+    const long start;
+    const long end;
+    const char *font;
+    t_vec4 * const color;
+    const float x;
+    const float y;
+    const long duration;
+    const std::vector<AnimationDuration *> animations;
+    MovieAnimation(const char *text, const long start, const long end, const char *font, t_vec4 *color,
+                   const float x, const float y, const long duration, const std::vector<AnimationDuration *> animations);
+    ~MovieAnimation();
 };
 
 
