@@ -138,7 +138,7 @@ private:
     MenuView *mv;
     MenuModel *mm;
     MenuController *mc;
-	LedView *lv;
+	//LedView *lv; ERROR!
 
     FontManager *fontManager;
 
