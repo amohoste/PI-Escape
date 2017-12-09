@@ -28,7 +28,6 @@ void build_rainbow() {
 }
 
 void build_array(SPGM_RGBTRIPLE** square) {
-	printf("write\n");
 #ifdef RPI
 	build_array_sense(square);
 #endif // RPI

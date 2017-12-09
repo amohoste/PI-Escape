@@ -150,12 +150,13 @@ void LedView::draw() {
 	for (int i = 0; i < 8; i++) {
 		for (int j = 0; j < 8; j++) {
 			SPGM_RGBTRIPLE colour;
-			if (0 < i && i <= HEIGHT_PATTERN && this->pattern[i - 1][this->frame + j]) {
+			int row = i - 1;
+			int column = (this->frame + j < this->length_pattern) ? this->frame + j : j;
+			if (0 < i && i <= HEIGHT_PATTERN && this->pattern[row][column]) {
 				colour.rgbBlue = 0;
 				colour.rgbGreen = 0;
 				colour.rgbRed = 255;
-			}
-			else {
+			} else {
 				colour.rgbBlue = 0;
 				colour.rgbGreen = 0;
 				colour.rgbRed = 0;
@@ -186,7 +187,6 @@ void LedView::invalidated() {
 	std::chrono::duration<double> elapsed_seconds = now - last_draw;
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
 	if (this->length_pattern > 0 && d > draw_every_ms) {
-		printf("draw\n");
 		draw();
 	}
 }
