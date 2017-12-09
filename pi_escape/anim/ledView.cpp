@@ -167,7 +167,29 @@ void LedView::draw() {
 	}
 
 	// add indicators
-	// TODO
+	SPGM_RGBTRIPLE colour;
+	colour.rgbBlue = 0;
+	colour.rgbGreen = 255;
+	colour.rgbRed = 0;
+	if (model->getSelectedInt() > 0) {
+		frame[0][3] = colour;
+		frame[0][4] = colour;
+	}
+	
+	if (model->getSelectedInt() > 1) {
+		frame[0][2] = colour;
+		frame[0][5] = colour;
+	}
+
+	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 1) {
+		frame[7][3] = colour;
+		frame[7][4] = colour;
+	}
+
+	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 2) {
+		frame[7][2] = colour;
+		frame[7][5] = colour;
+	}
 
 	// draw
 	build_array(frame);

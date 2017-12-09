@@ -25,6 +25,10 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
     }
 }
 
+int MenuModel::getSelectedInt() {
+	return selectedInt;
+}
+
 shared_ptr<MenuDefinition> MenuModel::getMenuDefinition() {
     return this->menuDefinition;
 }

@@ -70,6 +70,8 @@ public:
     void setActivated(bool i);
 
     void reset_start_times();
+
+	int getSelectedInt();
 };
 
 /**
