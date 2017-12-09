@@ -30,7 +30,7 @@ float MovieModel::getPosition(AnimationDuration *ad, int offset) {
     if (ad->start > time - offset) {
         return 0;
     }
-    float k = time - offset - ad->start;
+    float k = (float) time - offset - ad->start;
     float d = k / ad->duration;
     return d > 1 ? 1 : d;
 }
