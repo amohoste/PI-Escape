@@ -339,7 +339,6 @@ void MenuView::setFontManager(FontManager *fontManager) {
     LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
     menuModel->registerObserver(LEVEL, levelObserver);
 
-    delete moviePlayer;
     moviePlayer = new MoviePlayer(fontManager);
 }
 
