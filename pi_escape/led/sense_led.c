@@ -18,7 +18,7 @@
 #define FRAMEBUFFER "/dev/fb1"
 
 // hardcode rainbow colors
-int rainbow[64][3] = {
+int rainbow[LENGTH_BUFFER][3] = {
 	{ 255,   0,   0 },{ 255, 128,   0 },{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{   0, 255,   0 },{   0, 255, 128 },{   0, 255, 255 },
 	{ 255, 128,   0 },{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{   0, 255,   0 },{   0, 255, 128 },{   0, 255, 255 },{   0, 191, 255 },
 	{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{   0, 255,   0 },{   0, 255, 128 },{   0, 255, 255 },{   0, 191, 255 },{   0, 104, 255 },
@@ -82,9 +82,9 @@ void build_rainbow_sense() {
 void build_array_sense(SPGM_RGBTRIPLE** square) {
 	SPGM_RGBTRIPLE ledgrid[LENGTH_BUFFER];
 	int c = 0;
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < GRIDSIZE; i++)
 	{
-		for (int j = 0; j < 8; j++)
+		for (int j = 0; j < GRIDSIZE; j++)
 		{
 			ledgrid[c] = square[i][j];
 			c++;

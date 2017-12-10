@@ -3,6 +3,8 @@
 
 #include "../../util/rgb_triple.h"
 
+#define GRIDSIZE 8
+
 #ifdef RPI
 #include "sense_led.h"
 #endif // RPI

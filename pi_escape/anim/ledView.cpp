@@ -6,7 +6,7 @@
 using namespace std;
 
 // constants
-const int PADDING = 8;
+const int PADDING = GRIDSIZE;
 const int HEIGHT_PATTERN = 6;
 const string TINYFONT = "pi_escape/led/TinyFont";
 
@@ -120,7 +120,7 @@ void LedView::notified() {
 		int b = !!(byte2 & 0x80);
 		this->pattern[rb + empty_line][kb + (j * 4) + PADDING] = b;
 		kb++;
-		for (int i = 1; i < 8; i++) {
+		for (int i = 1; i < GRIDSIZE; i++) {
 			a = !!((byte1 << i) & 0x80);
 			b = !!((byte2 << i) & 0x80);
 			this->pattern[ra + empty_line][ka + (3 * j) + j + PADDING] = a;
@@ -141,14 +141,14 @@ void LedView::notified() {
 void LedView::draw() {
 	// construct frame
 	SPGM_RGBTRIPLE** frame;
-	frame = new SPGM_RGBTRIPLE*[8];
-	for (int i = 0; i < 8; i++) {
-		frame[i] = new SPGM_RGBTRIPLE[8];
+	frame = new SPGM_RGBTRIPLE*[GRIDSIZE];
+	for (int i = 0; i < GRIDSIZE; i++) {
+		frame[i] = new SPGM_RGBTRIPLE[GRIDSIZE];
 	}
 
 	// add text
-	for (int i = 0; i < 8; i++) {
-		for (int j = 0; j < 8; j++) {
+	for (int i = 0; i < GRIDSIZE; i++) {
+		for (int j = 0; j < GRIDSIZE; j++) {
 			SPGM_RGBTRIPLE colour;
 			int row = i - 1;
 			int column = (this->frame + j < this->length_pattern) ? this->frame + j : j;
@@ -188,13 +188,13 @@ void LedView::draw() {
 	}
 
 	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 1) {
-		frame[7][3] = inside;
-		frame[7][4] = inside;
+		frame[GRIDSIZE - 1][3] = inside;
+		frame[GRIDSIZE - 1][4] = inside;
 	}
 
 	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 2) {
-		frame[7][2] = outside;
-		frame[7][5] = outside;
+		frame[GRIDSIZE - 1][2] = outside;
+		frame[GRIDSIZE - 1][5] = outside;
 	}
 
 	// draw
@@ -204,7 +204,7 @@ void LedView::draw() {
 	last_draw = std::chrono::system_clock::now();
 	this->frame = (this->frame + 1) % this->length_pattern;
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < GRIDSIZE; i++) {
 		delete[] frame[i];
 	}
 	delete[] frame;
