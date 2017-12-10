@@ -160,13 +160,14 @@ void MenuView::invalidated() {
 
     this->draw();
     if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
-        cout << menuModel->getLevels()->size() << endl;
         notify(LEVEL);
         notify(SELECTION); //zodat de pi zijn scherm veranderd
     }
     while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
         menuModel->setDone(true);
-        moviePlayer->play(menuModel->getMovieDefinitions()->back());
+        shared_ptr<MovieDefinition> &definition = menuModel->getMovieDefinitions()->back();
+        moviePlayer->play(definition);
+        definition.reset();
         menuModel->getMovieDefinitions()->pop_back();
         menuModel->setDone(false);
     }

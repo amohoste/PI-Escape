@@ -116,6 +116,8 @@ public:
           func_t function, t_vec4 *color) : enabled_on_pi(enabled_on_pi), enabled_on_pc(enabled_on_pc), long_text(long_text),
                              short_text(short_text), mnemonic(mnemonic), action(action), font(font),
                              animations(animations), function(function), color(color) {};
+
+    ~Entry();
 };
 
 /**
