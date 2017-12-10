@@ -203,6 +203,11 @@ void LedView::draw() {
 	// Register draw
 	last_draw = std::chrono::system_clock::now();
 	this->frame = (this->frame + 1) % this->length_pattern;
+
+	for (int i = 0; i < 8; i++) {
+		delete[] frame[i];
+	}
+	delete[] frame;
 }
 
 /**
