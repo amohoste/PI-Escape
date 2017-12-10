@@ -31,6 +31,7 @@ public:
     std::shared_ptr<MovieDefinition> createIntro();
 
     std::shared_ptr<MovieDefinition> createCredits();
+	std::shared_ptr<MovieDefinition> createStarWarsCredits();
 
     std::shared_ptr<MovieDefinition> createOutro();
 };

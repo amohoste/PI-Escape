@@ -10,11 +10,20 @@ EntryBuilder &MenuBuilder::getEntryBuilder() {
 }
 
 MenuDefinition *MenuBuilder::build() {
-    return new MenuDefinition(this->entries);
+    t_vec3 *background = new t_vec3[3];
+    memcpy(background, this->background_color, sizeof(t_vec3));
+    return new MenuDefinition(this->entries, background);
 }
 
 void addEntry(MenuBuilder *mb, Entry *entry) {
     mb->entries.push_back(entry);
+}
+
+void MenuBuilder::setBackGroundColor(t_vec3 color) {
+    glmc_assign_vec3(this->background_color, color);
+}
+
+MenuBuilder::MenuBuilder() {
 }
 
 
@@ -54,6 +63,11 @@ EntryBuilder &EntryBuilder::setMnemonic(char c) {
     return *this;
 }
 
+EntryBuilder &EntryBuilder::setColor(t_vec3 color) {
+    glmc_assign_vec4(this->color, color);
+    return *this;
+}
+
 EntryBuilder &EntryBuilder::setFunction(func_t function) {
     this->function = function;
     return *this;
@@ -64,10 +78,12 @@ void EntryBuilder::setMenuBuilder(MenuBuilder *menuBuilder) {
 }
 
 EntryBuilder &EntryBuilder::buildEntryWithAction(const char *action) {
+    t_vec4 *color = new t_vec4[4];
+    memcpy(color, this->color, sizeof(t_vec4));
     this->action = action;
     addEntry(this->menuBuilder,
              new Entry(this->enabled_on_pc, this->enabled_on_pi, this->long_text, this->short_text, this->mnemonic,
-                       this->action, this->font, &animations, function));
+                       this->action, this->font, &animations, function, color));
     return *this;
 }
 
@@ -80,6 +96,16 @@ EntryBuilder::EntryBuilder() {
 
 }
 
+EntryBuilder::~EntryBuilder() {
+    map<MenuState, std::vector<EntryAnimation *>>::const_iterator iterator = animations.begin();
+    for(iterator; iterator != animations.end(); iterator++){
+        for(EntryAnimation* ea : iterator->second){
+            delete(ea);
+        }
+    }
+
+}
+
 float EntryAnimation::getPosition() {
     return position;
 }
@@ -87,8 +113,12 @@ float EntryAnimation::getPosition() {
 void EntryAnimation::setPosition(float x) {
     if (repeat) {
         position = (fmod(x, 1.0f));
-    } else{
+    } else {
         position = x > 1 ? 1 : x;
     }
+}
+
+EntryAnimation::~EntryAnimation() {
+    delete animation;
 }
 

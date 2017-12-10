@@ -7,7 +7,7 @@ using namespace std;
 
 void MovieModel::setMovieDefinition(shared_ptr<MovieDefinition> movieDefinition) {
     time = 0;
-    this->movieDefinition = std::move(movieDefinition);
+    this->movieDefinition = movieDefinition;
     setDone(false);
     fireInvalidationEvent();
 }
@@ -17,8 +17,7 @@ shared_ptr<MovieDefinition> MovieModel::getMovieDefinition() {
 }
 
 MovieModel::~MovieModel() {
-    //todo
-
+    this->movieDefinition.reset();
 }
 
 /**
@@ -31,13 +30,13 @@ float MovieModel::getPosition(AnimationDuration *ad, int offset) {
     if (ad->start > time - offset) {
         return 0;
     }
-    float k = time - offset - ad->start;
+    float k = (float) time - offset - ad->start;
     float d = k / ad->duration;
     return d > 1 ? 1 : d;
 }
 
 void MovieGLView::invalidated() {
-    if (!model->isDone()) {
+    while (!model->isDone()) {
         Uint32 start = SDL_GetTicks();
         draw();
         Uint32 end = SDL_GetTicks();
@@ -49,15 +48,18 @@ void MovieGLView::draw() {
     if (model->getMovieDefinition() != nullptr && !model->getMovieDefinition().get()->movie_animations.empty()) {
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
 
+        glmc_assign_vec3(fontManager->graphics->background_color, *model->getMovieDefinition().get()->background_color);
+
         for (MovieAnimation *mv : model->getMovieDefinition().get()->movie_animations) {
             if (model->getTime() >= mv->start && mv->end > model->getTime()) {
                 commands.push_back(glyphFromMovieAnimation(mv));
             }
         }
 
+
+
         //tekenen
-        //todo fontmanager methode
-        graphics_begin_draw(fontManager->graphics);
+        fontManager->begin_draw();
         for (vector<GlyphDrawCommand> vec : commands) {
             vector<GlyphDrawCommand>::iterator i = vec.begin();
             while (i != vec.end()) {
@@ -65,10 +67,21 @@ void MovieGLView::draw() {
                 i++;
             }
         }
-        graphics_end_draw(fontManager->graphics);
+        fontManager->end_draw();
 
         //moet er nog verder getekend worden?
         model->setDone(model->getTime() >= model->getMovieDefinition().get()->duration);
+
+         //events registreren
+        //input als laatste anders kan de setDone overschreven worden
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) {
+            switch (event.type) {
+                case SDL_KEYDOWN:
+                    key_press = event.key.keysym.sym;
+                    notify(INPUT);
+            }
+        }
     }
 }
 
@@ -81,6 +94,7 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
 
     // kleur, hpos en vpos opstellen voor volgende aanroep makeglyphdrawcommands
     m->setFont(mv->font);
+    m->setColor(*mv->color); //crasht
     m->setHpos(TEXT_CENTER); // Default TEXT_LEFT
     m->setVpos(TEXT_MIDDLE); // DEFAULT TEXT_BOTTOM
 
@@ -95,18 +109,30 @@ vector<GlyphDrawCommand> MovieGLView::glyphFromMovieAnimation(MovieAnimation *mv
     return command;
 }
 
+SDLKey MovieGLView::getKeyPress() {
+    return this->key_press;
+}
+
+MovieGLView::~MovieGLView() {
+
+}
+
 
 void MoviePlayer::play(shared_ptr<MovieDefinition> movieDefinition) {
     clear(); //oude componeten leegmaken
     mm = new MovieModel;
     mv = new MovieGLView;
-//    mc = new MovieController;
+    mc = new MovieController;
 
     mm->addListener(mv);
     mv->setMovieModel(mm);
     mv->setFontManager(fontManager);
 
-    mm->setMovieDefinition(std::move(movieDefinition));
+    mc->setMenuView(mv);
+    mc->setMenuModel(mm);
+    mv->registerObserver(INPUT, mc);
+
+    mm->setMovieDefinition(movieDefinition);
 }
 
 void MoviePlayer::clear() {
@@ -120,3 +146,35 @@ MoviePlayer::~MoviePlayer() {
 }
 
 
+void MovieController::onKey(SDLKey key) {
+    switch (key) {
+        case SDLK_ESCAPE:
+            this->movieModel->setDone(true);
+            break;
+        case SDLK_RETURN:
+            this->movieModel->setDone(true);
+            break;
+        default:
+            break;
+    }
+}
+
+void MovieController::notified() {
+    onKey(movieView->getKeyPress());
+}
+
+void MovieController::setMenuModel(MovieModel *movieModel) {
+    this->movieModel = movieModel;
+}
+
+void MovieController::setMenuView(MovieGLView *movieView) {
+    this->movieView = movieView;
+}
+
+MovieDefinition::~MovieDefinition() {
+    delete[] background_color;
+
+    for(MovieAnimation* ma : movie_animations){
+        delete ma;
+    }
+}

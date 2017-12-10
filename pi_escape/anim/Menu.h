@@ -3,9 +3,11 @@
 
 
 #include <deque>
+#include <utility>
 #include "UI.h"
 #include "FontManager.h"
 #include "MenuBuilder.h"
+#include "Movie.h"
 
 extern "C" {
 #include "../es/game.h"
@@ -22,53 +24,53 @@ class EntryAnimation;
 class MenuDefinition {
 public:
     const vector<Entry *> entries;
+    t_vec3 *const color;
 
-    explicit MenuDefinition(vector<Entry *> entries) : entries(entries) {};
+    MenuDefinition(vector<Entry *> entries, t_vec3 *color) : entries(std::move(entries)), color(color) {
+    };
 
-    ~MenuDefinition() {
-
-    }
+    ~MenuDefinition();
 };
-
 
 class MenuModel : public UIModel, public Subject {
 private:
+    vector<shared_ptr<MovieDefinition>> *movieDefinitions = new vector<shared_ptr<MovieDefinition>>;
     shared_ptr<MenuDefinition> menuDefinition;
-    unsigned int selectedInt;
+    int selectedInt;
 
-//    Entry *selected;
+    vector<Level *> levels_to_play;
 
-    vector<Level *> *levels_to_play;
-
-//    bool activated_menu;
+    bool activated_menu; //is er iets geactiveerd in het menu -> animatie spelen
 public:
-    MenuModel() {
 
-    }
+    MenuModel();
+
+    ~MenuModel() override;
+
+    vector<shared_ptr<MovieDefinition>> *getMovieDefinitions();
 
     void setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition);
 
     shared_ptr<MenuDefinition> getMenuDefinition();
 
-    void up();
-
-    void down();
-
-    void select();
 
     Entry *getSelectedEntry();
 
     vector<Level *> *getLevels();
 
-    void setLevels(vector<Level *> *levels);
+    void setLevels(vector<Level *> levels);
 
-//    void resetPositions();
-//
-//    void playAnimations();
-//
-//    bool isActivatedMenu();
-//
-//    void setActivatedMenu(bool i);
+    bool isActivated();
+
+    void setActivated(bool i);
+
+    void incrementSelectedInt(int i);
+
+    void reset_start_times();
+
+	int getSelectedInt();
+
+    void selectFunction();
 };
 
 /**
@@ -76,25 +78,24 @@ public:
  */
 class MenuView : public UIView, public Subject {
 private:
+    MoviePlayer *moviePlayer;
     MenuModel *menuModel;
     SDLKey key_press;
-//    bool animationsFinished;
-public:
-    ~MenuView() override {
-
-    }
-
-    void setFontManager(FontManager *fontManager);
-
-    void draw() override;
 
     vector<GlyphDrawCommand> drawEntry(Entry *entry, int x_offset, int y_offset);
+
+    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
+
+public:
+    ~MenuView() override;
+
+    void setFontManager(FontManager *fontManager) override;
+
+    void draw() override;
 
     void invalidated() override;
 
     void setMenuModel(MenuModel *menuModel);
-
-    vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
 
     SDLKey getKey_press();
 };
@@ -105,21 +106,19 @@ private:
     MenuModel *menuModel;
     MenuView *menuView;
 public:
-    ~MenuController() override {
-
-    }
-
     void onKey(SDLKey key) override;
-
-    void onExitKey() override {
-
-    }
 
     void notified() override;
 
     void setMenuModel(MenuModel *menuModel);
 
     void setMenuView(MenuView *menuView);
+
+    void up();
+
+    void down();
+
+    void select();
 
 };
 
@@ -130,17 +129,16 @@ private:
 public:
     LevelObserver(Graphics *graphics, MenuModel *menuModel) : graphics(graphics), menuModel(menuModel) {};
 
-//    ~LevelObserver();
-//
     void notified() override;
 
 };
 
 class MenuShower {
 private:
-    MenuView *mv{};
-    MenuModel *mm{};
-    MenuController *mc{};
+    MenuView *mv;
+    MenuModel *mm;
+    MenuController *mc;
+	//LedView *lv; ERROR!
 
     FontManager *fontManager;
 

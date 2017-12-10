@@ -1,8 +1,6 @@
-#ifdef RPI
-
 #include <stdlib.h>
 #include "led_system.h"
-#include "../../led/sense_led.h"
+#include "../../led/led.h"
 #include "../assemblage.h"
 
 
@@ -49,4 +47,3 @@ void system_led_update(LedSystem *system, Engine *engine) {
 		break;
 	}
 }
-#endif // RPI

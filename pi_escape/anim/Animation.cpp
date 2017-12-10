@@ -179,8 +179,8 @@ std::vector<GlyphDrawCommand> MoveAnimation::applyTransform(const std::vector<Gl
 		const GlyphDrawCommand& cur = *it;
 		
 		t_ivec2 move;
-		move[0] = (newPos[0] * position);
-		move[1] = (newPos[1] * position);
+		move[0] = (int) (newPos[0] * position);
+		move[1] = (int) (newPos[1] * position);
 
 		GlyphDrawCommand replacement = cur.move(move[0], move[1]);
 		res.push_back(replacement);
@@ -209,8 +209,8 @@ std::vector<GlyphDrawCommand> FloatInAnimation::applyTransform(const std::vector
 		const GlyphDrawCommand& cur = *it;
 
 		t_ivec2 move;
-		move[0] = (newPos[0] * (1 - position));
-		move[1] = (newPos[1] * (1 - position));
+		move[0] = (int) (newPos[0] * (1 - position));
+		move[1] = (int) (newPos[1] * (1 - position));
 
 		GlyphDrawCommand replacement = cur.move(move[0], -move[1]);
 		res.push_back(replacement);

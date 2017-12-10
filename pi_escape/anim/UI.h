@@ -87,15 +87,13 @@ public:
     virtual ~UIController();
 
     virtual void onKey(SDLKey key) = 0;
-
-    virtual void onExitKey() = 0;
 };
 
 class UIView : public Listener {
 protected:
     FontManager *fontManager;
 public:
-    void setFontManager(FontManager *fm);
+    virtual void setFontManager(FontManager *fm);
 
     UIView();
 

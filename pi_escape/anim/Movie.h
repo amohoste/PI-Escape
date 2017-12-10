@@ -8,6 +8,7 @@
 #include "MovieBuilder.h"
 
 class MovieAnimation;
+
 class AnimationDuration;
 
 /**
@@ -15,11 +16,14 @@ class AnimationDuration;
  */
 class MovieDefinition {
 public:
-    explicit MovieDefinition(vector<MovieAnimation *> movie_animations, long duration) : movie_animations(
-            std::move(movie_animations)), duration(duration) {};
+    MovieDefinition(vector<MovieAnimation *> movie_animations, long duration, t_vec3 *color) : movie_animations(
+            std::move(movie_animations)), duration(duration), background_color(color) {};
+
+    ~MovieDefinition();
 
     const vector<MovieAnimation *> movie_animations;
     const long duration; //hoelang duurt de movie
+    t_vec3 *const background_color;
 };
 
 
@@ -39,21 +43,38 @@ public:
 
 };
 
-class MovieGLView : public UIView {
+class MovieGLView : public UIView, public Subject {
 private:
     MovieModel *model;
+
+    SDLKey key_press;
 
     vector<GlyphDrawCommand> glyphFromMovieAnimation(MovieAnimation *mv);
 
 public:
+    ~MovieGLView() override;
+
     void setMovieModel(MovieModel *movieModel);
 
     void invalidated() override;
 
     void draw() override;
+
+    SDLKey getKeyPress();
 };
 
 class MovieController : public UIController {
+private:
+    MovieModel *movieModel;
+    MovieGLView *movieView;
+public:
+    void onKey(SDLKey key) override;
+
+    void notified() override;
+
+    void setMenuModel(MovieModel *movieModel);
+
+    void setMenuView(MovieGLView *movieView);
 };
 
 

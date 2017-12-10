@@ -37,8 +37,11 @@ private:
     const char *action;
     func_t function;
     std::map<MenuState, std::vector<EntryAnimation *>> animations;
+    t_vec4 color;
 public:
     EntryBuilder();
+
+    ~EntryBuilder();
 
     EntryBuilder &addAnimation(Animation *animation, MenuState activate, bool repeat, long duration);
 
@@ -58,6 +61,8 @@ public:
 
     EntryBuilder &setFunction(func_t function);
 
+    EntryBuilder &setColor(t_vec4 color);
+
     void setMenuBuilder(MenuBuilder *menuBuilder);
 
 };
@@ -68,6 +73,7 @@ public:
 class EntryAnimation {
 private:
     float position = 0;
+    uint32_t start_time = 0;
 public:
     const Animation *animation;
     const MenuState menuState;
@@ -78,10 +84,14 @@ public:
                                                                                             menuState(menuState),
                                                                                             repeat(repeat),
                                                                                             duration(duration) {};
+    ~EntryAnimation();
 
     float getPosition();
 
     void setPosition(float x);
+
+    uint32_t getStartTime(){return start_time;}
+    void setStartTime(uint32_t start_time){this->start_time = start_time;}
 };
 
 /**
@@ -98,13 +108,14 @@ public:
     const char *font;
     const map<MenuState, vector<EntryAnimation *>> *animations;
     const func_t function;
+    t_vec4 * const color;
 
     Entry(bool enabled_on_pc, bool enabled_on_pi, const char *long_text,
           const char *short_text, char mnemonic, const char *action, const char *font,
           map<MenuState, vector<EntryAnimation *>> *animations,
-          func_t function) : enabled_on_pi(enabled_on_pi), enabled_on_pc(enabled_on_pc), long_text(long_text),
+          func_t function, t_vec4 *color) : enabled_on_pi(enabled_on_pi), enabled_on_pc(enabled_on_pc), long_text(long_text),
                              short_text(short_text), mnemonic(mnemonic), action(action), font(font),
-                             animations(animations), function(function) {};
+                             animations(animations), function(function), color(color) {};
 };
 
 /**
@@ -113,12 +124,17 @@ public:
 class MenuBuilder {
 private:
     std::vector<Entry *> entries;
+    t_vec3 background_color;
 public:
+    MenuBuilder();
+
     EntryBuilder &getEntryBuilder();
 
     MenuDefinition *build();
 
     friend void addEntry(MenuBuilder *mb, Entry *entry);
+
+    void setBackGroundColor(t_vec3 color);
 };
 
 

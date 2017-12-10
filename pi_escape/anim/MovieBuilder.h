@@ -16,7 +16,8 @@ private:
     long start;
     long end;
     const char *font;
-    t_vec4 &color;
+    t_vec4 color;
+    t_vec3 background_color; //pointer naar een constante t_vec, geen constante pointer!!
     float x_perc;
     float y_perc;
     long duration;
@@ -32,6 +33,7 @@ public:
     MovieBuilder &setFont(const char *font);
 
     MovieBuilder &setColor(t_vec4 color);
+    MovieBuilder &setBackgroundColor(t_vec3 color);
 
     MovieBuilder &setPos_percent(float x, float y);
 
@@ -55,22 +57,24 @@ public:
     const Animation *a;
 
     AnimationDuration(long start, long duration, Animation *a);
+    ~AnimationDuration();
 };
 
 class MovieAnimation {
 public:
-    const char *text;
+    //todo alles echt const maken http://duramecho.com/ComputerInformation/WhyHowCppConst.html
+    const char * const text;
     const long start;
     const long end;
     const char *font;
-    const t_vec4 &color;
+    t_vec4 * const color;
     const float x;
     const float y;
     const long duration;
     const std::vector<AnimationDuration *> animations;
-    MovieAnimation(const char *text, const long start, const long end, const char *font, const t_vec4 &color,
+    MovieAnimation(const char *text, const long start, const long end, const char *font, t_vec4 *color,
                    const float x, const float y, const long duration, const std::vector<AnimationDuration *> animations);
-
+    ~MovieAnimation();
 };
 
 

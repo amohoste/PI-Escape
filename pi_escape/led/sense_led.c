@@ -30,7 +30,7 @@ int rainbow[64][3] = {
 };
 
 
-void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
+void display_sense_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	int ledgridFile;
 	uint16_t *mapping;
 	uint16_t *pointer;
@@ -57,25 +57,39 @@ void display_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer) {
 	close(ledgridFile);
 }
 
-void clear_ledgrid() {
+void clear_sense_ledgrid() {
 	build_one_color((SPGM_RGBTRIPLE) { .rgbRed = 0, .rgbGreen = 0, .rgbBlue = 0 });
 }
 
-void build_one_color(SPGM_RGBTRIPLE color) {
+void build_one_color_sense(SPGM_RGBTRIPLE color) {
 	SPGM_RGBTRIPLE ledgrid[LENGTH_BUFFER];
 	for (int i = 0; i < LENGTH_BUFFER; i++)
 	{
 		ledgrid[i] = (SPGM_RGBTRIPLE) { .rgbRed = color.rgbRed, .rgbGreen = color.rgbGreen, .rgbBlue = color.rgbBlue};
 	}
-	display_ledgrid(ledgrid, FRAMEBUFFER);
+	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
 }
 
-void build_rainbow() {
+void build_rainbow_sense() {
 	SPGM_RGBTRIPLE ledgrid[LENGTH_BUFFER];
 	for (int i = 0; i < LENGTH_BUFFER; i++)
 	{
 		ledgrid[i] = (SPGM_RGBTRIPLE) { .rgbRed = rainbow[i][0], .rgbGreen = rainbow[i][1], .rgbBlue = rainbow[i][2] };
 	}
-	display_ledgrid(ledgrid, FRAMEBUFFER);
+	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
+}
+
+void build_array_sense(SPGM_RGBTRIPLE** square) {
+	SPGM_RGBTRIPLE ledgrid[LENGTH_BUFFER];
+	int c = 0;
+	for (int i = 0; i < 8; i++)
+	{
+		for (int j = 0; j < 8; j++)
+		{
+			ledgrid[c] = square[i][j];
+			c++;
+		}
+	}
+	display_sense_ledgrid(ledgrid, FRAMEBUFFER);
 }
 #endif // RPI
