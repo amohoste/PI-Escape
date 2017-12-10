@@ -221,8 +221,7 @@ void LedView::invalidated() {
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
 	if (!model->isDone() && this->length_pattern > 0 && d > draw_every_ms) {
 		draw();
-	}
-	else if (!model->isActivated()) {
+	} else if (model->isDone() && !model->isActivated()) {
 		clear_ledgrid();
 	}
 }
