@@ -1,8 +1,8 @@
 #ifndef RPI
 #include "fake_led.h"
 
-#include <windows.h>
-// TODO #include <BiDiSpl.h> same as windows.h ?
+//#include <windows.h>
+#include <BiDiSpl.h>
 #include <iostream>
 #include <fstream>
 #include <chrono>
