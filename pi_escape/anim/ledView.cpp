@@ -167,28 +167,34 @@ void LedView::draw() {
 	}
 
 	// add indicators
-	SPGM_RGBTRIPLE colour;
-	colour.rgbBlue = 0;
-	colour.rgbGreen = 255;
-	colour.rgbRed = 0;
+	SPGM_RGBTRIPLE inside;
+	inside.rgbBlue = 0;
+	inside.rgbGreen = 255;
+	inside.rgbRed = 50;
+
+	SPGM_RGBTRIPLE outside;
+	outside.rgbBlue = 0;
+	outside.rgbGreen = 225;
+	outside.rgbRed = 150;
+
 	if (model->getSelectedInt() > 0) {
-		frame[0][3] = colour;
-		frame[0][4] = colour;
+		frame[0][3] = inside;
+		frame[0][4] = inside;
 	}
 	
 	if (model->getSelectedInt() > 1) {
-		frame[0][2] = colour;
-		frame[0][5] = colour;
+		frame[0][2] = outside;
+		frame[0][5] = outside;
 	}
 
 	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 1) {
-		frame[7][3] = colour;
-		frame[7][4] = colour;
+		frame[7][3] = inside;
+		frame[7][4] = inside;
 	}
 
 	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 2) {
-		frame[7][2] = colour;
-		frame[7][5] = colour;
+		frame[7][2] = outside;
+		frame[7][5] = outside;
 	}
 
 	// draw
@@ -208,8 +214,11 @@ void LedView::invalidated() {
 	chrono::system_clock::time_point now = chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = now - last_draw;
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
-	if (this->length_pattern > 0 && d > draw_every_ms) {
+	if (!model->isDone() && this->length_pattern > 0 && d > draw_every_ms) {
 		draw();
+	}
+	else if (!model->isActivated()) {
+		clear_ledgrid();
 	}
 }
 
