@@ -12,68 +12,60 @@ extern "C"
 }
 #endif
 
-
+#include "pi_escape/anim/FontManager.h"
+#include "pi_escape/anim/GameUICreator.h"
 #include <SDL.h>
-#undef main //Weird bug on windows where SDL overwrite main definition
-#include <SDL_timer.h>
 
+#undef main //Weird bug on windows where SDL overwrite main definition
+
+#include <SDL_timer.h>
 #include <string>
-#include <cassert>
 
 using namespace std;
 
 int main() {
     int imgFlags = IMG_INIT_PNG;
-    if(!(IMG_Init(imgFlags) & imgFlags)) {
+    if (!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
     }
 
-    Graphics* graphics = graphics_alloc(0, 0);
+    Graphics *graphics = graphics_alloc(0, 0);
 
-    GLGlyph glGlyph;
-    gl_glyph_init(&glGlyph, graphics, (char*) "pi_escape/graphics/zorque72.png");
+    GameUICreator *gc = new GameUICreator;
 
-    t_vec4 col = { 1.0f, 0.0f, 0.0f, 1.0f };
 
-    //this is a demo of gl_glyph_draw
+    // Fontmanager aanmaken
+    FontManager m(graphics);
 
-    Uint32 start_time_ms = SDL_GetTicks();
-    Uint32 diff_time_ms = 0;
-    while (diff_time_ms < 5000) {
-        graphics_begin_draw(graphics);
+    // Fonts inladen
+    m.loadFont("zorque", "zorque72.png", "zorque72.fnt");
+    m.loadFont("base", "base72.png", "base72.fnt");
+    m.loadFont("arcade", "arcade72.png", "arcade72.fnt");
+    m.loadFont("atari", "atari72.png", "atari72.fnt");
+    m.loadFont("crossedwars", "starwars_crossed72.png", "starwars_crossed72.fnt");
+    m.loadFont("starwars", "starwars72.png", "starwars72.fnt");
+	m.loadFont("falcon", "falcon.png", "falcon.fnt");
 
-        glmc_vec4_set(col, diff_time_ms / 5000.0f, 0.0f, 0.0f, 1.0f);
+    MoviePlayer *mp = new MoviePlayer(&m);
+    mp->play(gc->createIntro());
 
-        gl_glyph_draw(&glGlyph, 481, 750,  2, 215,  48, 51, col);
-        gl_glyph_draw(&glGlyph, 534, 751,  52, 109,  35, 51, col);
-        gl_glyph_draw(&glGlyph, 570, 698,  214, 495,  51, 14, col);
-        gl_glyph_draw(&glGlyph, 624, 750,  2, 215,  48, 51, col);
-        gl_glyph_draw(&glGlyph, 677, 751,  52, 109,  35, 51, col);
-        gl_glyph_draw(&glGlyph, 714, 751,  127, 268,  39, 52, col);
-        gl_glyph_draw(&glGlyph, 757, 750,  53, 428,  41, 51, col);
-        gl_glyph_draw(&glGlyph, 801, 751,  2, 268,  48, 52, col);
-        gl_glyph_draw(&glGlyph, 852, 698,  214, 495,  51, 14, col);
-        gl_glyph_draw(&glGlyph, 906, 750,  44, 56,  46, 51, col);
-        gl_glyph_draw(&glGlyph, 954, 750,  82, 162,  41, 51, col);
-        gl_glyph_draw(&glGlyph, 997, 751,  2, 2,  48, 52, col);
-        gl_glyph_draw(&glGlyph, 1049, 751,  103, 215,  58, 51, col);
-        gl_glyph_draw(&glGlyph, 1165, 750,  52, 2,  42, 51, col);
-        gl_glyph_draw(&glGlyph, 1213, 751,  94, 335,  38, 52, col);
-        gl_glyph_draw(&glGlyph, 1254, 751,  2, 2,  48, 52, col);
-        gl_glyph_draw(&glGlyph, 1306, 750,  18, 322,  58, 51, col);
-        gl_glyph_draw(&glGlyph, 1368, 750,  53, 428,  41, 51, col);
-        gl_glyph_draw(&glGlyph, 1412, 751,  52, 109,  35, 51, col);
-        gl_glyph_draw(&glGlyph, 1451, 750,  52, 2,  42, 51, col);
+    MenuShower *ms = new MenuShower(&m);
+    ms->show(gc->createGameMenu());
 
-        graphics_end_draw(graphics);
+    mp->play(gc->createOutro());
 
-        Uint32 cur_time_ms = SDL_GetTicks();
-        diff_time_ms = cur_time_ms - start_time_ms;
-    }
+    delete mp;
+    delete ms;
+    delete gc;
 
-    gl_glyph_free(&glGlyph);
+    m.free(); // Fontmanager moet vrijgemaakt worden voor de graphics vrijgemaakt worden!
+
     graphics_free(graphics);
     free(graphics);
-
     return 0;
 }
+
+
+
+
+
