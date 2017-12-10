@@ -1,8 +1,6 @@
 #ifndef RPI
 #include "fake_led.h"
 
-//#include <windows.h>
-#include <BiDiSpl.h>
 #include <iostream>
 #include <fstream>
 #include <chrono>
@@ -132,14 +130,29 @@ void build_rainbow_fake() {
 
 // Create square corresponding to the given colourmatrix
 void build_array_fake(SPGM_RGBTRIPLE** colours) {
-	// Bitmap file header
-	BITMAPFILEHEADER file_header;
-	file_header.bfOffBits = sizeof(BITMAPFILEHEADER); // size of the file header
-	file_header.bfType = 0x4D42; // type of file = BM = 0x4D42
-	file_header.bfSize = sizeof(BITMAPFILEHEADER) + sizeof(BITMAPINFOHEADER) + grid_size * grid_size * 3;	 // the size of the file in bytes
-	file_header.bfReserved1 = 0;
-	file_header.bfReserved2 = 0;
+	int Type = 0x4D42; // type of file = BM = 0x4D42
+	int Size = 14 + sizeof(BITMAPINFOHEADER) + grid_size * grid_size * 3;	 // the size of the file in bytes
+	int Reserved1 = 0;
+	int Reserved2 = 0;
 
+
+	char* bfType = new char[4];
+	bfType[0] = (char)(Type >> 0);
+	bfType[1] = (char)(Type >> 8);
+	bfType[2] = (char)(Type >> 16);
+	bfType[3] = (char)(Type >> 24);
+
+	char* bfSize = new char[4];
+	bfSize[0] = (char)(Size >> 0);
+	bfSize[1] = (char)(Size >> 8);
+	bfSize[2] = (char)(Size >> 16);
+	bfSize[3] = (char)(Size >> 24);
+
+	char* Reserves = new char[4];
+	Reserves[0] = (char)(Reserved1 >> 0);
+	Reserves[1] = (char)(Reserved1 >> 8);
+	Reserves[2] = (char)(Reserved1 >> 16);
+	Reserves[3] = (char)(Reserved1 >> 24);
 
 	// Bitmap info header
 	BITMAPINFOHEADER info_header;
@@ -172,9 +185,18 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	// Write to bmp file
 	ofstream out;
 	out.open(bmp_file, ios::binary);
-	out.write((char*)&file_header, sizeof(BITMAPFILEHEADER));
+
+	out.write("BM", 2);
+	out.write(bfSize, sizeof(bfSize));
+	out.write(Reserves, sizeof(Reserves));
+	out.write(Reserves, sizeof(Reserves));
+
 	out.write((char*)&info_header, sizeof(BITMAPINFOHEADER));
 	out.write((char*)&bits, sizeof(bits));
 	out.close();
+
+	delete[] bfType;
+	delete[] bfSize;
+	delete[] Reserves;
 }
 #endif // !RPI
