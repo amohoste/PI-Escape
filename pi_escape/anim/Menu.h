@@ -37,7 +37,8 @@ public:
 
 class MenuModel : public UIModel, public Subject {
 private:
-    vector<shared_ptr<MovieDefinition>> *movieDefinitions = new vector<shared_ptr<MovieDefinition>>;
+    vector<shared_ptr<MovieDefinition>> *movieDefinitions = new 
+		vector<shared_ptr<MovieDefinition>>;
     shared_ptr<MenuDefinition> menuDefinition;
     int selectedInt;
 
