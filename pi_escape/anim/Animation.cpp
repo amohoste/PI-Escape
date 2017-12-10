@@ -226,6 +226,7 @@ GlyphIteratingAnimation::GlyphIteratingAnimation(Animation * animation, float ov
 }
 
 GlyphIteratingAnimation::~GlyphIteratingAnimation() {
+	delete animation;
 }
 
 std::vector<GlyphDrawCommand> GlyphIteratingAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
@@ -295,6 +296,7 @@ RepeatAnimation::RepeatAnimation(Animation * animation, int repeats) : animation
 }
 
 RepeatAnimation::~RepeatAnimation() {
+	delete animation;
 }
 
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
@@ -377,6 +379,7 @@ SineAnimation::SineAnimation(Animation * animation) : animation(animation) {
 }
 
 SineAnimation::~SineAnimation() {
+	delete animation;
 }
 
 std::vector<GlyphDrawCommand> SineAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {

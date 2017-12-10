@@ -6,6 +6,12 @@ MovieBuilder::MovieBuilder() {
 }
 
 MovieBuilder::~MovieBuilder() {
+	vector<AnimationDuration *>::iterator it = animations.begin();
+
+	while (it != animations.end()) {
+		delete(*it);
+		it++;
+	}
 }
 
 MovieBuilder &MovieBuilder::addText(const char *text) {
@@ -98,5 +104,5 @@ AnimationDuration::AnimationDuration(long start, long duration, Animation *a) : 
 }
 
 AnimationDuration::~AnimationDuration() {
-    delete(a);
+    delete a;
 }
