@@ -8,6 +8,8 @@ extern "C" {
 	#include "../led/led.h"
 }
 
+class MenuModel;
+
 class LedView;
 
 class LedView : public Observer, public UIView {

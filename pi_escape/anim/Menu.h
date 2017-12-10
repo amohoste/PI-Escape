@@ -8,6 +8,7 @@
 #include "FontManager.h"
 #include "MenuBuilder.h"
 #include "Movie.h"
+#include "ledView.h"
 
 extern "C" {
 #include "../es/game.h"
@@ -20,6 +21,8 @@ class MenuView;
 class MenuController;
 
 class EntryAnimation;
+
+class LedView;
 
 class MenuDefinition {
 public:
@@ -144,8 +147,8 @@ class MenuShower {
 private:
     MenuView *mv;
     MenuModel *mm;
-    MenuController *mc;
-	//LedView *lv; ERROR!
+	MenuController *mc;
+	LedView* lv;
 
     FontManager *fontManager;
 
