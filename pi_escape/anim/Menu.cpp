@@ -153,9 +153,11 @@ void MenuView::draw() {
 
 void MenuView::invalidated() {
     while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
+        menuModel->setDone(true);
         cout << menuModel->getLevels()->size() << endl;
         moviePlayer->play(menuModel->getMovieDefinitions()->back());
         menuModel->getMovieDefinitions()->pop_back();
+        menuModel->setDone(false);
     }
     this->draw();
     if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
