@@ -214,8 +214,11 @@ void LedView::invalidated() {
 	chrono::system_clock::time_point now = chrono::system_clock::now();
 	std::chrono::duration<double> elapsed_seconds = now - last_draw;
 	ms d = std::chrono::duration_cast<ms>(elapsed_seconds);
-	if (this->length_pattern > 0 && d > draw_every_ms) {
+	if (!model->isDone() && this->length_pattern > 0 && d > draw_every_ms) {
 		draw();
+	}
+	else if (!model->isActivated()) {
+		clear_ledgrid();
 	}
 }
 
