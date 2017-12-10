@@ -19,6 +19,8 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
 
     levels_to_play.clear();
 
+    notify(SELECTION);
+
     while (!done || activated_menu) {
         fireInvalidationEvent();
     }
