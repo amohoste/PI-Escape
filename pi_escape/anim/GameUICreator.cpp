@@ -41,9 +41,7 @@ void start_game(MenuModel *m) {
 }
 
 void tutorial(MenuModel *m) {
-    m->setActivated(true);
     load_levels(1, 7, m);
-    m->fireInvalidationEvent();
 }
 
 /**

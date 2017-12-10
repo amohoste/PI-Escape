@@ -245,10 +245,12 @@ void MenuController::down() {
 }
 
 void MenuController::select() {
-    menuModel->setActivated(true);
-    menuModel->setDone(true);
-    menuModel->reset_start_times();
-    menuModel->selectFunction();
+    if(!menuModel->isActivated()) {
+        menuModel->setActivated(true);
+        menuModel->setDone(true);
+        menuModel->reset_start_times();
+        menuModel->selectFunction();
+    }
 
 
 }
