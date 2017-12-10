@@ -178,23 +178,23 @@ void LedView::draw() {
 	outside.rgbRed = 150;
 
 	if (model->getSelectedInt() > 0) {
-		frame[7][3] = inside;
-		frame[7][4] = inside;
-	}
-	
-	if (model->getSelectedInt() > 1) {
-		frame[7][2] = outside;
-		frame[7][5] = outside;
-	}
-
-	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 1) {
 		frame[0][3] = inside;
 		frame[0][4] = inside;
 	}
-
-	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 2) {
+	
+	if (model->getSelectedInt() > 1) {
 		frame[0][2] = outside;
 		frame[0][5] = outside;
+	}
+
+	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 1) {
+		frame[7][3] = inside;
+		frame[7][4] = inside;
+	}
+
+	if (model->getSelectedInt() < model->getMenuDefinition().get()->entries.size() - 2) {
+		frame[7][2] = outside;
+		frame[7][5] = outside;
 	}
 
 	// draw
