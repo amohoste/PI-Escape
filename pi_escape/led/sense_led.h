@@ -3,6 +3,7 @@
 #ifdef RPI
 
 #include "../../util/rgb_triple.h"
+#include "led.h"
 
 void display_sense_ledgrid(SPGM_RGBTRIPLE* ledgrid, const char* framebuffer);
 

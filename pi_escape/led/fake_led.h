@@ -10,6 +10,7 @@
 #endif
 
 #include "../../util/rgb_triple.h"
+#include "led.h"
 
 // Bitmap headers:
 //////////////////
