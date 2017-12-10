@@ -319,7 +319,7 @@ std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<
 
 	// Block (aantal positie) per animatie berekenen
 	float block = 1.0 / i;
-	int cycle = floor(position / (2 * block));
+	int cycle = (int) floor(position / (2 * block));
 
 	Animation* a;
 	if (startIn) {
