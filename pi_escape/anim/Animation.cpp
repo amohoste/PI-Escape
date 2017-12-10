@@ -299,6 +299,13 @@ RepeatAnimation::~RepeatAnimation() {
 
 std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<GlyphDrawCommand>& draws, float position) const {
 	
+	// Repeatanimations worden niet ondersteund op de pi omdat deze issues geeft met het scherm op hoge resolutie (te snel voor de pi)
+	#ifdef RPI
+	std::vector<GlyphDrawCommand> res = animation->applyTransform(draws, position);
+
+	return res;
+	#endif // RPI
+	#ifndef RPI
 	std::vector<GlyphDrawCommand> res;
 
 	// Berekenen hoeveel animaties er moeten gebeuren
@@ -359,6 +366,7 @@ std::vector<GlyphDrawCommand> RepeatAnimation::applyTransform(const std::vector<
 	}
 
 	return res;
+	#endif // !RPI
 }
 
 /***************************************************************

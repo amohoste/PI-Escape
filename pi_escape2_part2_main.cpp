@@ -21,9 +21,14 @@ extern "C"
 #include <SDL_timer.h>
 #include <string>
 
+#include <stdlib.h>
+#include <crtdbg.h>
+
 using namespace std;
 
 int main() {
+	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+
     int imgFlags = IMG_INIT_PNG;
     if (!(IMG_Init(imgFlags) & imgFlags)) {
         fatal("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
