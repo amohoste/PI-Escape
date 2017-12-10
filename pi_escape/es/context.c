@@ -9,9 +9,9 @@ void context_init(Context* c) {
     c->time = 0;
     c->level_ended = 0;
 	c->fps = 0;
-	c->temperature = 0;
-	c->pressure = 0;
-	c->humidity = 0;
+	c->temperature = 25;
+	c->pressure = 1024;
+	c->humidity = 35;
 	c->wall_color[0] = 1.0f;
 	c->wall_color[1] = 0.0f;
 	c->wall_color[2] = 0.0f;
