@@ -54,7 +54,7 @@ class AnimationDuration{
 public:
     const long start;
     const long duration;
-    const Animation *a;
+    const Animation * const a;
 
     AnimationDuration(long start, long duration, Animation *a);
     ~AnimationDuration();
@@ -62,11 +62,10 @@ public:
 
 class MovieAnimation {
 public:
-    //todo alles echt const maken http://duramecho.com/ComputerInformation/WhyHowCppConst.html
     const char * const text;
     const long start;
     const long end;
-    const char *font;
+    const char * const font;
     t_vec4 * const color;
     const float x;
     const float y;

@@ -20,6 +20,8 @@ void MenuModel::setMenuDefinition(shared_ptr<MenuDefinition> menuDefinition) {
 
     levels_to_play.clear();
 
+    notify(SELECTION);
+
     while (!done || activated_menu) {
         fireInvalidationEvent();
     }
@@ -98,7 +100,7 @@ void MenuModel::incrementSelectedInt(int i) {
     int size = (int) this->menuDefinition.get()->entries.size();
     selectedInt =
             selectedInt >= size ? size - 1
-                                      : selectedInt;
+                                : selectedInt;
     selectedInt = selectedInt < 0 ? 0 : selectedInt;
     fireInvalidationEvent();
     notify(SELECTION);
@@ -116,10 +118,12 @@ void MenuView::draw() {
         glmc_assign_vec3(fontManager->graphics->background_color, *menuModel->getMenuDefinition().get()->color);
 
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
-        int i = 1;
+        uint32_t height = fontManager->graphics->height;
+        int i = (int) ceil(entries.size() / 2);
+        int offset = static_cast<int>( height / (entries.size() + 2));
         if (!entries.empty()) {
             for (Entry *entry: entries) {
-                commands.push_back(drawEntry(entry, 0, i * 200));
+                commands.push_back(drawEntry(entry, 0, i * offset));
                 i--;
             }
         }
@@ -153,16 +157,19 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-    while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
-        cout << menuModel->getLevels()->size() << endl;
-        moviePlayer->play(menuModel->getMovieDefinitions()->back());
-        menuModel->getMovieDefinitions()->pop_back();
-    }
+
     this->draw();
     if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
-        cout << menuModel->getLevels()->size() << endl;
         notify(LEVEL);
         notify(SELECTION); //zodat de pi zijn scherm veranderd
+    }
+    while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
+        menuModel->setDone(true);
+        shared_ptr<MovieDefinition> &definition = menuModel->getMovieDefinitions()->back();
+        moviePlayer->play(definition);
+        definition.reset();
+        menuModel->getMovieDefinitions()->pop_back();
+        menuModel->setDone(false);
     }
 }
 
@@ -244,10 +251,12 @@ void MenuController::down() {
 }
 
 void MenuController::select() {
-    menuModel->setActivated(true);
-    menuModel->setDone(true);
-    menuModel->reset_start_times();
-    menuModel->selectFunction();
+    if(!menuModel->isActivated()) {
+        menuModel->setActivated(true);
+        menuModel->setDone(true);
+        menuModel->reset_start_times();
+        menuModel->selectFunction();
+    }
 
 
 }
@@ -367,6 +376,7 @@ void MenuView::setFontManager(FontManager *fontManager) {
     UIView::setFontManager(fontManager);
 
     LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
+    this->levelObserver = levelObserver; //voor later te verwijderen
     registerObserver(LEVEL, levelObserver);
 
     moviePlayer = new MoviePlayer(fontManager);
@@ -374,6 +384,11 @@ void MenuView::setFontManager(FontManager *fontManager) {
 
 MenuView::~MenuView() {
     delete moviePlayer;
+    delete levelObserver;
+}
+
+void MenuView::setLevelObserver(LevelObserver *obs) {
+    this->levelObserver = obs;
 }
 
 void MenuController::setMenuModel(MenuModel *menuModel) {

@@ -75,7 +75,7 @@ private:
     float position = 0;
     uint32_t start_time = 0;
 public:
-    const Animation *animation;
+    const Animation * const animation;
     const MenuState menuState;
     const long duration;
     const bool repeat;
@@ -101,11 +101,11 @@ class Entry {
 public:
     const bool enabled_on_pi;
     const bool enabled_on_pc;
-    const char *long_text;
-    const char *short_text;
+    const char * const long_text;
+    const char * const short_text;
     const char mnemonic;
-    const char *action;
-    const char *font;
+    const char * const action;
+    const char * const font;
     const map<MenuState, vector<EntryAnimation *>> *animations;
     const func_t function;
     t_vec4 * const color;
@@ -116,6 +116,8 @@ public:
           func_t function, t_vec4 *color) : enabled_on_pi(enabled_on_pi), enabled_on_pc(enabled_on_pc), long_text(long_text),
                              short_text(short_text), mnemonic(mnemonic), action(action), font(font),
                              animations(animations), function(function), color(color) {};
+
+    ~Entry();
 };
 
 /**

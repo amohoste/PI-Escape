@@ -98,9 +98,9 @@ EntryBuilder::EntryBuilder() {
 
 EntryBuilder::~EntryBuilder() {
     map<MenuState, std::vector<EntryAnimation *>>::const_iterator iterator = animations.begin();
-    for(iterator; iterator != animations.end(); iterator++){
-        for(EntryAnimation* ea : iterator->second){
-            delete(ea);
+    for (iterator; iterator != animations.end(); iterator++) {
+        for (EntryAnimation *ea : iterator->second) {
+            delete (ea);
         }
     }
 
@@ -122,3 +122,13 @@ EntryAnimation::~EntryAnimation() {
     delete animation;
 }
 
+Entry::~Entry() {
+
+    map<MenuState , vector<EntryAnimation*>>::const_iterator it;
+
+    for (it = animations->begin(); it != animations->end(); it++) {
+        for(EntryAnimation* ea : it->second){
+            delete(ea);
+        }
+    }
+}
