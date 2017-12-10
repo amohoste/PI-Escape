@@ -95,7 +95,7 @@ void MenuModel::incrementSelectedInt(int i) {
     int size = (int) this->menuDefinition.get()->entries.size();
     selectedInt =
             selectedInt >= size ? size - 1
-                                      : selectedInt;
+                                : selectedInt;
     selectedInt = selectedInt < 0 ? 0 : selectedInt;
     fireInvalidationEvent();
     notify(SELECTION);
@@ -114,11 +114,11 @@ void MenuView::draw() {
 
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
         uint32_t height = fontManager->graphics->height;
-        int i = (int) ceil(entries.size()/2);
+        int i = (int) ceil(entries.size() / 2);
         int offset = static_cast<int>( height / (entries.size() + 2));
         if (!entries.empty()) {
             for (Entry *entry: entries) {
-                commands.push_back(drawEntry(entry, 0, i *offset));
+                commands.push_back(drawEntry(entry, 0, i * offset));
                 i--;
             }
         }
@@ -152,17 +152,18 @@ void MenuView::draw() {
 }
 
 void MenuView::invalidated() {
-    while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
-        menuModel->setDone(true);
-        moviePlayer->play(menuModel->getMovieDefinitions()->back());
-        menuModel->getMovieDefinitions()->pop_back();
-        menuModel->setDone(false);
-    }
+
     this->draw();
     if (!menuModel->getLevels()->empty() && !menuModel->isActivated()) {
         cout << menuModel->getLevels()->size() << endl;
         notify(LEVEL);
         notify(SELECTION); //zodat de pi zijn scherm veranderd
+    }
+    while (!menuModel->getMovieDefinitions()->empty() && !menuModel->isActivated()) {
+        menuModel->setDone(true);
+        moviePlayer->play(menuModel->getMovieDefinitions()->back());
+        menuModel->getMovieDefinitions()->pop_back();
+        menuModel->setDone(false);
     }
 }
 
