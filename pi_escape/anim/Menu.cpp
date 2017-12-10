@@ -367,6 +367,7 @@ void MenuView::setFontManager(FontManager *fontManager) {
     UIView::setFontManager(fontManager);
 
     LevelObserver *levelObserver = new LevelObserver(fontManager->graphics, menuModel);
+    this->levelObserver = levelObserver; //voor later te verwijderen
     registerObserver(LEVEL, levelObserver);
 
     moviePlayer = new MoviePlayer(fontManager);
@@ -374,6 +375,11 @@ void MenuView::setFontManager(FontManager *fontManager) {
 
 MenuView::~MenuView() {
     delete moviePlayer;
+    delete levelObserver;
+}
+
+void MenuView::setLevelObserver(LevelObserver *obs) {
+    this->levelObserver = obs;
 }
 
 void MenuController::setMenuModel(MenuModel *menuModel) {

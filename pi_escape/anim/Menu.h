@@ -71,6 +71,8 @@ public:
     void selectFunction();
 };
 
+class LevelObserver;
+
 /**
  * De menuview is ook een subject, namelijk welke input in het scherm komt
  */
@@ -84,6 +86,8 @@ private:
 
     vector<GlyphDrawCommand> applyAnimations(vector<EntryAnimation *> animations, vector<GlyphDrawCommand> command);
 
+    LevelObserver *levelObserver;
+
 public:
     ~MenuView() override;
 
@@ -96,6 +100,9 @@ public:
     void setMenuModel(MenuModel *menuModel);
 
     SDLKey getKey_press();
+
+    void setLevelObserver(LevelObserver *obs);
+
 };
 
 
