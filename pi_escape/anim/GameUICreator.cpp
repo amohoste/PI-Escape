@@ -41,9 +41,7 @@ void start_game(MenuModel *m) {
 }
 
 void tutorial(MenuModel *m) {
-    m->setActivated(true);
     load_levels(1, 7, m);
-    m->fireInvalidationEvent();
 }
 
 /**
@@ -69,7 +67,7 @@ std::shared_ptr<MenuDefinition> GameUICreator::createGameMenu() {
     builder.setBackGroundColor(background_color);
 
 
-    t_vec4 menuEntryColor = {1.0f, 0.0f, 0.0f, 1.0f};
+    t_vec4 menuEntryColor = {1.0f, 1.0f, 0.0f, 1.0f};
 
     addMainMenuAnimation(builder.getEntryBuilder())
             .setEnabledOnPc(true).setEnabledOnPi(true)
