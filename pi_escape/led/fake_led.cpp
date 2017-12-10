@@ -159,7 +159,7 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	char bits[grid_size * grid_size * 3];
 	int enlarge_factor = grid_size / 8;
 	int k = 0;
-	for (int i = 0; i < grid_size; i++) {
+	for (int i = grid_size - 1; i >= 0 ; i--) {
 		for (int j = 0; j < grid_size; j++) {
 			SPGM_RGBTRIPLE colour = colours[i / enlarge_factor][j / enlarge_factor];
 			bits[k] = colour.rgbBlue;

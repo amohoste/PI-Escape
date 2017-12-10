@@ -307,7 +307,7 @@ void MenuShower::clear() {
     delete mm;
     delete mv;
     delete mc;
-	delete lv;
+	//delete lv;
 }
 
 
@@ -315,7 +315,7 @@ void MenuShower::show(shared_ptr<MenuDefinition> menuDefinition) {
     mm = new MenuModel;
     mv = new MenuView;
     mc = new MenuController;
-	lv = new LedView;
+	LedView* lv = new LedView;
 
     mm->addListener(mv);
     mv->setMenuModel(mm);

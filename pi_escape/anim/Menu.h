@@ -133,7 +133,7 @@ private:
     MenuView *mv;
     MenuModel *mm;
     MenuController *mc;
-	LedView *lv;
+	//LedView *lv;
 
     FontManager *fontManager;
 
