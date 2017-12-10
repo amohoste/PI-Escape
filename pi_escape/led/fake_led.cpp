@@ -13,12 +13,12 @@ const ms write_every_ms = (ms) 1000;
 chrono::system_clock::time_point last_write = chrono::system_clock::now();
 
 // Constants
-const int grid_size = 256;	// width and heigth of the grid in pixels (should always be at least the amount of leds, 8)
+const int img_size = 256;	// width and heigth of the grid in pixels (should always be at least the amount of leds, 8)
 
 const string bmp_file = "pi_escape/led/led.bmp";	// location of bmp file
 
 // 8 by 8 resolution of rainbow pattern
-const int rainbow[8][8][3] = {
+const int rainbow[GRIDSIZE][GRIDSIZE][3] = {
 	{ { 255,   0,   0 },{ 255, 128,   0 },{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{ 0, 255,   0 },{ 0, 255, 128 },{ 0, 255, 255 } },
 	{ { 255, 128,   0 },{ 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{ 0, 255,   0 },{ 0, 255, 128 },{ 0, 255, 255 },{ 0, 191, 255 }},
 	{ { 255, 153,   0 },{ 255, 191,   0 },{ 255, 255,   0 },{ 0, 255,   0 },{ 0, 255, 128 },{ 0, 255, 255 },{ 0, 191, 255 },{ 0, 104, 255 }},
@@ -39,15 +39,15 @@ void clear_fake_ledgrid() {
 	}
 
 	// Construct black array
-	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[8];
+	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[GRIDSIZE];
 	SPGM_RGBTRIPLE colour;
 	colour.rgbBlue = 0;
 	colour.rgbGreen = 0;
 	colour.rgbRed = 0;
 
-	for (int i = 0; i < 8; i++) {
-		colours[i] = new SPGM_RGBTRIPLE[8];
-		for (int j = 0; j < 8; j++) {
+	for (int i = 0; i < GRIDSIZE; i++) {
+		colours[i] = new SPGM_RGBTRIPLE[GRIDSIZE];
+		for (int j = 0; j < GRIDSIZE; j++) {
 			colours[i][j] = colour;
 		}
 	}
@@ -55,7 +55,7 @@ void clear_fake_ledgrid() {
 	// Write array to file
 	build_array_fake(colours);
 	
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < GRIDSIZE; i++)
 		delete[] colours[i];
 	delete[] colours;
 
@@ -72,11 +72,11 @@ void build_one_color_fake(SPGM_RGBTRIPLE colour) {
 		return;
 
 	// Construct monochroom array
-	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[8];
+	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[GRIDSIZE];
 
-	for (int i = 0; i < 8; i ++) {
-		colours[i] = new SPGM_RGBTRIPLE[8];
-		for (int j = 0; j < 8; j ++) {
+	for (int i = 0; i < GRIDSIZE; i ++) {
+		colours[i] = new SPGM_RGBTRIPLE[GRIDSIZE];
+		for (int j = 0; j < GRIDSIZE; j ++) {
 			colours[i][j] = colour;
 		}
 	}
@@ -85,7 +85,7 @@ void build_one_color_fake(SPGM_RGBTRIPLE colour) {
 	build_array_fake(colours);
 
 	// clean up
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < GRIDSIZE; i++)
 		delete[] colours[i];
 	delete[] colours;
 
@@ -103,10 +103,10 @@ void build_rainbow_fake() {
 	}
 
 	// Construct rainbow array
-	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[8];
-	for (int i = 0; i < 8; i++) {
-		colours[i] = new SPGM_RGBTRIPLE[8];
-		for (int j = 0; j < 8; j++) {
+	SPGM_RGBTRIPLE** colours = new SPGM_RGBTRIPLE*[GRIDSIZE];
+	for (int i = 0; i < GRIDSIZE; i++) {
+		colours[i] = new SPGM_RGBTRIPLE[GRIDSIZE];
+		for (int j = 0; j < GRIDSIZE; j++) {
 			SPGM_RGBTRIPLE colour;
 			colour.rgbRed = rainbow[i][j][0];
 			colour.rgbGreen = rainbow[i][j][1];
@@ -120,7 +120,7 @@ void build_rainbow_fake() {
 	build_array_fake(colours);
 
 	// clean up
-	for (int i = 0; i < 8; i++)
+	for (int i = 0; i < GRIDSIZE; i++)
 		delete[] colours[i];
 	delete[] colours;
 
@@ -131,7 +131,7 @@ void build_rainbow_fake() {
 // Create square corresponding to the given colourmatrix
 void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	int Type = 0x4D42; // type of file = BM = 0x4D42
-	int Size = 14 + sizeof(BITMAPINFOHEADER) + grid_size * grid_size * 3;	 // the size of the file in bytes
+	int Size = 14 + sizeof(BITMAPINFOHEADER) + img_size * img_size * 3;	 // the size of the file in bytes
 	int Reserved1 = 0;
 	int Reserved2 = 0;
 
@@ -157,8 +157,8 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	// Bitmap info header
 	BITMAPINFOHEADER info_header;
 	info_header.biSize = sizeof(BITMAPINFOHEADER); // size of the info header
-	info_header.biWidth = grid_size;
-	info_header.biHeight = grid_size;
+	info_header.biWidth = img_size;
+	info_header.biHeight = img_size;
 	info_header.biPlanes = 1;
 	info_header.biBitCount = 24;
 	info_header.biCompression = 0;
@@ -169,11 +169,11 @@ void build_array_fake(SPGM_RGBTRIPLE** colours) {
 	info_header.biClrImportant = 0;
 
 	// Actual bits
-	char bits[grid_size * grid_size * 3];
-	int enlarge_factor = grid_size / 8;
+	char bits[img_size * img_size * 3];
+	int enlarge_factor = img_size / GRIDSIZE;
 	int k = 0;
-	for (int i = grid_size - 1; i >= 0 ; i--) {
-		for (int j = 0; j < grid_size; j++) {
+	for (int i = img_size - 1; i >= 0 ; i--) {
+		for (int j = 0; j < img_size; j++) {
 			SPGM_RGBTRIPLE colour = colours[i / enlarge_factor][j / enlarge_factor];
 			bits[k] = colour.rgbBlue;
 			bits[k + 1] = colour.rgbGreen;
