@@ -55,7 +55,7 @@ int hts221_init(int frequentie)
 	i2c_write_byte_data(hts221.filehts221, CTRL_REG3, 0x01);
 	do {
 		usleep(2500);
-		status = i2c_read_byte_data(hts221.filehts221, CTRL_REG3);
+		status = i2c_read_byte_data(hts221.filehts221, STATUS_REG);
 	} while (status != 0);
 
 	hts221.t0_degC_x8 = i2c_read_byte_data(hts221.filehts221, T0_degC_x8);

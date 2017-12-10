@@ -42,7 +42,7 @@ int lps25h_init(int frequentie)
 	i2c_write_byte_data(lps25h.filelps25h, CTRL_REG4, 0x01);
 	do {
 		usleep(2500);
-		status = i2c_read_byte_data(lps25h.filelps25h, CTRL_REG4);
+		status = i2c_read_byte_data(lps25h.filelps25h, STATUS_REG);
 	} while (status != 0);
 
 	lps25h.pressure = -9999;
