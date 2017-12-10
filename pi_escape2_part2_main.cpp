@@ -48,13 +48,13 @@ int main() {
 
     MoviePlayer *mp = new MoviePlayer(&m);
     mp->play(gc->createIntro());
-    delete mp;
 
     MenuShower *ms = new MenuShower(&m);
     ms->show(gc->createGameMenu());
 
     mp->play(gc->createOutro());
 
+    delete mp;
     delete ms;
     delete gc;
 
