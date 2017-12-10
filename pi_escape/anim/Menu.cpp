@@ -111,10 +111,12 @@ void MenuView::draw() {
         glmc_assign_vec3(fontManager->graphics->background_color, *menuModel->getMenuDefinition().get()->color);
 
         vector<vector<GlyphDrawCommand>> commands; //alles dat getekend moet worden
-        int i = 1;
+        uint32_t height = fontManager->graphics->height;
+        int i = (int) ceil(entries.size()/2);
+        int offset = static_cast<int>( height / (entries.size() + 2));
         if (!entries.empty()) {
             for (Entry *entry: entries) {
-                commands.push_back(drawEntry(entry, 0, i * 200));
+                commands.push_back(drawEntry(entry, 0, i *offset));
                 i--;
             }
         }
