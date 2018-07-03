@@ -10,8 +10,8 @@ Made by:
 **Controls:** [Controls](controls.md)
 
 ## Screenshots
-[Screenshot_1](screens/screenshot_1.png)
+![Screenshot_1](screens/screenshot_1.png)
 
-[Screenshot_2](screens/screenshot_2.png)
+![Screenshot_2](screens/screenshot_2.png)
 
-[Screenshot_3](screens/screenshot_3.png)
+![Screenshot_3](screens/screenshot_3.png)
