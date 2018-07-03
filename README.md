@@ -1,8 +1,9 @@
-This is the code of the project of the course "Systeem Programmeren" (2017)
+Project for the course System Programming (C003776) - 2017
 
-- Arne Goeteyn (aggoetey)
-- Amory Hoste (amohoste)
-- Tom Lauwaerts (tolauwae)
-- Jorg Wieme (jowieme)
+Made by:
+- Arne Goeteyn
+- Amory Hoste
+- Tom Lauwaerts
+- Jorg Wieme
 
 **Controls:** [Controls](controls.md)
