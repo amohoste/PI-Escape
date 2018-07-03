@@ -1,5 +1,5 @@
 # PI Escape Game
-Project for the course System Programming (C003776) | 1st sem 2017 - 2018. Made during my second year of Bachelor of Science in Computer Science at Ghent University. Some start code was already given.
+Group project for the course System Programming (C003776) | 1st sem 2017 - 2018. Made during my second year of Bachelor of Science in Computer Science at Ghent University. Some start code was already given.
 
 Made by:
 - Arne Goeteyn
